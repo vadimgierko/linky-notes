@@ -6,19 +6,18 @@ import { useEffect, useState } from "react";
 
 export default function ItemPage() {
   const { theme } = useTheme();
-  const { items, deleteItem, users } = useDatabase();
+  const { items, deleteItem } = useDatabase();
   const { user } = useAuth();
 
   const { itemKey } = useParams();
-  const { userId } = useParams();
 
   const [item, setItem] = useState(null);
 
   useEffect(() => {
-    if (items && userId && itemKey) {
-      setItem(items[userId][itemKey]);
+    if (items && itemKey) {
+      setItem(items[itemKey]);
     }
-  }, [items, userId, itemKey]);
+  }, [items, itemKey]);
 
   return (
     <div
@@ -30,18 +29,18 @@ export default function ItemPage() {
       {item ? (
         <>
           <div className="row">
-            <div className="col-4">
+            {/*<div className="col-4">
               {
                 item.itemImageURL ?
                   <img src={item.itemImageURL} className="img-fluid" />
                 :
                   <p>No item image yet...</p>
               }
-            </div>
-            <div className="col" style={{borderLeft: "1px solid grey"}}>
+            </div>*/}
+            <div className="col">
               <h4>
                 {item.title}
-                {user && user.uid === userId ? (
+                {user && user.uid ? (
                   <>
                     <Link to="/items">
                       <i
@@ -50,7 +49,7 @@ export default function ItemPage() {
                         onClick={() => deleteItem(itemKey)}
                       ></i>
                     </Link>
-                    <Link to={"/items/update-item/" + userId + "/" + itemKey}>
+                    <Link to={"/items/update-item/" + itemKey}>
                       <i
                         className="bi bi-pencil text-info"
                         style={{ cursor: "pointer" }}
@@ -60,7 +59,7 @@ export default function ItemPage() {
                 ) : null}
               </h4>
               <p>{item.description}</p>
-              <p>
+              {/*<p>
                 by
                 <Link to={"/users/" + userId} className="ms-2">
                   {users[userId].firstName + " " + users[userId].lastName}
@@ -70,7 +69,7 @@ export default function ItemPage() {
                     className="ms-2"
                   />
                 </Link>
-              </p>
+              </p>*/}
             </div>
           </div>
         </>

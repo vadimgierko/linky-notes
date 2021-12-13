@@ -18,7 +18,7 @@ export default function AddItemForm() {
     <div
       style={{ background: theme.background, color: theme.color }}
     >
-      <h3>Create a new item!</h3>
+      <h3>Create a new note!</h3>
       <hr />
       <form>
         <input

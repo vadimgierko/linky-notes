@@ -22,7 +22,7 @@ export default function Header() {
       }
     >
       <div className="container">
-        <span className="navbar-brand mb-0 h1">Template CRUD & auth App</span>
+        <span className="navbar-brand mb-0 h1">linky_notes</span>
         <button
           className="navbar-toggler collapsed"
           type="button"
@@ -50,7 +50,7 @@ export default function Header() {
                   }
                 }}
               >
-                About
+                about
               </Link>
             </li>
             <li className="nav-item">
@@ -63,10 +63,10 @@ export default function Header() {
                   }
                 }}
               >
-                Items
+                notes
               </Link>
             </li>
-            <li className="nav-item">
+            {/*<li className="nav-item">
               <Link
                 className="nav-link"
                 to="/users"
@@ -78,7 +78,7 @@ export default function Header() {
               >
                 Users
               </Link>
-            </li>
+            </li>*/}
             {user ? (
               <li className="nav-item">
                 <Link
@@ -90,32 +90,23 @@ export default function Header() {
                     }
                   }}
                 >
-                  Add item
+                  add note
                 </Link>
               </li>
             ) : null}
           </ul>
           {user ? (
-            <Link
-              className="nav-link text-muted"
-              to="/dashboard"
-              type="button"
-              onClick={() => {
-                if (!isNavCollapsed) {
-                  handleNavCollapse();
-                }
-              }}
-            >
+            <div className="text-muted me-3">
               {user.email ? user.email : null}
-            </Link>
+            </div>
           ) : null}
           <button
             className={
               theme.mode === "light"
                 ? "btn btn-secondary" +
-                  (isNavCollapsed ? " me-2" : " d-block w-100")
+                  (isNavCollapsed ? " me-3" : " d-block w-100")
                 : "btn btn-light" +
-                  (isNavCollapsed ? " me-2" : " d-block w-100")
+                  (isNavCollapsed ? " me-3" : " d-block w-100")
             }
             type="button"
             onClick={() => {

@@ -8,14 +8,12 @@ import Header from "./Header";
 import About from "./About.js";
 import SignUpForm from "./SignUpForm.js";
 import SignInForm from "./SignInForm.js";
-import Dashboard from "./Dashboard.js";
+//import Dashboard from "./Dashboard.js";
 import ItemsList from "./ItemsList";
 import Footer from "./Footer.js";
 import AddItemForm from "./AddItemForm";
 import UpdateItemForm from "./UpdateItemForm";
 import ItemPage from "./ItemPage";
-import UsersList from "./UsersList";
-import UserPage from "./UserPage";
 
 export default function Container() {
   const { theme } = useTheme();
@@ -54,14 +52,11 @@ export default function Container() {
           <Route path="/signin">
             <SignInForm />
           </Route>
-          <Route path="/dashboard">
+          {/*<Route path="/dashboard">
             <Dashboard />
-          </Route>
-          <Route exact path="/items/:userId/:itemKey">
+          </Route>*/}
+          <Route exact path="/items/:itemKey">
             <ItemPage />
-          </Route>
-          <Route path="/users/:userId">
-            <UserPage />
           </Route>
           <Route exact path="/items">
             <ItemsList />
@@ -69,14 +64,11 @@ export default function Container() {
           <Route path="/add-item">
             <AddItemForm />
           </Route>
-          <Route path="/users">
-            <UsersList />
-          </Route>
-          <Route exact path="/items/update-item/:userId/:itemKey">
+          <Route exact path="/items/update-item/:itemKey">
             <UpdateItemForm />
           </Route>
         </Switch>
-        <Footer />
+        {/*<Footer />*/}
       </div>
     </div>
   );

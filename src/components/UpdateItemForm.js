@@ -7,18 +7,18 @@ import { useAuth } from "../hooks/use-auth";
 export default function UpdateItemForm() {
   const { theme } = useTheme();
   const { user } = useAuth();
-  const { items, updateItem, uploadItemImage } = useDatabase();
+  const { items, updateItem } = useDatabase();
+  //const { items, updateItem, uploadItemImage } = useDatabase();
 
   const { itemKey } = useParams();
-  const { userId } = useParams();
 
   const [item, setItem] = useState(null);
 
   useEffect(() => {
-    if (items && userId && itemKey) {
-      setItem(items[userId][itemKey]);
+    if (items && itemKey) {
+      setItem(items[itemKey]);
     }
-  }, [items, userId, itemKey]);
+  }, [items, itemKey]);
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -27,14 +27,14 @@ export default function UpdateItemForm() {
       style={{ background: theme.background, color: theme.color }}
     >
       {
-        user && user.uid === userId ?
+        user && user.uid ?
         (
         item ?
         <>
-          <h3>Update item!</h3>
+          <h3>Update note!</h3>
           <hr />
           <div className="row">
-            <div className="col-4">
+            {/*<div className="col-4">
               {
                 item.itemImageURL ?
                 <img src={item.itemImageURL} className="img-fluid" />
@@ -61,8 +61,8 @@ export default function UpdateItemForm() {
               >
                 Save new item image
               </button>
-            </div>
-            <div className="col" style={{borderLeft: "1px solid grey"}}>
+            </div>*/}
+            <div className="col">
               <form>
                 <input
                   className="form-control mb-2"
