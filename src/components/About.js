@@ -7,43 +7,32 @@ export default function About() {
     <div
       style={{ background: theme.background, color: theme.color }}
     >
+      <p><strong><em>linky_notes</em></strong> allows you to create notes with keywords, which works similarly to tags.</p>
+      <p>Thanks to that:</p>
+      <ul>
+        <li>your notes are linked with each other by keywords</li>
+        <li>they are grouped</li>
+        <li>same note can be in a few keywords groups</li>
+        <li>you don't need to put them in folders or do any index or table of content</li>
+        <li>that is easy to find the particular note by choosing keywords they consist in search field</li>
+        <li>you are saving a tone of time to organize & efficiently use them</li>
+      </ul>
       <p>
-        This is the basic template application for easy & quick start a new
-        complete full-stack web app project.
-      </p>
-      <h3>This template includes the following features (at the moment):</h3>
+        At the moment this SPA is only available for my personal use - you can see my notes, but cannot sign up or modify my database. I've implemented only basic core features for the moment, but app is still growing & is tested.</p>
+      <p>At the moment, I can:</p>
       <ul>
-        <li>Routing</li>
-        <li>User authentication (sign up, sign in, log out)</li>
-        <li>Items CRUD features: user can add, update & delete items (text content + images) when logged</li>
-        <li>There is a list of all items & when user is logged he sees trash & pencil icons to edit & delete his items, but not others items</li>
-        <li>Dark/ light mode</li>
+        <li>sign in</li>
+        <li>add, update & delete notes when logged</li>
+        <li>see a list of all items</li>
+        <li>switch dark/light mode</li>
       </ul>
-      <h3>This template includes the following components (at the moment):</h3>
-      <ul>
-        <li>(RWD) Header with nav links & auth buttons</li>
-        <li>Sign in form</li>
-        <li>Sign up form</li>
-        <li>Dashboard</li>
-        <li>About section (home page)</li>
-        <li>Add item form</li>
-        <li>Update item form</li>
-        <li>Items list</li>
-        <li>Item page</li>
-        <li>Users List</li>
-        <li>User page</li>
-      </ul>
-      <h3>Technologies used in project</h3>
+      <p>Technologies I've used in this project</p>
       <ul>
         <li>React 17</li>
         <li>React Router 5.2</li>
         <li>React Context & useContext</li>
         <li>Firebase 9.1 (authentication, realtime database, storage)</li>
         <li>Bootstrap 5.1</li>
-      </ul>
-      <h3>To do</h3>
-      <ul>
-        <li>...</li>
       </ul>
     </div>
   );

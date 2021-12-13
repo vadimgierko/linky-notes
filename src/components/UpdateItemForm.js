@@ -20,7 +20,7 @@ export default function UpdateItemForm() {
     }
   }, [items, itemKey]);
 
-  const [selectedFile, setSelectedFile] = useState(null);
+  //const [selectedFile, setSelectedFile] = useState(null);
 
   return (
     <div

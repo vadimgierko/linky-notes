@@ -66,19 +66,6 @@ export default function Header() {
                 notes
               </Link>
             </li>
-            {/*<li className="nav-item">
-              <Link
-                className="nav-link"
-                to="/users"
-                onClick={() => {
-                  if (!isNavCollapsed) {
-                    handleNavCollapse();
-                  }
-                }}
-              >
-                Users
-              </Link>
-            </li>*/}
             {user ? (
               <li className="nav-item">
                 <Link
@@ -104,9 +91,9 @@ export default function Header() {
             className={
               theme.mode === "light"
                 ? "btn btn-secondary" +
-                  (isNavCollapsed ? " me-3" : " d-block w-100")
+                  (isNavCollapsed ? " me-3" : " d-block mt-2 w-100")
                 : "btn btn-light" +
-                  (isNavCollapsed ? " me-3" : " d-block w-100")
+                  (isNavCollapsed ? " me-3" : " d-block mt-2 w-100")
             }
             type="button"
             onClick={() => {
@@ -146,22 +133,6 @@ export default function Header() {
             </Link>
           ) : (
             <div>
-              <Link
-                to="/signup"
-                type="button"
-                className={
-                  isNavCollapsed
-                    ? "btn btn-secondary me-2"
-                    : "btn btn-secondary d-block mt-2"
-                }
-                onClick={() => {
-                  if (!isNavCollapsed) {
-                    handleNavCollapse();
-                  }
-                }}
-              >
-                Sign up
-              </Link>
               <Link
                 to="/signin"
                 type="button"

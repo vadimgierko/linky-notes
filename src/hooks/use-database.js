@@ -141,7 +141,7 @@ export function DatabaseProvider({ children }) {
           if (data) {
             setItems(data);
           } else {
-            console.log("there are no notes");
+            //console.log("there are no notes");
           }
         });
 
@@ -176,7 +176,7 @@ export function DatabaseProvider({ children }) {
           if (data) {
             setItems(data);
           } else {
-            console.log("there are no notes");
+            //console.log("there are no notes");
           }
         });
         console.log("user is logged out");
