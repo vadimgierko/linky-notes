@@ -7,9 +7,12 @@ export default function AddItemForm() {
   const { theme } = useTheme();
 
   const [item, setItem] = useState({
-    title: "",
-    description: "",
-    itemImageURL: null
+    //title: "",
+    content: "",
+    //itemImageURL: null,
+    keywords: [],
+    createdAt: null,
+    editedAt: null
   });
   
   const { addItem } = useDatabase();
@@ -18,23 +21,23 @@ export default function AddItemForm() {
     <div
       style={{ background: theme.background, color: theme.color }}
     >
-      <h3>Create a new item!</h3>
+      <h3>Create a new note!</h3>
       <hr />
       <form>
-        <input
+        {/*<input
           className="form-control mb-2"
           type="text"
           placeholder="title"
           onChange={(e) =>
             setItem({ ...item, title: e.target.value })
           }
-        />
+        />*/}
         <textarea
           className="form-control mb-2"
-          placeholder="item description goes here"
-          defaultValue={item.description}
+          placeholder="note content goes here"
+          defaultValue={item.content}
           onChange={(e) =>
-            setItem({ ...item, description: e.target.value })
+            setItem({ ...item, content: e.target.value })
           }
         ></textarea>
       </form>

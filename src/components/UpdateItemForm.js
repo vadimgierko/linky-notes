@@ -7,77 +7,41 @@ import { useAuth } from "../hooks/use-auth";
 export default function UpdateItemForm() {
   const { theme } = useTheme();
   const { user } = useAuth();
-  const { items, updateItem, uploadItemImage } = useDatabase();
+  const { items, updateItem } = useDatabase();
+  //const { items, updateItem, uploadItemImage } = useDatabase();
 
   const { itemKey } = useParams();
-  const { userId } = useParams();
 
   const [item, setItem] = useState(null);
 
   useEffect(() => {
-    if (items && userId && itemKey) {
-      setItem(items[userId][itemKey]);
+    if (items && itemKey) {
+      setItem(items[itemKey]);
     }
-  }, [items, userId, itemKey]);
+  }, [items, itemKey]);
 
-  const [selectedFile, setSelectedFile] = useState(null);
+  //const [selectedFile, setSelectedFile] = useState(null);
 
   return (
     <div
       style={{ background: theme.background, color: theme.color }}
     >
       {
-        user && user.uid === userId ?
+        user && user.uid ?
         (
         item ?
         <>
-          <h3>Update item!</h3>
+          <h3>Update note!</h3>
           <hr />
           <div className="row">
-            <div className="col-4">
-              {
-                item.itemImageURL ?
-                <img src={item.itemImageURL} className="img-fluid" />
-                :
-                <div>No item image yet...</div>
-              }
-              <p>Upload new item image:</p>
-              <input
-                className="form-control mb-2"
-                type="file"
-                onChange={(e) => {
-                  setSelectedFile(e.target.files[0]);
-                  console.log(e.target.files[0]);
-                }}
-              />
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={() => {
-                  if (selectedFile && itemKey && item) {
-                    uploadItemImage(selectedFile, itemKey, item);
-                  }
-                }}
-              >
-                Save new item image
-              </button>
-            </div>
-            <div className="col" style={{borderLeft: "1px solid grey"}}>
+            <div className="col">
               <form>
-                <input
-                  className="form-control mb-2"
-                  type="text"
-                  defaultValue={item.title}
-                  onChange={(e) =>
-                    setItem({ ...item, title: e.target.value })
-                  }
-                />
                 <textarea
                   className="form-control mb-2"
-                  placeholder="item description goes here"
-                  defaultValue={item.description}
+                  placeholder="note content goes here"
+                  defaultValue={item.content}
                   onChange={(e) =>
-                    setItem({ ...item, description: e.target.value })
+                    setItem({ ...item, content: e.target.value })
                   }
                 ></textarea>
               </form>

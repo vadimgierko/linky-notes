@@ -37,7 +37,7 @@ export default function SignInForm() {
         />
       </form>
       <Link
-        to="/dashboard"
+        to="/notes"
         type="button"
         className="btn btn-secondary mb-2"
         onClick={() => signIn(userSignInData.email, userSignInData.password)}

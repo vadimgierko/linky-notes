@@ -21,160 +21,162 @@ export const useDatabase = () => useContext(DatabaseContext);
 export function DatabaseProvider({ children }) {
 
   const [user, setUser] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const [users, setUsers] = useState(null);
+  //const [userData, setUserData] = useState(null);
+  //const [users, setUsers] = useState(null);
   const [items, setItems] = useState(null);
-  const [userItems, setUserItems] = useState(null);
+  //const [userItems, setUserItems] = useState(null);
 
   const addItem = (item) => {
     if (user) {
       const newItem = {
         ...item,
-        userId: user.uid
+        //userId: user.uid
       };
 
-      const newItemKey = push(child(ref(database), "items")).key;
+      const newItemKey = push(child(ref(database), "notes")).key;
 
       const updates = {};
-      updates["/items/" + user.uid + "/" + newItemKey] = newItem;
+      updates["notes/" + newItemKey] = newItem;
 
       return update(ref(database), updates);
     }
   };
 
   const updateItem = (updatedItem, itemKey) => {
-    set(ref(database, "items/" + user.uid + "/" + itemKey), {
+    set(ref(database, "notes/" + itemKey), {
       ...updatedItem
     });
   };
 
   const deleteItem = (itemKey) => {
-    remove(ref(database, "/items/" + user.uid + "/" + itemKey));
+    remove(ref(database, "notes/" + itemKey));
   };
 
-  const updateUserData = (userData) => {
-    set(ref(database, "users/" + user.uid), {
-      ...userData
-    });
-  };
+  // const updateUserData = (userData) => {
+  //   set(ref(database, "users/" + user.uid), {
+  //     ...userData
+  //   });
+  // };
 
-  const getProfileImageURL = (profileImageRef) => {
-    // get profile img url to users data:
-    getDownloadURL(storageRef(storage, profileImageRef))
-    .then((url) => {
-      updateUserData({...userData, profileImageURL: url})
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-  }
+  // const getProfileImageURL = (profileImageRef) => {
+  //   // get profile img url to users data:
+  //   getDownloadURL(storageRef(storage, profileImageRef))
+  //   .then((url) => {
+  //     updateUserData({...userData, profileImageURL: url})
+  //   })
+  //   .catch((error) => {
+  //     console.log(error.message);
+  //   });
+  // }
 
-  const uploadProfileImage = (image) => {
-    // Create a reference to 'profileImage.jpg'
-    const profileImageRef = storageRef(storage, `images/profileImages/${user.uid}/profileImg.png`);
+  // const uploadProfileImage = (image) => {
+  //   // Create a reference to 'profileImage.jpg'
+  //   const profileImageRef = storageRef(storage, `images/profileImages/${user.uid}/profileImg.png`);
 
-    uploadBytes(profileImageRef, image).then((snapshot) => {
-        if (snapshot) {
-          getProfileImageURL(profileImageRef);
-        } else {
-          console.log("file is not uploaded yet...")
-        }
-    });
-  };
+  //   uploadBytes(profileImageRef, image).then((snapshot) => {
+  //       if (snapshot) {
+  //         getProfileImageURL(profileImageRef);
+  //       } else {
+  //         console.log("file is not uploaded yet...")
+  //       }
+  //   });
+  // };
 
-  const getItemImageURL = (itemImageRef, itemKey, item) => {
-    getDownloadURL(storageRef(storage, itemImageRef))
-    .then((url) => {
-      console.log("img url", url);
-      const updatedItem = {
-        ...item,
-        itemImageURL: url
-      }
-      updateItem(updatedItem, itemKey);
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-  }
+  // const getItemImageURL = (itemImageRef, itemKey, item) => {
+  //   getDownloadURL(storageRef(storage, itemImageRef))
+  //   .then((url) => {
+  //     console.log("img url", url);
+  //     const updatedItem = {
+  //       ...item,
+  //       itemImageURL: url
+  //     }
+  //     updateItem(updatedItem, itemKey);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error.message);
+  //   });
+  // }
 
-  const uploadItemImage = (image, itemKey, item) => {
-    const itemImageRef = storageRef(storage, `images/itemsImages/${user.uid}/${itemKey}/itemImg.png`);
+  // const uploadItemImage = (image, itemKey, item) => {
+  //   const itemImageRef = storageRef(storage, `images/itemsImages/${user.uid}/${itemKey}/itemImg.png`);
 
-    uploadBytes(itemImageRef, image).then((snapshot) => {
-        if (snapshot) {
-          getItemImageURL(itemImageRef, itemKey, item);
-        } else {
-          console.log("file is not uploaded yet...")
-        }
-    });
-  }
+  //   uploadBytes(itemImageRef, image).then((snapshot) => {
+  //       if (snapshot) {
+  //         getItemImageURL(itemImageRef, itemKey, item);
+  //       } else {
+  //         console.log("file is not uploaded yet...")
+  //       }
+  //   });
+  // }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
         setUser(user);
 
-        const userDataRef = ref(database, `users/${user.uid}`);
-        onValue(userDataRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setUserData(data);
-          } else {
-            console.log("there are no user data...");
-          }
-        });
-        //fetch users list
-        const usersRef = ref(database, `users/`);
-        onValue(usersRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setUsers(data);
-          } else {
-            console.log("there are no users...");
-          }
-        });
+        // const userDataRef = ref(database, `users/${user.uid}`);
+        // onValue(userDataRef, (snapshot) => {
+        //   const data = snapshot.val();
+        //   if (data) {
+        //     setUserData(data);
+        //   } else {
+        //     console.log("there are no user data...");
+        //   }
+        // });
+        // //fetch users list
+        // const usersRef = ref(database, `users/`);
+        // onValue(usersRef, (snapshot) => {
+        //   const data = snapshot.val();
+        //   if (data) {
+        //     setUsers(data);
+        //   } else {
+        //     console.log("there are no users...");
+        //   }
+        // });
+
         // fetch all items
-        const itemsRef = ref(database, "items/");
+        const itemsRef = ref(database, "notes/");
         onValue(itemsRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
             setItems(data);
           } else {
-            console.log("there are no items");
+            //console.log("there are no notes");
           }
         });
+
         // fetch user items after log in
-        const userItemsRef = ref(database, "items/" + user.uid);
-        onValue(userItemsRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setUserItems(data);
-          } else {
-            console.log("there are no items");
-          }
-        });
+        // const userItemsRef = ref(database, "notes/" + user.uid);
+        // onValue(userItemsRef, (snapshot) => {
+        //   const data = snapshot.val();
+        //   if (data) {
+        //     setUserItems(data);
+        //   } else {
+        //     console.log("there are no user notes");
+        //   }
+        // });
       } else {
         setUser(null);
-        setUserData(null);
-        setUserItems(null);
+        //setUserData(null);
+        //setUserItems(null);
         //fetch users list
-        const usersRef = ref(database, `users/`);
-        onValue(usersRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setUsers(data);
-          } else {
-            console.log("there are no users...");
-          }
-        });
+        // const usersRef = ref(database, `users/`);
+        // onValue(usersRef, (snapshot) => {
+        //   const data = snapshot.val();
+        //   if (data) {
+        //     setUsers(data);
+        //   } else {
+        //     console.log("there are no users...");
+        //   }
+        // });
         // fetch all items
-        const itemsRef = ref(database, "items/");
+        const itemsRef = ref(database, "notes/");
         onValue(itemsRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
             setItems(data);
           } else {
-            console.log("there are no items");
+            //console.log("there are no notes");
           }
         });
         console.log("user is logged out");
@@ -188,16 +190,16 @@ export function DatabaseProvider({ children }) {
     <DatabaseContext.Provider
       value={{
         user,
-        userData,
-        users,
+        //userData,
+        //users,
         items,
-        userItems,
+        //userItems,
         addItem,
         updateItem,
         deleteItem,
-        updateUserData,
-        uploadProfileImage,
-        uploadItemImage
+        //updateUserData,
+        //uploadProfileImage,
+        //uploadItemImage
       }}
     >
       {children}

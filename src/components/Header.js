@@ -22,7 +22,7 @@ export default function Header() {
       }
     >
       <div className="container">
-        <span className="navbar-brand mb-0 h1">Template CRUD & auth App</span>
+        <span className="navbar-brand mb-0 h1">linky_notes</span>
         <button
           className="navbar-toggler collapsed"
           type="button"
@@ -50,7 +50,7 @@ export default function Header() {
                   }
                 }}
               >
-                About
+                about
               </Link>
             </li>
             <li className="nav-item">
@@ -63,20 +63,7 @@ export default function Header() {
                   }
                 }}
               >
-                Items
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to="/users"
-                onClick={() => {
-                  if (!isNavCollapsed) {
-                    handleNavCollapse();
-                  }
-                }}
-              >
-                Users
+                notes
               </Link>
             </li>
             {user ? (
@@ -90,32 +77,23 @@ export default function Header() {
                     }
                   }}
                 >
-                  Add item
+                  add note
                 </Link>
               </li>
             ) : null}
           </ul>
           {user ? (
-            <Link
-              className="nav-link text-muted"
-              to="/dashboard"
-              type="button"
-              onClick={() => {
-                if (!isNavCollapsed) {
-                  handleNavCollapse();
-                }
-              }}
-            >
+            <div className="text-muted me-3">
               {user.email ? user.email : null}
-            </Link>
+            </div>
           ) : null}
           <button
             className={
               theme.mode === "light"
                 ? "btn btn-secondary" +
-                  (isNavCollapsed ? " me-2" : " d-block w-100")
+                  (isNavCollapsed ? " me-3" : " d-block mt-2 w-100")
                 : "btn btn-light" +
-                  (isNavCollapsed ? " me-2" : " d-block w-100")
+                  (isNavCollapsed ? " me-3" : " d-block mt-2 w-100")
             }
             type="button"
             onClick={() => {
@@ -155,22 +133,6 @@ export default function Header() {
             </Link>
           ) : (
             <div>
-              <Link
-                to="/signup"
-                type="button"
-                className={
-                  isNavCollapsed
-                    ? "btn btn-secondary me-2"
-                    : "btn btn-secondary d-block mt-2"
-                }
-                onClick={() => {
-                  if (!isNavCollapsed) {
-                    handleNavCollapse();
-                  }
-                }}
-              >
-                Sign up
-              </Link>
               <Link
                 to="/signin"
                 type="button"
