@@ -34,50 +34,14 @@ export default function UpdateItemForm() {
           <h3>Update note!</h3>
           <hr />
           <div className="row">
-            {/*<div className="col-4">
-              {
-                item.itemImageURL ?
-                <img src={item.itemImageURL} className="img-fluid" />
-                :
-                <div>No item image yet...</div>
-              }
-              <p>Upload new item image:</p>
-              <input
-                className="form-control mb-2"
-                type="file"
-                onChange={(e) => {
-                  setSelectedFile(e.target.files[0]);
-                  console.log(e.target.files[0]);
-                }}
-              />
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={() => {
-                  if (selectedFile && itemKey && item) {
-                    uploadItemImage(selectedFile, itemKey, item);
-                  }
-                }}
-              >
-                Save new item image
-              </button>
-            </div>*/}
             <div className="col">
               <form>
-                <input
-                  className="form-control mb-2"
-                  type="text"
-                  defaultValue={item.title}
-                  onChange={(e) =>
-                    setItem({ ...item, title: e.target.value })
-                  }
-                />
                 <textarea
                   className="form-control mb-2"
-                  placeholder="item description goes here"
-                  defaultValue={item.description}
+                  placeholder="note content goes here"
+                  defaultValue={item.content}
                   onChange={(e) =>
-                    setItem({ ...item, description: e.target.value })
+                    setItem({ ...item, content: e.target.value })
                   }
                 ></textarea>
               </form>
