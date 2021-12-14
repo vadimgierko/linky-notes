@@ -38,6 +38,7 @@ export default function ItemsList() {
                       </Link>
                     </h4>
                     <p>{createShortContentAfterTitle(item.content)}</p>
+                    <p>{item.createdAt} {item.updatedAt ? " -> " + item.updatedAt : null}</p>
                   </div>
                   <div className="col-2 text-end">
                     {user && user.uid ? (

@@ -24,6 +24,7 @@ export function DatabaseProvider({ children }) {
   //const [userData, setUserData] = useState(null);
   //const [users, setUsers] = useState(null);
   const [items, setItems] = useState(null);
+  const [tags, setTags] = useState([]);
   //const [userItems, setUserItems] = useState(null);
 
   const addItem = (item) => {
@@ -50,6 +51,14 @@ export function DatabaseProvider({ children }) {
 
   const deleteItem = (itemKey) => {
     remove(ref(database, "notes/" + itemKey));
+  };
+
+  //============ TAGS ================
+
+  const addTags = (newTags) => {
+    set(ref(database, "tags/"), {
+      tags: [...tags, ...newTags]
+    });
   };
 
   // const updateUserData = (userData) => {
@@ -144,6 +153,16 @@ export function DatabaseProvider({ children }) {
             //console.log("there are no notes");
           }
         });
+        // fetch all tags
+        const tagsRef = ref(database, "tags/");
+        onValue(tagsRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            setTags(data);
+          } else {
+            console.log("there are no tags");
+          }
+        });
 
         // fetch user items after log in
         // const userItemsRef = ref(database, "notes/" + user.uid);
@@ -179,6 +198,16 @@ export function DatabaseProvider({ children }) {
             //console.log("there are no notes");
           }
         });
+        // fetch all tags
+        const tagsRef = ref(database, "tags/");
+        onValue(tagsRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            setTags(data);
+          } else {
+            console.log("there are no tags");
+          }
+        });
         console.log("user is logged out");
       }
     });
@@ -199,7 +228,9 @@ export function DatabaseProvider({ children }) {
         deleteItem,
         //updateUserData,
         //uploadProfileImage,
-        //uploadItemImage
+        //uploadItemImage,
+        tags,
+        addTags
       }}
     >
       {children}
