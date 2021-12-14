@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useTheme } from "../hooks/use-theme";
 import { useDatabase } from "../hooks/use-database";
 import { useAuth } from "../hooks/use-auth";
+import { createDate } from "../functions/functions";
 
 export default function UpdateItemForm() {
   const { theme } = useTheme();
@@ -50,11 +51,17 @@ export default function UpdateItemForm() {
                 type="button"
                 className="btn btn-secondary mb-2"
                 onClick={() => {
-                  updateItem(item, itemKey);
-                  console.log(item);
+                  const date = createDate();
+                  const itemWithDate = {...item, updatedAt: date};
+                  if (itemWithDate) {
+                    updateItem(itemWithDate, itemKey);
+                  } else {
+                    alert("There is a problem with adding date to your note... Note is not created");
+                  }
+                  console.log(itemWithDate);
                 }}
               >
-                Update item data
+                Update note
               </Link>
             </div>
           </div>          

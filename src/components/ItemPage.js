@@ -37,6 +37,8 @@ export default function ItemPage() {
                 }
               </h4>
               <p>{item.content}</p>
+              <hr />
+              <p>{item.createdAt} {item.updatedAt ? " -> " + item.updatedAt : null}</p>
             </div>
             <div className="col-2 text-end">
               {user && user.uid ? (

@@ -2,17 +2,18 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../hooks/use-theme";
 import { useDatabase } from "../hooks/use-database";
+import { createDate } from "../functions/functions";
 
 export default function AddItemForm() {
   const { theme } = useTheme();
 
   const [item, setItem] = useState({
-    //title: "",
     content: "",
     //itemImageURL: null,
-    keywords: [],
+    tags: [],
+    source: "",
     createdAt: null,
-    editedAt: null
+    updatedAt: null
   });
   
   const { addItem } = useDatabase();
@@ -24,14 +25,6 @@ export default function AddItemForm() {
       <h3>Create a new note!</h3>
       <hr />
       <form>
-        {/*<input
-          className="form-control mb-2"
-          type="text"
-          placeholder="title"
-          onChange={(e) =>
-            setItem({ ...item, title: e.target.value })
-          }
-        />*/}
         <textarea
           className="form-control mb-2"
           placeholder="note content goes here"
@@ -46,11 +39,17 @@ export default function AddItemForm() {
         type="button"
         className="btn btn-secondary mb-2"
         onClick={() => {
-          addItem(item);
+          const date = createDate();
+          const itemWithDate = {...item, createdAt: date};
+          if (itemWithDate) {
+            addItem(itemWithDate);
+          } else {
+            alert("There is a problem with adding date to your note... Note is not created");
+          }
           console.log(item);
         }}
       >
-        Add a new item
+        Add a new note
       </Link>
     </div>
   );
