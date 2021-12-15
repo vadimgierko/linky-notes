@@ -14,7 +14,6 @@ export default function AddItemForm() {
 
   const [item, setItem] = useState({
     content: "",
-    //itemImageURL: null,
     tags: [],
     source: "",
     createdAt: null,
@@ -160,7 +159,7 @@ export default function AddItemForm() {
       <Link
         to="/items"
         type="button"
-        className="btn btn-info mb-2 d-block text-white"
+        className="btn btn-success mb-2 d-block text-white"
         onClick={() => {
           const date = createDate();
           const itemWithDate = {...item, createdAt: date};
@@ -171,7 +170,6 @@ export default function AddItemForm() {
             alert("There is a problem with adding date to your note... Note is not created");
           }
           console.log(item);
-          // check if there are new tags and add them to database!
         }}
       >
         Add a new note
