@@ -24,6 +24,7 @@ export default function AddItemForm() {
   useEffect(() => {
     if (tags) {
       console.log("tags in database:", tags);
+      console.log("useEffect in AddItemForm works...", )
     } else {
       console.log("There are no tags in database...");
     }
@@ -72,6 +73,19 @@ export default function AddItemForm() {
       }
     }
     return availableTags;
+  }
+
+  function addNewTagsToDatabase() {
+    let newTags = [...item.tags];
+    for (let i = 0; i < newTags.length; i++) {
+      for (let n = 0; n < tags.length; n++) {
+        if (newTags[i] === tags[n]) {
+          const deleteAt = i;
+          newTags = [...newTags.slice(0, deleteAt), ...newTags.slice(deleteAt + 1)];
+        }
+      }
+    }
+    addTags(newTags);
   }
 
   useEffect(() => {
@@ -151,6 +165,7 @@ export default function AddItemForm() {
           const date = createDate();
           const itemWithDate = {...item, createdAt: date};
           if (itemWithDate) {
+            addNewTagsToDatabase();
             addItem(itemWithDate);
           } else {
             alert("There is a problem with adding date to your note... Note is not created");
