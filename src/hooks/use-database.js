@@ -154,7 +154,7 @@ export function DatabaseProvider({ children }) {
           }
         });
         // fetch all tags
-        const tagsRef = ref(database, "tags/");
+        const tagsRef = ref(database, "tags/tags");
         onValue(tagsRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
@@ -199,7 +199,7 @@ export function DatabaseProvider({ children }) {
           }
         });
         // fetch all tags
-        const tagsRef = ref(database, "tags/");
+        const tagsRef = ref(database, "tags/tags");
         onValue(tagsRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {

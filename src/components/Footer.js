@@ -11,7 +11,7 @@ export default function Footer() {
       }}
     >
       <hr />
-      <p className="text-center mb-0 pb-3">Created by Vadim Gierko | 2021</p>
+      <p className="text-center mb-0 pb-3">&copy; 2021 Vadim Gierko</p>
     </div>
   );
 }

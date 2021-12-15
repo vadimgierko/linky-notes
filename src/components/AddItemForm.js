@@ -14,7 +14,6 @@ export default function AddItemForm() {
 
   const [item, setItem] = useState({
     content: "",
-    //itemImageURL: null,
     tags: [],
     source: "",
     createdAt: null,
@@ -74,6 +73,19 @@ export default function AddItemForm() {
     return availableTags;
   }
 
+  function addNewTagsToDatabase() {
+    let newTags = [...item.tags];
+    for (let i = 0; i < newTags.length; i++) {
+      for (let n = 0; n < tags.length; n++) {
+        if (newTags[i] === tags[n]) {
+          const deleteAt = i;
+          newTags = [...newTags.slice(0, deleteAt), ...newTags.slice(deleteAt + 1)];
+        }
+      }
+    }
+    addTags(newTags);
+  }
+
   useEffect(() => {
     console.log("inputedTagValue:", inputedTagValue);
     setAvailableTags(generateAvailableTags(inputedTagValue));
@@ -111,8 +123,9 @@ export default function AddItemForm() {
             <p>There are no note tags yet...</p>
             <hr />
           </div>
-        )}
-        {inputedTagValue ? (
+        )
+      }
+      {inputedTagValue ? (
         <div>
           <button
             className="btn btn-outline-secondary mb-2 me-2"
@@ -146,17 +159,17 @@ export default function AddItemForm() {
       <Link
         to="/items"
         type="button"
-        className="btn btn-info mb-2 d-block text-white"
+        className="btn btn-success mb-2 d-block text-white"
         onClick={() => {
           const date = createDate();
           const itemWithDate = {...item, createdAt: date};
           if (itemWithDate) {
+            addNewTagsToDatabase();
             addItem(itemWithDate);
           } else {
             alert("There is a problem with adding date to your note... Note is not created");
           }
           console.log(item);
-          // check if there are new tags and add them to database!
         }}
       >
         Add a new note

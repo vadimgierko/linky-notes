@@ -54,7 +54,7 @@ export default function Container() {
             <UpdateItemForm />
           </Route>
         </Switch>
-        {/*<Footer />*/}
+        <Footer />
       </div>
     </div>
   );
