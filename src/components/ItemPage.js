@@ -37,6 +37,18 @@ export default function ItemPage() {
                 }
               </h4>
               <p>{item.content}</p>
+              <div>{item.tags && item.tags.length
+                ? item.tags.map((tag) => (
+                  <button
+                    key={"tag-button-for-" + tag}
+                    className="btn btn-outline-secondary mb-2 me-2"
+                    style={{ borderRadius: 20 }}
+                  >
+                    {tag}
+                  </button>
+                  ))
+                : (null)}
+              </div>
               <hr />
               <p>{item.createdAt} {item.updatedAt ? " -> " + item.updatedAt : null}</p>
             </div>

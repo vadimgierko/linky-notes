@@ -8,7 +8,69 @@ import { createShortContentAfterTitle, createShorterTitle } from "../functions/f
 export default function ItemsList() {
   const { theme } = useTheme();
   const { user } = useAuth();
-  const { items, deleteItem } = useDatabase();
+  const { items, deleteItem, tags } = useDatabase();
+
+  const [inputedTagValue, setInputedTagValue] = useState("");
+  const [availableTags, setAvailableTags] = useState(null);
+  const [filterTags, setFilterTags] = useState([]);
+
+  useEffect(() => {
+    if (tags) {
+      console.log("tags in database:", tags);
+    } else {
+      console.log("There are no tags in database...");
+    }
+  }, [tags]);
+  
+  function TagButton({ tag, deleteTag }) {
+    return (
+      <button type="button" className="btn btn-secondary mb-2 me-2" style={{ borderRadius: 20 }}>
+        {tag}{" "}
+        <i
+          className="bi bi-trash text-white m-2"
+          style={{
+            backgroundColor: "red",
+            cursor: "pointer"
+          }}
+          onClick={() => deleteTag(tag)}
+        ></i>
+      </button>
+    );
+  }
+
+  function deleteTag(tag) {
+    const updatedTags = filterTags.filter((item) => item !== tag);
+    setFilterTags(updatedTags);
+  }
+
+  function generateAvailableTags(input) {
+    let availableTags = [];
+    for (let i = 0; i < tags.length; i++) {
+      const tag = tags[i];
+      let sameLettersNum = 0;
+      for (let n = 0; n < input.length; n++) {
+        if (input[n] === tag[n]) {
+          // check every letter in order
+          sameLettersNum++;
+          // if it's the same, put tag into array
+          if (sameLettersNum === input.length) {
+            const isThisTagInArrayAlready = availableTags.find(
+              (availableTag) => availableTag === tag
+            );
+            if (!isThisTagInArrayAlready) {
+              availableTags.push(tag);
+            }
+          }
+        }
+      }
+    }
+    return availableTags;
+  }
+
+  useEffect(() => {
+    console.log("inputedTagValue:", inputedTagValue);
+    setAvailableTags(generateAvailableTags(inputedTagValue));
+  }, [inputedTagValue]);
 
   return (
     <div
@@ -17,6 +79,58 @@ export default function ItemsList() {
         color: theme.color
       }}
     >
+      <div>
+        <input
+          type="text"
+          className="form-control mb-2"
+          defaultValue={inputedTagValue}
+          placeholder="type some tag to search for notes"
+          onChange={(e) => setInputedTagValue(e.target.value)}
+        />
+        {filterTags && filterTags.length
+          ? filterTags.map((tag) => (
+              <TagButton key={tag} tag={tag} deleteTag={deleteTag} />
+            ))
+          : (
+            <div>
+              <p>There are no filter tags yet...</p>
+              <hr />
+            </div>
+          )
+        }
+      {inputedTagValue ? (
+        <div>
+          <button
+            className="btn btn-outline-secondary mb-2 me-2"
+            style={{ cursor: "pointer", borderRadius: 20 }}
+            onClick={() => {
+              setFilterTags([...filterTags, inputedTagValue]);
+              setInputedTagValue("");
+            }}
+          >
+            {inputedTagValue}
+          </button>
+          <hr />
+        </div>
+      ) : null}
+      {inputedTagValue && availableTags.length
+        ? availableTags.map((tag, i) => (
+            <div key={tag + i}>
+              <p
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setFilterTags([...filterTags, tag]);
+                  setInputedTagValue("");
+                }}
+              >
+                {tag}
+              </p>
+              <hr />
+            </div>
+          ))
+        : null}
+        <hr />
+      </div>
       <div>
         {items ? (
           Object.entries(items).map((itemObject) => {

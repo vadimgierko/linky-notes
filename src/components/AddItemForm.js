@@ -23,7 +23,6 @@ export default function AddItemForm() {
   useEffect(() => {
     if (tags) {
       console.log("tags in database:", tags);
-      console.log("useEffect in AddItemForm works...", )
     } else {
       console.log("There are no tags in database...");
     }
@@ -124,8 +123,9 @@ export default function AddItemForm() {
             <p>There are no note tags yet...</p>
             <hr />
           </div>
-        )}
-        {inputedTagValue ? (
+        )
+      }
+      {inputedTagValue ? (
         <div>
           <button
             className="btn btn-outline-secondary mb-2 me-2"

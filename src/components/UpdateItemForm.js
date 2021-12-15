@@ -26,7 +26,6 @@ export default function UpdateItemForm() {
   useEffect(() => {
     if (tags) {
       console.log("tags in database:", tags);
-      console.log("useEffect in UpdateItemForm works...", )
     } else {
       console.log("There are no tags in database...");
     }
