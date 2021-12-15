@@ -14,6 +14,41 @@ export default function ItemsList() {
   const [availableTags, setAvailableTags] = useState(null);
   const [filterTags, setFilterTags] = useState([]);
 
+  const [filteredItems, setFilteredItems] = useState([]);
+
+  function filterItems(filterTags) {
+    if (items) {
+      let filteredItemsArray = [];
+      const itemsArray = Object.entries(items);
+      for (let i = 0; i < itemsArray.length; i++) {
+        const item = itemsArray[i][1];
+        console.log("item:", item)
+        if (filterTags.length > 1) {
+          let sameNum = 0;
+          for (let n = 0; n < filterTags.length; n++) {
+            for (let m = 0; m < item.tags.length; m++) {
+              if (item.tags[m] === filterTags[n]) {
+                sameNum++;
+                if (sameNum === filterTags.length) {
+                  filteredItemsArray.push({...itemsArray[i]});
+                }
+              }
+            }
+          }
+        } else {
+          for (let m = 0; m < item.tags.length; m++) {
+            const tag = item.tags[m];
+            if (tag === filterTags[0]) {
+              filteredItemsArray.push({...itemsArray[i]});
+            }
+          }
+        }
+      }
+      setFilteredItems([...filteredItemsArray]);
+      console.log("filteredItemsArray:", filteredItemsArray);
+    }
+  }
+
   useEffect(() => {
     if (tags) {
       console.log("tags in database:", tags);
@@ -24,7 +59,11 @@ export default function ItemsList() {
   
   function TagButton({ tag, deleteTag }) {
     return (
-      <button type="button" className="btn btn-secondary mb-2 me-2" style={{ borderRadius: 20 }}>
+      <button
+        type="button"
+        className="btn btn-secondary mb-2 me-2"
+        style={{ borderRadius: 20 }}
+      >
         {tag}{" "}
         <i
           className="bi bi-trash text-white m-2"
@@ -71,6 +110,11 @@ export default function ItemsList() {
     console.log("inputedTagValue:", inputedTagValue);
     setAvailableTags(generateAvailableTags(inputedTagValue));
   }, [inputedTagValue]);
+
+  useEffect(() => {
+    filterItems(filterTags);
+    console.log("filterTags", filterTags);
+  }, [filterTags])
 
   return (
     <div
@@ -132,10 +176,11 @@ export default function ItemsList() {
         <hr />
       </div>
       <div>
-        {items ? (
-          Object.entries(items).map((itemObject) => {
-            const itemKey = itemObject[0];
-            const item = itemObject[1];
+        {filteredItems && filteredItems.length ? (
+          filteredItems.map((itemArray) => {
+            console.log("itemArray:", itemArray);
+            const itemKey = itemArray[0];
+            const item = itemArray[1];
             return (
               <div className="row" key={itemKey}>
                 <div className="row">
@@ -198,3 +243,66 @@ export default function ItemsList() {
     </div>
   );
 }
+
+// {items ? (
+//   Object.entries(items).map((itemObject) => {
+//     const itemKey = itemObject[0];
+//     const item = itemObject[1];
+//     return (
+//       <div className="row" key={itemKey}>
+//         <div className="row">
+//           <div className="col">
+//             <h4>
+//               <Link
+//                 to={"/items/" + itemKey}
+//                 style={{textDecoration: "none", color: theme.color}}
+//               >
+//                 {
+//                   createShorterTitle(item.content)
+//                 }
+//               </Link>
+//             </h4>
+//             <p>{createShortContentAfterTitle(item.content)}</p>
+//             <div>{item.tags && item.tags.length
+//               ? item.tags.map((tag) => (
+//                 <button
+//                   key={"tag-button-for-" + tag}
+//                   className="btn btn-outline-secondary mb-2 me-2"
+//                   style={{ borderRadius: 20 }}
+//                 >
+//                   {tag}
+//                 </button>
+//                 ))
+//               : (null)}
+//             </div>
+//             <p>{item.createdAt} {item.updatedAt ? " -> " + item.updatedAt : null}</p>
+//           </div>
+//           <div className="col-2 text-end">
+//             {user && user.uid ? (
+//               <>
+//                 <span>
+//                   <i
+//                     className="bi bi-trash text-danger me-2"
+//                     style={{ cursor: "pointer" }}
+//                     onClick={() => deleteItem(itemKey)}
+//                   ></i>
+//                 </span>
+//                 <Link to={"/items/update-item/" + itemKey}>
+//                   <i
+//                     className="bi bi-pencil text-info me-2"
+//                     style={{ cursor: "pointer" }}
+//                   ></i>
+//                 </Link>
+//               </>
+//             ) : null}
+//           </div>
+//         </div>
+//         <hr />
+//       </div>
+//     );
+//   })
+// ) : (
+//   <div>
+//     <h2>Downloading data...</h2>
+//   </div>
+// )}
