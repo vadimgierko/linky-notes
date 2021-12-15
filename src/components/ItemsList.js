@@ -30,7 +30,7 @@ export default function ItemsList() {
               if (item.tags[m] === filterTags[n]) {
                 sameNum++;
                 if (sameNum === filterTags.length) {
-                  filteredItemsArray.push({...itemsArray[i]});
+                  filteredItemsArray.push([...itemsArray[i]]);
                 }
               }
             }
@@ -39,7 +39,7 @@ export default function ItemsList() {
           for (let m = 0; m < item.tags.length; m++) {
             const tag = item.tags[m];
             if (tag === filterTags[0]) {
-              filteredItemsArray.push({...itemsArray[i]});
+              filteredItemsArray.push([...itemsArray[i]]);
             }
           }
         }
@@ -61,7 +61,7 @@ export default function ItemsList() {
     return (
       <button
         type="button"
-        className="btn btn-secondary mb-2 me-2"
+        className="btn btn-secondary mb-2 mt-2 me-2"
         style={{ borderRadius: 20 }}
       >
         {tag}{" "}
@@ -114,7 +114,13 @@ export default function ItemsList() {
   useEffect(() => {
     filterItems(filterTags);
     console.log("filterTags", filterTags);
-  }, [filterTags])
+  }, [filterTags]);
+
+  useEffect(() => {
+    if (items) {
+      console.log("items:", items);
+    }
+  }, [items]);
 
   return (
     <div
@@ -135,45 +141,36 @@ export default function ItemsList() {
           ? filterTags.map((tag) => (
               <TagButton key={tag} tag={tag} deleteTag={deleteTag} />
             ))
-          : (
-            <div>
-              <p>There are no filter tags yet...</p>
-              <hr />
-            </div>
-          )
+          : null
         }
-      {inputedTagValue ? (
-        <div>
+        {inputedTagValue ? (
           <button
-            className="btn btn-outline-secondary mb-2 me-2"
-            style={{ cursor: "pointer", borderRadius: 20 }}
+            className="btn btn-outline-secondary mb-2 mt-2 me-2"
+            style={{borderRadius: 20}}
             onClick={() => {
               setFilterTags([...filterTags, inputedTagValue]);
               setInputedTagValue("");
             }}
           >
             {inputedTagValue}
-          </button>
-          <hr />
-        </div>
-      ) : null}
-      {inputedTagValue && availableTags.length
-        ? availableTags.map((tag, i) => (
-            <div key={tag + i}>
-              <p
-                style={{ cursor: "pointer" }}
+          </button>    
+        ) : null}
+        {inputedTagValue && availableTags.length
+          ? availableTags.map((tag, i) => (
+              <button
+                key={"tag-button-for-" + tag}
+                className="btn btn-outline-secondary m-2"
+                style={{borderRadius: 20}}
                 onClick={() => {
                   setFilterTags([...filterTags, tag]);
                   setInputedTagValue("");
                 }}
               >
                 {tag}
-              </p>
-              <hr />
-            </div>
-          ))
-        : null}
-        <hr />
+              </button>
+            )
+        ) : null}
+        
       </div>
       <div>
         {filteredItems && filteredItems.length ? (
@@ -234,11 +231,7 @@ export default function ItemsList() {
               </div>
             );
           })
-        ) : (
-          <div>
-            <h2>Downloading data...</h2>
-          </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 # linky_notes app
 
-### This SPA allows you to create notes with keywords, which works similarly to tags.
+### This SPA allows you to create notes with tags.
 
 Thanks to that:
 - your notes are linked with each other by keywords
@@ -10,12 +10,13 @@ Thanks to that:
 - that is easy to find the particular note by choosing keywords they consist in search field
 - you are saving a tone of time to organize & efficiently use them
 
-At the moment this SPA is only available `for my personal use` - you can see my notes, but cannot sign up or modify my database. I've implemented only basic core features for the moment, but app is still growing & is tested.
+**At the moment this SPA is available `for my personal use` only** - you can see my notes, see, how it works, but cannot sign up or modify my database. I've implemented only basic core features for the moment, but app is growing rapidly.
 
 At the moment, I can:
 - sign in
 - add, update & delete notes when logged
-- see a list of all items
+- add & delete tags for my notes (can leave it without tags also)
+- find note by tag/ tags
 - switch dark/light mode
 
 ### Technologies I've used in this project:

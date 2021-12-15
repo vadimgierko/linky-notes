@@ -49,7 +49,7 @@ export default function ItemPage() {
                   ))
                 : (null)}
               </div>
-              <hr />
+              
               <p>{item.createdAt} {item.updatedAt ? " -> " + item.updatedAt : null}</p>
             </div>
             <div className="col-2 text-end">
@@ -71,6 +71,7 @@ export default function ItemPage() {
                 </>
               ) : null}
             </div>
+            <hr />
           </div>
         </>
       ) : (

@@ -18,13 +18,15 @@ export default function About() {
         <li>you are saving a tone of time to organize & efficiently use them</li>
       </ul>
       <p>
-        At the moment this SPA is only available for my personal use - you can see my notes, but cannot sign up or modify my database. I've implemented only basic core features for the moment, but app is still growing & is tested.</p>
+        <strong>At the moment this SPA is available for my personal use only.</strong> You can see my notes, but cannot sign up or modify my database. I've implemented only basic core features for the moment, but app is still growing & is tested.</p>
       <p>At the moment, I can:</p>
       <ul>
         <li>sign in</li>
         <li>add, update & delete notes when logged</li>
         <li>see a list of all items</li>
-        <li>switch dark/light mode</li>
+        <li>add & delete tags for my notes (can leave it without tags also)</li>
+        <li>find note/ notes by tag/ tags</li>
+        <li>switch dark/ light mode</li>
       </ul>
       <p>Technologies I've used in this project</p>
       <ul>
