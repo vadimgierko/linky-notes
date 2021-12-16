@@ -1,7 +1,7 @@
 import { ThemeProvider } from "./hooks/use-theme.js";
 import { AuthProvider } from "./hooks/use-auth.js";
 import { DatabaseProvider } from "./hooks/use-database.js";
-import Container from "./components/Container";
+import Container from "./pages/Container";
 
 export default function App() {
   return (
