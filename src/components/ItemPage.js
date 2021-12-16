@@ -1,9 +1,9 @@
 import { useTheme } from "../hooks/use-theme";
 import { useAuth } from "../hooks/use-auth";
 import { useDatabase } from "../hooks/use-database";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { createShorterTitle } from "../functions/functions";
+import ItemCard from "../molecules/ItemCard";
 
 export default function ItemPage() {
   const { theme } = useTheme();
@@ -28,52 +28,14 @@ export default function ItemPage() {
       }}
     >
       {item ? (
-        <>
-          <div className="row">
-            <div className="col">
-              <h4>
-                {
-                  createShorterTitle(item.content)
-                }
-              </h4>
-              <p>{item.content}</p>
-              <div>{item.tags && item.tags.length
-                ? item.tags.map((tag) => (
-                  <button
-                    key={"tag-button-for-" + tag}
-                    className="btn btn-outline-secondary mb-2 me-2"
-                    style={{ borderRadius: 20 }}
-                  >
-                    {tag}
-                  </button>
-                  ))
-                : (null)}
-              </div>
-              
-              <p>{item.createdAt} {item.updatedAt ? " -> " + item.updatedAt : null}</p>
-            </div>
-            <div className="col-2 text-end">
-              {user && user.uid ? (
-                <>
-                  <Link to="/items">
-                    <i
-                      className="bi bi-trash text-danger mx-2"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => deleteItem(itemKey)}
-                    ></i>
-                  </Link>
-                  <Link to={"/items/update-item/" + itemKey}>
-                    <i
-                      className="bi bi-pencil text-info"
-                      style={{ cursor: "pointer" }}
-                    ></i>
-                  </Link>
-                </>
-              ) : null}
-            </div>
-            <hr />
-          </div>
-        </>
+        <ItemCard
+          key={"item-" + itemKey}
+          item={item}
+          itemKey={itemKey}
+          editLink={"/items/update-item/" + itemKey}
+          deleteFunction={() => deleteItem(itemKey)}
+          deleteLink="/items"
+        />
       ) : (
         <h1>Downloading data...</h1>
       )}
