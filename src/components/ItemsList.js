@@ -5,14 +5,13 @@ import { useEffect, useState } from "react";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
 import TagButton from "../atoms/TagButton";
 import ItemCard from "../molecules/ItemCard";
+import TagSearchForm from "../molecules/TagSearchForm";
 
 export default function ItemsList() {
   const { theme } = useTheme();
   const { user } = useAuth();
   const { items, deleteItem, tags } = useDatabase();
-
-  const [inputedTagValue, setInputedTagValue] = useState("");
-  const [availableTags, setAvailableTags] = useState(null);
+  
   const [filterTags, setFilterTags] = useState([]);
 
   const [filteredItems, setFilteredItems] = useState([]);
@@ -48,39 +47,6 @@ export default function ItemsList() {
     }
   }
 
-  function deleteTag(tag) {
-    const updatedTags = filterTags.filter((item) => item !== tag);
-    setFilterTags(updatedTags);
-  }
-
-  function generateAvailableTags(input) {
-    let availableTags = [];
-    for (let i = 0; i < tags.length; i++) {
-      const tag = tags[i];
-      let sameLettersNum = 0;
-      for (let n = 0; n < input.length; n++) {
-        if (input[n] === tag[n]) {
-          // check every letter in order
-          sameLettersNum++;
-          // if it's the same, put tag into array
-          if (sameLettersNum === input.length) {
-            const isThisTagInArrayAlready = availableTags.find(
-              (availableTag) => availableTag === tag
-            );
-            if (!isThisTagInArrayAlready) {
-              availableTags.push(tag);
-            }
-          }
-        }
-      }
-    }
-    return availableTags;
-  }
-
-  useEffect(() => {
-    setAvailableTags(generateAvailableTags(inputedTagValue));
-  }, [inputedTagValue]);
-
   useEffect(() => {
     filterItems(filterTags);
   }, [filterTags]);
@@ -92,45 +58,7 @@ export default function ItemsList() {
         color: theme.color
       }}
     >
-      <div>
-        <input
-          type="text"
-          className="form-control mb-2"
-          defaultValue={inputedTagValue}
-          placeholder="type some tag to search for notes"
-          onChange={(e) => setInputedTagValue(e.target.value)}
-        />
-        {filterTags && filterTags.length
-          ? filterTags.map((tag) => (
-              <TagButtonWithTrashIcon
-                key={tag}
-                tag={tag}
-                onTrashIconClick={() => deleteTag(tag)}
-              />
-            ))
-          : null}
-        {inputedTagValue ? (
-          <TagButton
-            tag={inputedTagValue}
-            onClick={() => {
-              setFilterTags([...filterTags, inputedTagValue]);
-              setInputedTagValue("");
-            }}
-          />
-        ) : null}
-        {inputedTagValue && availableTags.length
-          ? availableTags.map((tag, i) => (
-              <TagButton
-                key={tag}
-                tag={tag}
-                onClick={() => {
-                  setFilterTags([...filterTags, tag]);
-                  setInputedTagValue("");
-                }}
-              />
-            ))
-          : null}
-      </div>
+      <TagSearchForm tags={tags} filterTags={filterTags} setFilterTags={setFilterTags} />
       <div>
         {filteredItems && filteredItems.length
           ? filteredItems.map((itemArray) => {
