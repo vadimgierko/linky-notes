@@ -1,7 +1,6 @@
 import TagButton from "../atoms/TagButton";
-import { createShorterTitle } from "../functions/functions";
 import { Link } from "react-router-dom";
-import { useTheme } from "../hooks/use-theme";
+import { useTheme } from "../../hooks/use-theme";
 import TrashIconButton from "../atoms/TrashIconButton";
 import PencilIconButton from "../atoms/PencilIconButton";
 

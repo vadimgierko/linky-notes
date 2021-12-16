@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/use-auth";
 import { useDatabase } from "../hooks/use-database";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ItemCard from "../molecules/ItemCard";
+import ItemCard from "../components/molecules/ItemCard";
 
 export default function ItemPage() {
   const { theme } = useTheme();

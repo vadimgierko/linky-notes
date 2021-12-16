@@ -2,10 +2,8 @@ import { useTheme } from "../hooks/use-theme";
 import { useAuth } from "../hooks/use-auth";
 import { useDatabase } from "../hooks/use-database";
 import { useEffect, useState } from "react";
-import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
-import TagButton from "../atoms/TagButton";
-import ItemCard from "../molecules/ItemCard";
-import TagSearchForm from "../molecules/TagSearchForm";
+import ItemCard from "../components/molecules/ItemCard";
+import TagSearchForm from "../components/molecules/TagSearchForm";
 
 export default function ItemsList() {
   const { theme } = useTheme();
