@@ -77,16 +77,19 @@ export default function UpdateItemForm() {
   }
 
   function addNewTagsToDatabase() {
-    let newTags = [...item.tags];
-    for (let i = 0; i < newTags.length; i++) {
-      for (let n = 0; n < tags.length; n++) {
-        if (newTags[i] === tags[n]) {
-          const deleteAt = i;
-          newTags = [...newTags.slice(0, deleteAt), ...newTags.slice(deleteAt + 1)];
-        }
+    let newTags = [];
+    for (let i = 0; i < item.tags.length; i++) {
+      const newTag = item.tags[i];
+      if (!tags.includes(newTag)) {
+        newTags.push(newTag);
       }
     }
-    addTags(newTags);
+    if (newTags.length) {
+      addTags(newTags);
+      console.log("New tags:", newTags);
+    } else {
+      console.log("There are no new tags!");
+    }
   }
 
   useEffect(() => {
