@@ -1,14 +1,12 @@
 import { useTheme } from "../hooks/use-theme";
-import { useAuth } from "../hooks/use-auth";
 import { useDatabase } from "../hooks/use-database";
 import { useEffect, useState } from "react";
-import ItemCard from "../components/molecules/ItemCard";
 import TagSearchForm from "../components/molecules/TagSearchForm";
+import ItemsList from "../components/organisms/ItemsList";
 
-export default function ItemsList() {
+export default function ItemsPage() {
   const { theme } = useTheme();
-  const { user } = useAuth();
-  const { items, deleteItem, tags } = useDatabase();
+  const { items, tags } = useDatabase();
 
   const [filterTags, setFilterTags] = useState([]);
 
@@ -40,6 +38,10 @@ export default function ItemsList() {
     filterItems(filterTags);
   }, [filterTags]);
 
+  useEffect(() => {
+    console.log(items);
+  }, [items]);
+
   return (
     <div
       style={{
@@ -52,24 +54,9 @@ export default function ItemsList() {
         filterTags={filterTags}
         setFilterTags={setFilterTags}
       />
-      <div>
-        {filteredItems && filteredItems.length
-          ? filteredItems.map((itemArray) => {
-              const itemKey = itemArray[0];
-              const item = itemArray[1];
-              return (
-                <ItemCard
-                  key={"item-" + itemKey}
-                  item={item}
-                  itemKey={itemKey}
-                  editLink={"/items/update-item/" + itemKey}
-                  deleteFunction={() => deleteItem(itemKey)}
-                  deleteLink="/items"
-                />
-              );
-            })
-          : null}
-      </div>
+      {filteredItems && filteredItems.length
+        ? <ItemsList items={filteredItems} />
+        : <ItemsList items={items ? Object.entries(items) : []} />}
     </div>
   );
 }

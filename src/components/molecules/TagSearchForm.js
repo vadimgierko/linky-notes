@@ -43,7 +43,7 @@ export default function TagSearchForm({ tags, filterTags, setFilterTags }) {
     <div>
       <input
         type="text"
-        className="form-control"
+        className="form-control mb-2"
         defaultValue={inputedTagValue}
         placeholder="type some tag to search for notes"
         onChange={(e) => setInputedTagValue(e.target.value)}
