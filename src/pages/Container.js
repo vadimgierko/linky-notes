@@ -10,6 +10,7 @@ import Footer from "./Footer.js";
 import AddItemForm from "./AddItemForm";
 import UpdateItemForm from "./UpdateItemForm";
 import ItemPage from "./ItemPage";
+import TagsList from "./TagsList";
 
 export default function Container() {
   const { theme } = useTheme();
@@ -25,7 +26,7 @@ export default function Container() {
     >
       <Header />
       <div
-        className="container"
+        className="container-sm"
         style={{
           background: theme.background,
           color: theme.color,
@@ -44,6 +45,9 @@ export default function Container() {
           </Route>
           <Route exact path="/items">
             <ItemsList />
+          </Route>
+          <Route exact path="/tags">
+            <TagsList />
           </Route>
           <Route path="/add-item">
             <AddItemForm />

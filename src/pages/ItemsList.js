@@ -9,7 +9,7 @@ export default function ItemsList() {
   const { theme } = useTheme();
   const { user } = useAuth();
   const { items, deleteItem, tags } = useDatabase();
-  
+
   const [filterTags, setFilterTags] = useState([]);
 
   const [filteredItems, setFilteredItems] = useState([]);
@@ -20,23 +20,14 @@ export default function ItemsList() {
       const itemsArray = Object.entries(items);
       for (let i = 0; i < itemsArray.length; i++) {
         const item = itemsArray[i][1];
-        if (filterTags.length > 1) {
-          let sameNum = 0;
-          for (let n = 0; n < filterTags.length; n++) {
-            for (let m = 0; m < item.tags.length; m++) {
-              if (item.tags[m] === filterTags[n]) {
-                sameNum++;
-                if (sameNum === filterTags.length) {
-                  filteredItemsArray.push([...itemsArray[i]]);
-                }
-              }
-            }
-          }
-        } else {
+        let sameNum = 0;
+        for (let n = 0; n < filterTags.length; n++) {
           for (let m = 0; m < item.tags.length; m++) {
-            const tag = item.tags[m];
-            if (tag === filterTags[0]) {
-              filteredItemsArray.push([...itemsArray[i]]);
+            if (item.tags[m] === filterTags[n]) {
+              sameNum++;
+              if (sameNum === filterTags.length) {
+                filteredItemsArray.push([...itemsArray[i]]);
+              }
             }
           }
         }
@@ -56,7 +47,11 @@ export default function ItemsList() {
         color: theme.color
       }}
     >
-      <TagSearchForm tags={tags} filterTags={filterTags} setFilterTags={setFilterTags} />
+      <TagSearchForm
+        tags={tags}
+        filterTags={filterTags}
+        setFilterTags={setFilterTags}
+      />
       <div>
         {filteredItems && filteredItems.length
           ? filteredItems.map((itemArray) => {
