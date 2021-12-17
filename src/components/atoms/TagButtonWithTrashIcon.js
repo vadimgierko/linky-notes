@@ -2,7 +2,7 @@ export default function TagButtonWithTrashIcon({ tag, onTrashIconClick }) {
     return (
         <button
             type="button"
-            className="btn btn-outline-secondary mb-2 mt-2 me-2"
+            className="btn btn-outline-secondary mb-2 me-2"
             style={{ borderRadius: 20 }}
         >
             {tag}{" "}

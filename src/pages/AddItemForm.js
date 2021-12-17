@@ -74,8 +74,9 @@ export default function AddItemForm() {
   }
 
   function addNewTagsToDatabase() {
-    let newTags = [...item.tags];
+    
     for (let i = 0; i < newTags.length; i++) {
+      let newTags = [...item.tags];
       for (let n = 0; n < tags.length; n++) {
         if (newTags[i] === tags[n]) {
           const deleteAt = i;

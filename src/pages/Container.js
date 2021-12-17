@@ -5,11 +5,12 @@ import { useTheme } from "../hooks/use-theme";
 import Header from "./Header";
 import About from "./About.js";
 import SignInForm from "./SignInForm.js";
-import ItemsList from "./ItemsList";
+import ItemsPage from "./ItemsPage";
 import Footer from "./Footer.js";
 import AddItemForm from "./AddItemForm";
 import UpdateItemForm from "./UpdateItemForm";
 import ItemPage from "./ItemPage";
+import TagsList from "./TagsList";
 
 export default function Container() {
   const { theme } = useTheme();
@@ -43,7 +44,10 @@ export default function Container() {
             <ItemPage />
           </Route>
           <Route exact path="/items">
-            <ItemsList />
+            <ItemsPage />
+          </Route>
+          <Route exact path="/tags">
+            <TagsList />
           </Route>
           <Route path="/add-item">
             <AddItemForm />

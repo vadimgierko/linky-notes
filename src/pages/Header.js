@@ -66,6 +66,32 @@ export default function Header() {
                 notes
               </Link>
             </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to="/tags"
+                onClick={() => {
+                  if (!isNavCollapsed) {
+                    handleNavCollapse();
+                  }
+                }}
+              >
+                tags
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to="/sources"
+                onClick={() => {
+                  if (!isNavCollapsed) {
+                    handleNavCollapse();
+                  }
+                }}
+              >
+                sources
+              </Link>
+            </li>
             {user ? (
               <li className="nav-item">
                 <Link

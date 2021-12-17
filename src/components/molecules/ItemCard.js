@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
 import TrashIconButton from "../atoms/TrashIconButton";
 import PencilIconButton from "../atoms/PencilIconButton";
+import EyeIconButton from "../atoms/EyeIconButton";
 
 export default function ItemCard({
     item,
@@ -13,18 +14,14 @@ export default function ItemCard({
 }) {
     const { theme } = useTheme();
     return (
-        <div className="card mb-3">
+        <div className="card mb-2">
             <div className="card-header text-end">
+                <EyeIconButton link={"/items/" + itemKey} />
                 <PencilIconButton link={editLink} />
                 <TrashIconButton link={deleteLink} onClick={deleteFunction} />
             </div>
             <div className="card-body">
-                <Link
-                    to={"/items/" + itemKey}
-                    style={{ textDecoration: "none" }}
-                >
-                    <p className="card-text text-secondary">{item.content}</p>
-                </Link>
+                <p className="card-text text-secondary">{item.content}</p>
                 {item.tags && item.tags.length
                 ? item.tags.map((tag) => <TagButton key={"item-tag-" + tag} tag={tag} />)
                 : null}    
