@@ -6,9 +6,9 @@ export const useTheme = () => useContext(ThemeContext);
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState({
-    mode: "light",
-    color: "black",
-    background: "white"
+    mode: "dark",
+      color: "white",
+      background: "rgb(41, 41, 41)"
   });
 
   const switchToLight = () =>

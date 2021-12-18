@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
 import TagButton from "../atoms/TagButton";
+import { useTheme } from "../../hooks/use-theme";
 
 export default function TagSearchForm({ tags, filterTags, setFilterTags }) {
+  const { theme } = useTheme();
   const [inputedTagValue, setInputedTagValue] = useState("");
   const [availableTags, setAvailableTags] = useState(null);
 
@@ -43,7 +45,7 @@ export default function TagSearchForm({ tags, filterTags, setFilterTags }) {
     <div>
       <input
         type="text"
-        className="form-control mb-2"
+        className={"form-control mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
         defaultValue={inputedTagValue}
         placeholder="type some tag to search for notes"
         onChange={(e) => setInputedTagValue(e.target.value)}
@@ -62,6 +64,7 @@ export default function TagSearchForm({ tags, filterTags, setFilterTags }) {
           tag={inputedTagValue}
           onClick={() => {
             setFilterTags([...filterTags, inputedTagValue]);
+            setInputedTagValue("");
           }}
         />
       ) : null}

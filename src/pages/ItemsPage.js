@@ -54,8 +54,10 @@ export default function ItemsPage() {
         filterTags={filterTags}
         setFilterTags={setFilterTags}
       />
-      {filteredItems && filteredItems.length
-        ? <ItemsList items={filteredItems} />
+      {filterTags && filterTags.length
+        ? (filteredItems && filteredItems.length
+          ? <ItemsList items={filteredItems} />
+          : <div>There are no notes including this tag/tags...</div>)
         : <ItemsList items={items ? Object.entries(items) : []} />}
     </div>
   );
