@@ -1,5 +1,4 @@
 import TagButton from "../atoms/TagButton";
-import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
 import TrashIconButton from "../atoms/TrashIconButton";
 import PencilIconButton from "../atoms/PencilIconButton";
@@ -14,7 +13,7 @@ export default function ItemCard({
 }) {
     const { theme } = useTheme();
     return (
-        <div className="card mb-2">
+        <div className={"card mb-2 bg-" + theme.mode}>
             <div className="card-header text-end">
                 <EyeIconButton link={"/items/" + itemKey} />
                 <PencilIconButton link={editLink} />

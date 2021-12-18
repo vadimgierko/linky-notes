@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
 import TagButton from "../atoms/TagButton";
+import { useTheme } from "../../hooks/use-theme";
 
-export default function TagSearchForm({ tags, filterTags, setFilterTags }) {
+export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
+  const { theme } = useTheme();
   const [inputedTagValue, setInputedTagValue] = useState("");
   const [availableTags, setAvailableTags] = useState(null);
 
   function deleteTag(tag) {
-    const updatedTags = filterTags.filter((item) => item !== tag);
-    setFilterTags(updatedTags);
+    const updatedTags = chosenTags.filter((item) => item !== tag);
+    setChosenTags(updatedTags);
   }
 
   function generateAvailableTags(input) {
@@ -40,16 +42,18 @@ export default function TagSearchForm({ tags, filterTags, setFilterTags }) {
   }, [inputedTagValue]);
 
   return (
-    <div>
+    <div
+      style={{ background: theme.background, color: theme.color }}
+    >
       <input
         type="text"
-        className="form-control mb-2"
+        className={"form-control mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
         defaultValue={inputedTagValue}
         placeholder="type some tag to search for notes"
         onChange={(e) => setInputedTagValue(e.target.value)}
       />
-      {filterTags && filterTags.length
-        ? filterTags.map((tag) => (
+      {chosenTags && chosenTags.length
+        ? chosenTags.map((tag) => (
             <TagButtonWithTrashIcon
               key={tag}
               tag={tag}
@@ -61,7 +65,8 @@ export default function TagSearchForm({ tags, filterTags, setFilterTags }) {
         <TagButton
           tag={inputedTagValue}
           onClick={() => {
-            setFilterTags([...filterTags, inputedTagValue]);
+            setChosenTags([...chosenTags, inputedTagValue]);
+            setInputedTagValue("");
           }}
         />
       ) : null}
@@ -71,7 +76,7 @@ export default function TagSearchForm({ tags, filterTags, setFilterTags }) {
               key={tag}
               tag={tag}
               onClick={() => {
-                setFilterTags([...filterTags, tag]);
+                setChosenTags([...chosenTags, tag]);
                 setInputedTagValue("");
               }}
             />
