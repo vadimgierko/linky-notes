@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useTheme } from "../hooks/use-theme";
 import { useDatabase } from "../hooks/use-database";
-import { createDate } from "../functions/functions";
 import ItemForm from "../components/organisms/ItemForm";
 
-export default function AddItemForm() {
+export default function AddItemPage() {
 
   const { theme } = useTheme();
   const { addItem, tags, addTags } = useDatabase();
@@ -20,6 +17,7 @@ export default function AddItemForm() {
         onItemFormClick={addItem}
         link="/items"
         buttonText="Add a new note"
+        headerText="Create a new note!"
       />
     </div>
   );

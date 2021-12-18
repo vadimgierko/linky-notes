@@ -7,8 +7,8 @@ import About from "./About.js";
 import SignInForm from "./SignInForm.js";
 import ItemsPage from "./ItemsPage";
 import Footer from "./Footer.js";
-import AddItemForm from "./AddItemForm";
-import UpdateItemForm from "./UpdateItemForm";
+import AddItemPage from "./AddItemPage";
+import UpdateItemPage from "./UpdateItemPage";
 import ItemPage from "./ItemPage";
 import TagsList from "./TagsList";
 
@@ -50,10 +50,10 @@ export default function Container() {
             <TagsList />
           </Route>
           <Route path="/add-item">
-            <AddItemForm />
+            <AddItemPage />
           </Route>
           <Route exact path="/items/update-item/:itemKey">
-            <UpdateItemForm />
+            <UpdateItemPage />
           </Route>
         </Switch>
         <Footer />
