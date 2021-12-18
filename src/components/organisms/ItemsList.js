@@ -19,12 +19,12 @@ export default function ItemsList({ items }) {
             const item = itemArray[1];
             return (
                 <ItemCard
-                    key={"item-" + itemKey}
-                    item={item}
-                    itemKey={itemKey}
-                    editLink={"/items/update-item/" + itemKey}
-                    deleteFunction={() => deleteItem(itemKey)}
-                    deleteLink="/items"
+                  key={"item-" + itemKey}
+                  item={item}
+                  itemKey={itemKey}
+                  editLink={"/items/update-item/" + itemKey}
+                  deleteFunction={() => deleteItem(itemKey)}
+                  deleteLink="/items"
                 />
             );
         })}

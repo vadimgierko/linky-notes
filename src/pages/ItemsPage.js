@@ -51,8 +51,8 @@ export default function ItemsPage() {
     >
       <TagSearchForm
         tags={tags}
-        filterTags={filterTags}
-        setFilterTags={setFilterTags}
+        chosenTags={filterTags}
+        setChosenTags={setFilterTags}
       />
       {filterTags && filterTags.length
         ? (filteredItems && filteredItems.length
