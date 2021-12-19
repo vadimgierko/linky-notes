@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react/cjs/react.development";
 import Form from "../components/organisms/Form";
+import { useDatabase } from "../hooks/use-database";
 
 export default function AddSourcePage() {
+
+    const { sources, addSource} = useDatabase();
 
     const [item, setItem] = useState({
         title: "",
@@ -14,8 +17,8 @@ export default function AddSourcePage() {
     });
 
     function onFormSubmit(updatedItem) {
-        setItem(updatedItem);
-        // addSource(updatedItem) to database
+        //setItem(updatedItem);
+        addSource(updatedItem);
     }
 
     useEffect(() => {
