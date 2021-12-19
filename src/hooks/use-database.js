@@ -1,8 +1,7 @@
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { firebaseAuth, database, storage } from "../firebaseConfig";
-import { onAuthStateChanged } from "firebase/auth";
+import { database, storage } from "../firebaseConfig";
 
 import {
   ref,
@@ -20,27 +19,21 @@ export const useDatabase = () => useContext(DatabaseContext);
 
 export function DatabaseProvider({ children }) {
 
-  const [user, setUser] = useState(null);
-  //const [userData, setUserData] = useState(null);
-  //const [users, setUsers] = useState(null);
   const [items, setItems] = useState(null);
   const [tags, setTags] = useState([]);
-  //const [userItems, setUserItems] = useState(null);
+  const [sources, setSources] = useState(null);
 
   const addItem = (item) => {
-    if (user) {
-      const newItem = {
-        ...item,
-        //userId: user.uid
-      };
+    const newItem = {
+      ...item,
+    };
 
-      const newItemKey = push(child(ref(database), "notes")).key;
+    const newItemKey = push(child(ref(database), "notes")).key;
 
-      const updates = {};
-      updates["notes/" + newItemKey] = newItem;
+    const updates = {};
+    updates["notes/" + newItemKey] = newItem;
 
-      return update(ref(database), updates);
-    }
+    return update(ref(database), updates);
   };
 
   const updateItem = (updatedItem, itemKey) => {
@@ -59,6 +52,21 @@ export function DatabaseProvider({ children }) {
     set(ref(database, "tags/"), {
       tags: [...tags, ...newTags]
     });
+  };
+
+  //========== SOURCES =============
+
+  const addSource = (item) => {
+    const newItem = {
+      ...item,
+    };
+
+    const newItemKey = push(child(ref(database), "sources")).key;
+
+    const updates = {};
+    updates["sources/" + newItemKey] = newItem;
+
+    return update(ref(database), updates);
   };
 
   // const updateUserData = (userData) => {
@@ -119,110 +127,45 @@ export function DatabaseProvider({ children }) {
   // }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
-      if (user) {
-        setUser(user);
-
-        // const userDataRef = ref(database, `users/${user.uid}`);
-        // onValue(userDataRef, (snapshot) => {
-        //   const data = snapshot.val();
-        //   if (data) {
-        //     setUserData(data);
-        //   } else {
-        //     console.log("there are no user data...");
-        //   }
-        // });
-        // //fetch users list
-        // const usersRef = ref(database, `users/`);
-        // onValue(usersRef, (snapshot) => {
-        //   const data = snapshot.val();
-        //   if (data) {
-        //     setUsers(data);
-        //   } else {
-        //     console.log("there are no users...");
-        //   }
-        // });
-
-        // fetch all items
-        const itemsRef = ref(database, "notes/");
-        onValue(itemsRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setItems(data);
-          } else {
-            //console.log("there are no notes");
-          }
-        });
-        // fetch all tags
-        const tagsRef = ref(database, "tags/tags");
-        onValue(tagsRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setTags(data);
-          } else {
-            console.log("there are no tags");
-          }
-        });
-
-        // fetch user items after log in
-        // const userItemsRef = ref(database, "notes/" + user.uid);
-        // onValue(userItemsRef, (snapshot) => {
-        //   const data = snapshot.val();
-        //   if (data) {
-        //     setUserItems(data);
-        //   } else {
-        //     console.log("there are no user notes");
-        //   }
-        // });
+    // fetch all items
+    const itemsRef = ref(database, "notes/");
+    onValue(itemsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setItems(data);
+        console.log("items in database:", data);
       } else {
-        setUser(null);
-        //setUserData(null);
-        //setUserItems(null);
-        //fetch users list
-        // const usersRef = ref(database, `users/`);
-        // onValue(usersRef, (snapshot) => {
-        //   const data = snapshot.val();
-        //   if (data) {
-        //     setUsers(data);
-        //   } else {
-        //     console.log("there are no users...");
-        //   }
-        // });
-        // fetch all items
-        const itemsRef = ref(database, "notes/");
-        onValue(itemsRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setItems(data);
-          } else {
-            //console.log("there are no notes");
-          }
-        });
-        // fetch all tags
-        const tagsRef = ref(database, "tags/tags");
-        onValue(tagsRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setTags(data);
-          } else {
-            console.log("there are no tags");
-          }
-        });
-        console.log("user is logged out");
+        console.log("there are no notes...");
       }
     });
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
+    // fetch all tags
+    const tagsRef = ref(database, "tags/tags");
+    onValue(tagsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setTags(data);
+        console.log("tags in database:", data);
+      } else {
+        console.log("there are no tags...");
+      }
+    });
+    // fetch all sources
+    const sourcesRef = ref(database, "sources/");
+    onValue(sourcesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setSources(data);
+        console.log("sources in database:", data);
+      } else {
+        console.log("there are no sources...");
+      }
+    });
   }, []);
 
   return (
     <DatabaseContext.Provider
       value={{
-        user,
-        //userData,
-        //users,
         items,
-        //userItems,
         addItem,
         updateItem,
         deleteItem,
@@ -230,7 +173,9 @@ export function DatabaseProvider({ children }) {
         //uploadProfileImage,
         //uploadItemImage,
         tags,
-        addTags
+        addTags,
+        sources,
+        addSource
       }}
     >
       {children}
