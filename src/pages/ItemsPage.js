@@ -1,7 +1,7 @@
 import { useTheme } from "../hooks/use-theme";
 import { useDatabase } from "../hooks/use-database";
 import { useEffect, useState } from "react";
-import TagSearchForm from "../components/molecules/TagSearchForm";
+import TagSearchForm from "../components/organisms/TagSearchForm";
 import ItemsList from "../components/organisms/ItemsList";
 
 export default function ItemsPage() {

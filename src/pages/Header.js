@@ -107,6 +107,21 @@ export default function Header() {
                 </Link>
               </li>
             ) : null}
+            {user ? (
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  to="/add-source"
+                  onClick={() => {
+                    if (!isNavCollapsed) {
+                      handleNavCollapse();
+                    }
+                  }}
+                >
+                  add source
+                </Link>
+              </li>
+            ) : null}
           </ul>
           {user ? (
             <div className="text-muted me-3">

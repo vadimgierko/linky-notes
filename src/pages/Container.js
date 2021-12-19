@@ -11,6 +11,7 @@ import AddItemPage from "./AddItemPage";
 import UpdateItemPage from "./UpdateItemPage";
 import ItemPage from "./ItemPage";
 import TagsList from "./TagsList";
+import AddSourcePage from "./AddSourcePage";
 
 export default function Container() {
   const { theme } = useTheme();
@@ -54,6 +55,9 @@ export default function Container() {
           </Route>
           <Route exact path="/items/update-item/:itemKey">
             <UpdateItemPage />
+          </Route>
+          <Route exact path="/add-source">
+            <AddSourcePage />
           </Route>
         </Switch>
         <Footer />

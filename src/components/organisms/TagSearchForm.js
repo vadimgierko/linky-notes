@@ -49,7 +49,7 @@ export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
         type="text"
         className={"form-control mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
         defaultValue={inputedTagValue}
-        placeholder="type some tag to search for notes"
+        placeholder="type some tag"
         onChange={(e) => setInputedTagValue(e.target.value)}
       />
       {chosenTags && chosenTags.length
