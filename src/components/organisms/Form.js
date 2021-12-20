@@ -18,9 +18,8 @@ export default function Form({ item, handleSubmit, buttonText }) {
       // for adding new item
       const emptyItem = {
         title: "",
-        subtitle: "",
-        author: "",
-        publisher: "",
+        name: "",
+        surname: "",
         city: "",
         year: ""
       };

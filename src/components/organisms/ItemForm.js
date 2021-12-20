@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
 import { createDate } from "../../functions/functions";
 import TagSearchForm from "./TagSearchForm";
+import Form from "../organisms/Form";
+import Input from "../atoms/Input";
+import {useDatabase} from "../../hooks/use-database";
 
 export default function ItemForm({
   tags,
@@ -15,9 +18,18 @@ export default function ItemForm({
   passedItemKey
 }) {
   const { theme } = useTheme();
-  const [itemTags, setItemTags] = useState([]);
+  const { sources, addSource } = useDatabase();
+
+  const [sourcesList, setSourcesList] = useState([]);
 
   const [item, setItem] = useState(null);
+  const [itemTags, setItemTags] = useState([]);
+
+  useEffect(() => {
+    if (sources) {
+      setSourcesList([...Object.entries(sources)]);
+    }
+  }, [sources]);
 
   useEffect(() => {
     if (passedItem) {
@@ -30,6 +42,7 @@ export default function ItemForm({
         content: "",
         tags: [],
         source: "",
+        page: "",
         createdAt: null,
         updatedAt: null
       });
@@ -56,6 +69,11 @@ export default function ItemForm({
     } else {
       console.log("There are no new tags!");
     }
+  }
+
+  function fetchSourceObjectAndConvertIntoSourceRepresentation(sourceKey) {
+    const sourceObject = sources[sourceKey];
+    return `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
   }
 
   useEffect(() => {
@@ -85,6 +103,29 @@ export default function ItemForm({
           chosenTags={itemTags}
           setChosenTags={setItemTags}
         />
+        <select
+          className={"form-select mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
+          onChange={(e) => setItem({...item, source: e.target.value})}
+        >
+          <option>select source</option>
+          {sourcesList && sourcesList.length
+          ? sourcesList.map(sourceArray => {
+            const sourceKey = sourceArray[0];
+            const sourceObject = sourceArray[1];
+            const sourceRepresentation = `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`
+            return <option key={"source-option-" + sourceKey} value={sourceKey}>{sourceRepresentation}</option>
+          })
+          : null}
+        </select>
+        <input
+          className={"form-control mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
+          defaultValue={item ? item.page : ""}
+          placeholder="page"
+          onChange={(e) => setItem({...item, page: e.target.value})}
+        />
+        {item && item.source
+        ? <p>{fetchSourceObjectAndConvertIntoSourceRepresentation(item.source)} {item.page ? (" [" + item.page + "]") : null}</p>
+        : <p>This note has no source...</p>}
       </form>
       <Link
         to={link}
