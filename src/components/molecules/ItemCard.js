@@ -16,8 +16,14 @@ export default function ItemCard({
   const { sources } = useDatabase();
 
   function fetchSourceObjectAndConvertIntoSourceRepresentation(sourceKey) {
-    const sourceObject = sources[sourceKey];
-    return `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
+    if (sources) {
+      const sourceObject = sources[sourceKey];
+      if (sourceObject) {
+        return `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
+      } else {
+        return "source was deleted probably..."
+      }
+    }
   }
 
   return (

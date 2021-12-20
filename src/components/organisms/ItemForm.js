@@ -25,6 +25,8 @@ export default function ItemForm({
   const [item, setItem] = useState(null);
   const [itemTags, setItemTags] = useState([]);
 
+  const [isAddSourceFormNeeded, setIsAddSourceFormNeeded] = useState(false);
+
   useEffect(() => {
     if (sources) {
       setSourcesList([...Object.entries(sources)]);
@@ -72,8 +74,19 @@ export default function ItemForm({
   }
 
   function fetchSourceObjectAndConvertIntoSourceRepresentation(sourceKey) {
-    const sourceObject = sources[sourceKey];
-    return `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
+    if (sources) {
+      const sourceObject = sources[sourceKey];
+      if (sourceObject) {
+        return `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
+      } else {
+        return "source was deleted probably..."
+      }
+    }
+  }
+
+  function onAddSourceFormSubmit(updatedItem) {
+    addSource(updatedItem);
+    setIsAddSourceFormNeeded(false);
   }
 
   useEffect(() => {
@@ -119,7 +132,7 @@ export default function ItemForm({
           })
           : null}
         </select>
-        <p>... or <Link target="_blank" to="/add-source">add new source to database</Link></p>
+        <p>... or <button type="button" className="btn btn-secondary mb-2" onClick={() => setIsAddSourceFormNeeded(true)}>add new source to database</button></p>
         <input
           className={"form-control mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
           defaultValue={item ? item.page : ""}
@@ -130,6 +143,18 @@ export default function ItemForm({
         ? <p>{fetchSourceObjectAndConvertIntoSourceRepresentation(item.source)} {item.page ? (" [" + item.page + "]") : null}</p>
         : <p>This note has no source...</p>}
       </form>
+      {
+        isAddSourceFormNeeded
+        ? (
+          <div>
+            <hr />
+            <Form 
+              handleSubmit={onAddSourceFormSubmit}
+              buttonText="Add new source to database & this note"
+            />
+          </div>
+        ) : null
+      }
       <Link
         to={link}
         type="button"
