@@ -8,7 +8,6 @@ import ItemCard from "../components/molecules/ItemCard";
 export default function ItemPage() {
   const { theme } = useTheme();
   const { items, deleteItem } = useDatabase();
-  const { user } = useAuth();
 
   const { itemKey } = useParams();
 
@@ -32,9 +31,9 @@ export default function ItemPage() {
           key={"item-" + itemKey}
           item={item}
           itemKey={itemKey}
-          editLink={"/items/update-item/" + itemKey}
+          editLink={"/notes/update-note/" + itemKey}
           deleteFunction={() => deleteItem(itemKey)}
-          deleteLink="/items"
+          deleteLink="/notes"
         />
       ) : (
         <h1>Downloading data...</h1>

@@ -33,7 +33,7 @@ const ALPHABET = [
   "ż"
 ];
 
-export default function TagsList() {
+export default function TagsPage() {
   const { tags } = useDatabase();
   return (
     <div className="tags-list">
@@ -43,7 +43,9 @@ export default function TagsList() {
           <hr />
           <div>
             {tags.map((tag) =>
-              tag[0] === letter ? <TagButton key={"tag-button-for-" + tag} tag={tag} /> : null
+              tag[0] === letter ? (
+                <TagButton key={"tag-button-for-" + tag} tag={tag} />
+              ) : null
             )}
           </div>
         </div>

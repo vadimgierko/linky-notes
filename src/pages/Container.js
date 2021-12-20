@@ -2,15 +2,15 @@ import { Switch, Route } from "react-router-dom";
 
 import { useTheme } from "../hooks/use-theme";
 
-import Header from "./Header";
+import Header from "../components/organisms/Header";
 import About from "./About.js";
 import SignInForm from "./SignInForm.js";
 import ItemsPage from "./ItemsPage";
-import Footer from "./Footer.js";
+import Footer from "../components/organisms/Footer.js";
 import AddItemPage from "./AddItemPage";
 import UpdateItemPage from "./UpdateItemPage";
 import ItemPage from "./ItemPage";
-import TagsList from "./TagsList";
+import TagsPage from "./TagsPage";
 import AddSourcePage from "./AddSourcePage";
 
 export default function Container() {
@@ -41,19 +41,19 @@ export default function Container() {
           <Route path="/signin">
             <SignInForm />
           </Route>
-          <Route exact path="/items/:itemKey">
+          <Route exact path="/notes/:itemKey">
             <ItemPage />
           </Route>
-          <Route exact path="/items">
+          <Route exact path="/notes">
             <ItemsPage />
           </Route>
           <Route exact path="/tags">
-            <TagsList />
+            <TagsPage />
           </Route>
-          <Route path="/add-item">
+          <Route path="/add-note">
             <AddItemPage />
           </Route>
-          <Route exact path="/items/update-item/:itemKey">
+          <Route exact path="/notes/update-note/:itemKey">
             <UpdateItemPage />
           </Route>
           <Route exact path="/add-source">
