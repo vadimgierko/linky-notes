@@ -1,4 +1,4 @@
-import { useTheme } from "../hooks/use-theme";
+import { useTheme } from "../../hooks/use-theme";
 
 export default function Footer() {
   const { theme } = useTheme();

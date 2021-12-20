@@ -10,7 +10,7 @@ export default function About() {
       <p><strong><em>linky_notes</em></strong> allows you to create notes with keywords, which works similarly to tags.</p>
       <p>Thanks to that:</p>
       <ul>
-        <li>your notes are linked with each other by keywords</li>
+        <li>your notes are linked with each other by keywords/ tags</li>
         <li>they are grouped</li>
         <li>same note can be in a few keywords groups</li>
         <li>you don't need to put them in folders or do any index or table of content</li>
@@ -24,7 +24,8 @@ export default function About() {
         <li>sign in</li>
         <li>add, update & delete notes when logged</li>
         <li>see a list of all items</li>
-        <li>add & delete tags for my notes (can leave it without tags also)</li>
+        <li>add & delete <strong>tags</strong> for my notes or leave it without</li>
+        <li>add & delete <strong>source</strong> for my notes or leave it without</li>
         <li>find note/ notes by tag/ tags</li>
         <li>switch dark/ light mode</li>
       </ul>

@@ -15,18 +15,18 @@ export default function ItemsList({ items }) {
     >
       <div>
         {items.map((itemArray) => {
-            const itemKey = itemArray[0];
-            const item = itemArray[1];
-            return (
-                <ItemCard
-                  key={"item-" + itemKey}
-                  item={item}
-                  itemKey={itemKey}
-                  editLink={"/items/update-item/" + itemKey}
-                  deleteFunction={() => deleteItem(itemKey)}
-                  deleteLink="/items"
-                />
-            );
+          const itemKey = itemArray[0];
+          const item = itemArray[1];
+          return (
+            <ItemCard
+              key={"item-" + itemKey}
+              item={item}
+              itemKey={itemKey}
+              editLink={"/notes/update-note/" + itemKey}
+              deleteFunction={() => deleteItem(itemKey)}
+              deleteLink="/notes"
+            />
+          );
         })}
       </div>
     </div>

@@ -1,6 +1,6 @@
 # linky_notes app
 
-### This SPA allows you to create notes with tags.
+### This SPA allows you to create notes with tags
 
 Thanks to that:
 - your notes are linked with each other by keywords
@@ -15,8 +15,9 @@ Thanks to that:
 At the moment, I can:
 - sign in
 - add, update & delete notes when logged
-- add & delete tags for my notes (can leave it without tags also)
-- find note by tag/ tags
+- add & delete **tags** for my notes or leave it without
+- add & delete **source** for my notes or leave it without
+- search/ filter notes by tag/ tags
 - switch dark/light mode
 
 ### Technologies I've used in this project:
