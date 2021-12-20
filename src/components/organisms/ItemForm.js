@@ -98,11 +98,13 @@ export default function ItemForm({
           defaultValue={item ? item.content : ""}
           onChange={(e) => setItem({ ...item, content: e.target.value })}
         ></textarea>
+        <hr />
         <TagSearchForm
           tags={tags}
           chosenTags={itemTags}
           setChosenTags={setItemTags}
         />
+        <hr />
         <select
           className={"form-select mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
           onChange={(e) => setItem({...item, source: e.target.value})}
@@ -117,6 +119,7 @@ export default function ItemForm({
           })
           : null}
         </select>
+        <p>... or <Link target="_blank" to="/add-source">add new source to database</Link></p>
         <input
           className={"form-control mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
           defaultValue={item ? item.page : ""}
