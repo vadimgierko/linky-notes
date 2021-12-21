@@ -5,7 +5,7 @@ import { createDate } from "../../functions/functions";
 import TagSearchForm from "./TagSearchForm";
 import Form from "../organisms/Form";
 import Input from "../atoms/Input";
-import {useDatabase} from "../../hooks/use-database";
+import { useDatabase } from "../../hooks/use-database";
 
 export default function ItemForm({
   tags,
@@ -79,7 +79,7 @@ export default function ItemForm({
       if (sourceObject) {
         return `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
       } else {
-        return "source was deleted probably..."
+        return "source was deleted probably...";
       }
     }
   }
@@ -96,94 +96,125 @@ export default function ItemForm({
   }, [item]);
 
   return (
-    <div style={{ background: theme.background, color: theme.color }}>
-      <h3>{headerText}</h3>
-      <hr />
-      <form>
-        <textarea
-          className={
-            "form-control mb-2 + bg-" +
-            theme.mode +
-            " text-" +
-            (theme.mode === "dark" ? "light" : "dark")
-          }
-          placeholder="note content goes here"
-          defaultValue={item ? item.content : ""}
-          onChange={(e) => setItem({ ...item, content: e.target.value })}
-        ></textarea>
-        <hr />
-        <TagSearchForm
-          tags={tags}
-          chosenTags={itemTags}
-          setChosenTags={setItemTags}
-        />
-        <hr />
-        <select
-          className={"form-select mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
-          onChange={(e) => setItem({...item, source: e.target.value})}
-        >
-          <option>select source</option>
-          {sourcesList && sourcesList.length
-          ? sourcesList.map(sourceArray => {
-            const sourceKey = sourceArray[0];
-            const sourceObject = sourceArray[1];
-            const sourceRepresentation = `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`
-            return <option key={"source-option-" + sourceKey} value={sourceKey}>{sourceRepresentation}</option>
-          })
-          : null}
-        </select>
-        <p>... or <button type="button" className="btn btn-secondary mb-2" onClick={() => setIsAddSourceFormNeeded(true)}>add new source to database</button></p>
-        <input
-          className={"form-control mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
-          defaultValue={item ? item.page : ""}
-          placeholder="page"
-          onChange={(e) => setItem({...item, page: e.target.value})}
-        />
-        {item && item.source
-        ? <p>{fetchSourceObjectAndConvertIntoSourceRepresentation(item.source)} {item.page ? (" [" + item.page + "]") : null}</p>
-        : <p>This note has no source...</p>}
-      </form>
-      {
-        isAddSourceFormNeeded
-        ? (
+    <div className={"card mb-2 shadow bg-" + theme.mode}>
+      <div className="card-header fw-bold text-center">{headerText}</div>
+      <div className="card-body">
+        <form>
+          <textarea
+            className={
+              "form-control mb-2 + bg-" +
+              theme.mode +
+              " text-" +
+              (theme.mode === "dark" ? "light" : "dark")
+            }
+            placeholder="note content goes here"
+            defaultValue={item ? item.content : ""}
+            onChange={(e) => setItem({ ...item, content: e.target.value })}
+          ></textarea>
+          <TagSearchForm
+            tags={tags}
+            chosenTags={itemTags}
+            setChosenTags={setItemTags}
+          />
+          <hr />
+          <select
+            className={
+              "form-select mb-2 + bg-" +
+              theme.mode +
+              " text-" +
+              (theme.mode === "dark" ? "light" : "dark")
+            }
+            value={item ? (item.source ? item.source : "") : ""}
+            onChange={(e) => setItem({ ...item, source: e.target.value })}
+          >
+            <option>select source</option>
+            {sourcesList && sourcesList.length
+              ? sourcesList.map((sourceArray) => {
+                  const sourceKey = sourceArray[0];
+                  const sourceObject = sourceArray[1];
+                  const sourceRepresentation = `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
+                  return (
+                    <option
+                      key={"source-option-" + sourceKey}
+                      value={sourceKey}
+                    >
+                      {sourceRepresentation}
+                    </option>
+                  );
+                })
+              : null}
+          </select>
+          <p
+            style={{ cursor: "pointer" }}
+            onClick={() => setIsAddSourceFormNeeded(true)}
+          >
+            ... or{" "}
+            <span style={{ textDecoration: "underline" }}>
+              add new source to database
+            </span>
+          </p>
+          <input
+            className={
+              "form-control mb-2 + bg-" +
+              theme.mode +
+              " text-" +
+              (theme.mode === "dark" ? "light" : "dark")
+            }
+            defaultValue={item ? item.page : ""}
+            placeholder="page"
+            onChange={(e) => setItem({ ...item, page: e.target.value })}
+          />
+          {item && item.source ? (
+            <p>
+              {fetchSourceObjectAndConvertIntoSourceRepresentation(item.source)}{" "}
+              {item.page ? " [" + item.page + "]" : null}
+            </p>
+          ) : (
+            <p>This note has no source...</p>
+          )}
+        </form>
+        {isAddSourceFormNeeded ? (
           <div>
-            <hr />
-            <Form 
+            <Form
               handleSubmit={onAddSourceFormSubmit}
-              buttonText="Add new source to database & this note"
+              handleCancel={() => setIsAddSourceFormNeeded(false)}
+              headerText="Add new source to database!"
+              buttonText="Add new source"
             />
           </div>
-        ) : null
-      }
-      <Link
-        to={link}
-        type="button"
-        className="btn btn-success mb-2 d-block text-white"
-        onClick={() => {
-          const date = createDate();
-          let itemWithDate;
-          if (passedItemKey) {
-            itemWithDate = { ...item, updatedAt: date };
-          } else {
-            itemWithDate = { ...item, createdAt: date };
-          }
-          if (itemWithDate) {
-            addNewTagsToDatabase();
+        ) : null}
+      </div>
+      <div className="card-footer">
+        <Link
+          to={link}
+          type="button"
+          className="btn btn-success mb-2 d-block text-white"
+          onClick={() => {
+            const date = createDate();
+            let itemWithDate;
             if (passedItemKey) {
-              onItemFormClick(itemWithDate, passedItemKey);
+              itemWithDate = { ...item, updatedAt: date };
             } else {
-              onItemFormClick(itemWithDate);
+              itemWithDate = { ...item, createdAt: date };
             }
-          } else {
-            alert(
-              "There is a problem with adding/ updating date to your note... Note is not created / updated"
-            );
-          }
-          console.log(item);
-        }}
-      >
-        {buttonText}
-      </Link>
+            if (itemWithDate) {
+              addNewTagsToDatabase();
+              if (passedItemKey) {
+                onItemFormClick(itemWithDate, passedItemKey);
+              } else {
+                onItemFormClick(itemWithDate);
+              }
+            } else {
+              alert(
+                "There is a problem with adding/ updating date to your note... Note is not created / updated"
+              );
+            }
+            console.log(item);
+          }}
+        >
+          {buttonText}
+        </Link>
+      </div>
     </div>
   );
 }

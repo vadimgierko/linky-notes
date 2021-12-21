@@ -3,7 +3,7 @@ import { useTheme } from "../../hooks/use-theme";
 import TrashIconButton from "../atoms/TrashIconButton";
 import PencilIconButton from "../atoms/PencilIconButton";
 import EyeIconButton from "../atoms/EyeIconButton";
-import {useDatabase} from "../../hooks/use-database";
+import { useDatabase } from "../../hooks/use-database";
 
 export default function ItemCard({
   item,
@@ -21,22 +21,25 @@ export default function ItemCard({
       if (sourceObject) {
         return `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
       } else {
-        return "source was deleted probably..."
+        return "source was deleted probably...";
       }
     }
   }
 
   return (
-    <div className={"card mb-2 bg-" + theme.mode}>
+    <div className={"card mb-2 shadow bg-" + theme.mode}>
       <div className="card-header">
         <div className="row">
-          <div className="col-8 text-muted">
+          <div className="col text-muted">
             {item.createdAt} {item.updatedAt ? "/ " + item.updatedAt : null}
           </div>
           <div className="col text-end">
             <EyeIconButton link={"/notes/" + itemKey} />
             <PencilIconButton link={editLink} />
-            <TrashIconButton link={deleteLink} handleOnTrashButtonClick={deleteFunction} />
+            <TrashIconButton
+              link={deleteLink}
+              handleOnTrashButtonClick={deleteFunction}
+            />
           </div>
         </div>
       </div>
@@ -50,7 +53,10 @@ export default function ItemCard({
       </div>
       <div className="card-footer text-muted">
         {item.source
-          ? (fetchSourceObjectAndConvertIntoSourceRepresentation(item.source) + " [" + item.page + "]")
+          ? fetchSourceObjectAndConvertIntoSourceRepresentation(item.source) +
+            " [" +
+            item.page +
+            "]"
           : null}
       </div>
     </div>

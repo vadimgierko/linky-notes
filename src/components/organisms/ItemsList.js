@@ -14,7 +14,7 @@ export default function ItemsList({ items }) {
       }}
     >
       <div>
-        {items.map((itemArray) => {
+        {items.slice().reverse().map((itemArray) => {
           const itemKey = itemArray[0];
           const item = itemArray[1];
           return (

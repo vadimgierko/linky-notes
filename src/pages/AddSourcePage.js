@@ -23,10 +23,10 @@ export default function AddSourcePage() {
     <div>
       {user && user.uid ? (
         <div>
-          <h3>Add new source!</h3>
           <Form
             item={item}
             handleSubmit={onFormSubmit}
+            headerText="Add new source!"
             buttonText="Add new source"
           />
         </div>
