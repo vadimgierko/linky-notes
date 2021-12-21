@@ -40,7 +40,7 @@ export default function Form({
   }, [itemArray]);
 
   return (
-    <div className={"card mb-2 bg-" + theme.mode}>
+    <div className={"card mb-2 shadow bg-" + theme.mode}>
       <div className="card-header fw-bold text-center">{headerText}</div>
       <div className="card-body">
         <form>
