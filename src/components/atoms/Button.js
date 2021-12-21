@@ -1,13 +1,11 @@
-import { Link } from "react-router-dom";
-
-export default function Button({ buttonText, handleClick }) {
-    return (
-        <button
-            type="button"
-            className="btn btn-success mb-2 d-block"
-            onClick={handleClick}
-        >
-            {buttonText}
-        </button>
-    );
+export default function Button({ buttonStyle, buttonText, handleClick }) {
+  return (
+    <button
+      type="button"
+      className={"btn btn-" + buttonStyle + " mb-2 me-2"}
+      onClick={handleClick}
+    >
+      {buttonText}
+    </button>
+  );
 }

@@ -42,12 +42,15 @@ export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
   }, [inputedTagValue]);
 
   return (
-    <div
-      style={{ background: theme.background, color: theme.color }}
-    >
+    <div>
       <input
         type="text"
-        className={"form-control mb-2 + bg-" + theme.mode + " text-" + (theme.mode === "dark" ? "light" : "dark")}
+        className={
+          "form-control mb-2 + bg-" +
+          theme.mode +
+          " text-" +
+          (theme.mode === "dark" ? "light" : "dark")
+        }
         defaultValue={inputedTagValue}
         placeholder="type some tag"
         onChange={(e) => setInputedTagValue(e.target.value)}
