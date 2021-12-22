@@ -3,7 +3,7 @@ import Button from "../atoms/Button";
 import { useEffect, useState } from "react";
 import { useTheme } from "../../hooks/use-theme";
 
-export default function Form({
+export default function SourceForm({
   item,
   handleSubmit,
   handleCancel,
@@ -40,7 +40,7 @@ export default function Form({
   }, [itemArray]);
 
   return (
-    <div className={"card mb-2 shadow bg-" + theme.mode}>
+    <div className={"card mb-2 shadow bg-" + theme.mode + (theme.mode === "dark" ? " border-secondary" : "")}>
       <div className="card-header fw-bold text-center">{headerText}</div>
       <div className="card-body">
         <form>
