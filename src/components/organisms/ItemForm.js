@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
 import { createDate } from "../../functions/functions";
 import TagSearchForm from "./TagSearchForm";
-import Form from "../organisms/Form";
+import SourceForm from "./SourceForm";
 import Input from "../atoms/Input";
 import { useDatabase } from "../../hooks/use-database";
 
@@ -96,7 +96,7 @@ export default function ItemForm({
   }, [item]);
 
   return (
-    <div className={"card mb-2 shadow bg-" + theme.mode}>
+    <div className={"card mb-2 shadow bg-" + theme.mode + (theme.mode === "dark" ? " border-secondary" : "")}>
       <div className="card-header fw-bold text-center">{headerText}</div>
       <div className="card-body">
         <form>
@@ -175,7 +175,7 @@ export default function ItemForm({
         </form>
         {isAddSourceFormNeeded ? (
           <div>
-            <Form
+            <SourceForm
               handleSubmit={onAddSourceFormSubmit}
               handleCancel={() => setIsAddSourceFormNeeded(false)}
               headerText="Add new source to database!"

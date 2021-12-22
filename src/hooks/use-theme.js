@@ -8,7 +8,7 @@ export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState({
     mode: "dark",
       color: "white",
-      background: "rgb(41, 41, 41)"
+      background: "rgb(13, 17, 23)"
   });
 
   const switchToLight = () =>
@@ -22,7 +22,7 @@ export function ThemeProvider({ children }) {
     setTheme({
       mode: "dark",
       color: "white",
-      background: "rgb(39, 37, 37)"
+      background: "rgb(13, 17, 23)"
     });
 
   return (

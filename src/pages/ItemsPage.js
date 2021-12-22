@@ -36,7 +36,7 @@ export default function ItemsPage() {
 
   useEffect(() => {
     filterItems(filterTags);
-  }, [filterTags]);
+  }, [filterTags, items]);
 
   useEffect(() => {
     console.log(items);

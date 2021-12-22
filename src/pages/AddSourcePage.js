@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react/cjs/react.development";
-import Form from "../components/organisms/Form";
+import { useEffect, useState } from "react";
+import SourceForm from "../components/organisms/SourceForm";
 import { useDatabase } from "../hooks/use-database";
 import { useAuth } from "../hooks/use-auth";
 
@@ -23,7 +23,7 @@ export default function AddSourcePage() {
     <div>
       {user && user.uid ? (
         <div>
-          <Form
+          <SourceForm
             item={item}
             handleSubmit={onFormSubmit}
             headerText="Add new source!"

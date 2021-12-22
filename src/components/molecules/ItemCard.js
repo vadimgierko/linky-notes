@@ -27,7 +27,7 @@ export default function ItemCard({
   }
 
   return (
-    <div className={"card mb-2 shadow bg-" + theme.mode}>
+    <div className={"card mb-2 shadow bg-" + theme.mode + (theme.mode === "dark" ? " border-secondary" : "")}>
       <div className="card-header">
         <div className="row">
           <div className="col text-muted">
