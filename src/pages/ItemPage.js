@@ -33,7 +33,7 @@ export default function ItemPage() {
           itemKey={itemKey}
           editLink={"/notes/update-note/" + itemKey}
           deleteFunction={() => deleteItem(itemKey)}
-          deleteLink="/notes"
+          deleteLink="/"
         />
       ) : (
         <h1>Downloading data...</h1>

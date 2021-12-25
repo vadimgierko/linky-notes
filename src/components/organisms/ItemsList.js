@@ -24,7 +24,7 @@ export default function ItemsList({ items }) {
               itemKey={itemKey}
               editLink={"/notes/update-note/" + itemKey}
               deleteFunction={() => deleteItem(itemKey)}
-              deleteLink="/notes"
+              deleteLink="/"
             />
           );
         })}

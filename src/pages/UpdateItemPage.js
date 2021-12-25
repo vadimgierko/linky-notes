@@ -34,7 +34,7 @@ export default function UpdateItemPage() {
             tags={tags && tags.length ? tags : []}
             addTags={addTags}
             onItemFormClick={updateItem}
-            link="/notes"
+            link="/"
             buttonText="Update note"
             headerText="Update note!"
             passedItem={item ? item : null}

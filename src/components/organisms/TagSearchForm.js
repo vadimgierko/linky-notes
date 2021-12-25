@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
-import TagButton from "../atoms/TagButton";
+import FormTagButton from "../atoms/FormTagButton";
+import TagButtonGeneratedByInput from "../atoms/TagButtonGeneratedByInput";
 import { useTheme } from "../../hooks/use-theme";
+import { Link } from "react-router-dom";
 
-export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
+export default function TagSearchForm({
+  tags,
+  chosenTags,
+  setChosenTags,
+  searchLinkFromFilterTags,
+  setSearchLinkFromFilterTags,
+  form
+  }) {
   const { theme } = useTheme();
   const [inputedTagValue, setInputedTagValue] = useState("");
   const [availableTags, setAvailableTags] = useState(null);
@@ -37,6 +46,21 @@ export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
     return availableTags;
   }
 
+  function generateLinkAfterDeletionOfTag(tag) {
+    const updatedTags = chosenTags.filter((item) => item !== tag);
+    let link = "";
+    if (updatedTags && updatedTags.length) {
+      for (let i = 0; i < updatedTags.length; i++) {
+        if (i === 0) {
+          link = updatedTags[i];
+        } else {
+          link = link + "+" + updatedTags[i];
+        }
+      }
+    }
+    return link;
+  }
+
   useEffect(() => {
     setAvailableTags(generateAvailableTags(inputedTagValue));
   }, [inputedTagValue]);
@@ -55,7 +79,36 @@ export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
         placeholder="type some tag"
         onChange={(e) => setInputedTagValue(e.target.value)}
       />
-      {chosenTags && chosenTags.length
+      {/** FOR NOTES SEARCH */}
+      {!form && chosenTags && chosenTags.length
+        ? chosenTags.map((tag) => {
+          if (tag && tag.length) {
+            return (
+              <button
+                key={"tag-btn-with-trash-icon-for-" + tag}
+                type="button"
+                className="btn btn-outline-secondary mb-2 me-2"
+                style={{ borderRadius: 20 }}
+              >
+                {tag}{" "}
+                <Link
+                  to={"/search?name=" + generateLinkAfterDeletionOfTag(tag)}
+                >
+                  <i
+                    className="bi bi-trash text-white m-2"
+                    style={{
+                      backgroundColor: "red",
+                      cursor: "pointer"
+                    }}
+                  ></i>
+                </Link>
+              </button>
+            )
+          }
+        })
+        : null}
+      {/** FOR FORM SEARCH */}
+      {form && chosenTags && chosenTags.length
         ? chosenTags.map((tag) => (
             <TagButtonWithTrashIcon
               key={tag}
@@ -64,8 +117,49 @@ export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
             />
           ))
         : null}
-      {inputedTagValue ? (
-        <TagButton
+      {/** FOR NOTES SEARCH: */}
+      {!form && inputedTagValue ? (
+        <TagButtonGeneratedByInput
+          tag={inputedTagValue}
+          link={
+          "/search?name=" +
+          (searchLinkFromFilterTags
+              ? searchLinkFromFilterTags + "+" + inputedTagValue
+              : inputedTagValue)
+          }
+          onClick={() => {
+            const link = searchLinkFromFilterTags
+                ? searchLinkFromFilterTags + "+" + inputedTagValue
+                : inputedTagValue;
+            setSearchLinkFromFilterTags(link);
+            setInputedTagValue("");
+          }}
+        />
+      ) : null}
+      {!form && inputedTagValue && availableTags.length
+        ? availableTags.map((tag, i) => (
+          <TagButtonGeneratedByInput
+            key={tag}
+            tag={tag}
+            link={
+            "/search?name=" +
+            (searchLinkFromFilterTags
+                ? searchLinkFromFilterTags + "+" + tag
+                : tag)
+            }
+            onClick={() => {
+              const link = searchLinkFromFilterTags
+                  ? searchLinkFromFilterTags + "+" + tag
+                  : tag;
+              setSearchLinkFromFilterTags(link);
+              setInputedTagValue("");
+            }}
+          />
+          ))
+        : null}
+      {/** FOR FORM SEARCH */}
+      {form && inputedTagValue ? (
+        <FormTagButton
           tag={inputedTagValue}
           onClick={() => {
             setChosenTags([...chosenTags, inputedTagValue]);
@@ -73,9 +167,9 @@ export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
           }}
         />
       ) : null}
-      {inputedTagValue && availableTags.length
+      {form && inputedTagValue && availableTags.length
         ? availableTags.map((tag, i) => (
-            <TagButton
+            <FormTagButton
               key={tag}
               tag={tag}
               onClick={() => {

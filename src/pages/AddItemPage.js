@@ -15,7 +15,7 @@ export default function AddItemPage() {
           tags={tags && tags.length ? tags : []}
           addTags={addTags}
           onItemFormClick={addItem}
-          link="/notes"
+          link="/"
           buttonText="Add a new note"
           headerText="Create a new note!"
         />

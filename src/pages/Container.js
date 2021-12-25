@@ -44,10 +44,7 @@ export default function Container() {
           <Route exact path="/notes/:itemKey">
             <ItemPage />
           </Route>
-          <Route exact path="/notes">
-            <ItemsPage />
-          </Route>
-          <Route exact path="/tags">
+          <Route path="/tags">
             <TagsPage />
           </Route>
           <Route path="/add-note">
@@ -58,6 +55,9 @@ export default function Container() {
           </Route>
           <Route exact path="/add-source">
             <AddSourcePage />
+          </Route>
+          <Route path="/">
+            <ItemsPage />
           </Route>
         </Switch>
         <Footer />
