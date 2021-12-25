@@ -26,28 +26,33 @@ export default function ItemsPage() {
       console.log("search:", search);
       const searchValue = search.slice(6);
       console.log("searchValue", searchValue)
-      // when search value changes, set filter tags:
-      setFilterTags(() => {
-        const tags = searchValue.split("+");
-        // decode tags from URL:
-        let convertedTags = [];
-        for (let n = 0; n < tags.length; n++) {
-          convertedTags.push(decodeURI(tags[n]));
-        }
-        setSearchLinkFromFilterTags(() => {
-          let link = "";
-          for (let i = 0; i < convertedTags.length; i++) {
-            if (i === 0) {
-              link = convertedTags[i];
-            } else {
-              link = link + "+" + convertedTags[i];
-            }
+      if (searchValue.length) {
+        // when search value changes, set filter tags:
+        setFilterTags(() => {
+          const tags = searchValue.split("+");
+          // decode tags from URL:
+          let convertedTags = [];
+          for (let n = 0; n < tags.length; n++) {
+            convertedTags.push(decodeURI(tags[n]));
           }
-          return link;
+          setSearchLinkFromFilterTags(() => {
+            let link = "";
+            for (let i = 0; i < convertedTags.length; i++) {
+              if (i === 0) {
+                link = convertedTags[i];
+              } else {
+                link = link + "+" + convertedTags[i];
+              }
+            }
+            return link;
+          });
+          console.log("converted tags:", convertedTags)
+          return [...convertedTags];
         });
-        console.log("converted tags:", convertedTags)
-        return [...convertedTags];
-      });
+      } else {
+        console.log("there is no search value");
+        setFilterTags([]);
+      }
     } else {
       console.log("There is no search value.");
     }

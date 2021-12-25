@@ -46,6 +46,21 @@ export default function TagSearchForm({
     return availableTags;
   }
 
+  function generateLinkAfterDeletionOfTag(tag) {
+    const updatedTags = chosenTags.filter((item) => item !== tag);
+    let link = "";
+    if (updatedTags && updatedTags.length) {
+      for (let i = 0; i < updatedTags.length; i++) {
+        if (i === 0) {
+          link = updatedTags[i];
+        } else {
+          link = link + "+" + updatedTags[i];
+        }
+      }
+    }
+    return link;
+  }
+
   useEffect(() => {
     setAvailableTags(generateAvailableTags(inputedTagValue));
   }, [inputedTagValue]);
@@ -64,7 +79,36 @@ export default function TagSearchForm({
         placeholder="type some tag"
         onChange={(e) => setInputedTagValue(e.target.value)}
       />
-      {chosenTags && chosenTags.length
+      {/** FOR NOTES SEARCH */}
+      {!form && chosenTags && chosenTags.length
+        ? chosenTags.map((tag) => {
+          if (tag && tag.length) {
+            return (
+              <button
+                key={"tag-btn-with-trash-icon-for-" + tag}
+                type="button"
+                className="btn btn-outline-secondary mb-2 me-2"
+                style={{ borderRadius: 20 }}
+              >
+                {tag}{" "}
+                <Link
+                  to={"/search?name=" + generateLinkAfterDeletionOfTag(tag)}
+                >
+                  <i
+                    className="bi bi-trash text-white m-2"
+                    style={{
+                      backgroundColor: "red",
+                      cursor: "pointer"
+                    }}
+                  ></i>
+                </Link>
+              </button>
+            )
+          }
+        })
+        : null}
+      {/** FOR FORM SEARCH */}
+      {form && chosenTags && chosenTags.length
         ? chosenTags.map((tag) => (
             <TagButtonWithTrashIcon
               key={tag}
