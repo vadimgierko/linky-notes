@@ -47,7 +47,11 @@ export default function ItemCard({
         <p className="card-text">{item.content}</p>
         {item.tags && item.tags.length
           ? item.tags.map((tag) => (
-              <TagButton key={"item-tag-" + tag} tag={tag} />
+              <TagButton 
+                key={"item-tag-" + tag}
+                tag={tag}
+                tagLink={"/search?name=" + tag}
+              />
             ))
           : null}
       </div>

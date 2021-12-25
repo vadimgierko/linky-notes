@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
 import TagButton from "../atoms/TagButton";
+import TagButtonGeneratedByInput from "../atoms/TagButtonGeneratedByInput";
 import { useTheme } from "../../hooks/use-theme";
+import { Link } from "react-router-dom";
 
-export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
+export default function TagSearchForm({
+  tags,
+  chosenTags,
+  setChosenTags,
+  searchLinkFromFilterTags,
+  setSearchLinkFromFilterTags
+  }) {
   const { theme } = useTheme();
   const [inputedTagValue, setInputedTagValue] = useState("");
   const [availableTags, setAvailableTags] = useState(null);
@@ -65,24 +73,42 @@ export default function TagSearchForm({ tags, chosenTags, setChosenTags }) {
           ))
         : null}
       {inputedTagValue ? (
-        <TagButton
+        <TagButtonGeneratedByInput
           tag={inputedTagValue}
+          link={
+          "/search?name=" +
+          (searchLinkFromFilterTags
+              ? searchLinkFromFilterTags + "+" + inputedTagValue
+              : inputedTagValue)
+          }
           onClick={() => {
-            setChosenTags([...chosenTags, inputedTagValue]);
+            const link = searchLinkFromFilterTags
+                ? searchLinkFromFilterTags + "+" + inputedTagValue
+                : inputedTagValue;
+            setSearchLinkFromFilterTags(link);
             setInputedTagValue("");
           }}
         />
       ) : null}
       {inputedTagValue && availableTags.length
         ? availableTags.map((tag, i) => (
-            <TagButton
-              key={tag}
-              tag={tag}
-              onClick={() => {
-                setChosenTags([...chosenTags, tag]);
-                setInputedTagValue("");
-              }}
-            />
+          <TagButtonGeneratedByInput
+            key={tag}
+            tag={tag}
+            link={
+            "/search?name=" +
+            (searchLinkFromFilterTags
+                ? searchLinkFromFilterTags + "+" + tag
+                : tag)
+            }
+            onClick={() => {
+              const link = searchLinkFromFilterTags
+                  ? searchLinkFromFilterTags + "+" + tag
+                  : tag;
+              setSearchLinkFromFilterTags(link);
+              setInputedTagValue("");
+            }}
+          />
           ))
         : null}
     </div>

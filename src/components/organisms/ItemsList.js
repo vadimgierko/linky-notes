@@ -5,6 +5,7 @@ import { useDatabase } from "../../hooks/use-database";
 export default function ItemsList({ items }) {
   const { theme } = useTheme();
   const { deleteItem } = useDatabase();
+  console.log("items in items list:", items);
 
   return (
     <div
@@ -24,7 +25,7 @@ export default function ItemsList({ items }) {
               itemKey={itemKey}
               editLink={"/notes/update-note/" + itemKey}
               deleteFunction={() => deleteItem(itemKey)}
-              deleteLink="/notes"
+              deleteLink="/"
             />
           );
         })}

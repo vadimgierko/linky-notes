@@ -133,7 +133,7 @@ export function DatabaseProvider({ children }) {
       const data = snapshot.val();
       if (data) {
         setItems(data);
-        console.log("items in database:", data);
+        //console.log("items in database:", data);
       } else {
         console.log("there are no notes...");
       }
@@ -155,7 +155,7 @@ export function DatabaseProvider({ children }) {
       const data = snapshot.val();
       if (data) {
         setSources(data);
-        console.log("sources in database:", data);
+        //console.log("sources in database:", data);
       } else {
         console.log("there are no sources...");
       }
