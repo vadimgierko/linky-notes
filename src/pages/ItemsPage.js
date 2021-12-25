@@ -29,9 +29,10 @@ export default function ItemsPage() {
       // when search value changes, set filter tags:
       setFilterTags(() => {
         const tags = searchValue.split("+");
+        // decode tags from URL:
         let convertedTags = [];
         for (let n = 0; n < tags.length; n++) {
-          convertedTags.push(convertPolishSymbolsAndSpaces(tags[n]));
+          convertedTags.push(decodeURI(tags[n]));
         }
         setSearchLinkFromFilterTags(() => {
           let link = "";
@@ -80,10 +81,6 @@ export default function ItemsPage() {
     console.log("filterTags:", filterTags);
     filterItems(filterTags);
   }, [filterTags, items]);
-
-  // useEffect(() => {
-  //   console.log(items);
-  // }, [items]);
 
   return (
     <div

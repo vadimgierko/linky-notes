@@ -28,36 +28,3 @@ export function createDate() {
     const currentDate = year + "." + month + "." + day;
     return currentDate;
 }
-
-export function convertPolishSymbolsAndSpaces(string) {
-    let convertedString = "";
-    for (let i = 0; i < string.length; i++) {
-        let symbol = string[i];
-        console.log("symbol before if:", symbol);
-        if (symbol === "%20") {
-            symbol = " ";
-        } else if (symbol === "%C4%85") {
-            symbol = "ą";
-        } else if (symbol === "%C4%87") {
-            symbol = "ć";
-        } else if (symbol === "%C4%99") {
-            symbol = "ę";
-        } else if (symbol === "%C5%82") {
-            symbol = "ł";
-        } else if (symbol === "%C5%84") {
-            symbol = "ń";
-        } else if (symbol === "%C3%B3") {
-            symbol = "ó";
-        } else if (symbol === "%C5%9B") {
-            symbol = "ś";
-        } else if (symbol === "%C5%BA") {
-            symbol = "ź";
-        } else if (symbol === "%C5%BC") {
-            symbol = "ż";
-        }
-        console.log("symbol after if:", symbol);
-        convertedString = convertedString + symbol;
-    }
-    console.log("converted string:", convertedString);
-    return convertedString;
-}

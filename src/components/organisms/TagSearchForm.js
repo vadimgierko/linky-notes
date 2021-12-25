@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
-import TagButton from "../atoms/TagButton";
+import FormTagButton from "../atoms/FormTagButton";
 import TagButtonGeneratedByInput from "../atoms/TagButtonGeneratedByInput";
 import { useTheme } from "../../hooks/use-theme";
 import { Link } from "react-router-dom";
@@ -10,7 +10,8 @@ export default function TagSearchForm({
   chosenTags,
   setChosenTags,
   searchLinkFromFilterTags,
-  setSearchLinkFromFilterTags
+  setSearchLinkFromFilterTags,
+  form
   }) {
   const { theme } = useTheme();
   const [inputedTagValue, setInputedTagValue] = useState("");
@@ -72,7 +73,8 @@ export default function TagSearchForm({
             />
           ))
         : null}
-      {inputedTagValue ? (
+      {/** FOR NOTES SEARCH: */}
+      {!form && inputedTagValue ? (
         <TagButtonGeneratedByInput
           tag={inputedTagValue}
           link={
@@ -90,7 +92,7 @@ export default function TagSearchForm({
           }}
         />
       ) : null}
-      {inputedTagValue && availableTags.length
+      {!form && inputedTagValue && availableTags.length
         ? availableTags.map((tag, i) => (
           <TagButtonGeneratedByInput
             key={tag}
@@ -109,6 +111,28 @@ export default function TagSearchForm({
               setInputedTagValue("");
             }}
           />
+          ))
+        : null}
+      {/** FOR FORM SEARCH */}
+      {form && inputedTagValue ? (
+        <FormTagButton
+          tag={inputedTagValue}
+          onClick={() => {
+            setChosenTags([...chosenTags, inputedTagValue]);
+            setInputedTagValue("");
+          }}
+        />
+      ) : null}
+      {form && inputedTagValue && availableTags.length
+        ? availableTags.map((tag, i) => (
+            <FormTagButton
+              key={tag}
+              tag={tag}
+              onClick={() => {
+                setChosenTags([...chosenTags, tag]);
+                setInputedTagValue("");
+              }}
+            />
           ))
         : null}
     </div>

@@ -4,7 +4,6 @@ import { useTheme } from "../../hooks/use-theme";
 import { createDate } from "../../functions/functions";
 import TagSearchForm from "./TagSearchForm";
 import SourceForm from "./SourceForm";
-import Input from "../atoms/Input";
 import { useDatabase } from "../../hooks/use-database";
 
 export default function ItemForm({
@@ -115,6 +114,7 @@ export default function ItemForm({
             tags={tags}
             chosenTags={itemTags}
             setChosenTags={setItemTags}
+            form={true}
           />
           <hr />
           <select
