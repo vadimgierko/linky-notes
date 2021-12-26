@@ -3,8 +3,7 @@ import { useDatabase } from "../hooks/use-database";
 import { useEffect, useState } from "react";
 import TagSearchForm from "../components/organisms/TagSearchForm";
 import ItemsList from "../components/organisms/ItemsList";
-import { Link, useLocation } from "react-router-dom";
-import { convertPolishSymbolsAndSpaces } from "../functions/functions";
+import { useLocation } from "react-router-dom";
 
 export default function ItemsPage() {
 
@@ -23,9 +22,9 @@ export default function ItemsPage() {
 
   useEffect(() => {
     if (search) {
-      console.log("search:", search);
+      //console.log("search:", search);
       const searchValue = search.slice(6);
-      console.log("searchValue", searchValue)
+      //console.log("searchValue", searchValue)
       if (searchValue.length) {
         // when search value changes, set filter tags:
         setFilterTags(() => {
@@ -46,15 +45,16 @@ export default function ItemsPage() {
             }
             return link;
           });
-          console.log("converted tags:", convertedTags)
+          //console.log("converted tags:", convertedTags)
           return [...convertedTags];
         });
       } else {
-        console.log("there is no search value");
+        //console.log("there is no search value");
         setFilterTags([]);
+        setSearchLinkFromFilterTags(null);
       }
     } else {
-      console.log("There is no search value.");
+      //console.log("There is no search value.");
     }
   }, [search]);
 
@@ -83,7 +83,7 @@ export default function ItemsPage() {
   }
 
   useEffect(() => {
-    console.log("filterTags:", filterTags);
+    //console.log("filterTags:", filterTags);
     filterItems(filterTags);
   }, [filterTags, items]);
 

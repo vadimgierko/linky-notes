@@ -68,7 +68,7 @@ export default function ItemForm({
       addTags(newTags);
       console.log("New tags:", newTags);
     } else {
-      console.log("There are no new tags!");
+      //console.log("There are no new tags!");
     }
   }
 
@@ -87,12 +87,6 @@ export default function ItemForm({
     addSource(updatedItem);
     setIsAddSourceFormNeeded(false);
   }
-
-  useEffect(() => {
-    if (item) {
-      console.log("item:", item);
-    }
-  }, [item]);
 
   return (
     <div className={"card mb-2 shadow bg-" + theme.mode + (theme.mode === "dark" ? " border-secondary" : "")}>
@@ -209,7 +203,6 @@ export default function ItemForm({
                 "There is a problem with adding/ updating date to your note... Note is not created / updated"
               );
             }
-            console.log(item);
           }}
         >
           {buttonText}

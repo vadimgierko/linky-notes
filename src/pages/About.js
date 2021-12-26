@@ -7,12 +7,12 @@ export default function About() {
     <div
       style={{ background: theme.background, color: theme.color }}
     >
-      <p><strong><em>linky_notes</em></strong> allows you to create notes with keywords, which works similarly to tags.</p>
+      <p><strong><em>linky_notes</em></strong> allows you to create notes with tags & sources.</p>
       <p>Thanks to that:</p>
       <ul>
-        <li>your notes are linked with each other by keywords/ tags</li>
-        <li>they are grouped</li>
-        <li>same note can be in a few keywords groups</li>
+        <li>your notes are linked with each other by tags</li>
+        <li>they are grouped by tags & sources</li>
+        <li>the note can have few tags, so it would be in a few keywords groups</li>
         <li>you don't need to put them in folders or do any index or table of content</li>
         <li>that is easy to find the particular note by choosing keywords they consist in search field</li>
         <li>you are saving a tone of time to organize & efficiently use them</li>
@@ -22,11 +22,11 @@ export default function About() {
       <p>At the moment, I can:</p>
       <ul>
         <li>sign in</li>
-        <li>add, update & delete notes when logged</li>
-        <li>see a list of all items</li>
+        <li><strong>add, update & delete notes</strong> when logged</li>
         <li>add & delete <strong>tags</strong> for my notes or leave it without</li>
         <li>add & delete <strong>source</strong> for my notes or leave it without</li>
-        <li>find note/ notes by tag/ tags</li>
+        <li><strong>search/ filter notes by tag/ tags</strong></li>
+        <li>searching mechanism generates link for each searching session, so I can navigate beetween searching sessions and/ or can send searching session link to someone if I need to</li>
         <li>switch dark/ light mode</li>
       </ul>
       <p>Technologies I've used in this project</p>
