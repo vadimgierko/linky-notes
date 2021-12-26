@@ -10,7 +10,9 @@ Thanks to that:
 - that is easy to find the particular note by choosing keywords they consist in search field
 - you are saving a tone of time to organize & efficiently use them
 
-**At the moment this SPA is available `for my personal use` only** - you can see my notes, see, how it works, but cannot sign up or modify my database. I've implemented only basic core features for the moment, but app is growing rapidly.
+**At the moment this SPA is available `for my personal use` only**, because I've made it first of all for myself. I read a lot, create a lot and... do a lot notes. I couldn't manage hunderds of my notes, so I've decided to build this app. And I'm very proud, that finally, after one year of learning web development, I've solved one of my biggest problems thanks to my own app. Now my notes will be tagged, organized & easy to filter.
+
+You can see my notes, see, how it works, but cannot sign up or modify my database. I've implemented only basic core features for the moment, but app is still growing. When right time comes, I'll enable creating accounts for users like you ;-)
 
 At the moment, I can:
 - sign in

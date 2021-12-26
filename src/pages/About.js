@@ -18,7 +18,8 @@ export default function About() {
         <li>you are saving a tone of time to organize & efficiently use them</li>
       </ul>
       <p>
-        <strong>At the moment this SPA is available for my personal use only.</strong> You can see my notes, but cannot sign up or modify my database. I've implemented only basic core features for the moment, but app is still growing & is tested.</p>
+        <strong>At the moment this SPA is available for my personal use only,</strong> , because I've made it first of all for myself. I read a lot, create a lot and... do a lot notes. I couldn't manage hunderds of my notes, so I've decided to build this app. And I'm very proud, that finally, after one year of learning web development, I've solved one of my biggest problems thanks to my own app. Now my notes will be tagged, organized & easy to filter.</p>
+        <p>You can see my notes, but cannot sign up or modify my database. I've implemented only basic core features for the moment, but app is still growing & is tested by me. When right time comes, I'll enable creating accounts for users like you ;-)</p>
       <p>At the moment, I can:</p>
       <ul>
         <li>sign in</li>
