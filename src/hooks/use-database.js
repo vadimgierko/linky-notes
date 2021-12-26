@@ -135,7 +135,7 @@ export function DatabaseProvider({ children }) {
         setItems(data);
         //console.log("items in database:", data);
       } else {
-        console.log("there are no notes...");
+        //console.log("there are no notes...");
       }
     });
     // fetch all tags
@@ -144,9 +144,9 @@ export function DatabaseProvider({ children }) {
       const data = snapshot.val();
       if (data) {
         setTags(data);
-        console.log("tags in database:", data);
+        //console.log("tags in database:", data);
       } else {
-        console.log("there are no tags...");
+        //console.log("there are no tags...");
       }
     });
     // fetch all sources
@@ -157,7 +157,7 @@ export function DatabaseProvider({ children }) {
         setSources(data);
         //console.log("sources in database:", data);
       } else {
-        console.log("there are no sources...");
+        //console.log("there are no sources...");
       }
     });
   }, []);

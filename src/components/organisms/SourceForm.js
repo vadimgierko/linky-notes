@@ -10,10 +10,7 @@ export default function SourceForm({
   headerText,
   buttonText
 }) {
-  // recieves item object (with string values !!! )
-  // convert item object into array
-  // update array
-  // passes updated array converted into updated item object through handle submit
+
   const { theme } = useTheme();
   const [itemArray, setItemArray] = useState([]); // [[key, value], [key, value], ...]
 
@@ -21,7 +18,7 @@ export default function SourceForm({
     if (item) {
       // if item for update passed
       setItemArray([...Object.entries(item)]);
-      console.log("item received in Form:", item);
+      //console.log("item received in Form:", item);
     } else {
       // for adding new item
       const emptyItem = {
@@ -34,10 +31,6 @@ export default function SourceForm({
       setItemArray([...Object.entries(emptyItem)]);
     }
   }, [item]);
-
-  useEffect(() => {
-    console.log("itemArray:", itemArray);
-  }, [itemArray]);
 
   return (
     <div className={"card mb-2 shadow bg-" + theme.mode + (theme.mode === "dark" ? " border-secondary" : "")}>

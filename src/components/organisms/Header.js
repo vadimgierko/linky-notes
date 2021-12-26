@@ -27,7 +27,7 @@ export default function Header() {
     "about",
     "notes",
     "tags",
-    "sources",
+    //"sources",
     "add note",
     "add source"
   ];

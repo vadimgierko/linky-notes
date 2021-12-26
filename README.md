@@ -1,12 +1,12 @@
 # linky_notes app
 
-### This SPA allows you to create notes with tags
+### This SPA allows you to create notes with tags & sources
 
 Thanks to that:
 - your notes are linked with each other by keywords
-- they are grouped
-- same note can be in a few keywords groups
-- you don't need to put them in folders or do any index or table of content
+- they are grouped by tags & sources
+- the note can have few tags, so it would be in a few keywords groups
+- you don't need to put notes in folders or do any index or table of content
 - that is easy to find the particular note by choosing keywords they consist in search field
 - you are saving a tone of time to organize & efficiently use them
 
@@ -14,11 +14,14 @@ Thanks to that:
 
 At the moment, I can:
 - sign in
-- add, update & delete notes when logged
+- **add, update & delete notes** when logged
 - add & delete **tags** for my notes or leave it without
 - add & delete **source** for my notes or leave it without
-- search/ filter notes by tag/ tags
-- switch dark/light mode
+- **search/ filter notes by tag/ tags**
+- searching mechanism generates link for each searching session, so:
+  - I can navigate beetween searching sessions
+  - can send searching session link to someone theoretically
+- switch dark/ light mode
 
 ### Technologies I've used in this project:
 - React 17
