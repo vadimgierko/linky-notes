@@ -1,37 +1,37 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
-import { useAuth } from "../../hooks/use-auth";
-import { useDatabase } from "../../hooks/use-database";
+import { useStore } from "../../store/Store";
 import ItemForm from "../organisms/ItemForm";
 
 export default function UpdateItem() {
 	const { theme } = useTheme();
-	const { user } = useAuth();
-	const { items, updateItem, tags, addTags } = useDatabase();
+	const { state } = useStore();
+	//const { items, updateItem, tags, addTags } = useDatabase();
 
 	const { itemKey } = useParams();
 
 	const [item, setItem] = useState(null);
 
 	useEffect(() => {
-		if (items && itemKey) {
+		if (state.items && itemKey) {
 			setItem({
-				...items[itemKey],
+				...state.items[itemKey],
 				tags:
-					items[itemKey].tags && items[itemKey].tags.length
-						? items[itemKey].tags
+					state.items[itemKey].tags &&
+					state.items[itemKey].tags.length
+						? state.items[itemKey].tags
 						: [],
 			});
 		}
-	}, [items, itemKey]);
+	}, [state, itemKey]);
 
 	return (
 		<div style={{ background: theme.background, color: theme.color }}>
-			{user && user.uid ? (
+			{state.user && state.user.uid ? (
 				item ? (
 					<ItemForm
-						tags={tags && tags.length ? tags : []}
+						tags={state.tags && state.tags.length ? state.tags : []}
 						addTags={addTags}
 						onItemFormClick={updateItem}
 						link="/"

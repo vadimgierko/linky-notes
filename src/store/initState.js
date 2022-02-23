@@ -1,8 +1,6 @@
 export const INIT_STATE = {
 	user: null,
-	userData: null,
-	userItemsList: null,
+	itemsList: null,
 	fetchedItems: null,
-	//tags
-	//sources
+	tags: null,
 };

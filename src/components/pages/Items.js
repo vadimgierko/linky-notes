@@ -1,22 +1,24 @@
 import { useTheme } from "../../hooks/use-theme";
-import { useDatabase } from "../../hooks/use-database";
 import { useEffect, useState } from "react";
 import TagSearchForm from "../organisms/TagSearchForm";
 import ItemsList from "../organisms/ItemsList";
 import { useLocation } from "react-router-dom";
+import { useStore } from "../../store/Store";
 
 export default function Items() {
 	const { theme } = useTheme();
+	const { state } = useStore();
 
 	const { search } = useLocation();
-
-	const { items, tags } = useDatabase();
 
 	const [filterTags, setFilterTags] = useState([]);
 	const [searchLinkFromFilterTags, setSearchLinkFromFilterTags] =
 		useState(null);
 
 	const [filteredItems, setFilteredItems] = useState([]);
+
+	if (!state.user) return <p>You need to be logged to see your items!</p>;
+	if (!state.itemsList) return <p>There are no items so far...</p>;
 
 	useEffect(() => {
 		if (search) {
@@ -57,10 +59,10 @@ export default function Items() {
 	}, [search]);
 
 	function filterItems(filterTags) {
-		if (items) {
+		if (state.items) {
 			if (filterTags && filterTags.length) {
 				let filteredItemsArray = [];
-				const itemsArray = Object.entries(items);
+				const itemsArray = Object.entries(state.items);
 				for (let i = 0; i < itemsArray.length; i++) {
 					const item = itemsArray[i][1];
 					let sameNum = 0;

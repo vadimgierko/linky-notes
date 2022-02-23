@@ -29,8 +29,8 @@ export default function Header() {
 		//"notes",
 		//"tags",
 		//"sources",
-		"add note",
-		"add source",
+		//"add note",
+		//"add source",
 	];
 
 	return (

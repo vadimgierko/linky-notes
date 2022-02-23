@@ -9,23 +9,23 @@ export default function reducer(state, action) {
 					...action.payload,
 				},
 			};
-		case "set-user-data":
+		// case "set-user-data":
+		// 	return {
+		// 		...state,
+		// 		userData: {
+		// 			...action.payload,
+		// 		},
+		// 	};
+		case "set-items-list":
 			return {
 				...state,
-				userData: {
-					...action.payload,
-				},
-			};
-		case "set-user-items-list":
-			return {
-				...state,
-				userItemsList: action.payload,
+				itemsList: action.payload,
 			};
 		case "add-item":
 			return {
 				...state,
-				userItemsList: {
-					...state.userItemsList,
+				itemsList: {
+					...state.itemsList,
 					[action.payload.key]: {
 						title: action.payload.item.title,
 					},
@@ -41,7 +41,7 @@ export default function reducer(state, action) {
 			};
 		case "delete-item":
 			// delete item from userItemsList object copy:
-			let items = { ...state.userItemsList };
+			let items = { ...state.itemsList };
 			delete items[action.payload.key];
 			// delete item from fetchedItems object copy:
 			// CHECK IF FETCHED ITEMS TRUE ???
@@ -57,7 +57,7 @@ export default function reducer(state, action) {
 			return {
 				...state,
 				fetchedItems: fetched,
-				userItemsList: items,
+				itemsList: items,
 			};
 		case "reset-state":
 			return INIT_STATE;
