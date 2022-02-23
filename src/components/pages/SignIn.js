@@ -1,16 +1,28 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
-import { useAuth } from "../../hooks/use-auth";
+import signIn from "../../logic/signIn";
 
 export default function SignIn() {
 	const { theme } = useTheme();
-	const { signIn } = useAuth();
 
 	const [userSignInData, setUserSignInData] = useState({
 		email: "",
 		password: "",
 	});
+
+	const handleSubmit = (signUpData) => {
+		if (
+			signUpData.email.replace(/\s/g, "").length &&
+			signUpData.password.replace(/\s/g, "").length
+		) {
+			signIn(signUpData);
+		} else {
+			alert(
+				"You need to complete all input fields (not only white spaces...) to sign in!"
+			);
+		}
+	};
 
 	return (
 		<div style={{ background: theme.background, color: theme.color }}>
@@ -41,11 +53,14 @@ export default function SignIn() {
 				/>
 			</form>
 			<Link
-				to="/items"
+				to="/" // => "/items"
 				type="button"
 				className="btn btn-secondary mb-2"
 				onClick={() =>
-					signIn(userSignInData.email, userSignInData.password)
+					handleSubmit({
+						email: userSignInData.email,
+						password: userSignInData.password,
+					})
 				}
 			>
 				Sign in

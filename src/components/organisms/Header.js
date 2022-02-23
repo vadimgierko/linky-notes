@@ -26,8 +26,8 @@ export default function Header() {
 
 	const sectionsList = [
 		"about",
-		"notes",
-		"tags",
+		//"notes",
+		//"tags",
 		//"sources",
 		"add note",
 		"add source",
@@ -107,20 +107,42 @@ export default function Header() {
 							<i className="bi bi-brightness-high"></i>
 						)}
 					</button>
-					<LogButton
-						link={state.user ? "/about" : "/signin"}
-						logButtonText={state.user ? "Log out" : "Sign in"}
-						className={
-							isNavCollapsed
-								? "btn btn-" +
-								  (state.user ? "danger" : "success") +
-								  " me-2"
-								: "btn btn-" +
-								  (state.user ? "danger" : "success") +
-								  " d-block mt-2"
-						}
-						handleLogButtonClick={onLogButtonClick}
-					/>
+					{state.user && (
+						<LogButton
+							link="/about"
+							logButtonText="Log out"
+							className={
+								isNavCollapsed
+									? "btn btn-outline-danger me-2"
+									: "btn btn-outline-danger d-block mt-2"
+							}
+							handleLogButtonClick={onLogButtonClick}
+						/>
+					)}
+					{!state.user && (
+						<LogButton
+							link="/signin"
+							logButtonText="Sign In"
+							className={
+								isNavCollapsed
+									? "btn btn-outline-success me-2"
+									: "btn btn-outline-success d-block mt-2"
+							}
+							handleLogButtonClick={onLogButtonClick}
+						/>
+					)}
+					{!state.user && (
+						<LogButton
+							link="/signup"
+							logButtonText="Sign Up"
+							className={
+								isNavCollapsed
+									? "btn btn-outline-info me-2"
+									: "btn btn-outline-info d-block mt-2"
+							}
+							handleLogButtonClick={onLogButtonClick}
+						/>
+					)}
 				</div>
 			</div>
 		</nav>

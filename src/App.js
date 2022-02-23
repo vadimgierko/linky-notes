@@ -12,6 +12,7 @@ import Item from "./components/pages/Item";
 import Tags from "./components/pages/Tags";
 import AddSource from "./components/pages/AddSource";
 import { useEffect } from "react";
+import SignUp from "./components/pages/SignUp";
 
 export default function App() {
 	const { theme } = useTheme();
@@ -45,6 +46,9 @@ export default function App() {
 					</Route>
 					<Route path="/signin">
 						<SignIn />
+					</Route>
+					<Route path="/signup">
+						<SignUp />
 					</Route>
 					<Route exact path="/notes/:itemKey">
 						<Item />
