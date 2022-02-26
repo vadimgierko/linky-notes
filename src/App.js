@@ -62,9 +62,9 @@ export default function App() {
 					<Route exact path="/notes/update-note/:itemKey">
 						<UpdateItem />
 					</Route>
-					<Route exact path="/add-source">
+					{/* <Route exact path="/add-source">
 						<AddSource />
-					</Route>
+					</Route> */}
 					<Route path="/notes">
 						<Items />
 					</Route>

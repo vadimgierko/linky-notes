@@ -16,21 +16,21 @@ export default function reducer(state, action) {
 		// 			...action.payload,
 		// 		},
 		// 	};
-		case "set-items-list":
-			return {
-				...state,
-				itemsList: action.payload,
-			};
-		case "add-item":
-			return {
-				...state,
-				itemsList: {
-					...state.itemsList,
-					[action.payload.key]: {
-						title: action.payload.item.title,
-					},
-				},
-			};
+		// case "set-items-list":
+		// 	return {
+		// 		...state,
+		// 		itemsList: action.payload,
+		// 	};
+		// case "add-item":
+		// 	return {
+		// 		...state,
+		// 		itemsList: {
+		// 			...state.itemsList,
+		// 			[action.payload.key]: {
+		// 				title: action.payload.item.title,
+		// 			},
+		// 		},
+		// 	};
 		case "add-fetched-item-to-fetched-items":
 			return {
 				...state,

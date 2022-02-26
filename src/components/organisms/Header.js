@@ -29,7 +29,7 @@ export default function Header() {
 		//"notes",
 		//"tags",
 		//"sources",
-		//"add note",
+		"add note",
 		//"add source",
 	];
 
