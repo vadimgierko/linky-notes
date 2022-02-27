@@ -10,12 +10,12 @@ function addItemToDatabase(item, userId, key) {
 	);
 }
 
-// function addItemIntoItemsList(key, userId) {
-// 	return set(ref(database, "users/" + userId + "/itemsList/" + key), {
-// 		title: itemTitle,
-// 	}).then(() =>
-// 		console.log("Item was added into user items list under the key,", key)
-// 	);
+// function addItemToItemsList(key, userId) {
+// 	// return set(ref(database, "users/" + userId + "/itemsList/" + key), {
+// 	// 	title: itemTitle,
+// 	// }).then(() =>
+// 	// 	console.log("Item was added into user items list under the key,", key)
+// 	// );
 // }
 
 // compose all functions in addItem function
@@ -34,9 +34,7 @@ export default function addItem(item, userId, dispatch) {
 
 	return (
 		addItemToDatabase(itemWithDate, userId, key)
-			// .then(() =>
-			// 	addItemToUserItemsList(itemWithDate.title, key, itemWithDate.userId)
-			// )
+			//.then(() => addItemToItemsList(key, itemWithDate.userId))
 			.then(() => {
 				console.log("Item was added successfully!");
 				// dispatch({

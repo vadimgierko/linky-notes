@@ -3,7 +3,6 @@ import ItemCard from "../molecules/ItemCard";
 
 export default function ItemsList({ items }) {
 	const { theme } = useTheme();
-	const { deleteItem } = useDatabase();
 
 	if (!items) return <p>There are no items so far...</p>;
 
@@ -15,7 +14,7 @@ export default function ItemsList({ items }) {
 			}}
 		>
 			<div>
-				{items
+				{Object.entries(items)
 					.slice()
 					.reverse()
 					.map((itemArray) => {
@@ -26,9 +25,6 @@ export default function ItemsList({ items }) {
 								key={"item-" + itemKey}
 								item={item}
 								itemKey={itemKey}
-								editLink={"/notes/update-note/" + itemKey}
-								deleteFunction={() => deleteItem(itemKey)}
-								deleteLink="/"
 							/>
 						);
 					})}

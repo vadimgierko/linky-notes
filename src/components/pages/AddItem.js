@@ -16,7 +16,7 @@ export default function AddItem() {
 				tags={state.tags && state.tags.length ? state.tags : []}
 				//addTags={addTags}
 				onItemFormClick={addItem}
-				link="/"
+				link="/notes"
 				buttonText="Add a new note"
 				headerText="Create a new note!"
 			/>

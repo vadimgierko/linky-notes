@@ -26,7 +26,7 @@ export default function Header() {
 
 	const sectionsList = [
 		"about",
-		//"notes",
+		"notes",
 		//"tags",
 		//"sources",
 		"add note",
