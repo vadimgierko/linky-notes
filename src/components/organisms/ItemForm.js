@@ -35,9 +35,9 @@ export default function ItemForm({
 	useEffect(() => {
 		if (passedItem) {
 			setItem({ ...passedItem });
-			if (passedItem.tags.length) {
-				setItemTags([...passedItem.tags]);
-			}
+			// if (passedItem.tags.length) {
+			// 	setItemTags([...passedItem.tags]);
+			// }
 		} else {
 			setItem({
 				content: "",
@@ -109,8 +109,17 @@ export default function ItemForm({
 		// 	);
 		// }
 		//addItem(item, userId, dispatch)
-		onItemFormClick(item, state.user.id, dispatch);
+
+		if (passedItem && passedItemKey) {
+			// if there was passed item & key, it means, that we are updating the item:
+			onItemFormClick(item, passedItemKey, state.user.id, dispatch);
+		} else {
+			// if there wasn't passed item & key, it means, that we are adding the item:
+			onItemFormClick(item, state.user.id, dispatch);
+		}
 	}
+
+	if (!item) return null;
 
 	return (
 		<div

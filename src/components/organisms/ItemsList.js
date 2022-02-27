@@ -4,7 +4,8 @@ import ItemCard from "../molecules/ItemCard";
 export default function ItemsList({ items }) {
 	const { theme } = useTheme();
 
-	if (!items) return <p>There are no items so far...</p>;
+	if (!items || !Object.entries(items).length)
+		return <p>There are no items so far...</p>;
 
 	return (
 		<div

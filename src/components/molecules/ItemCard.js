@@ -25,7 +25,7 @@ export default function ItemCard({ item, itemKey }) {
 	return (
 		<div
 			className={
-				"card mb-2 shadow bg-" +
+				"item-card card mb-2 shadow bg-" +
 				theme.mode +
 				(theme.mode === "dark" ? " border-secondary" : "")
 			}

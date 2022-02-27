@@ -12,8 +12,8 @@ export default function About() {
 				allows you to create notes with tags & sources.
 			</p>
 			<h3 className="text-danger">
-				NOTE! At the moment (from 23.02 to 24/25.02) I'm adapting this
-				app to a new architecture & data layer management pattern, so
+				NOTE! At the moment (from 23.02) I'm adapting this app to a new
+				architecture, data layer management pattern & security rules, so
 				app is not working. Before these changes the app was dedicated
 				only for my personal use, but after a few days anyone would be
 				able to sign up & add notes :-) So stay tuned!
