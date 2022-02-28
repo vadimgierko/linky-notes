@@ -1,4 +1,4 @@
-import TagButton from "../atoms/TagButton";
+import TagLinkButton from "../atoms/TagLinkButton";
 import { useTheme } from "../../hooks/use-theme";
 import TrashIconButton from "../atoms/TrashIconButton";
 import PencilIconButton from "../atoms/PencilIconButton";

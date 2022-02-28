@@ -38,6 +38,21 @@ export default function reducer(state, action) {
 				...state,
 				fetchedItems: fetched,
 			};
+		case "set-fetched-tags":
+			return {
+				...state,
+				tags: {
+					...action.payload,
+				},
+			};
+		case "add-tag-to-fetched-tags":
+			return {
+				...state,
+				tags: {
+					...state.tags,
+					[action.payload.key]: action.payload.tag,
+				},
+			};
 		case "reset-state":
 			return INIT_STATE;
 		default:

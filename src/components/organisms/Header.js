@@ -1,7 +1,7 @@
 import { useTheme } from "../../hooks/use-theme";
 import { useState } from "react";
 import NavLinksList from "../molecules/NavLinksList";
-import LogButton from "../atoms/LogButton";
+import LogButton from "../atoms/Header/LogButton";
 import { useStore } from "../../store/Store";
 import logOut from "../../logic/logOut";
 
@@ -27,7 +27,7 @@ export default function Header() {
 	const sectionsList = [
 		"about",
 		"notes",
-		//"tags",
+		"tags",
 		//"sources",
 		"add note",
 		//"add source",

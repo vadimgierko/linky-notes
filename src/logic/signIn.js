@@ -1,5 +1,4 @@
 import { firebaseAuth } from "../firebaseConfig.js";
-
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function signIn(signInData) {

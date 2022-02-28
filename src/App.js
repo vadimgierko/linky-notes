@@ -65,7 +65,7 @@ export default function App() {
 					{/* <Route exact path="/add-source">
 						<AddSource />
 					</Route> */}
-					<Route path="/notes">
+					<Route path="/">
 						<Items />
 					</Route>
 				</Switch>

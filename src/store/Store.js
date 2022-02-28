@@ -3,6 +3,8 @@ import { firebaseAuth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "firebase/auth";
 import reducer from "./reducer.js";
 import { INIT_STATE } from "./initState.js";
+import fetchItems from "../logic/fetchItems.js";
+import fetchTags from "../logic/fetchTags.js";
 
 const StoreContext = createContext();
 
@@ -20,6 +22,8 @@ export function StoreProvider({ children }) {
 					payload: { id: user.uid, email: user.email },
 				});
 				console.log("user logged in. user:", user);
+				//fetchItems(user.uid, dispatch);
+				//fetchTags(user.uid, dispatch);
 			} else {
 				dispatch({ type: "reset-state" });
 				console.log("user is logged out");

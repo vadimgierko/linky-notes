@@ -7,18 +7,6 @@ function deleteItemFromDatabase(key, userId) {
 	);
 }
 
-// function deleteItemFromUsersItemsList(key, userId) {
-// 	return remove(ref(database, "users/" + userId + "/itemsList/" + key)).then(
-// 		() =>
-// 			console.log(
-// 				"Item with the key,",
-// 				key,
-// 				" was deleted from user's items list."
-// 			)
-// 	);
-// }
-
-// compose all functions in addItem function
 export default function deleteItem(key, userId, dispatch) {
 	return (
 		deleteItemFromDatabase(key, userId)

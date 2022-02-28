@@ -5,29 +5,37 @@ import ItemsList from "../organisms/ItemsList";
 import { useLocation } from "react-router-dom";
 import { useStore } from "../../store/Store";
 import fetchItems from "../../logic/fetchItems";
+import fetchTags from "../../logic/fetchTags";
 
 export default function Items() {
 	const { theme } = useTheme();
 	const { state, dispatch } = useStore();
 	const { search } = useLocation();
 
-	//const [filterTags, setFilterTags] = useState([]);
-	// const [searchLinkFromFilterTags, setSearchLinkFromFilterTags] =
-	// 	useState(null);
+	const [filterTags, setFilterTags] = useState([]);
+	const [searchLinkFromFilterTags, setSearchLinkFromFilterTags] =
+		useState(null);
 
 	const [filteredItems, setFilteredItems] = useState([]);
 
-	useEffect(() => {
-		if (state.user) {
-			if (!state.fetchedItems) {
-				fetchItems(state.user.id, dispatch);
-			} else {
-				console.log(
-					"Fetched items are already fetched. No need to fetch again."
-				);
-			}
-		}
-	}, [state]);
+	// useEffect(() => {
+	// 	if (state.user) {
+	// 		if (!state.fetchedItems) {
+	// 			fetchItems(state.user.id, dispatch);
+	// 		} else {
+	// 			console.log(
+	// 				"Fetched items are already fetched. No need to fetch again."
+	// 			);
+	// 		}
+	// 		if (!state.tags) {
+	// 			fetchTags(state.user.id, dispatch);
+	// 		} else {
+	// 			console.log(
+	// 				"Fetched tags are already fetched. No need to fetch again."
+	// 			);
+	// 		}
+	// 	}
+	// }, [state]);
 
 	if (!state.user) return <p>You need to be logged to see your items!</p>;
 	//if (!state.fetchedItems) return <p>There are no user's items so far...</p>;
@@ -106,13 +114,12 @@ export default function Items() {
 				color: theme.color,
 			}}
 		>
-			{/* <TagSearchForm
-				tags={tags}
+			<TagSearchForm
 				chosenTags={filterTags}
 				setChosenTags={setFilterTags}
 				searchLinkFromFilterTags={searchLinkFromFilterTags}
 				setSearchLinkFromFilterTags={setSearchLinkFromFilterTags}
-			/> */}
+			/>
 			{/* {filterTags && filterTags.length ? (
 				filteredItems && filteredItems.length ? (
 					<ItemsList items={filteredItems} />
