@@ -1,12 +1,23 @@
 import { useTheme } from "../../hooks/use-theme";
 import { useState } from "react";
-import NavLinksList from "../molecules/NavLinksList";
-import LogButton from "../atoms/Header/LogButton";
+import NavLinksList from "../Header/molecules/NavLinksList";
+import ThemeSwitchButton from "../Header/atoms/ThemeSwitchButton";
 import { useStore } from "../../store/Store";
 import logOut from "../../logic/logOut";
+import LoggedUserEmail from "../Header/atoms/LoggedUserEmail";
+import LogButtonsSection from "../Header/molecules/LogButtonsSection";
+
+const SECTIONS_LIST = [
+	"about",
+	"notes",
+	"tags",
+	//"sources",
+	"add note",
+	//"add source",
+];
 
 export default function Header() {
-	const { theme, switchToDark, switchToLight } = useTheme();
+	const { theme } = useTheme();
 	const { state } = useStore();
 
 	const [isNavCollapsed, setIsNavCollapsed] = useState(true);
@@ -14,24 +25,6 @@ export default function Header() {
 	const handleNavCollapse = () => {
 		setIsNavCollapsed(!isNavCollapsed);
 	};
-
-	const onLogButtonClick = () => {
-		if (state.user) {
-			logOut();
-		}
-		if (!isNavCollapsed) {
-			handleNavCollapse();
-		}
-	};
-
-	const sectionsList = [
-		"about",
-		"notes",
-		"tags",
-		//"sources",
-		"add note",
-		//"add source",
-	];
 
 	return (
 		<nav
@@ -63,86 +56,26 @@ export default function Header() {
 					id="navbarColor01"
 				>
 					<NavLinksList
-						sectionsList={sectionsList}
-						handleLinkClick={() => {
+						sectionsList={SECTIONS_LIST}
+						handleLinkClick={handleNavCollapse}
+					/>
+					<LoggedUserEmail user={state.user} />
+					<ThemeSwitchButton
+						isNavCollapsed={isNavCollapsed}
+						handleNavCollapse={handleNavCollapse}
+					/>
+					<LogButtonsSection
+						user={state.user}
+						isNavCollapsed={isNavCollapsed}
+						onLogButtonClick={() => {
+							if (state.user) {
+								logOut();
+							}
 							if (!isNavCollapsed) {
 								handleNavCollapse();
 							}
 						}}
 					/>
-					{/** user email when loged */}
-					{state.user ? (
-						<div className="text-muted me-3">
-							{state.user.email ? state.user.email : null}
-						</div>
-					) : null}
-					{/** switch mode btn */}
-					<button
-						className={
-							theme.mode === "light"
-								? "btn btn-secondary" +
-								  (isNavCollapsed
-										? " me-3"
-										: " d-block mt-2 w-100")
-								: "btn btn-light" +
-								  (isNavCollapsed
-										? " me-3"
-										: " d-block mt-2 w-100")
-						}
-						type="button"
-						onClick={() => {
-							if (theme.mode === "light") {
-								switchToDark();
-							} else {
-								switchToLight();
-							}
-							if (!isNavCollapsed) {
-								handleNavCollapse();
-							}
-						}}
-					>
-						{theme.mode === "light" ? (
-							<i className="bi bi-moon"></i>
-						) : (
-							<i className="bi bi-brightness-high"></i>
-						)}
-					</button>
-					{state.user && (
-						<LogButton
-							link="/about"
-							logButtonText="Log out"
-							className={
-								isNavCollapsed
-									? "btn btn-outline-danger me-2"
-									: "btn btn-outline-danger d-block mt-2"
-							}
-							handleLogButtonClick={onLogButtonClick}
-						/>
-					)}
-					{!state.user && (
-						<LogButton
-							link="/signin"
-							logButtonText="Sign In"
-							className={
-								isNavCollapsed
-									? "btn btn-outline-success me-2"
-									: "btn btn-outline-success d-block mt-2"
-							}
-							handleLogButtonClick={onLogButtonClick}
-						/>
-					)}
-					{!state.user && (
-						<LogButton
-							link="/signup"
-							logButtonText="Sign Up"
-							className={
-								isNavCollapsed
-									? "btn btn-outline-info me-2"
-									: "btn btn-outline-info d-block mt-2"
-							}
-							handleLogButtonClick={onLogButtonClick}
-						/>
-					)}
 				</div>
 			</div>
 		</nav>
