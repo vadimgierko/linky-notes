@@ -9,14 +9,14 @@ import fetchTags from "../../logic/fetchTags";
 
 export default function Items() {
 	const { theme } = useTheme();
-	const { state, dispatch } = useStore();
+	const { state } = useStore();
+
 	const { search } = useLocation();
 
-	const [filterTags, setFilterTags] = useState([]);
-	const [searchLinkFromFilterTags, setSearchLinkFromFilterTags] =
-		useState(null);
+	const [filterTagsKeys, setFilterTagsKeys] = useState();
+	const [filteredItems, setFilteredItems] = useState();
 
-	const [filteredItems, setFilteredItems] = useState([]);
+	const [searchLink, setSearchLink] = useState();
 
 	// useEffect(() => {
 	// 	if (state.user) {
@@ -37,46 +37,28 @@ export default function Items() {
 	// 	}
 	// }, [state]);
 
-	if (!state.user) return <p>You need to be logged to see your items!</p>;
-	//if (!state.fetchedItems) return <p>There are no user's items so far...</p>;
+	//if (!state.user) return <p>You need to be logged to see your items!</p>;
 
-	// useEffect(() => {
-	// 	if (search) {
-	// 		//console.log("search:", search);
-	// 		const searchValue = search.slice(6);
-	// 		//console.log("searchValue", searchValue)
-	// 		if (searchValue.length) {
-	// 			// when search value changes, set filter tags:
-	// 			setFilterTags(() => {
-	// 				const tags = searchValue.split("+");
-	// 				// decode tags from URL:
-	// 				let convertedTags = [];
-	// 				for (let n = 0; n < tags.length; n++) {
-	// 					convertedTags.push(decodeURI(tags[n]));
-	// 				}
-	// 				setSearchLinkFromFilterTags(() => {
-	// 					let link = "";
-	// 					for (let i = 0; i < convertedTags.length; i++) {
-	// 						if (i === 0) {
-	// 							link = convertedTags[i];
-	// 						} else {
-	// 							link = link + "+" + convertedTags[i];
-	// 						}
-	// 					}
-	// 					return link;
-	// 				});
-	// 				//console.log("converted tags:", convertedTags)
-	// 				return [...convertedTags];
-	// 			});
-	// 		} else {
-	// 			//console.log("there is no search value");
-	// 			setFilterTags([]);
-	// 			setSearchLinkFromFilterTags(null);
-	// 		}
-	// 	} else {
-	// 		//console.log("There is no search value.");
-	// 	}
-	// }, [search]);
+	useEffect(() => {
+		if (search) {
+			console.log("search from useLocation():", search);
+
+			const searchValue = search.slice(6);
+			console.log("searchValue (from search.slice(6):", searchValue);
+
+			if (searchValue.length) {
+				const tagsKeys = searchValue.split("+"); // returns an array with tagKeys
+				console.log("tagKeys = array from searchValue:", tagsKeys);
+				setFilterTagsKeys(tagsKeys);
+				setSearchLink(searchValue);
+				console.log("searchLink = searchValue", searchValue);
+			} else {
+				console.log("there is no search value");
+				setFilterTagsKeys([]);
+				setSearchLink();
+			}
+		}
+	}, [search]);
 
 	// function filterItems(filterTags) {
 	// 	if (state.items) {
@@ -113,12 +95,11 @@ export default function Items() {
 				background: theme.background,
 				color: theme.color,
 			}}
+			className="items-page"
 		>
 			<TagSearchForm
-				chosenTags={filterTags}
-				setChosenTags={setFilterTags}
-				searchLinkFromFilterTags={searchLinkFromFilterTags}
-				setSearchLinkFromFilterTags={setSearchLinkFromFilterTags}
+				filterTagsKeys={filterTagsKeys}
+				searchLink={searchLink}
 			/>
 			{/* {filterTags && filterTags.length ? (
 				filteredItems && filteredItems.length ? (

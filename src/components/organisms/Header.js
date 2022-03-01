@@ -57,7 +57,11 @@ export default function Header() {
 				>
 					<NavLinksList
 						sectionsList={SECTIONS_LIST}
-						handleLinkClick={handleNavCollapse}
+						handleLinkClick={() => {
+							if (!isNavCollapsed) {
+								handleNavCollapse();
+							}
+						}}
 					/>
 					<LoggedUserEmail user={state.user} />
 					<ThemeSwitchButton

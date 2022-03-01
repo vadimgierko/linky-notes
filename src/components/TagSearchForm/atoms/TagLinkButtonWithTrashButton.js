@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 export default function TagLinkButtonWithTrashIcon({ tag, link }) {
 	return (
 		<button
-			key={"tag-btn-with-trash-icon-for-" + tag}
 			type="button"
 			className="btn btn-outline-secondary mb-2 me-2"
 			style={{ borderRadius: 20 }}
