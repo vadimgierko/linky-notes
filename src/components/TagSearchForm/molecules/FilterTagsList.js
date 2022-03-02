@@ -1,35 +1,11 @@
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
-import TagLinkButtonWithTrashIcon from "../atoms/TagLinkButtonWithTrashButton";
+import TagLinkButtonWithTrashIcon from "../atoms/TagLinkButtonWithTrashIcon";
 import { useStore } from "../../../store/Store";
 import { useEffect, useState } from "react";
 
-export default function FilterTagsList({
-	filterTagsKeys, // ARRAY !!!
-	searchLink,
-	form,
-}) {
+export default function FilterTagsList({ filterTagsKeys, form }) {
 	const { state } = useStore();
 	const [tags, setTags] = useState();
-
-	// function deleteTag(tag) {
-	// 	//const updatedTags = filterTags.filter((item) => item !== tag);
-	// 	//setFilterTags(updatedTags);
-	// }
-
-	// function generateLinkAfterDeletionOfTag(tag) {
-	// 	const updatedTags = filterTags.filter((item) => item !== tag);
-	// 	let link = "";
-	// 	if (updatedTags && updatedTags.length) {
-	// 		for (let i = 0; i < updatedTags.length; i++) {
-	// 			if (i === 0) {
-	// 				link = updatedTags[i];
-	// 			} else {
-	// 				link = link + "+" + updatedTags[i];
-	// 			}
-	// 		}
-	// 	}
-	// 	return link;
-	// }
 
 	function generateNewSearchLinkAfterDeletionOfTag(n) {
 		let newLink = "";
@@ -54,8 +30,8 @@ export default function FilterTagsList({
 	}
 
 	useEffect(() => {
-		if (state.tags && Object.entries(state.tags).length) {
-			if (filterTagsKeys && filterTagsKeys.length) {
+		if (filterTagsKeys && filterTagsKeys.length) {
+			if (state.tags && Object.entries(state.tags).length) {
 				let retrievedTags = [];
 				for (let i = 0; i < filterTagsKeys.length; i++) {
 					if (state.tags[filterTagsKeys[i]]) {
@@ -67,16 +43,10 @@ export default function FilterTagsList({
 				}
 				setTags(retrievedTags);
 			}
+		} else {
+			setTags();
 		}
-	}, [state]);
-
-	// useEffect(() => {
-	// 	console.log("tags in FilterTagsList:", tags);
-	// }, [tags]);
-
-	// useEffect(() => {
-	// 	console.log("searchLink in FilterTagsList:", searchLink);
-	// }, [searchLink]);
+	}, [state, filterTagsKeys]);
 
 	if (!tags || !tags.length) return null;
 
@@ -102,10 +72,11 @@ export default function FilterTagsList({
 					key={tag.key}
 					tag={tag.tag}
 					link={
-						"/search?name=" +
-						generateNewSearchLinkAfterDeletionOfTag(i)
+						generateNewSearchLinkAfterDeletionOfTag(i).length
+							? "/search?name=" +
+							  generateNewSearchLinkAfterDeletionOfTag(i)
+							: ""
 					}
-					//link={"/search?name=" + tag.key}
 				/>
 			))}
 		</div>

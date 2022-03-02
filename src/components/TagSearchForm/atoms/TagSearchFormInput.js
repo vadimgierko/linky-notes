@@ -1,6 +1,6 @@
 import { useTheme } from "../../../hooks/use-theme";
 
-export default function TagSearchFormInput({ defaultValue, handleChange }) {
+export default function TagSearchFormInput({ inputValue, handleChange }) {
 	const { theme } = useTheme();
 
 	return (
@@ -12,9 +12,9 @@ export default function TagSearchFormInput({ defaultValue, handleChange }) {
 				" text-" +
 				(theme.mode === "dark" ? "light" : "dark")
 			}
-			defaultValue={defaultValue}
+			value={inputValue}
 			placeholder="type some tag"
-			onChange={(e) => handleChange(e.target.value)}
+			onChange={handleChange}
 		/>
 	);
 }

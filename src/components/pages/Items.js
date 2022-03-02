@@ -44,7 +44,7 @@ export default function Items() {
 			console.log("search from useLocation():", search);
 
 			const searchValue = search.slice(6);
-			console.log("searchValue (from search.slice(6):", searchValue);
+			console.log("searchValue (from search.slice(6)):", searchValue);
 
 			if (searchValue.length) {
 				const tagsKeys = searchValue.split("+"); // returns an array with tagKeys
@@ -54,9 +54,13 @@ export default function Items() {
 				console.log("searchLink = searchValue", searchValue);
 			} else {
 				console.log("there is no search value");
-				setFilterTagsKeys([]);
+				setFilterTagsKeys();
 				setSearchLink();
 			}
+		} else {
+			console.log("there is no search");
+			setFilterTagsKeys();
+			setSearchLink();
 		}
 	}, [search]);
 

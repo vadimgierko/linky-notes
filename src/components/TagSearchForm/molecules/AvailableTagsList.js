@@ -1,19 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useStore } from "../../../store/Store";
 import FormTagButton from "../atoms/FormTagButton";
 import TagLinkButtonGeneratedByInput from "../atoms/TagLinkButtonGeneratedByInput";
 
-export default function AvailableTagsList({
-	inputedTagValue,
-	form,
-	searchLink,
-}) {
+export default function AvailableTagsList({ inputValue, form, searchLink }) {
+	const { state } = useStore();
 	const [availableTags, setAvailableTags] = useState();
-	// useEffect(() => {
-	// 	setAvailableTags(generateAvailableTags(inputedTagValue));
-	// }, [inputedTagValue]);
 
-	if (!inputedTagValue) return null;
-	if (!availableTags || !availableTags.length) return null;
+	function generateAvailableTags(input) {
+		if (input && input.length) {
+			if (state.tags && Object.entries(state.tags).length) {
+				const stateTagsArray = Object.entries(state.tags);
+				// => [["sdcsdcasdcasd", {tag: "test"}], ["okvf98u98dfv", {tag: "app"}]
+				let tags = [];
+				for (let i = 0; i < stateTagsArray.length; i++) {
+					if (stateTagsArray[i][1].tag.includes(input)) {
+						tags.push({
+							tag: stateTagsArray[i][1].tag,
+							key: stateTagsArray[i][0],
+						});
+					}
+				}
+				setAvailableTags(tags);
+			}
+		} else {
+			setAvailableTags();
+		}
+	}
+
+	useEffect(() => {
+		generateAvailableTags(inputValue);
+	}, [inputValue]);
+
+	if (!inputValue || !inputValue.length) return null;
 
 	//================= if (form)
 
@@ -42,7 +61,7 @@ export default function AvailableTagsList({
 
 	return (
 		<div className="available-tags-list">
-			<TagLinkButtonGeneratedByInput
+			{/* <TagLinkButtonGeneratedByInput
 				tag={inputedTagValue}
 				link={
 					"/search?name=" +
@@ -50,17 +69,19 @@ export default function AvailableTagsList({
 						? searchLink + "+" + inputedTagValue
 						: inputedTagValue)
 				}
-			/>
-			{availableTags.map((tag, i) => (
-				<TagLinkButtonGeneratedByInput
-					key={tag}
-					tag={tag}
-					link={
-						"/search?name=" +
-						(searchLink ? searchLink + "+" + tag : tag)
-					}
-				/>
-			))}
+			/> */}
+			{availableTags &&
+				availableTags.map((tag, i) => (
+					<TagLinkButtonGeneratedByInput
+						key={tag.key}
+						tag={tag.tag}
+						link={
+							searchLink
+								? "/search?name=" + searchLink + "+" + tag.key
+								: "/search?name=" + tag.key
+						}
+					/>
+				))}
 		</div>
 	);
 }

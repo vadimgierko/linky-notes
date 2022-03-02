@@ -1,33 +1,32 @@
 import { useEffect, useState } from "react";
-import { useStore } from "../../store/Store";
 import TagSearchFormInput from "../TagSearchForm/atoms/TagSearchFormInput";
 import FilterTagsList from "../TagSearchForm/molecules/FilterTagsList";
 import AvailableTagsList from "../TagSearchForm/molecules/AvailableTagsList";
 
 export default function TagSearchForm({
-	filterTagsKeys, // TAGS KEYS ARRAY !!!
+	filterTagsKeys,
 	searchLink,
 	form = false,
 }) {
-	const [inputedTagValue, setInputedTagValue] = useState("");
+	const [inputValue, setInputValue] = useState("");
 
-	if (!filterTagsKeys || !searchLink)
-		return (
-			<div className="tag-search-form">
-				<TagSearchFormInput
-					defaultValue={inputedTagValue}
-					placeholder="type some tag"
-					handleChange={setInputedTagValue}
-				/>
-			</div>
-		);
+	function handleInputChange(e) {
+		setInputValue(e.target.value);
+	}
+
+	useEffect(() => setInputValue(""), [searchLink]);
+
+	// useEffect(
+	// 	() => console.log("input value in TagSearchForm:", inputValue),
+	// 	[inputValue]
+	// );
 
 	return (
 		<div className="tag-search-form">
 			<TagSearchFormInput
-				defaultValue={inputedTagValue}
+				inputValue={inputValue}
 				placeholder="type some tag"
-				handleChange={setInputedTagValue}
+				handleChange={handleInputChange}
 			/>
 			<FilterTagsList
 				filterTagsKeys={filterTagsKeys}
@@ -35,7 +34,7 @@ export default function TagSearchForm({
 				form={form}
 			/>
 			<AvailableTagsList
-				inputedTagValue={inputedTagValue}
+				inputValue={inputValue}
 				form={form}
 				searchLink={searchLink}
 			/>
