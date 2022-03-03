@@ -20,7 +20,7 @@ export default function Items() {
 			className="items-page"
 		>
 			<TagSearchForm search={search} />
-			{/* <ItemsList search={search} /> */}
+			<ItemsList search={search} />
 		</div>
 	);
 }

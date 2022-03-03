@@ -3,9 +3,6 @@ import { useStore } from "../../../store/Store";
 import FormTagButton from "../atoms/FormTagButton";
 import TagLinkButtonGeneratedByInput from "../atoms/TagLinkButtonGeneratedByInput";
 
-// => generate availableTags from inputValue =>
-// => generate new search link when clicked
-
 export default function AvailableTagsList({ inputValue, form, search }) {
 	const { state } = useStore();
 	const [availableTags, setAvailableTags] = useState(); // [{tag: "", key: ""}]

@@ -1,57 +1,62 @@
+import { useEffect, useState } from "react";
 import { useTheme } from "../../hooks/use-theme";
+import { useStore } from "../../store/Store";
 import ItemCard from "../molecules/ItemCard";
 
-export default function ItemsList({ items }) {
+export default function ItemsList({ search }) {
 	const { theme } = useTheme();
+	const { state } = useStore();
+	const [items, setItems] = useState();
 
-	function filterItems(filterTagsKeys) {
-		if (filterTagsKeys) {
-			if (state.fetchedItems) {
-				let items = {}; // object with filtered items objects
-				const stateFetchedItemsArray = Object.entries(
-					state.fetchedItems
-				);
-				//console.log("stateFetchedItemsArray", stateFetchedItemsArray);
-				for (let i = 0; i < stateFetchedItemsArray.length; i++) {
-					const itemTagsArray = Object.entries(
-						stateFetchedItemsArray[i][1].tags
+	function filterItems(search) {
+		const tagsKeysStringFromSearch = search.slice(6);
+
+		if (tagsKeysStringFromSearch.length) {
+			const tagsKeysArray = tagsKeysStringFromSearch.split("+");
+
+			const filteredItemsKeys = Object.keys(state.fetchedItems).filter(
+				(itemKey) => {
+					const itemTagsKeysArray = Object.keys(
+						state.fetchedItems[itemKey].tags
 					);
-					//console.log("itemTagsArray", itemTagsArray);
-					let sameTagsNum = 0;
-					for (let j = 0; j < filterTagsKeys.length; j++) {
-						for (let n = 0; n < itemTagsArray.length; n++) {
-							if (itemTagsArray[n][0] === filterTagsKeys[j]) {
-								sameTagsNum++;
-								if (sameTagsNum === filterTagsKeys.length) {
-									items = {
-										...items,
-										[stateFetchedItemsArray[i][0]]: {
-											...stateFetchedItemsArray[i][1],
-										},
-									};
-								}
-							}
-						}
-						if (j === filterTagsKeys.length - 1) {
-							sameTagsNum = 0;
-						}
+					const containsAll = tagsKeysArray.every((element) =>
+						itemTagsKeysArray.includes(element)
+					);
+					if (containsAll) {
+						return itemKey;
+					} else {
+						return null;
 					}
 				}
-				if (Object.entries(items).length) {
-					setFilteredItems(items);
-				} else {
-					setFilteredItems();
-				}
+			);
+			//console.log("filteredItemsKeys:", filteredItemsKeys);
+			let filteredItems = {};
+			for (let i = 0; i < filteredItemsKeys.length; i++) {
+				filteredItems = {
+					...filteredItems,
+					[filteredItemsKeys[i]]: {
+						...state.fetchedItems[filteredItemsKeys[i]],
+					},
+				};
 			}
+			setItems(filteredItems);
 		} else {
-			setFilteredItems();
+			setItems();
 		}
 	}
 
 	useEffect(() => {
-		//console.log("filterTagsKeys", filterTagsKeys);
-		filterItems(filterTagsKeys);
-	}, [filterTagsKeys]);
+		if (search) {
+			filterItems(search);
+		} else {
+			if (state.fetchedItems) {
+				setItems(state.fetchedItems);
+			} else {
+				console.log("There are no fetched items in state...");
+				setItems();
+			}
+		}
+	}, [search, state]);
 
 	if (!items || !Object.entries(items).length)
 		return <p>There are no items so far...</p>;

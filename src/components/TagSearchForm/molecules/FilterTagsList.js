@@ -3,9 +3,6 @@ import { useStore } from "../../../store/Store";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
 import TagLinkButtonWithTrashIcon from "../atoms/TagLinkButtonWithTrashIcon";
 
-// => generate filterTags from search =>
-// => generate new search link when clicked
-
 export default function FilterTagsList({ search, form }) {
 	const { state } = useStore();
 	const [filterTags, setFilterTags] = useState(); // [{tag: "", key: ""}]
@@ -41,10 +38,13 @@ export default function FilterTagsList({ search, form }) {
 	) {
 		const tagsKeysStringFromPrevSearch = prevSearch.slice(6);
 		const prevTagsKeysArray = tagsKeysStringFromPrevSearch.split("+");
+
 		const newTagsKeysArray = prevTagsKeysArray.filter(
 			(key) => key !== deletedTagKey
 		);
+
 		const newSearchLinkString = newTagsKeysArray.join("+");
+
 		if (newSearchLinkString.length) {
 			return "/search?name=" + newSearchLinkString;
 		} else {
