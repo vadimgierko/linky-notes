@@ -1,7 +1,7 @@
-import TagLinkButton from "../atoms/TagLinkButton";
-import { useStore } from "../../store/Store";
 import { useEffect } from "react";
-import fetchTags from "../../logic/fetchTags";
+import { useStore } from "../../store/Store";
+//import fetchTags from "../../logic/fetchTags";
+import TagLinkButton from "../atoms/TagLinkButton";
 
 const ALPHABET = [
 	"a",
@@ -39,15 +39,15 @@ const ALPHABET = [
 export default function Tags() {
 	const { state, dispatch } = useStore();
 
-	useEffect(() => {
-		if (state.user) {
-			if (!state.tags || !Object.entries(state.tags).length) {
-				fetchTags(state.user.id, dispatch);
-			}
-		}
-	}, [state]);
+	// useEffect(() => {
+	// 	if (state.user) {
+	// 		if (!state.tags || !Object.entries(state.tags).length) {
+	// 			fetchTags(state.user.id, dispatch);
+	// 		}
+	// 	}
+	// }, [state]);
 
-	if (!state.user) return <p>You need to be logged to see your tags...</p>;
+	//if (!state.user) return <p>You need to be logged to see your tags...</p>;
 	if (!state.tags || !Object.entries(state.tags).length)
 		return <p>There are no tags so far...</p>;
 
@@ -66,7 +66,7 @@ export default function Tags() {
 								tag[1].tag[0] === letter ? (
 									<TagLinkButton
 										key={tag[0]}
-										tagKey={tag[0]}
+										tagLink={"/search?name=" + tag[0]}
 										tag={tag[1].tag}
 									/>
 								) : null
