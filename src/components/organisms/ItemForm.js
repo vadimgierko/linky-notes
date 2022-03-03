@@ -143,13 +143,13 @@ export default function ItemForm({
 							setItem({ ...item, content: e.target.value })
 						}
 					></textarea>
-					{/* <TagSearchForm
-						tags={tags}
-						chosenTags={itemTags}
-						setChosenTags={setItemTags}
+					<TagSearchForm
+						// tags={tags}
+						// chosenTags={itemTags}
+						// setChosenTags={setItemTags}
 						form={true}
 					/>
-					<hr /> */}
+					<hr />
 					{/* <select
 						className={
 							"form-select mb-2 + bg-" +

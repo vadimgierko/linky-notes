@@ -1,54 +1,63 @@
+import { useEffect, useState } from "react";
+import { useStore } from "../../../store/Store";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
 import TagLinkButtonWithTrashIcon from "../atoms/TagLinkButtonWithTrashIcon";
-import { useStore } from "../../../store/Store";
-import { useEffect, useState } from "react";
 
-export default function FilterTagsList({ filterTagsKeys, form }) {
+// => generate filterTags from search =>
+// => generate new search link when clicked
+
+export default function FilterTagsList({ search, form }) {
 	const { state } = useStore();
-	const [tags, setTags] = useState();
+	const [filterTags, setFilterTags] = useState(); // [{tag: "", key: ""}]
 
-	function generateNewSearchLinkAfterDeletionOfTag(n) {
-		let newLink = "";
-		for (let i = 0; i < tags.length; i++) {
-			if (n > 0) {
-				if (i === 0) {
-					newLink = newLink + tags[i].key;
+	function getFilterTagsFromSearch(search) {
+		if (search) {
+			const tagsKeysStringFromSearch = search.slice(6);
+
+			if (tagsKeysStringFromSearch.length) {
+				const tagsKeysArray = tagsKeysStringFromSearch.split("+");
+
+				if (state.tags) {
+					const retrievedTagsObjectsArray = tagsKeysArray.map(
+						(key) => ({ key: key, tag: state.tags[key].tag })
+					);
+					setFilterTags(retrievedTagsObjectsArray);
 				} else {
-					if (i !== n) {
-						newLink = newLink + "+" + tags[i].key;
-					}
+					console.log(
+						"There are no tags in state... Cannot get tags from search."
+					);
 				}
 			} else {
-				if (i !== 0 && i === 1) {
-					newLink = newLink + tags[i].key;
-				} else if (i !== 0 && i > 1) {
-					newLink = newLink + "+" + tags[i].key;
-				}
+				setFilterTags();
 			}
+		} else {
+			setFilterTags();
 		}
-		return newLink;
+	}
+
+	function generateNewSearchLinkAfterDeletionOfTag(
+		deletedTagKey,
+		prevSearch
+	) {
+		const tagsKeysStringFromPrevSearch = prevSearch.slice(6);
+		const prevTagsKeysArray = tagsKeysStringFromPrevSearch.split("+");
+		const newTagsKeysArray = prevTagsKeysArray.filter(
+			(key) => key !== deletedTagKey
+		);
+		const newSearchLinkString = newTagsKeysArray.join("+");
+		if (newSearchLinkString.length) {
+			return "/search?name=" + newSearchLinkString;
+		} else {
+			return "";
+		}
 	}
 
 	useEffect(() => {
-		if (filterTagsKeys && filterTagsKeys.length) {
-			if (state.tags && Object.entries(state.tags).length) {
-				let retrievedTags = [];
-				for (let i = 0; i < filterTagsKeys.length; i++) {
-					if (state.tags[filterTagsKeys[i]]) {
-						retrievedTags.push({
-							tag: state.tags[filterTagsKeys[i]].tag,
-							key: filterTagsKeys[i],
-						});
-					}
-				}
-				setTags(retrievedTags);
-			}
-		} else {
-			setTags();
-		}
-	}, [state, filterTagsKeys]);
+		getFilterTagsFromSearch(search);
+	}, [search]);
 
-	if (!tags || !tags.length) return null;
+	if (!filterTags || !filterTags.length)
+		return <p className="filter-tags-list">There are no filter tags...</p>;
 
 	//================== if (form)
 
@@ -67,15 +76,12 @@ export default function FilterTagsList({ filterTagsKeys, form }) {
 
 	return (
 		<div className="filter-tags-list">
-			{tags.map((tag, i) => (
+			{filterTags.map((tag, i) => (
 				<TagLinkButtonWithTrashIcon
 					key={tag.key}
 					tag={tag.tag}
-					link={
-						generateNewSearchLinkAfterDeletionOfTag(i).length
-							? "/search?name=" +
-							  generateNewSearchLinkAfterDeletionOfTag(i)
-							: ""
+					link={() =>
+						generateNewSearchLinkAfterDeletionOfTag(tag.key, search)
 					}
 				/>
 			))}

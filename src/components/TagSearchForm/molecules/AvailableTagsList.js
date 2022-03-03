@@ -3,9 +3,12 @@ import { useStore } from "../../../store/Store";
 import FormTagButton from "../atoms/FormTagButton";
 import TagLinkButtonGeneratedByInput from "../atoms/TagLinkButtonGeneratedByInput";
 
-export default function AvailableTagsList({ inputValue, form, searchLink }) {
+// => generate availableTags from inputValue =>
+// => generate new search link when clicked
+
+export default function AvailableTagsList({ inputValue, form, search }) {
 	const { state } = useStore();
-	const [availableTags, setAvailableTags] = useState();
+	const [availableTags, setAvailableTags] = useState(); // [{tag: "", key: ""}]
 
 	function generateAvailableTags(input) {
 		if (input && input.length) {
@@ -76,8 +79,8 @@ export default function AvailableTagsList({ inputValue, form, searchLink }) {
 						key={tag.key}
 						tag={tag.tag}
 						link={
-							searchLink
-								? "/search?name=" + searchLink + "+" + tag.key
+							search
+								? "/search" + search + "+" + tag.key
 								: "/search?name=" + tag.key
 						}
 					/>
