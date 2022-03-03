@@ -50,16 +50,17 @@ export default function ItemCard({ item, itemKey }) {
 				</div>
 			</div>
 			<div className="card-body">
-				<p className="card-text">{item.content}</p>
-				{/* {item.tags && item.tags.length
-          ? item.tags.map((tag) => (
-              <TagButton 
-                key={"item-tag-" + tag}
-                tag={tag}
-                tagLink={"/search?name=" + tag}
-              />
-            ))
-          : null} */}
+				<p className="item-content card-text">{item.content}</p>
+				<div className="item-tags">
+					{item.tags &&
+						Object.entries(item.tags).map((tag) => (
+							<TagLinkButton
+								key={"item-tag-" + tag[0]}
+								tag={tag[1].tag}
+								tagLink={"/search?name=" + tag[0]}
+							/>
+						))}
+				</div>
 			</div>
 			<div className="card-footer text-muted">
 				{/* {item.source

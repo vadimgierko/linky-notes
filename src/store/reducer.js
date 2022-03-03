@@ -9,7 +9,7 @@ export default function reducer(state, action) {
 					...action.payload,
 				},
 			};
-		case "set-fetched-items": // run, when all user items are fetched
+		case "set-fetched-items":
 			return {
 				...state,
 				fetchedItems: {
@@ -50,7 +50,7 @@ export default function reducer(state, action) {
 				...state,
 				tags: {
 					...state.tags,
-					[action.payload.key]: action.payload.tag,
+					[action.payload.key]: { tag: action.payload.tag },
 				},
 			};
 		case "reset-state":

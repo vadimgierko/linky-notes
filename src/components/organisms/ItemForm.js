@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
 import { useStore } from "../../store/Store";
-//import TagSearchForm from "./TagSearchForm";
+import TagSearchForm from "./TagSearchForm";
 //import SourceForm from "./SourceForm";
 
 export default function ItemForm({
-	tags,
-	addTags,
 	passedItem,
 	onItemFormClick,
 	link,
@@ -17,8 +15,8 @@ export default function ItemForm({
 }) {
 	const { theme } = useTheme();
 	const { state, dispatch } = useStore();
-	//const { sources, addSource } = useDatabase();
 
+	//const { sources, addSource } = useDatabase();
 	//const [sourcesList, setSourcesList] = useState([]);
 
 	const [item, setItem] = useState();

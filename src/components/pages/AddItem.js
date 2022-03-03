@@ -15,10 +15,8 @@ export default function AddItem() {
 			style={{ background: theme.background, color: theme.color }}
 		>
 			<ItemForm
-				tags={state.tags && state.tags.length ? state.tags : []}
-				//addTags={addTags}
 				onItemFormClick={addItem}
-				link="/notes"
+				link="/"
 				buttonText="Add a new note"
 				headerText="Create a new note!"
 			/>
