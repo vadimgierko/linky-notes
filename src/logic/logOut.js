@@ -1,5 +1,4 @@
 import { firebaseAuth } from "../firebaseConfig.js";
-
 import { signOut } from "firebase/auth";
 
 export default function logOut() {

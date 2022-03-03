@@ -3,6 +3,8 @@ import { firebaseAuth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "firebase/auth";
 import reducer from "./reducer.js";
 import { INIT_STATE } from "./initState.js";
+import fetchItems from "../logic/fetchItems.js";
+import fetchTags from "../logic/fetchTags.js";
 
 const StoreContext = createContext();
 
@@ -12,19 +14,21 @@ export function StoreProvider({ children }) {
 	const [state, dispatch] = useReducer(reducer, INIT_STATE);
 
 	useEffect(() => {
-		onAuthStateChanged(firebaseAuth, (user) => {
-			if (user) {
-				console.log("DATA WAS FETCHED: USER CREDENTIALS");
-				dispatch({
-					type: "set-user",
-					payload: { id: user.uid, email: user.email },
-				});
-				console.log("user logged in. user:", user);
-			} else {
-				dispatch({ type: "reset-state" });
-				console.log("user is logged out");
-			}
-		});
+		// onAuthStateChanged(firebaseAuth, (user) => {
+		// 	if (user) {
+		// 		console.log("DATA WAS FETCHED: USER CREDENTIALS");
+		// 		dispatch({
+		// 			type: "set-user",
+		// 			payload: { id: user.uid, email: user.email },
+		// 		});
+		// 		console.log("user logged in. user:", user);
+		// 		//fetchItems(user.uid, dispatch);
+		// 		//fetchTags(user.uid, dispatch);
+		// 	} else {
+		// 		dispatch({ type: "reset-state" });
+		// 		console.log("user is logged out");
+		// 	}
+		// });
 	}, []);
 
 	const value = {

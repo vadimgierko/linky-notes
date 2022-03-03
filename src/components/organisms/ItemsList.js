@@ -1,11 +1,65 @@
+import { useEffect, useState } from "react";
 import { useTheme } from "../../hooks/use-theme";
+import { useStore } from "../../store/Store";
 import ItemCard from "../molecules/ItemCard";
 
-export default function ItemsList({ items }) {
+export default function ItemsList({ search }) {
 	const { theme } = useTheme();
-	const { deleteItem } = useDatabase();
+	const { state } = useStore();
+	const [items, setItems] = useState();
 
-	if (!items) return <p>There are no items so far...</p>;
+	function filterItems(search) {
+		const tagsKeysStringFromSearch = search.slice(6);
+
+		if (tagsKeysStringFromSearch.length) {
+			const tagsKeysArray = tagsKeysStringFromSearch.split("+");
+
+			const filteredItemsKeys = Object.keys(state.fetchedItems).filter(
+				(itemKey) => {
+					const itemTagsKeysArray = Object.keys(
+						state.fetchedItems[itemKey].tags
+					);
+					const containsAll = tagsKeysArray.every((element) =>
+						itemTagsKeysArray.includes(element)
+					);
+					if (containsAll) {
+						return itemKey;
+					} else {
+						return null;
+					}
+				}
+			);
+			//console.log("filteredItemsKeys:", filteredItemsKeys);
+			let filteredItems = {};
+			for (let i = 0; i < filteredItemsKeys.length; i++) {
+				filteredItems = {
+					...filteredItems,
+					[filteredItemsKeys[i]]: {
+						...state.fetchedItems[filteredItemsKeys[i]],
+					},
+				};
+			}
+			setItems(filteredItems);
+		} else {
+			setItems();
+		}
+	}
+
+	useEffect(() => {
+		if (search) {
+			filterItems(search);
+		} else {
+			if (state.fetchedItems) {
+				setItems(state.fetchedItems);
+			} else {
+				console.log("There are no fetched items in state...");
+				setItems();
+			}
+		}
+	}, [search, state]);
+
+	if (!items || !Object.entries(items).length)
+		return <p>There are no items so far...</p>;
 
 	return (
 		<div
@@ -13,9 +67,10 @@ export default function ItemsList({ items }) {
 				background: theme.background,
 				color: theme.color,
 			}}
+			className="items-list"
 		>
 			<div>
-				{items
+				{Object.entries(items)
 					.slice()
 					.reverse()
 					.map((itemArray) => {
@@ -26,9 +81,6 @@ export default function ItemsList({ items }) {
 								key={"item-" + itemKey}
 								item={item}
 								itemKey={itemKey}
-								editLink={"/notes/update-note/" + itemKey}
-								deleteFunction={() => deleteItem(itemKey)}
-								deleteLink="/"
 							/>
 						);
 					})}

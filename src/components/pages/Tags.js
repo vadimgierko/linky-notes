@@ -1,5 +1,8 @@
-import { useDatabase } from "../../hooks/use-database";
-import TagButton from "../atoms/TagButton";
+import { useEffect } from "react";
+import { useStore } from "../../store/Store";
+//import fetchTags from "../../logic/fetchTags";
+import TagLinkButton from "../atoms/TagLinkButton";
+
 const ALPHABET = [
 	"a",
 	"b",
@@ -34,28 +37,44 @@ const ALPHABET = [
 ];
 
 export default function Tags() {
-	const { tags } = useDatabase();
+	const { state, dispatch } = useStore();
+
+	// useEffect(() => {
+	// 	if (state.user) {
+	// 		if (!state.tags || !Object.entries(state.tags).length) {
+	// 			fetchTags(state.user.id, dispatch);
+	// 		}
+	// 	}
+	// }, [state]);
+
+	//if (!state.user) return <p>You need to be logged to see your tags...</p>;
+	if (!state.tags || !Object.entries(state.tags).length)
+		return <p>There are no tags so far...</p>;
+
 	return (
-		<div className="tags-list">
-			{ALPHABET.map((letter) => (
-				<div
-					key={letter + "-section"}
-					className="letter-section-in-tags-list"
-				>
-					<h5>{letter}</h5>
-					<hr />
-					<div>
-						{tags.map((tag) =>
-							tag[0] === letter ? (
-								<TagButton
-									key={"tag-button-for-" + tag}
-									tag={tag}
-								/>
-							) : null
-						)}
+		<div className="tags-page">
+			<div className="tags-list">
+				{ALPHABET.map((letter) => (
+					<div
+						key={letter + "-section"}
+						className="letter-section-in-tags-list"
+					>
+						<h5>{letter}</h5>
+						<hr />
+						<div>
+							{Object.entries(state.tags).map((tag) =>
+								tag[1].tag[0] === letter ? (
+									<TagLinkButton
+										key={tag[0]}
+										tagLink={"/search?name=" + tag[0]}
+										tag={tag[1].tag}
+									/>
+								) : null
+							)}
+						</div>
 					</div>
-				</div>
-			))}
+				))}
+			</div>
 		</div>
 	);
 }

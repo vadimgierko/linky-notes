@@ -1,5 +1,6 @@
 import { database } from "../firebaseConfig.js";
 import { ref, set, push, child } from "firebase/database";
+import { createDate } from "../functions/functions";
 
 function addItemToDatabase(item, userId, key) {
 	return set(ref(database, "items/" + userId + "/" + key), {
@@ -9,22 +10,11 @@ function addItemToDatabase(item, userId, key) {
 	);
 }
 
-function addItemToUserItemsList(itemTitle, key, userId) {
-	return set(ref(database, "users/" + userId + "/itemsList/" + key), {
-		title: itemTitle,
-	}).then(() =>
-		console.log("Item was added into user items list under the key,", key)
-	);
-}
-
-// compose all functions in addItem function
 export default function addItem(item, userId, dispatch) {
-	const createdAt = new Date().toDateString();
+	const createdAt = createDate();
 
 	const itemWithDate = {
-		title: item.title,
-		description: item.description,
-		content: item.content,
+		...item,
 		createdAt: createdAt,
 		userId: userId,
 	};
@@ -32,15 +22,8 @@ export default function addItem(item, userId, dispatch) {
 	const key = push(child(ref(database), "items/" + userId)).key;
 
 	return addItemToDatabase(itemWithDate, userId, key)
-		.then(() =>
-			addItemToUserItemsList(itemWithDate.title, key, itemWithDate.userId)
-		)
 		.then(() => {
 			console.log("Item was added successfully!");
-			dispatch({
-				type: "add-item",
-				payload: { key: key, item: itemWithDate },
-			});
 			dispatch({
 				type: "add-fetched-item-to-fetched-items",
 				payload: { key: key, item: itemWithDate },

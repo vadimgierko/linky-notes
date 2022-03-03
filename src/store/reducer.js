@@ -9,26 +9,11 @@ export default function reducer(state, action) {
 					...action.payload,
 				},
 			};
-		// case "set-user-data":
-		// 	return {
-		// 		...state,
-		// 		userData: {
-		// 			...action.payload,
-		// 		},
-		// 	};
-		case "set-items-list":
+		case "set-fetched-items":
 			return {
 				...state,
-				itemsList: action.payload,
-			};
-		case "add-item":
-			return {
-				...state,
-				itemsList: {
-					...state.itemsList,
-					[action.payload.key]: {
-						title: action.payload.item.title,
-					},
+				fetchedItems: {
+					...action.payload,
 				},
 			};
 		case "add-fetched-item-to-fetched-items":
@@ -40,11 +25,6 @@ export default function reducer(state, action) {
 				},
 			};
 		case "delete-item":
-			// delete item from userItemsList object copy:
-			let items = { ...state.itemsList };
-			delete items[action.payload.key];
-			// delete item from fetchedItems object copy:
-			// CHECK IF FETCHED ITEMS TRUE ???
 			let fetched = { ...state.fetchedItems };
 			if (fetched[action.payload.key]) {
 				delete fetched[action.payload.key];
@@ -57,7 +37,21 @@ export default function reducer(state, action) {
 			return {
 				...state,
 				fetchedItems: fetched,
-				itemsList: items,
+			};
+		case "set-fetched-tags":
+			return {
+				...state,
+				tags: {
+					...action.payload,
+				},
+			};
+		case "add-tag-to-fetched-tags":
+			return {
+				...state,
+				tags: {
+					...state.tags,
+					[action.payload.key]: { tag: action.payload.tag },
+				},
 			};
 		case "reset-state":
 			return INIT_STATE;
