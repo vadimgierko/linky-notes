@@ -3,7 +3,14 @@ import { useStore } from "../../../store/Store";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
 import TagLinkButtonWithTrashIcon from "../atoms/TagLinkButtonWithTrashIcon";
 
-export default function FilterTagsList({ search, form }) {
+export default function FilterTagsList({
+	search,
+	form,
+	existingTags,
+	newTags,
+	deleteExistingTag,
+	deleteNewTag,
+}) {
 	const { state } = useStore();
 	const [filterTags, setFilterTags] = useState(); // [{tag: "", key: ""}]
 
@@ -56,27 +63,58 @@ export default function FilterTagsList({ search, form }) {
 		getFilterTagsFromSearch(search);
 	}, [search]);
 
-	if (!filterTags || !filterTags.length)
+	if (form) {
+		if (
+			(existingTags && Object.entries(existingTags).length) ||
+			(newTags && Object.entries(newTags).length)
+		) {
+			return (
+				<div className="filter-tags-list">
+					{existingTags && Object.entries(existingTags).length
+						? Object.entries(existingTags).map((tagArray) => (
+								<TagButtonWithTrashIcon
+									key={tagArray[0]}
+									tag={tagArray[1]}
+									onTrashIconClick={() => {
+										console.log(
+											"you want to delete me...",
+											tagArray[1].tag
+										);
+										deleteExistingTag(tagArray[0]);
+									}}
+								/>
+						  ))
+						: null}
+					{newTags && Object.entries(newTags).length
+						? newTags.map((tag) => (
+								<TagButtonWithTrashIcon
+									key={tag}
+									tag={{ tag: tag }}
+									onTrashIconClick={() => {
+										console.log(
+											"you want to delete me...",
+											tag
+										);
+										deleteNewTag(tag);
+									}}
+								/>
+						  ))
+						: null}
+				</div>
+			);
+		} else {
+			return (
+				<p className="filter-tags-list">There are no filter tags...</p>
+			);
+		}
+	}
+
+	if (!form && (!filterTags || !filterTags.length))
 		return <p className="filter-tags-list">There are no filter tags...</p>;
-
-	//================== if (form)
-
-	// if (form)
-	// 	return (
-	// 		<div className="filter-tags-list">
-	// 			{filterTags.map((tag) => (
-	// 				<TagButtonWithTrashIcon
-	// 					key={tag}
-	// 					tag={tag}
-	// 					onTrashIconClick={() => deleteTag(tag)}
-	// 				/>
-	// 			))}
-	// 		</div>
-	// 	);
 
 	return (
 		<div className="filter-tags-list">
-			{filterTags.map((tag, i) => (
+			{filterTags.map((tag) => (
 				<TagLinkButtonWithTrashIcon
 					key={tag.key}
 					tag={tag.tag}

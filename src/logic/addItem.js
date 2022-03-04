@@ -2,6 +2,10 @@ import { database } from "../firebaseConfig.js";
 import { ref, set, push, child } from "firebase/database";
 import { createDate } from "../functions/functions";
 
+// check if there are new tags
+// if true => add new tags first
+// then add item
+
 function addItemToDatabase(item, userId, key) {
 	return set(ref(database, "items/" + userId + "/" + key), {
 		...item,

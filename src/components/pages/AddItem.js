@@ -1,7 +1,6 @@
 import { useTheme } from "../../hooks/use-theme";
-import ItemForm from "../organisms/ItemForm";
 import { useStore } from "../../store/Store";
-import addItem from "../../logic/addItem";
+import ItemForm from "../organisms/ItemForm";
 
 export default function AddItem() {
 	const { theme } = useTheme();
@@ -11,15 +10,10 @@ export default function AddItem() {
 
 	return (
 		<div
-			className="add-item-form"
+			className="add-item-page"
 			style={{ background: theme.background, color: theme.color }}
 		>
-			<ItemForm
-				onItemFormClick={addItem}
-				link="/"
-				buttonText="Add a new note"
-				headerText="Create a new note!"
-			/>
+			<ItemForm />
 		</div>
 	);
 }
