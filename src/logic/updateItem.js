@@ -2,6 +2,14 @@ import { database } from "../firebaseConfig.js";
 import { ref, set } from "firebase/database";
 import { createDate } from "../functions/functions";
 
+//===================================== IMPORTANT !!!
+// check if there are new tags
+// if true => add new tags first
+// then add item
+// + combine existingTags & newTags !!! &&
+
+// + remember, that updatedItem consists tags, existingTags & newTags => need to reduce
+
 function updateItemInDatabase(item, key, userId) {
 	return set(ref(database, "items/" + userId + "/" + key), {
 		...item,

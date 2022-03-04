@@ -14,21 +14,21 @@ export function StoreProvider({ children }) {
 	const [state, dispatch] = useReducer(reducer, INIT_STATE);
 
 	useEffect(() => {
-		// onAuthStateChanged(firebaseAuth, (user) => {
-		// 	if (user) {
-		// 		console.log("DATA WAS FETCHED: USER CREDENTIALS");
-		// 		dispatch({
-		// 			type: "set-user",
-		// 			payload: { id: user.uid, email: user.email },
-		// 		});
-		// 		console.log("user logged in. user:", user);
-		// 		//fetchItems(user.uid, dispatch);
-		// 		//fetchTags(user.uid, dispatch);
-		// 	} else {
-		// 		dispatch({ type: "reset-state" });
-		// 		console.log("user is logged out");
-		// 	}
-		// });
+		onAuthStateChanged(firebaseAuth, (user) => {
+			if (user) {
+				console.log("DATA WAS FETCHED: USER CREDENTIALS");
+				dispatch({
+					type: "set-user",
+					payload: { id: user.uid, email: user.email },
+				});
+				console.log("User logged in. User:", user);
+				fetchItems(user.uid, dispatch);
+				fetchTags(user.uid, dispatch);
+			} else {
+				dispatch({ type: "reset-state" });
+				console.log("User is logged out. Store was reset.");
+			}
+		});
 	}, []);
 
 	const value = {

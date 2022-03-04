@@ -9,8 +9,8 @@ function addTagToDatabase(tag, userId, key) {
 	);
 }
 
-export default function addTag(tag, userId, dispatch) {
-	const key = push(child(ref(database), "tags/" + userId)).key;
+export default function addTag(tag, key, userId, dispatch) {
+	//const key = push(child(ref(database), "tags/" + userId)).key;
 
 	return addTagToDatabase(tag, userId, key)
 		.then(() => {

@@ -58,19 +58,31 @@ export default function ItemForm({ itemKey }) {
 		}
 	}
 
+	function getItemByItemKey(itemKey) {
+		if (state.fetchedItems && state.fetchedItems[itemKey]) {
+			const fetchedItem = state.fetchedItems[itemKey];
+			setItem({
+				...fetchedItem,
+				content: fetchedItem.content,
+				existingTags: fetchedItem.tags,
+				newTags: [],
+			});
+		}
+	}
+
 	function handleFormSubmit(item, itemKey) {
 		if (itemKey) {
 			//updateItem(item, passedItemKey, state.user.id, dispatch);
 			console.log("updated item:", item);
 		} else {
-			//addItem(item, state.user.id, dispatch);
-			console.log("added item:", item);
+			console.log("added item (before calling addItem()):", item);
+			addItem(item, state.user.id, dispatch);
 		}
 	}
 
 	useEffect(() => {
 		if (itemKey) {
-			//getItemByItemKey(itemKey)
+			getItemByItemKey(itemKey);
 		} else {
 			setItem({
 				content: "",
