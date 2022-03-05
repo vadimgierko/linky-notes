@@ -2,7 +2,7 @@
 
 ## *linky_notes* allows you to create notes with tags & sources
 
-<img src="/linky-notes-app-screen-vadim-gierko.png">
+<img src="public/linky-notes-app-screen-vadim-gierko.png">
 
 Thanks to that:
 - your notes are linked with each other by keywords
