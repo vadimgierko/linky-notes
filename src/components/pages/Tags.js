@@ -47,7 +47,8 @@ export default function Tags() {
 	// 	}
 	// }, [state]);
 
-	//if (!state.user) return <p>You need to be logged to see your tags...</p>;
+	if (!state.user) return <p>You need to be logged to see your tags...</p>;
+
 	if (!state.tags || !Object.entries(state.tags).length)
 		return <p>There are no tags so far...</p>;
 

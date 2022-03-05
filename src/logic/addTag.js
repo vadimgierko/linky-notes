@@ -9,9 +9,8 @@ function addTagToDatabase(tag, userId, key) {
 	);
 }
 
-export default function addTag(tag, userId, dispatch) {
-	const key = push(child(ref(database), "tags/" + userId)).key;
-
+// the firebase key for tag will be generated in add/updateItem()
+export default function addTag(tag, key, userId, dispatch) {
 	return addTagToDatabase(tag, userId, key)
 		.then(() => {
 			console.log("Tag was added successfully!");

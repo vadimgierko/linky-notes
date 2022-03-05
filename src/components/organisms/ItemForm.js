@@ -2,120 +2,97 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
 import { useStore } from "../../store/Store";
+import addItem from "../../logic/addItem";
+import updateItem from "../../logic/updateItem";
 import TagSearchForm from "./TagSearchForm";
 //import SourceForm from "./SourceForm";
 
-export default function ItemForm({
-	passedItem,
-	onItemFormClick,
-	link,
-	buttonText,
-	headerText,
-	passedItemKey,
-}) {
+export default function ItemForm({ itemKey }) {
 	const { theme } = useTheme();
 	const { state, dispatch } = useStore();
-
-	//const { sources, addSource } = useDatabase();
-	//const [sourcesList, setSourcesList] = useState([]);
-
 	const [item, setItem] = useState();
-	//const [itemTags, setItemTags] = useState([]);
 
-	//const [isAddSourceFormNeeded, setIsAddSourceFormNeeded] = useState(false);
+	function addExistingTag(tagKey) {
+		if (tagKey) {
+			setItem({
+				...item,
+				existingTags: {
+					...item.existingTags,
+					[tagKey]: { ...state.tags[tagKey] },
+				},
+			});
+		}
+	}
 
-	// useEffect(() => {
-	//   if (sources) {
-	//     setSourcesList([...Object.entries(sources)]);
-	//   }
-	// }, [sources]);
+	function deleteExistingTag(tagKey) {
+		if (tagKey) {
+			const updatedTags = { ...item.existingTags };
+			delete updatedTags[tagKey];
+			setItem({
+				...item,
+				existingTags: {
+					...updatedTags,
+				},
+			});
+		}
+	}
+
+	function addNewTag(tag) {
+		if (tag) {
+			setItem({
+				...item,
+				newTags: [...item.newTags, tag],
+			});
+		}
+	}
+
+	function deleteNewTag(tag) {
+		if (tag) {
+			const updatedTags = item.newTags.filter(
+				(element) => element !== tag
+			);
+			setItem({
+				...item,
+				newTags: updatedTags,
+			});
+		}
+	}
+
+	function getItemByItemKey(itemKey) {
+		if (state.fetchedItems && state.fetchedItems[itemKey]) {
+			const fetchedItem = state.fetchedItems[itemKey];
+			setItem({
+				...fetchedItem, // there is also prev tags object...
+				content: fetchedItem.content,
+				existingTags: fetchedItem.tags, // ... but it will be added here, so... need to delete prev tags when update
+				newTags: [],
+			});
+		}
+	}
+
+	function handleFormSubmit(item, itemKey) {
+		if (itemKey) {
+			console.log("updated item:", item);
+			updateItem(item, itemKey, state.user.id, dispatch);
+		} else {
+			console.log("added item (before calling addItem()):", item);
+			addItem(item, state.user.id, dispatch);
+		}
+	}
 
 	useEffect(() => {
-		if (passedItem) {
-			setItem({ ...passedItem });
-			// if (passedItem.tags.length) {
-			// 	setItemTags([...passedItem.tags]);
-			// }
+		if (itemKey) {
+			getItemByItemKey(itemKey);
 		} else {
 			setItem({
 				content: "",
-				//tags: [],
-				//source: "",
-				//page: "",
-				//createdAt: null,
-				//updatedAt: null,
+				existingTags: {},
+				newTags: [],
 			});
 		}
-	}, [passedItem]);
+	}, [itemKey]);
 
-	// useEffect(() => {
-	// 	if (item) {
-	// 		setItem({ ...item, tags: [...itemTags] });
-	// 	}
-	// }, [itemTags]);
-
-	// function addNewTagsToDatabase() {
-	// 	let newTags = [];
-	// 	for (let i = 0; i < item.tags.length; i++) {
-	// 		const newTag = item.tags[i];
-	// 		if (!tags.includes(newTag)) {
-	// 			newTags.push(newTag);
-	// 		}
-	// 	}
-	// 	if (newTags.length) {
-	// 		addTags(newTags);
-	// 		console.log("New tags:", newTags);
-	// 	} else {
-	// 		//console.log("There are no new tags!");
-	// 	}
-	// }
-
-	// function fetchSourceObjectAndConvertIntoSourceRepresentation(sourceKey) {
-	// 	if (sources) {
-	// 		const sourceObject = sources[sourceKey];
-	// 		if (sourceObject) {
-	// 			return `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
-	// 		} else {
-	// 			return "source was deleted probably...";
-	// 		}
-	// 	}
-	// }
-
-	// function onAddSourceFormSubmit(updatedItem) {
-	// 	addSource(updatedItem);
-	// 	setIsAddSourceFormNeeded(false);
-	// }
-
-	function handleFormSubmit() {
-		// const date = createDate();
-		// let itemWithDate;
-		// if (passedItemKey) {
-		// 	itemWithDate = { ...item, updatedAt: date };
-		// } else {
-		// 	itemWithDate = { ...item, createdAt: date };
-		// }
-		// if (itemWithDate) {
-		// 	addNewTagsToDatabase();
-		// 	if (passedItemKey) {
-		// 		onItemFormClick(itemWithDate, passedItemKey);
-		// 	} else {
-		// 		onItemFormClick(itemWithDate);
-		// 	}
-		// } else {
-		// 	alert(
-		// 		"There is a problem with adding/ updating date to your note... Note is not created / updated"
-		// 	);
-		// }
-		//addItem(item, userId, dispatch)
-
-		if (passedItem && passedItemKey) {
-			// if there was passed item & key, it means, that we are updating the item:
-			onItemFormClick(item, passedItemKey, state.user.id, dispatch);
-		} else {
-			// if there wasn't passed item & key, it means, that we are adding the item:
-			onItemFormClick(item, state.user.id, dispatch);
-		}
-	}
+	//useEffect(() => console.log("item:", item), [item]);
 
 	if (!item) return null;
 
@@ -127,7 +104,9 @@ export default function ItemForm({
 				(theme.mode === "dark" ? " border-secondary" : "")
 			}
 		>
-			<div className="card-header fw-bold text-center">{headerText}</div>
+			<div className="card-header fw-bold text-center">
+				{itemKey ? "Update item!" : "Add item!"}
+			</div>
 			<div className="card-body">
 				<form>
 					<textarea
@@ -144,93 +123,24 @@ export default function ItemForm({
 						}
 					></textarea>
 					<TagSearchForm
-						// tags={tags}
-						// chosenTags={itemTags}
-						// setChosenTags={setItemTags}
 						form={true}
+						addExistingTag={addExistingTag}
+						addNewTag={addNewTag}
+						deleteExistingTag={deleteExistingTag}
+						deleteNewTag={deleteNewTag}
+						existingTags={item.existingTags}
+						newTags={item.newTags}
 					/>
-					<hr />
-					{/* <select
-						className={
-							"form-select mb-2 + bg-" +
-							theme.mode +
-							" text-" +
-							(theme.mode === "dark" ? "light" : "dark")
-						}
-						value={item ? (item.source ? item.source : "") : ""}
-						onChange={(e) =>
-							setItem({ ...item, source: e.target.value })
-						}
-					>
-						<option>select source</option>
-						{sourcesList && sourcesList.length
-							? sourcesList.map((sourceArray) => {
-									const sourceKey = sourceArray[0];
-									const sourceObject = sourceArray[1];
-									const sourceRepresentation = `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
-									return (
-										<option
-											key={"source-option-" + sourceKey}
-											value={sourceKey}
-										>
-											{sourceRepresentation}
-										</option>
-									);
-							  })
-							: null}
-					</select> */}
-					{/* <p
-						style={{ cursor: "pointer" }}
-						onClick={() => setIsAddSourceFormNeeded(true)}
-					>
-						... or{" "}
-						<span style={{ textDecoration: "underline" }}>
-							add new source to database
-						</span>
-					</p> */}
-					{/* <input
-						className={
-							"form-control mb-2 + bg-" +
-							theme.mode +
-							" text-" +
-							(theme.mode === "dark" ? "light" : "dark")
-						}
-						defaultValue={item ? item.page : ""}
-						placeholder="page"
-						onChange={(e) =>
-							setItem({ ...item, page: e.target.value })
-						}
-					/> */}
-					{/* {item && item.source ? (
-						<p>
-							{fetchSourceObjectAndConvertIntoSourceRepresentation(
-								item.source
-							)}{" "}
-							{item.page ? " [" + item.page + "]" : null}
-						</p>
-					) : (
-						<p>This note has no source...</p>
-					)} */}
 				</form>
-				{/* {isAddSourceFormNeeded ? (
-					<div>
-						<SourceForm
-							handleSubmit={onAddSourceFormSubmit}
-							handleCancel={() => setIsAddSourceFormNeeded(false)}
-							headerText="Add new source to database!"
-							buttonText="Add new source"
-						/>
-					</div>
-				) : null} */}
 			</div>
 			<div className="card-footer">
 				<Link
-					to={link}
+					to={itemKey ? "/notes/" + itemKey : "/"}
 					type="button"
 					className="btn btn-success mb-2 d-block text-white"
-					onClick={handleFormSubmit}
+					onClick={() => handleFormSubmit(item, itemKey)}
 				>
-					{buttonText}
+					{itemKey ? "Update item" : "Add item"}
 				</Link>
 			</div>
 		</div>
