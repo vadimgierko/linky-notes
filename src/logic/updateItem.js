@@ -1,14 +1,7 @@
 import { database } from "../firebaseConfig.js";
-import { ref, set } from "firebase/database";
+import { ref, set, push, child } from "firebase/database";
 import { createDate } from "../functions/functions";
-
-//===================================== IMPORTANT !!!
-// check if there are new tags
-// if true => add new tags first
-// then add item
-// + combine existingTags & newTags !!! &&
-
-// + remember, that updatedItem consists tags, existingTags & newTags => need to reduce
+import addTag from "./addTag.js";
 
 function updateItemInDatabase(item, key, userId) {
 	return set(ref(database, "items/" + userId + "/" + key), {
@@ -21,17 +14,59 @@ function updateItemInDatabase(item, key, userId) {
 export default function updateItem(item, key, userId, dispatch) {
 	const updatedAt = createDate();
 
-	const itemWithDate = {
+	let updatedItem = {
 		...item,
 		updatedAt: updatedAt,
 	};
 
-	return updateItemInDatabase(itemWithDate, key, userId)
+	// delete tags object, because existingTags consists it already:
+	delete updatedItem.tags;
+
+	// add new tags if exist & append them to itemToAdd.tags object
+	if (updatedItem.newTags && updatedItem.newTags.length) {
+		updatedItem.newTags.forEach((newTag) => {
+			const firebaseKey = push(
+				child(ref(database), "tags/" + userId)
+			).key;
+
+			addTag(newTag, firebaseKey, userId, dispatch);
+
+			updatedItem = {
+				...updatedItem,
+				tags: {
+					...updatedItem.tags,
+					[firebaseKey]: {
+						tag: newTag,
+					},
+				},
+			};
+		});
+	}
+
+	// append existing tags if exist to itemToAdd.tags object
+	if (
+		updatedItem.existingTags &&
+		Object.entries(updatedItem.existingTags).length
+	) {
+		updatedItem = {
+			...updatedItem,
+			tags: {
+				...updatedItem.tags,
+				...updatedItem.existingTags,
+			},
+		};
+	}
+
+	// delete newTags & existingTags from updatedItem:
+	delete updatedItem.newTags;
+	delete updatedItem.existingTags;
+
+	return updateItemInDatabase(updatedItem, key, userId)
 		.then(() => {
 			console.log("Item with the key", key, "was updated successfully!");
 			dispatch({
 				type: "add-fetched-item-to-fetched-items",
-				payload: { key: key, item: itemWithDate },
+				payload: { key: key, item: updatedItem },
 			});
 		})
 		.catch((error) => alert(error.message));

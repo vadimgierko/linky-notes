@@ -62,9 +62,9 @@ export default function ItemForm({ itemKey }) {
 		if (state.fetchedItems && state.fetchedItems[itemKey]) {
 			const fetchedItem = state.fetchedItems[itemKey];
 			setItem({
-				...fetchedItem,
+				...fetchedItem, // there is also prev tags object...
 				content: fetchedItem.content,
-				existingTags: fetchedItem.tags,
+				existingTags: fetchedItem.tags, // ... but it will be added here, so... need to delete prev tags when update
 				newTags: [],
 			});
 		}
@@ -72,8 +72,8 @@ export default function ItemForm({ itemKey }) {
 
 	function handleFormSubmit(item, itemKey) {
 		if (itemKey) {
-			//updateItem(item, passedItemKey, state.user.id, dispatch);
 			console.log("updated item:", item);
+			updateItem(item, itemKey, state.user.id, dispatch);
 		} else {
 			console.log("added item (before calling addItem()):", item);
 			addItem(item, state.user.id, dispatch);
@@ -92,7 +92,7 @@ export default function ItemForm({ itemKey }) {
 		}
 	}, [itemKey]);
 
-	useEffect(() => console.log("item:", item), [item]);
+	//useEffect(() => console.log("item:", item), [item]);
 
 	if (!item) return null;
 

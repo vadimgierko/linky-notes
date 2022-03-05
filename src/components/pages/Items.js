@@ -9,7 +9,7 @@ export default function Items() {
 	const { state } = useStore(); // need when uncomment checking if user is logged
 	const { search } = useLocation();
 
-	//if (!state.user) return <p>You need to be logged to see your items!</p>;
+	if (!state.user) return <p>You need to be logged to see your items!</p>;
 
 	return (
 		<div

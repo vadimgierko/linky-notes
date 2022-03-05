@@ -6,7 +6,7 @@ export default function AddItem() {
 	const { theme } = useTheme();
 	const { state } = useStore();
 
-	//if (!state.user) return <p>You need to log in to add an item...</p>;
+	if (!state.user) return <p>You need to log in to add an item...</p>;
 
 	return (
 		<div

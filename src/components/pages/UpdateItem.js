@@ -8,7 +8,7 @@ export default function UpdateItem() {
 	const { state } = useStore();
 	const { itemKey } = useParams();
 
-	//if (!state.user) return <p>You need to be logged to update item!</p>;
+	if (!state.user) return <p>You need to be logged to update item!</p>;
 
 	return (
 		<div
