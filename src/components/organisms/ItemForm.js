@@ -71,12 +71,22 @@ export default function ItemForm({ itemKey }) {
 	}
 
 	function handleFormSubmit(item, itemKey) {
-		if (itemKey) {
-			console.log("updated item:", item);
-			updateItem(item, itemKey, state.user.id, dispatch);
+		if (item) {
+			if (item.content && item.content.trim().length) {
+				if (itemKey) {
+					console.log("updated item:", item);
+					updateItem(item, itemKey, state.user.id, dispatch);
+				} else {
+					console.log("added item (before calling addItem()):", item);
+					addItem(item, state.user.id, dispatch);
+				}
+			} else {
+				alert(
+					"Oops... It seems that you try to save an empty note... The note cannot be empty and cannot contain only spaces... Write something in your note & then try to save it again!"
+				);
+			}
 		} else {
-			console.log("added item (before calling addItem()):", item);
-			addItem(item, state.user.id, dispatch);
+			alert("There is no note data... The note doesn't exist...");
 		}
 	}
 

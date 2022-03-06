@@ -46,15 +46,21 @@ export default function ItemsList({ search }) {
 	}
 
 	useEffect(() => {
-		if (search) {
-			filterItems(search);
-		} else {
-			if (state.fetchedItems) {
-				setItems(state.fetchedItems);
+		if (
+			state &&
+			state.fetchedItems &&
+			Object.entries(state.fetchedItems).length
+		) {
+			if (search) {
+				filterItems(search);
 			} else {
-				console.log("There are no fetched items in state...");
-				setItems();
+				setItems(state.fetchedItems);
 			}
+		} else {
+			console.log(
+				"There are no fetched items in state... Wait until items will be fetched... or... there are no items at all..."
+			);
+			setItems();
 		}
 	}, [search, state]);
 

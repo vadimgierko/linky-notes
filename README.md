@@ -1,6 +1,6 @@
-# linky_notes app
+# linky_notes
 
-## *linky_notes* allows you to create notes with tags & sources
+*linky_notes* allows you to create & organize notes with tags (soon with references too). Try the app here: https://vadimgierko.github.io/linky-notes/
 
 <img src="public/linky-notes-app-screen-vadim-gierko.png">
 

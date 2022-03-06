@@ -21,16 +21,12 @@ export default function FilterTagsList({
 			if (tagsKeysStringFromSearch.length) {
 				const tagsKeysArray = tagsKeysStringFromSearch.split("+");
 
-				if (state.tags) {
-					const retrievedTagsObjectsArray = tagsKeysArray.map(
-						(key) => ({ key: key, tag: state.tags[key].tag })
-					);
-					setFilterTags(retrievedTagsObjectsArray);
-				} else {
-					console.log(
-						"There are no tags in state... Cannot get tags from search."
-					);
-				}
+				const retrievedTagsObjectsArray = tagsKeysArray.map((key) => ({
+					key: key,
+					tag: state.tags[key].tag,
+				}));
+
+				setFilterTags(retrievedTagsObjectsArray);
 			} else {
 				setFilterTags();
 			}
@@ -60,8 +56,14 @@ export default function FilterTagsList({
 	}
 
 	useEffect(() => {
-		getFilterTagsFromSearch(search);
-	}, [search]);
+		if (state && state.tags && Object.entries(state.tags).length) {
+			getFilterTagsFromSearch(search);
+		} else {
+			console.log(
+				"There are no tags in state... Cannot get tags from search at the moment. Wait until state tags will be fetched."
+			);
+		}
+	}, [search, state]);
 
 	if (form) {
 		if (
