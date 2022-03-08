@@ -15,7 +15,7 @@ export default function addTag(tag, key, userId, dispatch) {
 		.then(() => {
 			console.log("Tag was added successfully!");
 			dispatch({
-				type: "add-tag-to-fetched-tags",
+				type: "add-tag",
 				payload: { key: key, tag: tag },
 			});
 		})

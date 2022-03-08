@@ -6,7 +6,7 @@ import ItemCard from "../molecules/ItemCard";
 export default function ItemsList({ search }) {
 	const { theme } = useTheme();
 	const { state } = useStore();
-	const [items, setItems] = useState();
+	const [itemsList, setItemsList] = useState();
 
 	function filterItems(search) {
 		const tagsKeysStringFromSearch = search.slice(6);
@@ -14,15 +14,15 @@ export default function ItemsList({ search }) {
 		if (tagsKeysStringFromSearch.length) {
 			const tagsKeysArray = tagsKeysStringFromSearch.split("+");
 
-			const filteredItemsKeys = Object.keys(state.fetchedItems).filter(
+			const filteredItemsKeys = Object.keys(state.items).filter(
 				(itemKey) => {
 					const itemTagsKeysArray = Object.keys(
-						state.fetchedItems[itemKey].tags
+						state.items[itemKey].tags
 					);
-					const containsAll = tagsKeysArray.every((element) =>
+					const containsAllTags = tagsKeysArray.every((element) =>
 						itemTagsKeysArray.includes(element)
 					);
-					if (containsAll) {
+					if (containsAllTags) {
 						return itemKey;
 					} else {
 						return null;
@@ -35,36 +35,32 @@ export default function ItemsList({ search }) {
 				filteredItems = {
 					...filteredItems,
 					[filteredItemsKeys[i]]: {
-						...state.fetchedItems[filteredItemsKeys[i]],
+						...state.items[filteredItemsKeys[i]],
 					},
 				};
 			}
-			setItems(filteredItems);
+			setItemsList(filteredItems);
 		} else {
-			setItems();
+			setItemsList();
 		}
 	}
 
 	useEffect(() => {
-		if (
-			state &&
-			state.fetchedItems &&
-			Object.entries(state.fetchedItems).length
-		) {
+		if (state && state.items && Object.entries(state.items).length) {
 			if (search) {
 				filterItems(search);
 			} else {
-				setItems(state.fetchedItems);
+				setItemsList(state.items);
 			}
 		} else {
 			console.log(
-				"There are no fetched items in state... Wait until items will be fetched... or... there are no items at all..."
+				"There are no items in state... Wait until items will be fetched... or... there are no items at all..."
 			);
-			setItems();
+			setItemsList();
 		}
 	}, [search, state]);
 
-	if (!items || !Object.entries(items).length)
+	if (!itemsList || !Object.entries(itemsList).length)
 		return <p>There are no items so far...</p>;
 
 	return (
@@ -76,7 +72,7 @@ export default function ItemsList({ search }) {
 			className="items-list"
 		>
 			<div>
-				{Object.entries(items)
+				{Object.entries(itemsList)
 					.slice()
 					.reverse()
 					.map((itemArray) => {

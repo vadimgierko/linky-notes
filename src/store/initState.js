@@ -1,7 +1,11 @@
 export const INIT_STATE = {
 	user: null,
-	fetchedItems: null,
+	items: null,
 	tags: null,
+	authorsList: null,
+	authors: null,
+	sourcesList: null,
+	sources: null,
 };
 
 // export const INIT_STATE = {

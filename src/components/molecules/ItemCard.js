@@ -9,18 +9,6 @@ import deleteItem from "../../logic/deleteItem";
 export default function ItemCard({ item, itemKey }) {
 	const { theme } = useTheme();
 	const { state, dispatch } = useStore();
-	//const { sources } = useDatabase();
-
-	// function fetchSourceObjectAndConvertIntoSourceRepresentation(sourceKey) {
-	//   if (sources) {
-	//     const sourceObject = sources[sourceKey];
-	//     if (sourceObject) {
-	//       return `${sourceObject.name} ${sourceObject.surname}, ${sourceObject.title}, ${sourceObject.city} ${sourceObject.year}`;
-	//     } else {
-	//       return "source was deleted probably...";
-	//     }
-	//   }
-	// }
 
 	return (
 		<div
@@ -62,14 +50,7 @@ export default function ItemCard({ item, itemKey }) {
 						))}
 				</div>
 			</div>
-			<div className="card-footer text-muted">
-				{/* {item.source
-          ? fetchSourceObjectAndConvertIntoSourceRepresentation(item.source) +
-            " [" +
-            item.page +
-            "]"
-          : null} */}
-			</div>
+			<div className="card-footer text-muted"></div>
 		</div>
 	);
 }

@@ -65,7 +65,7 @@ export default function addItem(item, userId, dispatch) {
 		.then(() => {
 			console.log("Item was added successfully!");
 			dispatch({
-				type: "add-fetched-item-to-fetched-items",
+				type: "add-item",
 				payload: { key: key, item: itemToAdd },
 			});
 		})

@@ -6,10 +6,9 @@ export default function fetchTags(userId, dispatch) {
 		ref(database, "tags/" + userId),
 		(snapshot) => {
 			const data = snapshot.val();
-			console.log("fetched tags:", data);
 			if (data) {
 				dispatch({
-					type: "set-fetched-tags",
+					type: "set-tags",
 					payload: data,
 				});
 				console.log("DATA WAS FETCHED: ALL USER'S TAGS.");

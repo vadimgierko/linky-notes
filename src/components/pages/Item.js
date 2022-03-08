@@ -13,20 +13,20 @@ export default function Item() {
 	const [item, setItem] = useState();
 
 	useEffect(() => {
-		if (state.fetchedItems) {
-			if (state.fetchedItems[itemKey]) {
-				setItem(state.fetchedItems[itemKey]);
+		if (state.items) {
+			if (state.items[itemKey]) {
+				setItem(state.items[itemKey]);
 				console.log(
 					"The item with the key",
 					itemKey,
-					"is in fetched items, so there's no need to fetch it."
+					"is in items, so there's no need to fetch it."
 				);
 			} else {
-				setItem(null);
+				setItem();
 				console.log(
 					"There is no item with the key",
 					itemKey,
-					"in fetched items."
+					"in items."
 				);
 			}
 		}
