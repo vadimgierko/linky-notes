@@ -53,7 +53,7 @@ export default function SignUp() {
 				/>
 			</form>
 			<Link
-				to="/" // => "/dashboard"
+				to="/"
 				type="button"
 				className="btn btn-secondary mb-2"
 				onClick={() =>

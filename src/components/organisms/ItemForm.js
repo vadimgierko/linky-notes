@@ -59,8 +59,8 @@ export default function ItemForm({ itemKey }) {
 	}
 
 	function getItemByItemKey(itemKey) {
-		if (state.fetchedItems && state.fetchedItems[itemKey]) {
-			const fetchedItem = state.fetchedItems[itemKey];
+		if (state.items && state.items[itemKey]) {
+			const fetchedItem = state.items[itemKey];
 			setItem({
 				...fetchedItem, // there is also prev tags object...
 				content: fetchedItem.content,

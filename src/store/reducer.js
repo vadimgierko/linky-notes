@@ -9,43 +9,38 @@ export default function reducer(state, action) {
 					...action.payload,
 				},
 			};
-		case "set-fetched-items":
+		case "set-items":
 			return {
 				...state,
-				fetchedItems: {
+				items: {
 					...action.payload,
 				},
 			};
-		case "add-fetched-item-to-fetched-items":
+		case "add-item":
 			return {
 				...state,
-				fetchedItems: {
-					...state.fetchedItems,
+				items: {
+					...state.items,
 					[action.payload.key]: action.payload.item,
 				},
 			};
 		case "delete-item":
-			let fetched = { ...state.fetchedItems };
-			if (fetched[action.payload.key]) {
-				delete fetched[action.payload.key];
-			} else {
-				console.log(
-					"Deleted item wasn't in fetched items, so no need to delete it from there."
-				);
+			let updatedItems = { ...state.items };
+			if (updatedItems[action.payload.key]) {
+				delete updatedItems[action.payload.key];
 			}
-			//==================================
 			return {
 				...state,
-				fetchedItems: fetched,
+				items: updatedItems,
 			};
-		case "set-fetched-tags":
+		case "set-tags":
 			return {
 				...state,
 				tags: {
 					...action.payload,
 				},
 			};
-		case "add-tag-to-fetched-tags":
+		case "add-tag":
 			return {
 				...state,
 				tags: {

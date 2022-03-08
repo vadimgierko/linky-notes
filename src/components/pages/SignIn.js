@@ -53,7 +53,7 @@ export default function SignIn() {
 				/>
 			</form>
 			<Link
-				to="/" // => "/items"
+				to="/"
 				type="button"
 				className="btn btn-secondary mb-2"
 				onClick={() =>

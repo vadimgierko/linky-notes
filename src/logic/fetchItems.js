@@ -9,10 +9,9 @@ export default function fetchItems(userId, dispatch) {
 		ref(database, "items/" + userId),
 		(snapshot) => {
 			const data = snapshot.val();
-			console.log("fetched items:", data);
 			if (data) {
 				dispatch({
-					type: "set-fetched-items",
+					type: "set-items",
 					payload: data,
 				});
 				console.log("DATA WAS FETCHED: ALL USER'S ITEMS.");

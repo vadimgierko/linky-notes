@@ -2,7 +2,7 @@
   "name": "linky-notes",
   "version": "1.0.0",
   "homepage": "https://vadimgierko.github.io/linky-notes",
-  "description": "linky_notes app created by Vadim Gierko allows you to create notes with tags",
+  "description": "linky_notes app created by Vadim Gierko allows you to create, organize & filter your notes by tags",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {

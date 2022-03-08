@@ -65,7 +65,7 @@ export default function updateItem(item, key, userId, dispatch) {
 		.then(() => {
 			console.log("Item with the key", key, "was updated successfully!");
 			dispatch({
-				type: "add-fetched-item-to-fetched-items",
+				type: "add-item",
 				payload: { key: key, item: updatedItem },
 			});
 		})
