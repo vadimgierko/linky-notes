@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useStore } from "../../store/Store";
 import Form from "../../reusable-components/organisms/Form";
 
@@ -7,7 +6,6 @@ const FORM_STRUCTURE = {
 	// according to template below:
 
 	// some_key_representanting_variable: { // name of the key / variable
-	//   hasNestedKeys: false (by default) || true
 	//   type: "password", // (OPTIONAL) include type only if it's value is not "text"
 	//   value: "some value", // (OPTIONAL) if it's empty, skip this key-value pair
 	//   placeholder: "some placeholder" // (OPTIONAL) if it's same as key / variable name, skip it
@@ -78,18 +76,17 @@ const FORM_STRUCTURE = {
 	// NOOOOOO !!!
 	// THIS IS MUCH BETTER! LOOK, IT LOOKS ALMOST THE SAME AS DATA OBJECT:
 
-	author: {
-		hasNestedKeys: true,
-		firstName: {
-			placeholder: "first name",
-		},
-		middleName: {
-			placeholder: "middle name",
-		},
-		lastName: {
-			placeholder: "last name",
-		},
-	},
+	// author: {
+	// 	firstName: {
+	// 		placeholder: "first name",
+	// 	},
+	// 	middleName: {
+	// 		placeholder: "middle name",
+	// 	},
+	// 	lastName: {
+	// 		placeholder: "last name",
+	// 	},
+	// },
 	title: {},
 	subtitle: {},
 	publisher: {},

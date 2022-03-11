@@ -22,6 +22,10 @@ export default function App() {
 		console.log("app store:", state);
 	}, [state]);
 
+	// useEffect(() => {
+	// 	console.log("current theme:", theme.mode, " theme object:", theme);
+	// }, [theme]);
+
 	return (
 		<div
 			className="container-fluid"

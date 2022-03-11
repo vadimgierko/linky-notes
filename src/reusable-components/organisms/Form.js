@@ -147,31 +147,25 @@ import { useEffect, useState } from "react";
 import { useTheme } from "../../hooks/use-theme";
 import Button from "../atoms/Button";
 
-function LabelInputGroup({ item, itemKey }) {
+function LabelInputGroup({ item, itemKey, onInputChange }) {
 	const { theme } = useTheme();
 	return (
 		<div className="form-label-input-pair">
 			<label htmlFor={itemKey} className="form-label">
-				{item.placeholder ? item.placeholder : itemKey}:
+				{item.placeholder}:
 			</label>
 			<input
 				id={itemKey}
 				className={
-					"form-control mb-2 + bg-" +
+					"form-control mb-2 bg-" +
 					theme.mode +
 					" text-" +
 					(theme.mode === "dark" ? "light" : "dark")
 				}
-				type={item.type ? item.type : "text"}
-				value={""}
-				placeholder={item.placeholder ? item.placeholder : itemKey}
-				onChange={(e) => {
-					console.log("there is no function to run onChange");
-					// const updatedItem = [...itemArray];
-					// updatedItem[i] = [...updatedItem[i]];
-					// updatedItem[i][1] = e.target.value;
-					// setItemArray([...updatedItem]);
-				}}
+				type={item.type}
+				value={item.value}
+				placeholder={item.placeholder}
+				onChange={(e) => onInputChange(e.target.value)}
 			/>
 		</div>
 	);
@@ -182,128 +176,76 @@ export default function Form({
 	data,
 	onSubmit = (objectReturnedFromForm) => console.log(objectReturnedFromForm),
 }) {
-	const [combinedDataStructureObject, setCombinedDataStructureObject] =
-		useState();
+	const [combo, setCombo] = useState();
 
-	function combineDataAndStructureIntoOneObject(structure, data) {
-		if (data) {
-			// TO DO
-		} else {
-			// if only structure object was passed via props
-			// in other words: if we are adding a new object
-			setCombinedDataStructureObject({
-				//
-			});
-		}
+	function initiateComboFromStructure(structure) {
+		let updatedCombo = {};
+		Object.keys(structure).map((key) => {
+			updatedCombo = {
+				...updatedCombo,
+				[key]: {
+					type: structure[key].type ? structure[key].type : "text",
+					value: structure[key].value ? structure[key].value : "",
+					placeholder: structure[key].placeholder
+						? structure[key].placeholder
+						: key,
+				},
+			};
+		});
+		console.log("Initiated combo from structure:", updatedCombo);
+		setCombo(updatedCombo);
 	}
 
-	const isObject = (obj) => {
-		return Object.prototype.toString.call(obj) === "[object Object]";
-	};
+	function extractItemDataFromCombo(combo) {
+		let extractedItemData = {};
+		Object.keys(combo).map((key) => {
+			extractedItemData = {
+				...extractedItemData,
+				[key]: combo[key].value,
+			};
+		});
+		return extractedItemData;
+	}
 
-	// useEffect(() => {
-	// 	if (structure) {
-	// 		//combineDataAndStructureIntoOneObject(structure, data);
-	// 		//=============================
-	// 		const itemArray = [];
-	// 		// transform structure / data object into array:
-	// 		Object.keys(structure).map((key) => {
-	// 			const keyValuePair =
-	// 				data && data[key] // is item passed ?
-	// 					? [key, data[key]] // set item[key] value
-	// 					: [
-	// 							// if no item
-	// 							key,
-	// 							structure[key].value // does structure[key] has value ?
-	// 								? structure[key].value // if true, use structure[key] value
-	// 								: "", // if false, set empty value to the key
-	// 					  ];
-	// 			return itemArray.push(keyValuePair);
-	// 		});
-	// 		if (data) {
-	// 			console.log("item array created from passed data:", itemArray);
-	// 		} else {
-	// 			console.log(
-	// 				"item array created from structure template:",
-	// 				itemArray
-	// 			);
-	// 		}
-	// 		setItemArray([...itemArray]);
-	// 	}
-	// }, [structure, data]);
+	useEffect(() => {
+		if (structure) {
+			initiateComboFromStructure(structure);
+		}
+	}, [structure]);
 
 	if (!structure)
 		return (
 			<p>
-				No form structure object has been passed to the Form component,
-				so the app cannot build the form for you... You need to pass at
-				least form structure object to create the form!
+				No form structure object has been passed to the Form component, so the
+				app cannot build the form for you... You need to pass at least form
+				structure object to create the form!
 			</p>
 		);
 
-	// now in the beginning of return we are checking, if some object keys are complex
-	// what means that they contains a few input to render & form a subform
+	if (!combo) return <p>Form generating in process... Wait please</p>;
+
 	return (
 		<form>
-			{Object.keys(structure).map((key, i) => {
-				return Object.entries(structure[key]).length > 1 ? (
-					<div className="subform" key={key + "-subform"}>
-						{Object.keys(structure[key]).map((subkey) => (
-							<LabelInputGroup
-								key={subkey + "form-label-input-pair"}
-								itemKey={subkey}
-								item={structure[key][subkey]}
-							/>
-						))}
-					</div>
-				) : (
-					<LabelInputGroup
-						key={key + "form-label-input-pair"}
-						itemKey={key}
-						item={structure[key]}
-					/>
-				);
-			})}
+			{Object.keys(combo).map((key) => (
+				<LabelInputGroup
+					key={key + "form-label-input-pair"}
+					itemKey={key}
+					item={combo[key]}
+					onInputChange={(input) =>
+						setCombo({
+							...combo,
+							[key]: {
+								...combo[key],
+								value: input,
+							},
+						})
+					}
+				/>
+			))}
 			<Button
 				text="set item"
-				onClick={() => {
-					// tranform item / data array back to object & pass it:
-					onSubmit(Object.fromEntries(itemArray));
-				}}
+				onClick={() => onSubmit(extractItemDataFromCombo(combo))}
 			/>
 		</form>
 	);
-}
-
-{
-	/* <div
-					className="form-label-input-pair"
-					key={key + "form-label-input-pair"}
-				>
-					<label htmlFor={key} className="form-label">
-						{structure[key].placeholder
-							? structure[key].placeholder
-							: key}
-						:
-					</label>
-					<input
-						id={key}
-						className="form-control mb-2"
-						type={
-							structure[key].type ? structure[key].type : "text"
-						}
-						value={itemArray[i][1] ? itemArray[i][1] : ""}
-						placeholder={
-							structure[key].placeholder
-								? structure[key].placeholder
-								: key
-						}
-						onChange={(e) => {
-							const updatedItem = [...itemArray];
-							updatedItem[i] = [...updatedItem[i]];
-							updatedItem[i][1] = e.target.value;
-							setItemArray([...updatedItem]);
-						}}
-					/>
-				</div> */
 }
