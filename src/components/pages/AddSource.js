@@ -1,37 +1,51 @@
-// import { useEffect, useState } from "react";
-// import SourceForm from "../organisms/SourceForm";
-// import { useDatabase } from "../../hooks/use-database";
+import { useEffect, useState } from "react";
+import { useStore } from "../../store/Store";
+import Form from "../../reusable-components/organisms/Form";
 
-// export default function AddSource() {
-// 	const { sources, addSource } = useDatabase();
-// 	const { user } = useAuth();
+const FORM_STRUCTURE = {
+	// add as much inputs, as you like
+	// according to template below:
 
-// 	const [item, setItem] = useState(null);
+	// some_key_representanting_variable: { // name of the key / variable
+	//   type: "password", // (OPTIONAL) include type only if it's value is not "text"
+	//   value: "some value", // (OPTIONAL) if it's empty, skip this key-value pair
+	//   placeholder: "some placeholder" // (OPTIONAL) if it's same as key / variable name, skip it
+	// }
 
-// 	function onFormSubmit(updatedItem) {
-// 		addSource(updatedItem);
-// 	}
+	// if all properties are default & skipped,
+	// add a key_name: {},
 
-// 	useEffect(() => {
-// 		if (item) {
-// 			console.log("item in AddSourcePage:", item);
-// 		}
-// 	}, [item]);
+	title: {},
+	subtitle: {},
+	publisher: {},
+	placeOfPublication: {
+		placeholder: "place of publication",
+	},
+	yearOfPublication: {
+		placeholder: "year of publication",
+	},
 
-// 	return (
-// 		<div>
-// 			{user && user.uid ? (
-// 				<div>
-// 					<SourceForm
-// 						item={item}
-// 						handleSubmit={onFormSubmit}
-// 						headerText="Add new source!"
-// 						buttonText="Add new source"
-// 					/>
-// 				</div>
-// 			) : (
-// 				<h3>You need to log in to add a source...</h3>
-// 			)}
-// 		</div>
-// 	);
-// }
+	// Autorska Koncepcja i Praktyczny System Generowanie Pomysłów i Realizacji Projektów Krok Po Kroku
+};
+
+export default function AddSource() {
+	const { state } = useStore();
+
+	function handleSubmit(data) {
+		console.log("data passed to handleSubmit:", data);
+	}
+
+	//if (!state.user) return <p className="add-source-page">You need to be logged to add a source...</p>
+
+	return (
+		<div className="add-source-page">
+			<div className="add-source-form">
+				<Form
+					structure={FORM_STRUCTURE}
+					data={null}
+					//onSubmit={handleSubmit}
+				/>
+			</div>
+		</div>
+	);
+}

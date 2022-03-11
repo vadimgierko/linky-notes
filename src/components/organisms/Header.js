@@ -13,7 +13,7 @@ const SECTIONS_LIST = [
 	"tags",
 	//"sources",
 	"add note",
-	//"add source",
+	"add source",
 ];
 
 export default function Header() {
