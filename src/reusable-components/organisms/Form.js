@@ -1,8 +1,22 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../../hooks/use-theme";
 import Button from "../atoms/Button";
-import LabelInputGroup from "./LabelInputGroup";
-import SubForm from "./SubForm";
+
+//====================// STRUCTURE OF THE FILE //===================
+//
+// 						NOTE:
+// I didn't want to extract these components & methods to another file
+// to contain all <Form /> components inside a encapsulated one component.
+//
+// - main component:
+//   - <Form /> (the only one exported)
+// - subcomponents:
+//   - <Subform />
+//   - <LabelInputGroup />
+// - methods:
+//   - initiateComboFromStructure()
+//   - extractItemDataFromCombo()
+// - readme
 
 export default function Form({
 	structure,
@@ -11,85 +25,9 @@ export default function Form({
 }) {
 	const [combo, setCombo] = useState();
 
-	function initiateComboFromStructure(structure) {
-		let updatedCombo = {};
-		let subformsNum = 0;
-		Object.keys(structure).map((key) => {
-			// here we must check every key if it needs a subform
-			// it means that this key forms keys group
-			if (Object.entries(structure[key]).length > 1) {
-				//console.log(key, " is a parent key => create subform", subformsNum);
-				const parentKey = key;
-				let children = {};
-				Object.keys(structure[key]).map((subKey) => {
-					children = {
-						...children,
-						[subKey]: {
-							type: structure[key][subKey].type
-								? structure[key][subKey].type
-								: "text",
-							value: structure[key][subKey].value
-								? structure[key][subKey].value
-								: "",
-							placeholder: structure[key][subKey].placeholder
-								? structure[key][subKey].placeholder
-								: subKey,
-						},
-					};
-				});
-				updatedCombo = {
-					...updatedCombo,
-					["subform" + subformsNum]: {
-						parentKey: parentKey,
-						children: children,
-					},
-				};
-				subformsNum++;
-			} else {
-				updatedCombo = {
-					...updatedCombo,
-					[key]: {
-						type: structure[key].type ? structure[key].type : "text",
-						value: structure[key].value ? structure[key].value : "",
-						placeholder: structure[key].placeholder
-							? structure[key].placeholder
-							: key,
-					},
-				};
-			}
-		});
-		//console.log("Initiated combo from structure:", updatedCombo);
-		setCombo(updatedCombo);
-	}
-
-	function extractItemDataFromCombo(combo) {
-		let extractedItemData = {};
-		Object.keys(combo).map((key) => {
-			if (key.includes("subform")) {
-				let children = {};
-				Object.keys(combo[key].children).map((childKey) => {
-					children = {
-						...children,
-						[childKey]: combo[key].children[childKey].value,
-					};
-				});
-				extractedItemData = {
-					...extractedItemData,
-					[combo[key].parentKey]: children,
-				};
-			} else {
-				extractedItemData = {
-					...extractedItemData,
-					[key]: combo[key].value,
-				};
-			}
-		});
-		return extractedItemData;
-	}
-
 	useEffect(() => {
 		if (structure) {
-			initiateComboFromStructure(structure);
+			initiateComboFromStructure(structure, setCombo);
 		}
 	}, [structure]);
 
@@ -111,16 +49,20 @@ export default function Form({
 			{Object.keys(combo).map((key) => {
 				return key.includes("subform") ? (
 					<SubForm
-						key={key}
-						structure={combo[key].children}
-						parentKey={combo[key].parentKey}
-						onSubformChange={(updates) => {
-							//console.log("updates:", updates);
+						key={combo[key].parentKey + "-subform"}
+						subcombo={combo[key]}
+						onSubFormInputChange={(input, subkey) => {
 							setCombo({
 								...combo,
 								[key]: {
 									parentKey: combo[key].parentKey,
-									children: updates,
+									children: {
+										...combo[key].children,
+										[subkey]: {
+											...combo[key].children[subkey],
+											value: input,
+										},
+									},
 								},
 							});
 						}}
@@ -149,6 +91,139 @@ export default function Form({
 			/>
 		</form>
 	);
+}
+
+//==================================// SUB COMPONENTS //=======================================
+
+function SubForm({ subcombo, onSubFormInputChange = (f) => f }) {
+	if (!subcombo)
+		return (
+			<p className="subform">
+				No subform structure object has been passed to the SubForm component, so
+				the app cannot build the SubForm for you... You need to pass a SubForm
+				subcombo structure object to create the form!
+			</p>
+		);
+	return (
+		<div className="subform">
+			<hr />
+			<p>{subcombo.parentKey}:</p>
+			<div className="ms-3">
+				{Object.keys(subcombo.children).map((subkey) => (
+					<LabelInputGroup
+						key={subkey + "form-label-input-pair"}
+						itemKey={subkey}
+						item={subcombo.children[subkey]}
+						onInputChange={(input) => onSubFormInputChange(input, subkey)}
+					/>
+				))}
+			</div>
+			<hr />
+		</div>
+	);
+}
+
+function LabelInputGroup({ item, itemKey, onInputChange }) {
+	const { theme } = useTheme();
+	return (
+		<div className="form-label-input-pair">
+			<label htmlFor={itemKey} className="form-label">
+				{item.placeholder}:
+			</label>
+			<input
+				id={itemKey}
+				className={
+					"form-control mb-2 bg-" +
+					theme.mode +
+					" text-" +
+					(theme.mode === "dark" ? "light" : "dark")
+				}
+				type={item.type}
+				value={item.value}
+				placeholder={item.placeholder}
+				onChange={(e) => onInputChange(e.target.value)}
+			/>
+		</div>
+	);
+}
+
+//====================================== METHODS ==========================================
+
+function initiateComboFromStructure(structure, hook = (f) => f) {
+	let updatedCombo = {};
+	let subformsNum = 0;
+	Object.keys(structure).map((key) => {
+		// here we must check every key if it needs a subform
+		// it means that this key forms keys group
+		if (Object.entries(structure[key]).length > 1) {
+			//console.log(key, " is a parent key => create subform", subformsNum);
+			const parentKey = key;
+			let children = {};
+			Object.keys(structure[key]).map((subKey) => {
+				children = {
+					...children,
+					[subKey]: {
+						type: structure[key][subKey].type
+							? structure[key][subKey].type
+							: "text",
+						value: structure[key][subKey].value
+							? structure[key][subKey].value
+							: "",
+						placeholder: structure[key][subKey].placeholder
+							? structure[key][subKey].placeholder
+							: subKey,
+					},
+				};
+			});
+			updatedCombo = {
+				...updatedCombo,
+				["subform" + subformsNum]: {
+					parentKey: parentKey,
+					children: children,
+				},
+			};
+			subformsNum++;
+		} else {
+			updatedCombo = {
+				...updatedCombo,
+				[key]: {
+					type: structure[key].type ? structure[key].type : "text",
+					value: structure[key].value ? structure[key].value : "",
+					placeholder: structure[key].placeholder
+						? structure[key].placeholder
+						: key,
+				},
+			};
+		}
+	});
+	//console.log("Initiated combo from structure:", updatedCombo);
+	// pass the initiated combo to the parent component by argument in passed hook:
+	hook(updatedCombo);
+}
+
+function extractItemDataFromCombo(combo) {
+	let extractedItemData = {};
+	Object.keys(combo).map((key) => {
+		if (key.includes("subform")) {
+			let children = {};
+			Object.keys(combo[key].children).map((childKey) => {
+				children = {
+					...children,
+					[childKey]: combo[key].children[childKey].value,
+				};
+			});
+			extractedItemData = {
+				...extractedItemData,
+				[combo[key].parentKey]: children,
+			};
+		} else {
+			extractedItemData = {
+				...extractedItemData,
+				[key]: combo[key].value,
+			};
+		}
+	});
+	return extractedItemData;
 }
 
 /*

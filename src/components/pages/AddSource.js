@@ -1,5 +1,5 @@
 import { useStore } from "../../store/Store";
-import Form from "../../reusable-components/Form/Form";
+import Form from "../../reusable-components/organisms/Form";
 
 const FORM_STRUCTURE = {
 	author: {
@@ -19,15 +19,16 @@ const FORM_STRUCTURE = {
 	placeOfPublication: {
 		placeholder: "place of publication",
 	},
-	meta: {
-		description: {},
-		translatorLastName: {
-			placeholder: "translator's last name",
-		},
-	},
 	yearOfPublication: {
 		placeholder: "year of publication",
 	},
+	//===================================================================
+	// email: {
+	// 	type: "email",
+	// },
+	// password: {
+	// 	type: "password",
+	// },
 };
 
 export default function AddSource() {
