@@ -7,6 +7,7 @@ import fetchItems from "../logic/fetchItems.js";
 import fetchTags from "../logic/fetchTags.js";
 //======= NOTE: THIS BELOW IS EXPERIMENTAL !!! DON'T USE IT, UNTIL I REMOVE THIS COMMENT:
 import fetchFromDatabase from "../logic/fetch/fetchFromDatabase.js";
+//=====================================================================================//
 
 const StoreContext = createContext();
 
@@ -24,8 +25,12 @@ export function StoreProvider({ children }) {
 					payload: { id: user.uid, email: user.email },
 				});
 				console.log("User logged in. User:", user);
-				fetchItems(user.uid, dispatch);
-				fetchTags(user.uid, dispatch);
+
+				//================================== OFF FOR TESTS:
+				//fetchItems(user.uid, dispatch);
+				//fetchTags(user.uid, dispatch);
+				//================================================//
+
 				// this below is used to fetch sources (experimental feature, don't use it)
 				fetchFromDatabase("sources", user.uid, dispatch);
 			} else {

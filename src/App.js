@@ -13,6 +13,7 @@ import Tags from "./components/pages/Tags";
 import AddSource from "./components/pages/AddSource";
 import { useEffect } from "react";
 import SignUp from "./components/pages/SignUp";
+import Sources from "./components/pages/Sources";
 
 export default function App() {
 	const { theme } = useTheme();
@@ -70,7 +71,7 @@ export default function App() {
 						<AddSource />
 					</Route>
 					<Route path="/sources">
-						<div>Sources!!!</div>
+						<Sources />
 					</Route>
 					<Route path="/">
 						<Items />

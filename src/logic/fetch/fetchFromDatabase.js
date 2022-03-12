@@ -15,7 +15,11 @@ export default function fetchFromDatabase(
 					type: "set-" + itemCategoryNameInThePlural,
 					payload: data,
 				});
-				console.log("DATA WAS FETCHED: ALL USER'S ITEMS.");
+				console.log(
+					"DATA WAS FETCHED: ALL USER'S " +
+						itemCategoryNameInThePlural.toUpperCase() +
+						"."
+				);
 			} else {
 				console.log(
 					"There are no " +

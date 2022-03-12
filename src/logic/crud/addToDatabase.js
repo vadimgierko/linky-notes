@@ -29,7 +29,7 @@ export default function addToDatabase(
 	return set(
 		ref(database, itemCategoryNameInThePlural + "/" + userId + "/" + key),
 		{
-			...item,
+			...itemToAdd,
 		}
 	)
 		.then(() => {
