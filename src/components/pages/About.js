@@ -43,6 +43,8 @@ I've made this app first of all for myself. I read a lot, create a lot and... do
 Recently (from 23.02 to 07.03) I rewrote the app with a new architecture, data layer management pattern & security rules. From 05.03 you can sign up, add, edit & delete notes, add & delete tags to them, but not adding the source yet...
 
 I've rebuild the app basically from scratch, and now it's available not only for my personal use, like it was before, but for everyone! You can add your notes at the moment, and when I add "add source" feature, you can just update your notes. At the moment just add a reference like an usual text, and later you will add it as a source, when the feature will be ready.
+
+At 11th of March 2022 I've a lot of reusable components for future refactor & tested on adding sources to database.
 `;
 
 export default function About() {
@@ -50,10 +52,7 @@ export default function About() {
 
 	return (
 		<div style={{ background: theme.background, color: theme.color }}>
-			<ReactMarkdown
-				children={ABOUT_MARKDOWN}
-				remarkPlugins={[remarkGfm]}
-			/>
+			<ReactMarkdown children={ABOUT_MARKDOWN} remarkPlugins={[remarkGfm]} />
 		</div>
 	);
 }
