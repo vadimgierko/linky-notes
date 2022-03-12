@@ -22,13 +22,6 @@ const FORM_STRUCTURE = {
 	yearOfPublication: {
 		placeholder: "year of publication",
 	},
-	//===================================================================
-	// email: {
-	// 	type: "email",
-	// },
-	// password: {
-	// 	type: "password",
-	// },
 };
 
 export default function AddSource() {
@@ -46,7 +39,9 @@ export default function AddSource() {
 				<Form
 					structure={FORM_STRUCTURE}
 					data={null}
+					submitText="add a source" // the text for the submit button
 					//onSubmit={handleSubmit}
+					//link="/sources" // add link, if you want to submit item be a link button
 				/>
 			</div>
 		</div>

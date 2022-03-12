@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
 import Button from "../atoms/Button";
 
@@ -12,7 +13,8 @@ import Button from "../atoms/Button";
 //   - <Form /> (the only one exported)
 // - subcomponents:
 //   - <Subform />
-//   - <LabelInputGroup />
+//     - <LabelInputGroup />
+//   - <SubmitFormSection />
 // - methods:
 //   - initiateComboFromStructure()
 //   - extractItemDataFromCombo()
@@ -21,7 +23,9 @@ import Button from "../atoms/Button";
 export default function Form({
 	structure,
 	data,
+	submitText = "call to action goes here",
 	onSubmit = (objectReturnedFromForm) => console.log(objectReturnedFromForm),
+	link,
 }) {
 	const [combo, setCombo] = useState();
 
@@ -85,9 +89,10 @@ export default function Form({
 				);
 			})}
 			<br />
-			<Button
-				text="set item"
-				onClick={() => onSubmit(extractItemDataFromCombo(combo))}
+			<SubmitFormSection
+				submitText={submitText}
+				onSubmit={() => onSubmit(extractItemDataFromCombo(combo))}
+				link={link}
 			/>
 		</form>
 	);
@@ -143,6 +148,23 @@ function LabelInputGroup({ item, itemKey, onInputChange }) {
 				placeholder={item.placeholder}
 				onChange={(e) => onInputChange(e.target.value)}
 			/>
+		</div>
+	);
+}
+
+function SubmitFormSection({ submitText, onSubmit, link }) {
+	if (link)
+		return (
+			<div className="submit-form-section">
+				<Link to={link}>
+					<Button text={submitText} onClick={onSubmit} />
+				</Link>
+			</div>
+		);
+
+	return (
+		<div className="submit-form-section">
+			<Button text={submitText} onClick={onSubmit} />
 		</div>
 	);
 }
