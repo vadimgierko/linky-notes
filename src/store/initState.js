@@ -2,9 +2,7 @@ export const INIT_STATE = {
 	user: null,
 	items: null,
 	tags: null,
-	authorsList: null,
 	authors: null,
-	sourcesList: null,
 	sources: null,
 };
 

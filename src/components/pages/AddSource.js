@@ -1,5 +1,6 @@
 import { useStore } from "../../store/Store";
 import Form from "../../reusable-components/organisms/Form";
+import addToDatabase from "../../logic/crud/addToDatabase";
 
 const FORM_STRUCTURE = {
 	author: {
@@ -25,13 +26,19 @@ const FORM_STRUCTURE = {
 };
 
 export default function AddSource() {
-	const { state } = useStore();
+	const { state, dispatch } = useStore();
 
-	function handleSubmit(data) {
-		console.log("data passed to handleSubmit:", data);
+	function handleSubmit(item) {
+		console.log("data passed to handleSubmit:", item);
+		addToDatabase("source", "sources", item, state.user.id, dispatch);
 	}
 
-	//if (!state.user) return <p className="add-source-page">You need to be logged to add a source...</p>
+	if (!state.user)
+		return (
+			<p className="add-source-page">
+				You need to be logged to add a source...
+			</p>
+		);
 
 	return (
 		<div className="add-source-page">
@@ -40,7 +47,7 @@ export default function AddSource() {
 					structure={FORM_STRUCTURE}
 					data={null}
 					submitText="add a source" // the text for the submit button
-					//onSubmit={handleSubmit}
+					onSubmit={handleSubmit}
 					//link="/sources" // add link, if you want to submit item be a link button
 				/>
 			</div>

@@ -48,6 +48,23 @@ export default function reducer(state, action) {
 					[action.payload.key]: { tag: action.payload.tag },
 				},
 			};
+		//======= THIS IS EXPERIMENTAL FEATURE DON'T USE IT ======
+		case "set-sources":
+			return {
+				...state,
+				sources: {
+					...action.payload,
+				},
+			};
+		case "add-source":
+			return {
+				...state,
+				sources: {
+					...state.sources,
+					[action.payload.key]: action.payload.item,
+				},
+			};
+		//==========================================================
 		case "reset-state":
 			return INIT_STATE;
 		default:
