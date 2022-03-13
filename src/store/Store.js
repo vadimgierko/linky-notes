@@ -32,9 +32,9 @@ export function StoreProvider({ children }) {
 				//================================================//
 
 				// this below is used to fetch sources (experimental feature, don't use it)
-				fetchFromDatabase("sources", user.uid, dispatch);
+				//fetchFromDatabase("sources", user.uid, dispatch);
 			} else {
-				dispatch({ type: "reset-state" });
+				//dispatch({ type: "reset-state" });
 				console.log("User is logged out. Store was reset.");
 			}
 		});

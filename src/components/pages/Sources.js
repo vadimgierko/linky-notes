@@ -1,12 +1,13 @@
 import { useTheme } from "../../hooks/use-theme";
 import { useStore } from "../../store/Store";
 import List from "../../reusable-components/molecules/List";
+import Card from "../../reusable-components/molecules/Card";
 
 export default function Sources() {
 	const { theme } = useTheme();
 	const { state } = useStore();
 
-	if (!state.user) return <p>You need to be logged to see your items!</p>;
+	//if (!state.user) return <p>You need to be logged to see your items!</p>;
 	if (!state.sources || !Object.entries(state.sources).length)
 		return (
 			<p className="sources-page">
@@ -22,9 +23,12 @@ export default function Sources() {
 			}}
 			className="sources-page"
 		>
-			<div className="sources-list">
-				<List items={state.sources} renderComponent="card" />
-			</div>
+			<List
+				items={state.sources}
+				ListItemComponent={Card}
+				itemCategoryNameInThePlural="sources"
+				itemCategoryNameInTheSingular="source"
+			/>
 		</div>
 	);
 }

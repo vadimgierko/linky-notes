@@ -3,7 +3,23 @@ export const INIT_STATE = {
 	items: null,
 	tags: null,
 	authors: null,
-	sources: null,
+	sources: {
+		fhsbdfb8u90u47yh3: {
+			author: {
+				firstName: "Vadim",
+				lastName: "Gierko",
+				middleName: "Stanisław",
+			},
+			createdAt: "2022.03.13",
+			placeOfPublication: "Lublin",
+			publisher: "Łowca Pomysłów",
+			subtitle:
+				"Autorska Koncepcja i Praktyczny System Generowania Pomysłów i Realizacji Projektów Krok Po Kroku",
+			title: "Zarządzanie Procesem Twórczym",
+			userId: "so9O3nfXwVXgR9k9eopVGcgaQWz2",
+			yearOfPublication: "2020",
+		},
+	},
 };
 
 // export const INIT_STATE = {

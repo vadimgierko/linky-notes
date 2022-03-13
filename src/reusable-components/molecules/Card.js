@@ -4,7 +4,13 @@ import PencilIconButton from "../../components/atoms/PencilIconButton";
 import TrashIconButton from "../../components/atoms/TrashIconButton";
 
 // if body prop includes text => add className="card-text" to <p>
-export default function Card({ item, itemKey, body, footer }) {
+// NOTE: now this Card is adapted for source item !!!!!!!!!!!!!!!!!!!!!!!!!!
+export default function Card({
+	item,
+	itemKey,
+	itemCategoryNameInThePlural,
+	itemCategoryNameInTheSingular,
+}) {
 	const { theme } = useTheme();
 
 	return (
@@ -21,8 +27,19 @@ export default function Card({ item, itemKey, body, footer }) {
 						{item.createdAt} {item.updatedAt ? "/ " + item.updatedAt : null}
 					</div>
 					<div className="col text-end">
-						<EyeIconButton link={"/sources/" + itemKey} />
-						<PencilIconButton link={"/sources/update-source/" + itemKey} />
+						<EyeIconButton
+							link={"/" + itemCategoryNameInThePlural + "/" + itemKey}
+						/>
+						<PencilIconButton
+							link={
+								"/" +
+								itemCategoryNameInThePlural +
+								"/update-" +
+								itemCategoryNameInTheSingular +
+								"/" +
+								itemKey
+							}
+						/>
 						<TrashIconButton
 							handleOnTrashButtonClick={
 								() => alert("There is no delete function for this item ;-)")
@@ -32,8 +49,27 @@ export default function Card({ item, itemKey, body, footer }) {
 					</div>
 				</div>
 			</div>
-			<div className="card-body">{body}</div>
-			<div className="card-footer text-muted">{footer}</div>
+			<div className="card-body">
+				{Object.keys(item).map((key) => {
+					return typeof item[key] === "string" ? (
+						<p key={key} className="card-text">
+							<strong>{key}</strong>: {item[key]}
+						</p>
+					) : (
+						<div key={key} className="mb-3">
+							<p className="card-text">
+								<strong>{key}</strong>:
+							</p>
+							{Object.keys(item[key]).map((subkey) => (
+								<p key={subkey} className="card-text ms-3">
+									<strong>{subkey}</strong>: {item[key][subkey]}
+								</p>
+							))}
+						</div>
+					);
+				})}
+			</div>
+			<div className="card-footer text-muted"></div>
 		</div>
 	);
 }
