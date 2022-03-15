@@ -20,6 +20,14 @@ import Button from "../atoms/Button";
 //   - extractItemDataFromCombo()
 // - readme
 
+/**
+ * Form Component ({structure, data}) =>
+ * object structured by structure prop & populated with users inputs values
+ *
+ * Issues:
+ * - the key of the object is in camelCase => figure out how to render them as placeholders
+ */
+
 export default function Form({
 	structure,
 	data,

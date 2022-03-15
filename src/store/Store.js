@@ -16,29 +16,29 @@ export const useStore = () => useContext(StoreContext);
 export function StoreProvider({ children }) {
 	const [state, dispatch] = useReducer(reducer, INIT_STATE);
 
-	useEffect(() => {
-		onAuthStateChanged(firebaseAuth, (user) => {
-			if (user) {
-				console.log("DATA WAS FETCHED: USER CREDENTIALS");
-				dispatch({
-					type: "set-user",
-					payload: { id: user.uid, email: user.email },
-				});
-				console.log("User logged in. User:", user);
+	// useEffect(() => {
+	// 	onAuthStateChanged(firebaseAuth, (user) => {
+	// 		if (user) {
+	// 			console.log("DATA WAS FETCHED: USER CREDENTIALS");
+	// 			dispatch({
+	// 				type: "set-user",
+	// 				payload: { id: user.uid, email: user.email },
+	// 			});
+	// 			console.log("User logged in. User:", user);
 
-				//================================== OFF FOR TESTS:
-				//fetchItems(user.uid, dispatch);
-				//fetchTags(user.uid, dispatch);
-				//================================================//
+	// 			//================================== OFF FOR TESTS:
+	// 			//fetchItems(user.uid, dispatch);
+	// 			//fetchTags(user.uid, dispatch);
+	// 			//================================================//
 
-				// this below is used to fetch sources (experimental feature, don't use it)
-				//fetchFromDatabase("sources", user.uid, dispatch);
-			} else {
-				//dispatch({ type: "reset-state" });
-				console.log("User is logged out. Store was reset.");
-			}
-		});
-	}, []);
+	// 			// this below is used to fetch sources (experimental feature, don't use it)
+	// 			//fetchFromDatabase("sources", user.uid, dispatch);
+	// 		} else {
+	// 			//dispatch({ type: "reset-state" });
+	// 			console.log("User is logged out. Store was reset.");
+	// 		}
+	// 	});
+	// }, []);
 
 	const value = {
 		state,

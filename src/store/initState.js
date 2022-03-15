@@ -10,14 +10,16 @@ export const INIT_STATE = {
 				lastName: "Gierko",
 				middleName: "Stanisław",
 			},
-			createdAt: "2022.03.13",
-			placeOfPublication: "Lublin",
-			publisher: "Łowca Pomysłów",
+			title: "Zarządzanie Procesem Twórczym",
 			subtitle:
 				"Autorska Koncepcja i Praktyczny System Generowania Pomysłów i Realizacji Projektów Krok Po Kroku",
-			title: "Zarządzanie Procesem Twórczym",
-			userId: "so9O3nfXwVXgR9k9eopVGcgaQWz2",
+			placeOfPublication: "Lublin",
+			publisher: "Łowca Pomysłów",
 			yearOfPublication: "2020",
+			noteMetadata: {
+				createdAt: "2022.03.13",
+				userId: "so9O3nfXwVXgR9k9eopVGcgaQWz2",
+			},
 		},
 	},
 };
