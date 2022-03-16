@@ -48,7 +48,7 @@ export default function reducer(state, action) {
 					[action.payload.key]: { tag: action.payload.tag },
 				},
 			};
-		//======= THIS IS EXPERIMENTAL FEATURE DON'T USE IT ======
+		//======= THese are EXPERIMENTAL FEATUREs DON'T USE IT ======
 		case "set-sources":
 			return {
 				...state,
@@ -61,6 +61,21 @@ export default function reducer(state, action) {
 				...state,
 				sources: {
 					...state.sources,
+					[action.payload.key]: action.payload.item,
+				},
+			};
+		case "set-authors":
+			return {
+				...state,
+				authors: {
+					...action.payload,
+				},
+			};
+		case "add-author":
+			return {
+				...state,
+				authors: {
+					...state.authors,
 					[action.payload.key]: action.payload.item,
 				},
 			};
