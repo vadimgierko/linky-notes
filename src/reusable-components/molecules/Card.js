@@ -1,8 +1,8 @@
 import { useTheme } from "../../hooks/use-theme";
+import { useStore } from "../../store/Store";
 import EyeIconButton from "../../components/atoms/EyeIconButton";
 import PencilIconButton from "../../components/atoms/PencilIconButton";
 import TrashIconButton from "../../components/atoms/TrashIconButton";
-import IconButton from "../atoms/IconButton";
 
 /**
  * NOTE: now this Card is adapted for source item !
@@ -21,21 +21,6 @@ import IconButton from "../atoms/IconButton";
  * 2. use structure for form as a template? => put structure form in store & share?
  * 3. order them when fetch?
  */
-
-const ICON_BUTTONS_GROUP = [
-	{
-		iconName: "eye",
-		color: "secondary",
-	},
-	{
-		iconName: "pencil",
-		color: "primary",
-	},
-	{
-		iconName: "trash",
-		color: "danger",
-	},
-];
 
 export default function Card({
 	item,
@@ -59,7 +44,7 @@ export default function Card({
 						{item.createdAt} {item.updatedAt ? "/ " + item.updatedAt : null}
 					</div>
 					<div className="icon-buttons-group col text-end">
-						{/* render ICON_BUTTONS_GROUP, but... maybe it will be: deleteButton, updateButton etc. or "do" prop */}
+						{/* maybe it will be: deleteButton, updateButton etc. or "do" prop */}
 						<EyeIconButton
 							link={"/" + itemCategoryNameInThePlural + "/" + itemKey}
 						/>
@@ -83,26 +68,60 @@ export default function Card({
 				</div>
 			</div>
 			<div className="card-body">
-				{Object.keys(item).map((key) => {
-					return typeof item[key] === "string" ? (
-						<p key={key} className="card-text">
-							<strong>{key}</strong>: {item[key]}
-						</p>
-					) : (
-						<div key={key} className="mb-3">
-							<p className="card-text">
-								<strong>{key}</strong>:
-							</p>
-							{Object.keys(item[key]).map((subkey) => (
-								<p key={subkey} className="card-text ms-3">
-									<strong>{subkey}</strong>: {item[key][subkey]}
-								</p>
-							))}
-						</div>
-					);
-				})}
+				<CardBody
+					item={item}
+					itemCategoryNameInTheSingular={itemCategoryNameInTheSingular}
+				/>
 			</div>
 			<div className="card-footer text-muted"></div>
 		</div>
 	);
 }
+
+function CardBody({ item, itemCategoryNameInTheSingular }) {
+	const { state } = useStore();
+
+	if (state.authors || Object.entries(state.authors).length) {
+		if (itemCategoryNameInTheSingular === "source")
+			return (
+				<>
+					<h3>{item.title}</h3>
+					<p className="card-text">
+						{item.subtitle ? item.subtitle : "[no subtitle data]"}
+					</p>
+					<p className="card-text">
+						by {state.authors[item.authorKey].firstName}{" "}
+						{state.authors[item.authorKey].lastName}
+					</p>
+					<hr />
+					<p className="card-text">
+						Published by{" "}
+						{item.publisher ? item.publisher : "[no publisher data]"} in{" "}
+						{item.placeOfPublication} in {item.yearOfPublication}
+					</p>
+				</>
+			);
+	} else {
+		return <p className="card-text text-danger">Downloading source data...</p>;
+	}
+}
+
+//======================= mapping list object with nested (object) & non-nested (string) objects:
+// Object.keys(item).map((key) => {
+// 	return typeof item[key] === "string" ? (
+// 		<p key={key} className="card-text">
+// 			<strong>{key}</strong>: {item[key]}
+// 		</p>
+// 	) : (
+// 		<div key={key} className="mb-3">
+// 			<p className="card-text">
+// 				<strong>{key}</strong>:
+// 			</p>
+// 			{Object.keys(item[key]).map((subkey) => (
+// 				<p key={subkey} className="card-text ms-3">
+// 					<strong>{subkey}</strong>: {item[key][subkey]}
+// 				</p>
+// 			))}
+// 		</div>
+// 	);
+// })

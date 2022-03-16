@@ -14,6 +14,7 @@ import AddSource from "./components/pages/AddSource";
 import { useEffect } from "react";
 import SignUp from "./components/pages/SignUp";
 import Sources from "./components/pages/Sources";
+import Source from "./components/pages/Source";
 
 export default function App() {
 	const { theme } = useTheme();
@@ -57,6 +58,9 @@ export default function App() {
 					</Route>
 					<Route exact path="/notes/:itemKey">
 						<Item />
+					</Route>
+					<Route exact path="/sources/:itemKey">
+						<Source />
 					</Route>
 					<Route path="/tags">
 						<Tags />
