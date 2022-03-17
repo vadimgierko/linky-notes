@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import SignUp from "./components/pages/SignUp";
 import Sources from "./components/pages/Sources";
 import Source from "./components/pages/Source";
+import Authors from "./components/pages/Authors";
 
 export default function App() {
 	const { theme } = useTheme();
@@ -23,10 +24,6 @@ export default function App() {
 	useEffect(() => {
 		console.log("app store:", state);
 	}, [state]);
-
-	// useEffect(() => {
-	// 	console.log("current theme:", theme.mode, " theme object:", theme);
-	// }, [theme]);
 
 	return (
 		<div
@@ -76,6 +73,9 @@ export default function App() {
 					</Route>
 					<Route path="/sources">
 						<Sources />
+					</Route>
+					<Route path="/authors">
+						<Authors />
 					</Route>
 					<Route path="/">
 						<Items />

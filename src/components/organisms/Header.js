@@ -10,10 +10,11 @@ import LogButtonsSection from "../Header/molecules/LogButtonsSection";
 const SECTIONS_LIST = [
 	"about",
 	"notes",
-	"tags",
-	//"sources",
 	"add note",
+	"tags",
+	"sources",
 	"add source",
+	"authors",
 ];
 
 export default function Header() {
@@ -50,9 +51,7 @@ export default function Header() {
 				</button>
 
 				<div
-					className={`${
-						isNavCollapsed ? "collapse" : null
-					} navbar-collapse`}
+					className={`${isNavCollapsed ? "collapse" : null} navbar-collapse`}
 					id="navbarColor01"
 				>
 					<NavLinksList

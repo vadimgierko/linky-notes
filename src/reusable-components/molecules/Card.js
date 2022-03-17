@@ -79,6 +79,8 @@ export default function Card({
 	);
 }
 
+//==================================// CardBody //===================================
+
 function CardBody({ item, itemCategoryNameInTheSingular }) {
 	const { state } = useStore();
 
@@ -119,6 +121,17 @@ function CardBody({ item, itemCategoryNameInTheSingular }) {
 							/>
 						))}
 				</div>
+			</>
+		);
+	}
+
+	if (itemCategoryNameInTheSingular === "author") {
+		return (
+			<>
+				<h3>
+					{item.firstName} {item.lastName}
+				</h3>
+				<p className="card-text">Cited author's works:</p>
 			</>
 		);
 	}

@@ -4,30 +4,11 @@ export const INIT_STATE = {
 	tags: null,
 	authors: null,
 	sources: null,
-	// sources: {
-	// 	fhsbdfb8u90u47yh3: {
-	// 		author: {
-	// 			firstName: "Vadim",
-	// 			lastName: "Gierko",
-	// 			middleName: "Stanisław",
-	// 		},
-	// 		title: "Zarządzanie Procesem Twórczym",
-	// 		subtitle:
-	// 			"Autorska Koncepcja i Praktyczny System Generowania Pomysłów i Realizacji Projektów Krok Po Kroku",
-	// 		placeOfPublication: "Lublin",
-	// 		publisher: "Łowca Pomysłów",
-	// 		yearOfPublication: "2020",
-	// 		noteMetadata: {
-	// 			createdAt: "2022.03.13",
-	// 			userId: "so9O3nfXwVXgR9k9eopVGcgaQWz2",
-	// 		},
-	// 	},
-	// },
 };
 
 // export const INIT_STATE = {
 // 	user: null,
-// 	fetchedItems: {
+// 	items: {
 // 		fsfv87997dfvdf79dvjggd9j: {
 // 			content: "Test item",
 // 			createdAt: "2022.03.01",
@@ -79,4 +60,23 @@ export const INIT_STATE = {
 // 			tag: "application",
 // 		},
 // 	},
+// sources: {
+// 	fhsbdfb8u90u47yh3: {
+// 		author: {
+// 			firstName: "Vadim",
+// 			lastName: "Gierko",
+// 			middleName: "Stanisław",
+// 		},
+// 		title: "Zarządzanie Procesem Twórczym",
+// 		subtitle:
+// 			"Autorska Koncepcja i Praktyczny System Generowania Pomysłów i Realizacji Projektów Krok Po Kroku",
+// 		placeOfPublication: "Lublin",
+// 		publisher: "Łowca Pomysłów",
+// 		yearOfPublication: "2020",
+// 		noteMetadata: {
+// 			createdAt: "2022.03.13",
+// 			userId: "so9O3nfXwVXgR9k9eopVGcgaQWz2",
+// 		},
+// 	},
+// },
 // };

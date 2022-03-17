@@ -3,8 +3,6 @@ import { firebaseAuth } from "../firebaseConfig.js";
 import { onAuthStateChanged } from "firebase/auth";
 import reducer from "./reducer.js";
 import { INIT_STATE } from "./initState.js";
-import fetchItems from "../logic/fetchItems.js";
-import fetchTags from "../logic/fetchTags.js";
 //======= NOTE: THIS BELOW IS EXPERIMENTAL !!! DON'T USE IT, UNTIL I REMOVE THIS COMMENT:
 import fetchFromDatabase from "../logic/fetch/fetchFromDatabase.js";
 //=====================================================================================//
@@ -27,11 +25,10 @@ export function StoreProvider({ children }) {
 				console.log("User logged in. User:", user);
 
 				//================================== OFF FOR TESTS:
-				fetchItems(user.uid, dispatch);
-				fetchTags(user.uid, dispatch);
-				//================================================//
 
 				// this below is used to fetch sources (experimental feature, don't use it)
+				fetchFromDatabase("items", user.uid, dispatch);
+				fetchFromDatabase("tags", user.uid, dispatch);
 				fetchFromDatabase("sources", user.uid, dispatch);
 				fetchFromDatabase("authors", user.uid, dispatch);
 			} else {

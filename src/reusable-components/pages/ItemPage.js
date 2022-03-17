@@ -36,6 +36,8 @@ export default function ItemPage({
 		}
 	}, [state]);
 
+	if (!state.user) return <p>You need to be logged to see this page!</p>;
+
 	if (!item)
 		return (
 			<p>
