@@ -81,7 +81,7 @@ export default function Card({
 function CardBody({ item, itemCategoryNameInTheSingular }) {
 	const { state } = useStore();
 
-	if (state.authors || Object.entries(state.authors).length) {
+	if (state && state.authors) {
 		if (itemCategoryNameInTheSingular === "source")
 			return (
 				<>
