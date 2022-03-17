@@ -24,8 +24,8 @@ import Button from "../atoms/Button";
  * Form Component ({structure, data}) =>
  * object structured by structure prop & populated with users inputs values
  *
- * Issues:
- * - the key of the object is in camelCase => figure out how to render them as placeholders
+ * Issues: TODO:
+ * - the key of the object is in camelCase => figure out how to render them as placeholders !!!
  */
 
 export default function Form({
@@ -256,8 +256,57 @@ function extractItemDataFromCombo(combo) {
 	return extractedItemData;
 }
 
+//=========================== future ideas for FORM_STRUCTURE:
+
+//============ var. 1. data structure wrapped in form controls list object:
+// inputs: {
+// 	// there will be previous rules of the form structure, because it cared only about inputs
+// 	author: {
+// 		firstName: {
+// 			placeholder: "first name",
+// 		},
+// 		middleName: {
+// 			placeholder: "middle name",
+// 		},
+// 		lastName: {
+// 			placeholder: "last name",
+// 		},
+// 	},
+// 	title: {},
+// 	subtitle: {},
+// 	publisher: {},
+// 	placeOfPublication: {
+// 		placeholder: "place of publication",
+// 	},
+// 	yearOfPublication: {
+// 		placeholder: "year of publication",
+// 	},
+// },
+// textareas: {},
+// selects: {},
+// buttons: {
+// 	submit: {
+// 		callToAction: "add source",
+// 		link: "/sources",
+// 	},
+// },
+//===== issues for var. 1.:
+// Q: what if we want put input, input, select, input, texarea etc. how to order them?
+// A: =>
+//===== var. 2.:
+// try to leave prev structure, but add a type of form control, f.e. select, but...
+// make inputs with type of text default if there is no form control type
+//
+// Q: ok, but what with buttons list object then?
+// A: maybe FORM_STRUCTURE & FORM BUTTONS_STRUCTURE separately ??
+//
+// Q: don't forget, that we also need to enable render custom componentsinside form, like:
+// - SearchInput
+// - FilterSearch
+
 /*
 =================================== READ ME !!! ================================
+===================== The Idea & Documented Developing Process==================
 
 THIS IS A REUSABLE CUSTOMISABLE FORM COMPONENT
 
@@ -496,6 +545,4 @@ const FORM_STRUCTURE = {
 	yearOfPublication: {
 		placeholder: "year of publication",
 	},
-
-	//============= write what happened here !!!!!!!!!!!!!!!!
 */

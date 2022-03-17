@@ -51,7 +51,7 @@ export default function List({
 	if (!items || !Object.entries(items).length)
 		return (
 			<p className="list">
-				There are no items in the list or the're loading now...
+				There are no items in the list or they're loading now...
 			</p>
 		);
 

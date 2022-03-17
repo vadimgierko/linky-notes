@@ -40,11 +40,13 @@ I've made this app first of all for myself. I read a lot, create a lot and... do
 
 ## UPDATE NOTE
 
-Recently (from 23.02 to 07.03) I rewrote the app with a new architecture, data layer management pattern & security rules. From 05.03 you can sign up, add, edit & delete notes, add & delete tags to them, but not adding the source yet...
+From 23.02 to 07.03 I adapted this app to a new architecture, data layer management pattern & security rules taken from my template starter app. Now you can **sign up, add, edit & delete notes, add & delete tags to them & filter notes by tags**. I rebuild the app basically from scratch, and **now it's available for everyone** and not only for my personal use, like it was before.
 
-I've rebuild the app basically from scratch, and now it's available not only for my personal use, like it was before, but for everyone! You can add your notes at the moment, and when I add "add source" feature, you can just update your notes. At the moment just add a reference like an usual text, and later you will add it as a source, when the feature will be ready.
+From 11.03 I started working on rewriting add source/references features from scratch (I had this functionality before, but it was...) So, You can add your notes at the moment, but without a reference. When I add "add/edit source" feature, you can just update your notes.
 
-At 11th of March 2022 I've a lot of reusable components for future refactor & tested on adding sources to database.
+While I was thinking about how to adapt this new rebuilt feature, I've understood, that I need to have **more of reusable & customizable components**, so all my work on addSource features became a playing background & test enviroment for new ideas. That's why it's so log, but... I make progress & **simplified, split & refactored a lot of other components**, so when the feature will be ready, I **plan to apply these reusable & customizable components to all app**, what means that I would **rebuild the app again**... and I did it partially already ;-)
+
+But don't worry, these under-the-hood changes will not impact on your experience of using this app!
 `;
 
 export default function About() {

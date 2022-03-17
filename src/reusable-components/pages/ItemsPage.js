@@ -2,6 +2,15 @@ import { useTheme } from "../../hooks/use-theme";
 import { useStore } from "../../store/Store";
 import List from "../../reusable-components/molecules/List";
 
+/**
+ * ItemsPage is a reusable & customizable page layout component.
+ * It's dedicated for displaying a page that renders a list of items, like articles, posts, notes etc.
+ * ItemsPage gets the items object from the store (state) by itemCategoryNameInThePlural
+ * & passes it to the reusable List component.
+ * You need to pass the RenderComponent of your choice for ListItemComponent to render its items.
+ * If the item is loading or there is no such items list object ItemsPage renders an info about it.
+ */
+
 export default function ItemsPage({
 	itemCategoryNameInTheSingular,
 	itemCategoryNameInThePlural,

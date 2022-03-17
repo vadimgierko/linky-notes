@@ -13,7 +13,15 @@ Thanks to that:
 - that is easy to find the particular note by choosing keywords they consist in search field
 - you are saving a tone of time to organize & efficiently use them
 
-### `NOTE! At the moment (from 23.02) I'm adapting this app to a new architecture, data layer management pattern & security rules. From 05.03 you can sign up, add, edit & delete notes, add & delete tags to them, but not adding the source. I rebuild the app basically from scratch, and now it's available not only for my personal use, like it was before, but for everyone! You can add your notes at the moment, and when I add "add source" feature, you can just update your notes.`
+### `NOTE!`
+
+From 23.02 to 05.03 I adapted this app to a new architecture, data layer management pattern & security rules taken from my template starter app. Now you can **sign up, add, edit & delete notes, add & delete tags to them & filter notes by tags**. I rebuild the app basically from scratch, and **now it's available for everyone** and not only for my personal use, like it was before.
+
+From 06.03. I started working on rewriting add source/references features from scratch (I had this functionality before, but it was...) So, You can add your notes at the moment, but without a reference. When I add "add/edit source" feature, you can just update your notes.
+
+While I was thinking about how to adapt this new rebuilt feature, I've understood, that I need to have more reusable & customizable components, so all my work on addSource features became a playing background & test enviroment for new ideas. That's why it's so log, but... I make progress & simplified a lot of other components, so when the feature will be ready, I plan to apply these reusable & customizable components to all app, what means that I would rebuild the app again... and I did it partially already ;-)
+
+But don't worry, these under-the-hood changes will not impact on your experience of using this app!
 
 ## Motivation
 
@@ -38,26 +46,35 @@ I've made this app first of all for myself. I read a lot, create a lot and... do
 - Bootstrap 5.1
 
 ----------------------------------------------------------------------------------------
-## currently working on (that's a checklist for myself):
+## currently working on (that's a TODO checklist for myself):
 
 Currently (from 07.03.2022) I'm working on developing & applying notes sources (references) features, so when I finish, **you'll be able to**:
 - [ ] add (+ edit & delete) a reference to the source of your note (you can cite a book or an article from the web etc.)
 - [ ] click a reference in note card footer to see the full information about the cited source (source card)
 - [ ] filter notes by sources or authors
-- [ ] see the list of all of your sources in database
+- [X] see the list of all of your sources in database
 - [ ] add, edit & delete sources independently from the note/s on dedicated add-source page
 
-The result of this big complex feature implementation will be **new components** listed below:
-- [ ] SourceSearchForm
-  - [ ] SourceSearchFormSelect => like TagSearchForm it generates a search link on ItemsPage or add source to the note during the note edition
-- [ ] SourceForm (for adding & deleting the source)
-  - [ ] AuthorForm (for adding a new author)
-- [ ] Sources (page)
-  - [ ] SourcesList
-    - [ ] SourceCard => when clicked filter notes that cite this source
-- [ ] Authors (page)
-  - [ ] AuthorsList
-    - [ ] AuthorCard => when clicked filter notes that cite this author
+The result of this big complex feature implementation will be ~~**new components** listed below:~~
+~~- [ ] SourceSearchForm~~
+~~- [ ] SourceSearchFormSelect => like TagSearchForm it generates a search link on ItemsPage or add source to the note during the note edition~~
+~~- [ ] SourceForm (for adding & deleting the source)~~
+ ~~- [ ] AuthorForm (for adding a new author)~~
+~~- [ ] Sources (page)~~
+~~- [ ] SourcesList~~
+~~- [ ] SourceCard => when clicked filter notes that cite this source~~
+~~- [ ] Authors (page)~~
+~~- [ ] AuthorsList~~
+  ~~- [ ] AuthorCard => when clicked filter notes that cite this author~~
+
+**new reusable & customizable components** used in the whole app:
+- [ ] Form
+  - [X] creeating new item object
+  - [ ] updating passed item object passed via props
+  - [ ] rendering many different form control types
+  - [ ] rendering additional custom components
+- [X] List
+- [X] Card
 
 The **database structure for sources & authors** will be:
 
@@ -137,35 +154,11 @@ The **database structure for sources & authors** will be:
 Prev security rules:
 {
   "rules": {
-    "users": {
+    "$anyItemType": { // sources, tags, notes, ...users, etc.
       "$uid": {
         ".read": "auth != null && auth.uid == $uid",
         ".write": "auth != null && auth.uid == $uid"
       }
     },
-    "items": {
-      "$uid": {
-        ".read": "auth != null && auth.uid == $uid",
-        ".write": "auth != null && auth.uid == $uid"
-      }
-    },
-    "tags": {
-      "$uid": {
-        ".read": "auth != null && auth.uid == $uid",
-        ".write": "auth != null && auth.uid == $uid"
-      }
-    },
-    "authors": {
-      "$uid": {
-        ".read": "auth != null && auth.uid == $uid",
-        ".write": "auth != null && auth.uid == $uid"
-      }
-    },
-    "sources": {
-      "$uid": {
-        ".read": "auth != null && auth.uid == $uid",
-        ".write": "auth != null && auth.uid == $uid"
-      }
-    }
   }
 }
