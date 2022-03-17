@@ -8,7 +8,7 @@ import Items from "./components/pages/Items";
 import Footer from "./components/organisms/Footer";
 import AddItem from "./components/pages/AddItem";
 import UpdateItem from "./components/pages/UpdateItem";
-import Item from "./components/pages/Item";
+import Note from "./components/pages/Note";
 import Tags from "./components/pages/Tags";
 import AddSource from "./components/pages/AddSource";
 import { useEffect } from "react";
@@ -57,7 +57,7 @@ export default function App() {
 						<SignUp />
 					</Route>
 					<Route exact path="/notes/:itemKey">
-						<Item />
+						<Note />
 					</Route>
 					<Route exact path="/sources/:itemKey">
 						<Source />

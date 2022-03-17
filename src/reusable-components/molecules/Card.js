@@ -3,6 +3,7 @@ import { useStore } from "../../store/Store";
 import EyeIconButton from "../../components/atoms/EyeIconButton";
 import PencilIconButton from "../../components/atoms/PencilIconButton";
 import TrashIconButton from "../../components/atoms/TrashIconButton";
+import TagLinkButton from "../../components/atoms/TagLinkButton";
 
 /**
  * NOTE: now this Card is adapted for source item !
@@ -81,8 +82,8 @@ export default function Card({
 function CardBody({ item, itemCategoryNameInTheSingular }) {
 	const { state } = useStore();
 
-	if (state && state.authors) {
-		if (itemCategoryNameInTheSingular === "source")
+	if (itemCategoryNameInTheSingular === "source") {
+		if (state && state.authors) {
 			return (
 				<>
 					<h3>{item.title}</h3>
@@ -101,9 +102,32 @@ function CardBody({ item, itemCategoryNameInTheSingular }) {
 					</p>
 				</>
 			);
-	} else {
-		return <p className="card-text text-danger">Downloading source data...</p>;
+		}
 	}
+
+	if (itemCategoryNameInTheSingular === "item") {
+		return (
+			<>
+				<p className="item-content card-text">{item.content}</p>
+				<div className="item-tags">
+					{item.tags &&
+						Object.entries(item.tags).map((tag) => (
+							<TagLinkButton
+								key={"item-tag-" + tag[0]}
+								tag={tag[1].tag}
+								tagLink={"/search?name=" + tag[0]}
+							/>
+						))}
+				</div>
+			</>
+		);
+	}
+
+	return (
+		<p className="card-text text-danger">
+			Downloading {itemCategoryNameInTheSingular} data...
+		</p>
+	);
 }
 
 //======================= mapping list object with nested (object) & non-nested (string) objects:

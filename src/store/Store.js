@@ -27,8 +27,8 @@ export function StoreProvider({ children }) {
 				console.log("User logged in. User:", user);
 
 				//================================== OFF FOR TESTS:
-				//fetchItems(user.uid, dispatch);
-				//fetchTags(user.uid, dispatch);
+				fetchItems(user.uid, dispatch);
+				fetchTags(user.uid, dispatch);
 				//================================================//
 
 				// this below is used to fetch sources (experimental feature, don't use it)
