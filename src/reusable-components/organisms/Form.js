@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
+import Label from "../atoms/Label";
+import Input from "../atoms/Input";
+import Select from "../atoms/Select";
+import TextArea from "../atoms/TextArea";
 import Button from "../atoms/Button";
 
 //====================// STRUCTURE OF THE FILE //===================
@@ -13,7 +17,7 @@ import Button from "../atoms/Button";
 //   - <Form /> (the only one exported)
 // - subcomponents:
 //   - <Subform />
-//     - <LabelInputGroup />
+//     - <FormControlGroup />
 //   - <SubmitFormSection />
 // - methods:
 //   - initiateComboFromStructure()
@@ -26,6 +30,8 @@ import Button from "../atoms/Button";
  *
  * Issues: TODO:
  * - the key of the object is in camelCase => figure out how to render them as placeholders !!!
+ * - enable adding other form controls
+ * - enable adding custom components
  */
 
 export default function Form({
@@ -63,7 +69,7 @@ export default function Form({
 					<SubForm
 						key={combo[key].parentKey + "-subform"}
 						subcombo={combo[key]}
-						onSubFormInputChange={(input, subkey) => {
+						onSubFormControlChange={(input, subkey) => {
 							setCombo({
 								...combo,
 								[key]: {
@@ -80,11 +86,11 @@ export default function Form({
 						}}
 					/>
 				) : (
-					<LabelInputGroup
+					<FormControlGroup
 						key={key + "form-label-input-pair"}
 						itemKey={key}
 						item={combo[key]}
-						onInputChange={(input) =>
+						onFormControlChange={(input) =>
 							setCombo({
 								...combo,
 								[key]: {
@@ -108,7 +114,7 @@ export default function Form({
 
 //==================================// SUB COMPONENTS //=======================================
 
-function SubForm({ subcombo, onSubFormInputChange = (f) => f }) {
+function SubForm({ subcombo, onSubFormControlChange = (f) => f }) {
 	if (!subcombo)
 		return (
 			<p className="subform">
@@ -123,11 +129,13 @@ function SubForm({ subcombo, onSubFormInputChange = (f) => f }) {
 			<p>{subcombo.parentKey}:</p>
 			<div className="ms-3">
 				{Object.keys(subcombo.children).map((subkey) => (
-					<LabelInputGroup
+					<FormControlGroup
 						key={subkey + "form-label-input-pair"}
 						itemKey={subkey}
 						item={subcombo.children[subkey]}
-						onInputChange={(input) => onSubFormInputChange(input, subkey)}
+						onFormControlChange={(input) =>
+							onSubFormControlChange(input, subkey)
+						}
 					/>
 				))}
 			</div>
@@ -136,26 +144,60 @@ function SubForm({ subcombo, onSubFormInputChange = (f) => f }) {
 	);
 }
 
-function LabelInputGroup({ item, itemKey, onInputChange }) {
+function FormControlGroup({
+	item,
+	itemKey,
+	onFormControlChange,
+	formControlType = "input",
+}) {
 	const { theme } = useTheme();
 	return (
-		<div className="form-label-input-pair">
-			<label htmlFor={itemKey} className="form-label">
-				{item.placeholder}:
-			</label>
-			<input
-				id={itemKey}
-				className={
-					"form-control mb-2 bg-" +
-					theme.mode +
-					" text-" +
-					(theme.mode === "dark" ? "light" : "dark")
-				}
-				type={item.type}
-				value={item.value}
-				placeholder={item.placeholder}
-				onChange={(e) => onInputChange(e.target.value)}
-			/>
+		<div className="form-control-group">
+			<Label htmlFor={itemKey} text={`${item.placeholder}:`} />
+			{formControlType === "input" && (
+				<Input
+					id={itemKey}
+					className={
+						"form-control mb-2 bg-" +
+						theme.mode +
+						" text-" +
+						(theme.mode === "dark" ? "light" : "dark")
+					}
+					type={item.type}
+					value={item.value}
+					placeholder={item.placeholder}
+					onChange={(e) => onFormControlChange(e.target.value)}
+				/>
+			)}
+			{formControlType === "textarea" && (
+				<TextArea
+					id={itemKey}
+					className={
+						"form-control mb-2 bg-" +
+						theme.mode +
+						" text-" +
+						(theme.mode === "dark" ? "light" : "dark")
+					}
+					value={item.value}
+					placeholder={item.placeholder}
+					onChange={(e) => onFormControlChange(e.target.value)}
+				/>
+			)}
+			{formControlType === "select" && (
+				<Select
+					id={itemKey}
+					className={
+						"form-control mb-2 bg-" +
+						theme.mode +
+						" text-" +
+						(theme.mode === "dark" ? "light" : "dark")
+					}
+					value={item.value}
+					options={item.options}
+					placeholder={item.placeholder}
+					onChange={(e) => onFormControlChange(e.target.value)}
+				/>
+			)}
 		</div>
 	);
 }
@@ -413,7 +455,7 @@ but this idea below is better !!! check it out:
 
 <Form>
     <SubForm>
-        <LabelInputGroup>
+        <FormControlGroup>
     <SubmitButton>
 
 const FORM_STRUCTURE = {

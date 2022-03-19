@@ -24,13 +24,10 @@ export function StoreProvider({ children }) {
 				});
 				console.log("User logged in. User:", user);
 
-				//================================== OFF FOR TESTS:
-
-				// this below is used to fetch sources (experimental feature, don't use it)
-				fetchFromDatabase("items", user.uid, dispatch);
-				fetchFromDatabase("tags", user.uid, dispatch);
-				fetchFromDatabase("sources", user.uid, dispatch);
-				fetchFromDatabase("authors", user.uid, dispatch);
+				//fetchFromDatabase("items", user.uid, dispatch);
+				//fetchFromDatabase("tags", user.uid, dispatch);
+				//fetchFromDatabase("sources", user.uid, dispatch);
+				//fetchFromDatabase("authors", user.uid, dispatch);
 			} else {
 				dispatch({ type: "reset-state" });
 				console.log("User is logged out. Store was reset.");
