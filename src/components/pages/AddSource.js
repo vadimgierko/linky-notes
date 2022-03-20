@@ -14,42 +14,27 @@ import { useEffect, useState } from "react";
 
 const generateFormStructure = (state) => {
 	const FORM_STRUCTURE = {
+		//==================================== form structure items (each key object = item):
 		author: {
 			// select author:
 			type: "select",
 			options: generateAuthorOptions(state),
-			// forNew: {
-			// 	firstName: {
-			// 		formControl: {
-			// 			type: "input",
-			// 			props: {
-			// 				type: "text",
-			// 				value: "",
-			// 				placeholder: "first name",
-			// 			},
-			// 		},
-			// 	},
-			// 	middleName: {
-			// 		formControl: {
-			// 			type: "input",
-			// 			props: {
-			// 				type: "text",
-			// 				value: "",
-			// 				placeholder: "middle name",
-			// 			},
-			// 		},
-			// 	},
-			// 	lastName: {
-			// 		formControl: {
-			// 			type: "input",
-			// 			props: {
-			// 				type: "text",
-			// 				value: "",
-			// 				placeholder: "last name",
-			// 			},
-			// 		},
-			// 	},
-			// },
+			forNewOption: {
+				// this prop is only for select:
+				// here you can define what props (structure) should have this particular form structure item
+				// if we want to add a new item, not present in database (in options)
+				// and we define it the same way as we define any other form item
+				// but it must be nested in this particular object under the key, where options are defined
+				firstName: {
+					placeholder: "first name",
+				},
+				middleName: {
+					placeholder: "middle name",
+				},
+				lastName: {
+					placeholder: "last name",
+				},
+			},
 		},
 		title: {},
 		subtitle: {},

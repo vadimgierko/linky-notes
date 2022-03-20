@@ -38,8 +38,9 @@ export default function Form({
 	structure,
 	data,
 	formTitle,
-	submitText = "call to action goes here",
-	onSubmit = (objectReturnedFromForm) => console.log(objectReturnedFromForm),
+	submitText,
+	onSubmit,
+	onFormChange,
 	link,
 }) {
 	const [combo, setCombo] = useState();
@@ -50,7 +51,7 @@ export default function Form({
 		}
 	}, [structure]);
 
-	//useEffect(() => console.log("changes in combo:", combo), [combo]);
+	useEffect(() => console.log("changes in combo:", combo), [combo]);
 
 	if (!structure)
 		return (
@@ -68,7 +69,8 @@ export default function Form({
 			<h1 className="text-center">{formTitle}</h1>
 			{Object.keys(combo).map((key) => {
 				return key.includes("subform") ? (
-					<SubForm
+					{
+						/* <SubForm
 						key={combo[key].parentKey + "-subform"}
 						subcombo={combo[key]}
 						onSubFormControlChange={(input, subkey) => {
@@ -86,7 +88,8 @@ export default function Form({
 								},
 							});
 						}}
-					/>
+					/> */
+					}
 				) : (
 					<FieldSet
 						key={key + "-fieldset"}
@@ -106,46 +109,48 @@ export default function Form({
 				);
 			})}
 			<br />
-			<SubmitFormSection
-				submitText={submitText}
-				onSubmit={() => onSubmit(extractItemDataFromCombo(combo))}
-				link={link}
-			/>
+			{onSubmit && (
+				<SubmitFormSection
+					submitText={submitText}
+					onSubmit={() => onSubmit(extractItemDataFromCombo(combo))}
+					link={link}
+				/>
+			)}
 		</form>
 	);
 }
 
 //==================================// SUB COMPONENTS //=======================================
 
-function SubForm({ subcombo, onSubFormControlChange = (f) => f }) {
-	if (!subcombo)
-		return (
-			<p className="subform">
-				No subform structure object has been passed to the SubForm component, so
-				the app cannot build the SubForm for you... You need to pass a SubForm
-				subcombo structure object to create the form!
-			</p>
-		);
-	return (
-		<div className="subform">
-			<hr />
-			<p>{subcombo.parentKey}:</p>
-			<div className="ms-3">
-				{Object.keys(subcombo.children).map((subkey) => (
-					<FieldSet
-						key={subkey + "-fieldset"}
-						itemKey={subkey}
-						item={subcombo.children[subkey]}
-						onFormControlChange={(input) =>
-							onSubFormControlChange(input, subkey)
-						}
-					/>
-				))}
-			</div>
-			<hr />
-		</div>
-	);
-}
+// function SubForm({ subcombo, onSubFormControlChange = (f) => f }) {
+// 	if (!subcombo)
+// 		return (
+// 			<p className="subform">
+// 				No subform structure object has been passed to the SubForm component, so
+// 				the app cannot build the SubForm for you... You need to pass a SubForm
+// 				subcombo structure object to create the form!
+// 			</p>
+// 		);
+// 	return (
+// 		<div className="subform">
+// 			<hr />
+// 			<p>{subcombo.parentKey}:</p>
+// 			<div className="ms-3">
+// 				{Object.keys(subcombo.children).map((subkey) => (
+// 					<FieldSet
+// 						key={subkey + "-fieldset"}
+// 						itemKey={subkey}
+// 						item={subcombo.children[subkey]}
+// 						onFormControlChange={(input) =>
+// 							onSubFormControlChange(input, subkey)
+// 						}
+// 					/>
+// 				))}
+// 			</div>
+// 			<hr />
+// 		</div>
+// 	);
+// }
 
 function FieldSet({ item, itemKey, onFormControlChange }) {
 	const { theme } = useTheme();
@@ -183,7 +188,19 @@ function FieldSet({ item, itemKey, onFormControlChange }) {
 					}`}
 					value={item.value}
 					options={item.options}
-					onChange={(e) => onFormControlChange(e.target.value)}
+					forNewOption={item.forNewOption}
+					onSelectChange={(e) => onFormControlChange(e.target.value)}
+					onCheckboxChange={(isCheckboxChecked) => {
+						if (isCheckboxChecked) {
+							// if checkbox was checked (returned true)
+							// it means that user want to add a new option
+							// so we need to erase previously selected value
+							onFormControlChange("");
+							// and add newOptionObject instead of select form control
+							// what means that we need to add form controls:
+							//================================================================== HERE WE NEED TO CHANGE COMBO FOR THIS KEY
+						}
+					}}
 				/>
 			)}
 		</fieldset>
@@ -209,66 +226,111 @@ function SubmitFormSection({ submitText, onSubmit, link }) {
 
 //====================================== METHODS ==========================================
 
+function transformFormStructureItemObjectIntoComboItemObject(
+	formStructureItemObject = {},
+	key
+) {
+	let comboItemObject = {};
+	// check if there is a type defined:
+	if (formStructureItemObject.type) {
+		if (
+			formStructureItemObject.type !== "select" &&
+			formStructureItemObject.type !== "textarea" // it means that it is a some type of input, like "text", "password" etc.
+		) {
+			comboItemObject = {
+				...comboItemObject,
+				label: formStructureItemObject.label
+					? formStructureItemObject.label
+					: key,
+				type: formStructureItemObject.type,
+				value: formStructureItemObject.value
+					? formStructureItemObject.value
+					: "",
+				placeholder: formStructureItemObject.placeholder
+					? formStructureItemObject.placeholder
+					: key,
+			};
+		}
+		if (formStructureItemObject.type === "textarea") {
+			comboItemObject = {
+				...comboItemObject,
+				label: formStructureItemObject.label
+					? formStructureItemObject.label
+					: key,
+				type: "textarea",
+				value: formStructureItemObject.value
+					? formStructureItemObject.value
+					: "",
+				placeholder: formStructureItemObject.placeholder
+					? formStructureItemObject.placeholder
+					: "type something here",
+			};
+		}
+		if (formStructureItemObject.type === "select") {
+			// if this is a select form control
+			// we will deal with options list object passed via FORM_STRUCTURE object
+			// & we also can deal with newOption prop if it's defined
+			// so we create newOptionObject to eventually populate it if newOption prop exists
+			let newOptionObject = {};
+			// check if there is newOption prop:
+			if (formStructureItemObject.forNewOption) {
+				// if true, populate newOptionObject with transformed forNewOption object:
+				Object.keys(formStructureItemObject.forNewOption).forEach((key) => {
+					newOptionObject = {
+						...newOptionObject,
+						[key]: transformFormStructureItemObjectIntoComboItemObject(
+							formStructureItemObject.forNewOption[key],
+							key
+						),
+					};
+				});
+			}
+			comboItemObject = {
+				...comboItemObject,
+				label: formStructureItemObject.label
+					? formStructureItemObject.label
+					: key,
+				type: "select",
+				value: formStructureItemObject.value
+					? formStructureItemObject.value
+					: "",
+				options: formStructureItemObject.options
+					? formStructureItemObject.options
+					: {},
+				forNewOption: formStructureItemObject.forNewOption
+					? newOptionObject //formStructureItemObject.forNewOption
+					: null,
+			};
+		}
+	} else {
+		// false => this is the default input of type: "text":
+		comboItemObject = {
+			...comboItemObject,
+			label: formStructureItemObject.label
+				? formStructureItemObject.label
+				: key,
+			type: "text",
+			value: formStructureItemObject.value ? formStructureItemObject.value : "",
+			placeholder: formStructureItemObject.placeholder
+				? formStructureItemObject.placeholder
+				: key,
+		};
+	}
+	return comboItemObject;
+}
+
 function initiateComboFromStructure(structure, hook = (f) => f) {
 	let updatedCombo = {};
 	let subformsNum = 0;
 	Object.keys(structure).map((key) => {
-		// check if there is a type defined:
-		if (structure[key].type) {
-			if (
-				structure[key].type !== "select" &&
-				structure[key].type !== "textarea" // it means that it is a some type of input, like "text", "password" etc.
-			) {
-				updatedCombo = {
-					...updatedCombo,
-					[key]: {
-						label: structure[key].label ? structure[key].label : key,
-						type: structure[key].type,
-						value: structure[key].value ? structure[key].value : "",
-						placeholder: structure[key].placeholder
-							? structure[key].placeholder
-							: key,
-					},
-				};
-			}
-			if (structure[key].type === "select") {
-				updatedCombo = {
-					...updatedCombo,
-					[key]: {
-						label: structure[key].label ? structure[key].label : key,
-						type: "select",
-						value: structure[key].value ? structure[key].value : "",
-						options: structure[key].options ? structure[key].options : {},
-					},
-				};
-			}
-			if (structure[key].type === "textarea") {
-				updatedCombo = {
-					...updatedCombo,
-					[key]: {
-						label: structure[key].label ? structure[key].label : key,
-						type: "textarea",
-						value: structure[key].value ? structure[key].value : "",
-						placeholder: structure[key].placeholder
-							? structure[key].placeholder
-							: "type something here",
-					},
-				};
-			}
-		} else {
-			// false => this is the default input of type: "text":
-			updatedCombo = {
-				...updatedCombo,
-				[key]: {
-					label: structure[key].label ? structure[key].label : key,
-					type: "text",
-					value: structure[key].value ? structure[key].value : "",
-					placeholder: structure[key].placeholder
-						? structure[key].placeholder
-						: key,
-				},
-			};
-		}
+		const comboItemObject = transformFormStructureItemObjectIntoComboItemObject(
+			structure[key],
+			key
+		);
+		updatedCombo = {
+			...updatedCombo,
+			[key]: comboItemObject,
+		};
 		// here we must check every key if it needs a subform
 		// it means that this key forms keys group
 		// if (Object.entries(structure[key]).length > 1) {
