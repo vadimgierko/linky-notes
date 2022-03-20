@@ -3,6 +3,7 @@ export default function Select({
 	options = {},
 	value = "",
 	className,
+	placeholder,
 	onChange = (e) => console.log(e.target.value),
 }) {
 	// options will be an object type: {
@@ -10,6 +11,7 @@ export default function Select({
 	// }
 	return (
 		<select className={className} id={id} value={value} onChange={onChange}>
+			<option value="">select from database</option>
 			{Object.keys(options).map((key) => (
 				<option key={key} value={key}>
 					{options[key]}

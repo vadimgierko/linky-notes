@@ -27,7 +27,7 @@ export function StoreProvider({ children }) {
 				//fetchFromDatabase("items", user.uid, dispatch);
 				//fetchFromDatabase("tags", user.uid, dispatch);
 				//fetchFromDatabase("sources", user.uid, dispatch);
-				//fetchFromDatabase("authors", user.uid, dispatch);
+				fetchFromDatabase("authors", user.uid, dispatch);
 			} else {
 				dispatch({ type: "reset-state" });
 				console.log("User is logged out. Store was reset.");

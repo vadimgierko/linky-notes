@@ -17,7 +17,7 @@ import Button from "../atoms/Button";
 //   - <Form /> (the only one exported)
 // - subcomponents:
 //   - <Subform />
-//     - <FormControlGroup />
+//     - <FieldSet />
 //   - <SubmitFormSection />
 // - methods:
 //   - initiateComboFromStructure()
@@ -37,6 +37,7 @@ import Button from "../atoms/Button";
 export default function Form({
 	structure,
 	data,
+	formTitle,
 	submitText = "call to action goes here",
 	onSubmit = (objectReturnedFromForm) => console.log(objectReturnedFromForm),
 	link,
@@ -64,6 +65,7 @@ export default function Form({
 
 	return (
 		<form>
+			<h1 className="text-center">{formTitle}</h1>
 			{Object.keys(combo).map((key) => {
 				return key.includes("subform") ? (
 					<SubForm
@@ -86,19 +88,20 @@ export default function Form({
 						}}
 					/>
 				) : (
-					<FormControlGroup
-						key={key + "form-label-input-pair"}
+					<FieldSet
+						key={key + "-fieldset"}
 						itemKey={key}
 						item={combo[key]}
-						onFormControlChange={(input) =>
+						onFormControlChange={(input) => {
 							setCombo({
 								...combo,
 								[key]: {
 									...combo[key],
 									value: input,
 								},
-							})
-						}
+							});
+							console.log("value changed onFormControlChange:", input);
+						}}
 					/>
 				);
 			})}
@@ -129,8 +132,8 @@ function SubForm({ subcombo, onSubFormControlChange = (f) => f }) {
 			<p>{subcombo.parentKey}:</p>
 			<div className="ms-3">
 				{Object.keys(subcombo.children).map((subkey) => (
-					<FormControlGroup
-						key={subkey + "form-label-input-pair"}
+					<FieldSet
+						key={subkey + "-fieldset"}
 						itemKey={subkey}
 						item={subcombo.children[subkey]}
 						onFormControlChange={(input) =>
@@ -144,61 +147,46 @@ function SubForm({ subcombo, onSubFormControlChange = (f) => f }) {
 	);
 }
 
-function FormControlGroup({
-	item,
-	itemKey,
-	onFormControlChange,
-	formControlType = "input",
-}) {
+function FieldSet({ item, itemKey, onFormControlChange }) {
 	const { theme } = useTheme();
 	return (
-		<div className="form-control-group">
-			<Label htmlFor={itemKey} text={`${item.placeholder}:`} />
-			{formControlType === "input" && (
+		<fieldset>
+			<Label htmlFor={itemKey} text={`${item.label}`} />
+			{item.type !== "select" && item.type !== "textarea" && (
 				<Input
 					id={itemKey}
-					className={
-						"form-control mb-2 bg-" +
-						theme.mode +
-						" text-" +
-						(theme.mode === "dark" ? "light" : "dark")
-					}
+					className={`form-control mb-2 bg-${theme.mode} text-${
+						theme.mode === "dark" ? "light" : "dark"
+					}`}
 					type={item.type}
 					value={item.value}
 					placeholder={item.placeholder}
 					onChange={(e) => onFormControlChange(e.target.value)}
 				/>
 			)}
-			{formControlType === "textarea" && (
+			{item.type === "textarea" && (
 				<TextArea
 					id={itemKey}
-					className={
-						"form-control mb-2 bg-" +
-						theme.mode +
-						" text-" +
-						(theme.mode === "dark" ? "light" : "dark")
-					}
+					className={`form-control mb-2 bg-${theme.mode} text-${
+						theme.mode === "dark" ? "light" : "dark"
+					}`}
 					value={item.value}
 					placeholder={item.placeholder}
 					onChange={(e) => onFormControlChange(e.target.value)}
 				/>
 			)}
-			{formControlType === "select" && (
+			{item.type === "select" && (
 				<Select
 					id={itemKey}
-					className={
-						"form-control mb-2 bg-" +
-						theme.mode +
-						" text-" +
-						(theme.mode === "dark" ? "light" : "dark")
-					}
+					className={`form-select mb-2 bg-${theme.mode} text-${
+						theme.mode === "dark" ? "light" : "dark"
+					}`}
 					value={item.value}
 					options={item.options}
-					placeholder={item.placeholder}
 					onChange={(e) => onFormControlChange(e.target.value)}
 				/>
 			)}
-		</div>
+		</fieldset>
 	);
 }
 
@@ -225,41 +213,55 @@ function initiateComboFromStructure(structure, hook = (f) => f) {
 	let updatedCombo = {};
 	let subformsNum = 0;
 	Object.keys(structure).map((key) => {
-		// here we must check every key if it needs a subform
-		// it means that this key forms keys group
-		if (Object.entries(structure[key]).length > 1) {
-			//console.log(key, " is a parent key => create subform", subformsNum);
-			const parentKey = key;
-			let children = {};
-			Object.keys(structure[key]).map((subKey) => {
-				children = {
-					...children,
-					[subKey]: {
-						type: structure[key][subKey].type
-							? structure[key][subKey].type
-							: "text",
-						value: structure[key][subKey].value
-							? structure[key][subKey].value
-							: "",
-						placeholder: structure[key][subKey].placeholder
-							? structure[key][subKey].placeholder
-							: subKey,
+		// check if there is a type defined:
+		if (structure[key].type) {
+			if (
+				structure[key].type !== "select" &&
+				structure[key].type !== "textarea" // it means that it is a some type of input, like "text", "password" etc.
+			) {
+				updatedCombo = {
+					...updatedCombo,
+					[key]: {
+						label: structure[key].label ? structure[key].label : key,
+						type: structure[key].type,
+						value: structure[key].value ? structure[key].value : "",
+						placeholder: structure[key].placeholder
+							? structure[key].placeholder
+							: key,
 					},
 				};
-			});
-			updatedCombo = {
-				...updatedCombo,
-				["subform" + subformsNum]: {
-					parentKey: parentKey,
-					children: children,
-				},
-			};
-			subformsNum++;
+			}
+			if (structure[key].type === "select") {
+				updatedCombo = {
+					...updatedCombo,
+					[key]: {
+						label: structure[key].label ? structure[key].label : key,
+						type: "select",
+						value: structure[key].value ? structure[key].value : "",
+						options: structure[key].options ? structure[key].options : {},
+					},
+				};
+			}
+			if (structure[key].type === "textarea") {
+				updatedCombo = {
+					...updatedCombo,
+					[key]: {
+						label: structure[key].label ? structure[key].label : key,
+						type: "textarea",
+						value: structure[key].value ? structure[key].value : "",
+						placeholder: structure[key].placeholder
+							? structure[key].placeholder
+							: "type something here",
+					},
+				};
+			}
 		} else {
+			// false => this is the default input of type: "text":
 			updatedCombo = {
 				...updatedCombo,
 				[key]: {
-					type: structure[key].type ? structure[key].type : "text",
+					label: structure[key].label ? structure[key].label : key,
+					type: "text",
 					value: structure[key].value ? structure[key].value : "",
 					placeholder: structure[key].placeholder
 						? structure[key].placeholder
@@ -267,8 +269,50 @@ function initiateComboFromStructure(structure, hook = (f) => f) {
 				},
 			};
 		}
+		// here we must check every key if it needs a subform
+		// it means that this key forms keys group
+		// if (Object.entries(structure[key]).length > 1) {
+		// 	//console.log(key, " is a parent key => create subform", subformsNum);
+		// 	const parentKey = key;
+		// 	let children = {};
+		// 	Object.keys(structure[key]).map((subKey) => {
+		// 		children = {
+		// 			...children,
+		// 			[subKey]: {
+		// 				type: structure[key][subKey].type
+		// 					? structure[key][subKey].type
+		// 					: "text",
+		// 				value: structure[key][subKey].value
+		// 					? structure[key][subKey].value
+		// 					: "",
+		// 				placeholder: structure[key][subKey].placeholder
+		// 					? structure[key][subKey].placeholder
+		// 					: subKey,
+		// 			},
+		// 		};
+		// 	});
+		// 	updatedCombo = {
+		// 		...updatedCombo,
+		// 		["subform" + subformsNum]: {
+		// 			parentKey: parentKey,
+		// 			children: children,
+		// 		},
+		// 	};
+		// 	subformsNum++;
+		// } else {
+		// 	updatedCombo = {
+		// 		...updatedCombo,
+		// 		[key]: {
+		// 			type: structure[key].type ? structure[key].type : "text",
+		// 			value: structure[key].value ? structure[key].value : "",
+		// 			placeholder: structure[key].placeholder
+		// 				? structure[key].placeholder
+		// 				: key,
+		// 		},
+		// 	};
+		// }
 	});
-	//console.log("Initiated combo from structure:", updatedCombo);
+	console.log("Initiated combo from structure:", updatedCombo);
 	// pass the initiated combo to the parent component by argument in passed hook:
 	hook(updatedCombo);
 }
@@ -455,7 +499,7 @@ but this idea below is better !!! check it out:
 
 <Form>
     <SubForm>
-        <FormControlGroup>
+        <FieldSet>
     <SubmitButton>
 
 const FORM_STRUCTURE = {
