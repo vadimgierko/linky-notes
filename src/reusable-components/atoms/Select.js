@@ -59,7 +59,6 @@ export default function Select({
 					</label>
 				</>
 			)}
-			{isCheckboxChecked && <p>new options go here</p>}
 		</div>
 	);
 }

@@ -16,26 +16,47 @@ const generateFormStructure = (state) => {
 	const FORM_STRUCTURE = {
 		//==================================== form structure items (each key object = item):
 		author: {
-			// select author:
-			type: "select",
-			options: generateAuthorOptions(state),
-			forNewOption: {
-				// this prop is only for select:
-				// here you can define what props (structure) should have this particular form structure item
-				// if we want to add a new item, not present in database (in options)
-				// and we define it the same way as we define any other form item
-				// but it must be nested in this particular object under the key, where options are defined
+			type: "subform",
+			subform: {
 				firstName: {
-					placeholder: "first name",
+					label: "author's first name",
+					placeholder: "author's first name",
 				},
 				middleName: {
-					placeholder: "middle name",
+					label: "author's middle name",
+					placeholder: "author's middle name",
 				},
 				lastName: {
-					placeholder: "last name",
+					label: "author's last name",
+					placeholder: "author's last name",
 				},
 			},
 		},
+		// author: {
+		// 	// select author:
+		// 	type: "select",
+		// 	options: generateAuthorOptions(state),
+		// 	forNewOption: {
+		// 		// this prop is only for select:
+		// 		// here you can define what props (structure) should have this particular form structure item
+		// 		// if we want to add a new item, not present in database (in options)
+		// 		// and we define it the same way as we define any other form item
+		// 		// but it must be nested in this particular object under the key, where options are defined
+		// 		firstName: {
+		// 			placeholder: "first name",
+		// 		},
+		// 		middleName: {
+		// 			placeholder: "middle name",
+		// 		},
+		// 		lastName: {
+		// 			placeholder: "last name",
+		// 		},
+		// 		// this above is an example of nested objects
+		// 		// in this case if author needs only one input to add a new author, f.e.: "New Author":
+		// 		// then you can just pass empty object as a value of forNewOption &
+		// 		// it will be rendered as an input type "text", value="" etc.
+		// 	},
+		// },
 		title: {},
 		subtitle: {},
 		description: {
@@ -56,7 +77,7 @@ const generateFormStructure = (state) => {
 	function generateAuthorOptions(state) {
 		{
 			if (state.authors) {
-				console.log("I'm working! Authors:", state.authors);
+				//console.log("I'm working! Authors:", state.authors);
 				let selectOptions = {};
 				if (state.authors) {
 					Object.keys(state.authors).forEach((key) => {
@@ -87,8 +108,9 @@ export default function AddSource() {
 	}
 
 	useEffect(() => {
-		setFormStructure(generateFormStructure(state));
-		console.log("state:", state);
+		const generatedFormStructure = generateFormStructure(state);
+		setFormStructure(generatedFormStructure);
+		//console.log("state:", state);
 	}, [state]);
 
 	// if (!state.user)
@@ -100,11 +122,11 @@ export default function AddSource() {
 
 	return (
 		<div className="add-source-page">
+			<h1 className="text-center">Add new source</h1>
 			<div className="add-source-form">
 				<Form
 					structure={formStructure}
 					data={null}
-					formTitle="Add new source"
 					submitText="add a source" // the text for the submit button
 					onSubmit={handleSubmit}
 					//link="/sources" // add link, if you want to submit item be a link button
