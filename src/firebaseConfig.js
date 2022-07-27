@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-//import { getStorage } from "firebase/storage";
+// import { getFirestore } from "firebase/firestore";
 
 // Add your Firebase credentials
 const firebaseConfig = {
@@ -15,9 +15,13 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+// Initialize Firebase Authentication and get a reference to the service
+export const auth = getAuth(app);
 
-export const firebaseAuth = getAuth(app);
+// Initialize Firebase Realtime Database and get a reference to the service:
 export const database = getDatabase(app);
+// TODO: export const rtdb = getDatabase(app);
 
-// Get a reference to the storage service, which is used to create references in your storage bucket
-//export const storage = getStorage(app);
+// TODO: replace rtdb with firestore, so init firestore:
+// Initialize Cloud Firestore and get a reference to the service:
+//export const firestore = getFirestore(app);

@@ -6,18 +6,26 @@ import "./styles.css";
 import App from "./App";
 import { ThemeProvider } from "./hooks/use-theme.js";
 import { StoreProvider } from "./store/Store";
+// redux:
+// TODO: when old Context Store will be replaced, rename "redux-store" folder into "store":
+import store from "./redux-store/store";
+import { Provider } from "react-redux";
 
 const rootElement = document.getElementById("root");
 
+// NOTE:
+// <StrictMode> is off (deleted) to prevent the double fetching data from database in dev mode.
+// Uncomment this code when build.
+
 ReactDOM.render(
-	<StrictMode>
-		<HashRouter>
-			<ThemeProvider>
-				<StoreProvider>
+	<HashRouter>
+		<ThemeProvider>
+			<StoreProvider>
+				<Provider store={store}>
 					<App />
-				</StoreProvider>
-			</ThemeProvider>
-		</HashRouter>
-	</StrictMode>,
+				</Provider>
+			</StoreProvider>
+		</ThemeProvider>
+	</HashRouter>,
 	rootElement
 );

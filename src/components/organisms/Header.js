@@ -1,24 +1,17 @@
-import { useTheme } from "../../hooks/use-theme";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useTheme } from "../../hooks/use-theme";
 import NavLinksList from "../Header/molecules/NavLinksList";
 import ThemeSwitchButton from "../Header/atoms/ThemeSwitchButton";
-import { useStore } from "../../store/Store";
-import logOut from "../../logic/logOut";
+import logOut from "../../auth/logOut";
 import LoggedUserEmail from "../Header/atoms/LoggedUserEmail";
 import LogButtonsSection from "../Header/molecules/LogButtonsSection";
 
-const SECTIONS_LIST = [
-	"about",
-	"notes",
-	"tags",
-	//"sources",
-	"add note",
-	//"add source",
-];
+const SECTIONS_LIST = ["about", "notes", "tags", "add note"];
 
 export default function Header() {
 	const { theme } = useTheme();
-	const { state } = useStore();
+	const user = useSelector((state) => state.user.value);
 
 	const [isNavCollapsed, setIsNavCollapsed] = useState(true);
 
@@ -50,9 +43,7 @@ export default function Header() {
 				</button>
 
 				<div
-					className={`${
-						isNavCollapsed ? "collapse" : null
-					} navbar-collapse`}
+					className={`${isNavCollapsed ? "collapse" : null} navbar-collapse`}
 					id="navbarColor01"
 				>
 					<NavLinksList
@@ -63,16 +54,16 @@ export default function Header() {
 							}
 						}}
 					/>
-					<LoggedUserEmail user={state.user} />
+					<LoggedUserEmail user={user} />
 					<ThemeSwitchButton
 						isNavCollapsed={isNavCollapsed}
 						handleNavCollapse={handleNavCollapse}
 					/>
 					<LogButtonsSection
-						user={state.user}
+						user={user}
 						isNavCollapsed={isNavCollapsed}
 						onLogButtonClick={() => {
-							if (state.user) {
+							if (user.id) {
 								logOut();
 							}
 							if (!isNavCollapsed) {

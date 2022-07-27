@@ -5,7 +5,7 @@ export default function LogButtonsSection({
 	isNavCollapsed,
 	onLogButtonClick,
 }) {
-	if (!user)
+	if (!user.id)
 		return (
 			<div className="log-buttons-section">
 				<LogButton
@@ -30,6 +30,7 @@ export default function LogButtonsSection({
 				/>
 			</div>
 		);
+
 	return (
 		<div className="log-buttons-sections">
 			<LogButton

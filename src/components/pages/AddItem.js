@@ -1,12 +1,12 @@
+import { useSelector } from "react-redux";
 import { useTheme } from "../../hooks/use-theme";
-import { useStore } from "../../store/Store";
 import ItemForm from "../organisms/ItemForm";
 
 export default function AddItem() {
 	const { theme } = useTheme();
-	const { state } = useStore();
+	const user = useSelector((state) => state.user.value);
 
-	if (!state.user) return <p>You need to log in to add an item...</p>;
+	if (!user.id) return <p>You need to log in to add an item...</p>;
 
 	return (
 		<div

@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { useStore } from "../../store/Store";
 import TagLinkButton from "../atoms/TagLinkButton";
 
@@ -36,8 +37,9 @@ const ALPHABET = [
 
 export default function Tags() {
 	const { state } = useStore();
+	const user = useSelector((state) => state.user.value);
 
-	if (!state.user) return <p>You need to be logged to see your tags...</p>;
+	if (!user.id) return <p>You need to be logged to see your tags...</p>;
 
 	if (!state.tags || !Object.entries(state.tags).length)
 		return <p>There are no tags so far...</p>;

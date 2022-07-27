@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
-import signIn from "../../logic/signIn";
+import signIn from "../../auth/signIn";
 
 export default function SignIn() {
 	const { theme } = useTheme();

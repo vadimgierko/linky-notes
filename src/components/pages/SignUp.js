@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
-import signUp from "../../logic/signUp";
+import signUp from "../../auth/signUp";
 
 export default function SignUp() {
 	const { theme } = useTheme();
