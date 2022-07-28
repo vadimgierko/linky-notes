@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useTheme } from "../../hooks/use-theme";
+// components:
 import TagSearchForm from "../organisms/TagSearchForm";
 import ItemsList from "../organisms/ItemsList";
 

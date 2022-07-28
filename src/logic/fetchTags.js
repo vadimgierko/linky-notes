@@ -1,9 +1,9 @@
-import { database } from "../firebaseConfig";
+import { rtdb } from "../firebaseConfig";
 import { onValue, ref } from "firebase/database";
 
 export default function fetchTags(userId, dispatch) {
 	return onValue(
-		ref(database, "tags/" + userId),
+		ref(rtdb, "tags/" + userId),
 		(snapshot) => {
 			const data = snapshot.val();
 			if (data) {

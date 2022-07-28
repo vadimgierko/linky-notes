@@ -1,8 +1,8 @@
-import { database } from "../firebaseConfig.js";
+import { rtdb } from "../firebaseConfig.js";
 import { ref, remove } from "firebase/database";
 
 function deleteItemFromDatabase(key, userId) {
-	return remove(ref(database, "items/" + userId + "/" + key)).then(() =>
+	return remove(ref(rtdb, "items/" + userId + "/" + key)).then(() =>
 		console.log("Item with the key,", key, " was deleted from database.")
 	);
 }
@@ -12,11 +12,7 @@ export default function deleteItem(key, userId, dispatch) {
 		deleteItemFromDatabase(key, userId)
 			//.then(() => deleteItemFromUsersItemsList(key, userId))
 			.then(() => {
-				console.log(
-					"Item with the key",
-					key,
-					"was deleted successfully!"
-				);
+				console.log("Item with the key", key, "was deleted successfully!");
 				dispatch({
 					type: "delete-item",
 					payload: {

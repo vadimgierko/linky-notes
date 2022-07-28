@@ -1,4 +1,4 @@
-import { database } from "../firebaseConfig";
+import { rtdb } from "../firebaseConfig";
 import { onValue, ref } from "firebase/database";
 
 //=========== NEED TO LIMIT THIS FETCH UP TO 10 LAST
@@ -6,7 +6,7 @@ import { onValue, ref } from "firebase/database";
 
 export default function fetchItems(userId, dispatch) {
 	return onValue(
-		ref(database, "items/" + userId),
+		ref(rtdb, "items/" + userId),
 		(snapshot) => {
 			const data = snapshot.val();
 			if (data) {

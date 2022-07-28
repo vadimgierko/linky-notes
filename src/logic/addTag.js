@@ -1,8 +1,8 @@
-import { database } from "../firebaseConfig.js";
+import { rtdb } from "../firebaseConfig.js";
 import { ref, set, push, child } from "firebase/database";
 
 function addTagToDatabase(tag, userId, key) {
-	return set(ref(database, "tags/" + userId + "/" + key), {
+	return set(ref(rtdb, "tags/" + userId + "/" + key), {
 		tag: tag,
 	}).then(() =>
 		console.log("Tag", tag, "was added to database under the key,", key)

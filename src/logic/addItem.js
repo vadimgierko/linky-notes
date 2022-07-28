@@ -1,14 +1,12 @@
-import { database } from "../firebaseConfig.js";
+import { rtdb } from "../firebaseConfig.js";
 import { ref, set, push, child } from "firebase/database";
 import { createDate } from "../functions/functions";
 import addTag from "./addTag.js";
 
 function addItemToDatabase(item, userId, key) {
-	return set(ref(database, "items/" + userId + "/" + key), {
+	return set(ref(rtdb, "items/" + userId + "/" + key), {
 		...item,
-	}).then(() =>
-		console.log("Item was added to database under the key,", key)
-	);
+	}).then(() => console.log("Item was added to database under the key,", key));
 }
 
 export default function addItem(item, userId, dispatch) {
@@ -23,9 +21,7 @@ export default function addItem(item, userId, dispatch) {
 	// add new tags if exist & append them to itemToAdd.tags object
 	if (itemToAdd.newTags && itemToAdd.newTags.length) {
 		itemToAdd.newTags.forEach((newTag) => {
-			const firebaseKey = push(
-				child(ref(database), "tags/" + userId)
-			).key;
+			const firebaseKey = push(child(ref(rtdb), "tags/" + userId)).key;
 
 			addTag(newTag, firebaseKey, userId, dispatch);
 
@@ -42,10 +38,7 @@ export default function addItem(item, userId, dispatch) {
 	}
 
 	// append existing tags if exist to itemToAdd.tags object
-	if (
-		itemToAdd.existingTags &&
-		Object.entries(itemToAdd.existingTags).length
-	) {
+	if (itemToAdd.existingTags && Object.entries(itemToAdd.existingTags).length) {
 		itemToAdd = {
 			...itemToAdd,
 			tags: {
@@ -59,7 +52,7 @@ export default function addItem(item, userId, dispatch) {
 	delete itemToAdd.newTags;
 	delete itemToAdd.existingTags;
 
-	const key = push(child(ref(database), "items/" + userId)).key;
+	const key = push(child(ref(rtdb), "items/" + userId)).key;
 
 	return addItemToDatabase(itemToAdd, userId, key)
 		.then(() => {

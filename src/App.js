@@ -4,6 +4,9 @@ import { auth } from "./firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 // reducers actions:
 import { userSignedIn, userLoggedOut } from "./features/user/userSlice";
+import { resetState } from "./features/notes/notesSlice";
+// thunks:
+import { fetchNotes } from "./thunks/notes/fetchNotes";
 //================================================
 import { Switch, Route } from "react-router-dom";
 import { useTheme } from "./hooks/use-theme";
@@ -40,11 +43,11 @@ export default function App() {
 					const email = user.email;
 					dispatch(userSignedIn({ email: email, id: uid }));
 					//========> UNCOMMENT THIS CODE TO FETCH AFTER APP MOUNTS & USER IS LOGGED:
-					//dispatch(fetchItems({ reference: "items/" + uid }));
+					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
-					//dispatch(resetState());
+					dispatch(resetState());
 				}
 			});
 		return unsubscribe();

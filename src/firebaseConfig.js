@@ -19,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 // Initialize Firebase Realtime Database and get a reference to the service:
-export const database = getDatabase(app);
+export const rtdb = getDatabase(app);
 // TODO: export const rtdb = getDatabase(app);
 
 // TODO: replace rtdb with firestore, so init firestore:

@@ -43,7 +43,8 @@ I've made this app first of all for myself. I read a lot, create a lot and... do
 ## Technologies I've used in this project:
 - React 17
 - React Router 5.2
-- React Context & useContext
+- React Context API
+- Redux (Toolkit)
 - Firebase 9.1 (authentication, realtime database, storage)
 - Bootstrap 5.1
 

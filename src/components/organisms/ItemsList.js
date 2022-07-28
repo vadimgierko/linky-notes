@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useTheme } from "../../hooks/use-theme";
-import { useStore } from "../../store/Store";
+//import { useStore } from "../../store/Store";
 import ItemCard from "../molecules/ItemCard";
 
 export default function ItemsList({ search }) {
 	const { theme } = useTheme();
-	const { state } = useStore();
+	const notes = useSelector((state) => state.notes.value);
+	//const { state } = useStore();
 	const [itemsList, setItemsList] = useState();
 
 	function filterItems(search) {
@@ -14,21 +16,17 @@ export default function ItemsList({ search }) {
 		if (tagsKeysStringFromSearch.length) {
 			const tagsKeysArray = tagsKeysStringFromSearch.split("+");
 
-			const filteredItemsKeys = Object.keys(state.items).filter(
-				(itemKey) => {
-					const itemTagsKeysArray = Object.keys(
-						state.items[itemKey].tags
-					);
-					const containsAllTags = tagsKeysArray.every((element) =>
-						itemTagsKeysArray.includes(element)
-					);
-					if (containsAllTags) {
-						return itemKey;
-					} else {
-						return null;
-					}
+			const filteredItemsKeys = Object.keys(notes).filter((itemKey) => {
+				const itemTagsKeysArray = Object.keys(notes[itemKey].tags);
+				const containsAllTags = tagsKeysArray.every((element) =>
+					itemTagsKeysArray.includes(element)
+				);
+				if (containsAllTags) {
+					return itemKey;
+				} else {
+					return null;
 				}
-			);
+			});
 			//console.log("filteredItemsKeys:", filteredItemsKeys);
 			let filteredItems = {};
 			for (let i = 0; i < filteredItemsKeys.length; i++) {
@@ -46,11 +44,11 @@ export default function ItemsList({ search }) {
 	}
 
 	useEffect(() => {
-		if (state && state.items && Object.entries(state.items).length) {
+		if (notes && Object.entries(notes).length) {
 			if (search) {
 				filterItems(search);
 			} else {
-				setItemsList(state.items);
+				setItemsList(notes);
 			}
 		} else {
 			console.log(
@@ -58,10 +56,10 @@ export default function ItemsList({ search }) {
 			);
 			setItemsList();
 		}
-	}, [search, state]);
+	}, [search, notes]);
 
 	if (!itemsList || !Object.entries(itemsList).length)
-		return <p>There are no items so far...</p>;
+		return <p>There are no notes so far...</p>;
 
 	return (
 		<div
@@ -69,7 +67,7 @@ export default function ItemsList({ search }) {
 				background: theme.background,
 				color: theme.color,
 			}}
-			className="items-list"
+			className="notes-list"
 		>
 			<div>
 				{Object.entries(itemsList)
@@ -79,11 +77,7 @@ export default function ItemsList({ search }) {
 						const itemKey = itemArray[0];
 						const item = itemArray[1];
 						return (
-							<ItemCard
-								key={"item-" + itemKey}
-								item={item}
-								itemKey={itemKey}
-							/>
+							<ItemCard key={"item-" + itemKey} item={item} itemKey={itemKey} />
 						);
 					})}
 			</div>

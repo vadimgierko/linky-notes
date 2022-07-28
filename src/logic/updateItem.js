@@ -1,10 +1,10 @@
-import { database } from "../firebaseConfig.js";
+import { rtdb } from "../firebaseConfig.js";
 import { ref, set, push, child } from "firebase/database";
 import { createDate } from "../functions/functions";
 import addTag from "./addTag.js";
 
 function updateItemInDatabase(item, key, userId) {
-	return set(ref(database, "items/" + userId + "/" + key), {
+	return set(ref(rtdb, "items/" + userId + "/" + key), {
 		...item,
 	}).then(() =>
 		console.log("Item was updated in database under the key,", key)
@@ -25,9 +25,7 @@ export default function updateItem(item, key, userId, dispatch) {
 	// add new tags if exist & append them to itemToAdd.tags object
 	if (updatedItem.newTags && updatedItem.newTags.length) {
 		updatedItem.newTags.forEach((newTag) => {
-			const firebaseKey = push(
-				child(ref(database), "tags/" + userId)
-			).key;
+			const firebaseKey = push(child(ref(rtdb), "tags/" + userId)).key;
 
 			addTag(newTag, firebaseKey, userId, dispatch);
 
