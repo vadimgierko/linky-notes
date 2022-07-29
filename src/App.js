@@ -11,12 +11,12 @@ import { fetchNotes } from "./thunks/notes/fetchNotes";
 import { Routes, Route } from "react-router-dom";
 import { useTheme } from "./contexts/useTheme";
 import { useStore } from "./store/Store";
-// components & pages:
-import Header from "./components/organisms/Header";
+// layout:
+import Layout from "./layout/Layout";
+// pages:
 import About from "./components/pages/About";
 import SignIn from "./components/pages/SignIn";
 import Items from "./components/pages/Items";
-import Footer from "./components/organisms/Footer";
 import AddItem from "./components/pages/AddItem";
 import UpdateItem from "./components/pages/UpdateItem";
 import Item from "./components/pages/Item";
@@ -89,30 +89,14 @@ export default function App() {
 	}, [dispatch]);
 
 	return (
-		<div
-			className="container-fluid"
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "white" : "black",
-				minHeight: "100vh",
-			}}
-		>
-			<Header />
-			<div
-				className="container"
-				style={{
-					background: theme.background,
-					color: theme.color,
-					paddingTop: 70,
-				}}
-			>
+		<div className="App">
+			<Layout>
 				<Routes>
 					{ROUTES.map((route) => (
 						<Route path={route.path} element={route.element} key={route.path} />
 					))}
 				</Routes>
-				<Footer />
-			</div>
+			</Layout>
 		</div>
 	);
 }
