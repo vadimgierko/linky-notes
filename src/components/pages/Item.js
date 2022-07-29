@@ -1,4 +1,4 @@
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ItemCard from "../molecules/ItemCard";
@@ -23,11 +23,7 @@ export default function Item() {
 				);
 			} else {
 				setItem();
-				console.log(
-					"There is no item with the key",
-					itemKey,
-					"in items."
-				);
+				console.log("There is no item with the key", itemKey, "in items.");
 			}
 		}
 	}, [state]);
@@ -38,8 +34,8 @@ export default function Item() {
 		<div
 			className="item-page"
 			style={{
-				background: theme.background,
-				color: theme.color,
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "black" : "white",
 			}}
 		>
 			<ItemCard key={"item-" + itemKey} item={item} itemKey={itemKey} />

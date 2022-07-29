@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 import signIn from "../../auth/signIn";
 
 export default function SignIn() {
@@ -25,7 +25,12 @@ export default function SignIn() {
 	};
 
 	return (
-		<div style={{ background: theme.background, color: theme.color }}>
+		<div
+			style={{
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "black" : "white",
+			}}
+		>
 			<h3>Sign in!</h3>
 			<hr />
 			<form>

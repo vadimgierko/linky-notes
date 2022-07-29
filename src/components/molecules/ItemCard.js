@@ -1,5 +1,5 @@
 import TagLinkButton from "../atoms/TagLinkButton";
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 import TrashIconButton from "../atoms/TrashIconButton";
 import PencilIconButton from "../atoms/PencilIconButton";
 import EyeIconButton from "../atoms/EyeIconButton";
@@ -14,21 +14,18 @@ export default function ItemCard({ item, itemKey }) {
 		<div
 			className={
 				"item-card card mb-2 shadow bg-" +
-				theme.mode +
-				(theme.mode === "dark" ? " border-secondary" : "")
+				theme +
+				(theme === "dark" ? " border-secondary" : "")
 			}
 		>
 			<div className="card-header">
 				<div className="row">
 					<div className="col text-muted">
-						{item.createdAt}{" "}
-						{item.updatedAt ? "/ " + item.updatedAt : null}
+						{item.createdAt} {item.updatedAt ? "/ " + item.updatedAt : null}
 					</div>
 					<div className="col text-end">
 						<EyeIconButton link={"/notes/" + itemKey} />
-						<PencilIconButton
-							link={"/notes/update-note/" + itemKey}
-						/>
+						<PencilIconButton link={"/notes/update-note/" + itemKey} />
 						<TrashIconButton
 							handleOnTrashButtonClick={() =>
 								deleteItem(itemKey, state.user.id, dispatch)

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 import ItemForm from "../organisms/ItemForm";
 
 export default function AddItem() {
@@ -11,7 +11,10 @@ export default function AddItem() {
 	return (
 		<div
 			className="add-item-page"
-			style={{ background: theme.background, color: theme.color }}
+			style={{
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "black" : "white",
+			}}
 		>
 			<ItemForm />
 		</div>

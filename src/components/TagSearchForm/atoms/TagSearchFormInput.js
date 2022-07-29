@@ -1,4 +1,4 @@
-import { useTheme } from "../../../hooks/use-theme";
+import { useTheme } from "../../../contexts/useTheme";
 
 export default function TagSearchFormInput({ inputValue, handleChange }) {
 	const { theme } = useTheme();
@@ -8,9 +8,9 @@ export default function TagSearchFormInput({ inputValue, handleChange }) {
 			type="text"
 			className={
 				"form-control mb-2 + bg-" +
-				theme.mode +
+				theme +
 				" text-" +
-				(theme.mode === "dark" ? "light" : "dark")
+				(theme === "dark" ? "light" : "dark")
 			}
 			value={inputValue}
 			placeholder="type some tag"

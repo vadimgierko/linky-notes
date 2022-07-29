@@ -9,7 +9,7 @@ import { resetState } from "./features/notes/notesSlice";
 import { fetchNotes } from "./thunks/notes/fetchNotes";
 //================================================
 import { Routes, Route } from "react-router-dom";
-import { useTheme } from "./hooks/use-theme";
+import { useTheme } from "./contexts/useTheme";
 import { useStore } from "./store/Store";
 // components & pages:
 import Header from "./components/organisms/Header";
@@ -92,8 +92,8 @@ export default function App() {
 		<div
 			className="container-fluid"
 			style={{
-				background: theme.background,
-				color: theme.color,
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "white" : "black",
 				minHeight: "100vh",
 			}}
 		>

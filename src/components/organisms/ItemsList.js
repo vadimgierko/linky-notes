@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 //import { useStore } from "../../store/Store";
 import ItemCard from "../molecules/ItemCard";
 
@@ -64,8 +64,8 @@ export default function ItemsList({ search }) {
 	return (
 		<div
 			style={{
-				background: theme.background,
-				color: theme.color,
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "white" : "black",
 			}}
 			className="notes-list"
 		>

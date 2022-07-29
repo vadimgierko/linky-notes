@@ -1,4 +1,4 @@
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -57,7 +57,12 @@ export default function About() {
 	const { theme } = useTheme();
 
 	return (
-		<div style={{ background: theme.background, color: theme.color }}>
+		<div
+			style={{
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "black" : "white",
+			}}
+		>
 			<ReactMarkdown children={ABOUT_MARKDOWN} remarkPlugins={[remarkGfm]} />
 		</div>
 	);

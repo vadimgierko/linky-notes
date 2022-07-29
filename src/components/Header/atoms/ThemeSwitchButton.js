@@ -1,33 +1,28 @@
-import { useTheme } from "../../../hooks/use-theme";
+import { useTheme } from "../../../contexts/useTheme";
 
 export default function ThemeSwitchButton({
 	isNavCollapsed,
 	handleNavCollapse,
 }) {
-	const { theme, switchToDark, switchToLight } = useTheme();
+	const { theme, switchTheme } = useTheme();
 
 	return (
 		<button
 			className={
-				theme.mode === "light"
+				theme === "light"
 					? "btn btn-secondary" +
 					  (isNavCollapsed ? " me-3" : " d-block mt-2 w-100")
-					: "btn btn-light" +
-					  (isNavCollapsed ? " me-3" : " d-block mt-2 w-100")
+					: "btn btn-light" + (isNavCollapsed ? " me-3" : " d-block mt-2 w-100")
 			}
 			type="button"
 			onClick={() => {
-				if (theme.mode === "light") {
-					switchToDark();
-				} else {
-					switchToLight();
-				}
+				switchTheme();
 				if (!isNavCollapsed) {
 					handleNavCollapse();
 				}
 			}}
 		>
-			{theme.mode === "light" ? (
+			{theme === "light" ? (
 				<i className="bi bi-moon"></i>
 			) : (
 				<i className="bi bi-brightness-high"></i>

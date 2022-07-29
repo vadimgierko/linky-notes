@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 import { useStore } from "../../store/Store";
 import ItemForm from "../organisms/ItemForm";
 
@@ -13,7 +13,10 @@ export default function UpdateItem() {
 	return (
 		<div
 			className="update-item-page"
-			style={{ background: theme.background, color: theme.color }}
+			style={{
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "black" : "white",
+			}}
 		>
 			<ItemForm itemKey={itemKey} />
 		</div>

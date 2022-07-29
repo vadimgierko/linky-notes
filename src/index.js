@@ -4,7 +4,7 @@ import { HashRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
 import App from "./App";
-import { ThemeProvider } from "./hooks/use-theme.js";
+import { ThemeProvider } from "./contexts/useTheme";
 import { StoreProvider } from "./store/Store";
 // redux:
 // TODO: when old Context Store will be replaced, rename "redux-store" folder into "store":

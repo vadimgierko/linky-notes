@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 import NavLinksList from "../Header/molecules/NavLinksList";
 import ThemeSwitchButton from "../Header/atoms/ThemeSwitchButton";
 import logOut from "../../auth/logOut";
@@ -22,7 +22,7 @@ export default function Header() {
 	return (
 		<nav
 			className={
-				theme.mode === "light"
+				theme === "light"
 					? "navbar navbar-expand-lg navbar-light bg-light fixed-top"
 					: "navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
 			}

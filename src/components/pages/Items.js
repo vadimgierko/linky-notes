@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 // components:
 import TagSearchForm from "../organisms/TagSearchForm";
 import ItemsList from "../organisms/ItemsList";
@@ -15,8 +15,8 @@ export default function Items() {
 	return (
 		<div
 			style={{
-				background: theme.background,
-				color: theme.color,
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "black" : "white",
 			}}
 			className="items-page"
 		>

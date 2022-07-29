@@ -1,4 +1,4 @@
-import { useTheme } from "../../hooks/use-theme";
+import { useTheme } from "../../contexts/useTheme";
 
 export default function Footer() {
 	const { theme } = useTheme();
@@ -6,8 +6,8 @@ export default function Footer() {
 	return (
 		<div
 			style={{
-				background: theme.background,
-				color: theme.color,
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "grey" : "white",
 			}}
 		>
 			<hr />
