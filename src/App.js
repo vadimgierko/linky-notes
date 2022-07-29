@@ -8,7 +8,7 @@ import { resetState } from "./features/notes/notesSlice";
 // thunks:
 import { fetchNotes } from "./thunks/notes/fetchNotes";
 //================================================
-import { Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useTheme } from "./hooks/use-theme";
 import { useStore } from "./store/Store";
 // components & pages:
@@ -22,6 +22,41 @@ import UpdateItem from "./components/pages/UpdateItem";
 import Item from "./components/pages/Item";
 import Tags from "./components/pages/Tags";
 import SignUp from "./components/pages/SignUp";
+
+const ROUTES = [
+	{
+		path: "/about",
+		element: <About />,
+	},
+	{
+		path: "/signin",
+		element: <SignIn />,
+	},
+	{
+		path: "/signup",
+		element: <SignUp />,
+	},
+	{
+		path: "/notes/:itemKey",
+		element: <Item />,
+	},
+	{
+		path: "/tags",
+		element: <Tags />,
+	},
+	{
+		path: "/add-note",
+		element: <AddItem />,
+	},
+	{
+		path: "/notes/update-note/:itemKey",
+		element: <UpdateItem />,
+	},
+	{
+		path: "/",
+		element: <Items />,
+	},
+];
 
 export default function App() {
 	const { theme } = useTheme();
@@ -43,7 +78,7 @@ export default function App() {
 					const email = user.email;
 					dispatch(userSignedIn({ email: email, id: uid }));
 					//========> UNCOMMENT THIS CODE TO FETCH AFTER APP MOUNTS & USER IS LOGGED:
-					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
+					//dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
@@ -71,32 +106,11 @@ export default function App() {
 					paddingTop: 70,
 				}}
 			>
-				<Switch>
-					<Route path="/about">
-						<About />
-					</Route>
-					<Route path="/signin">
-						<SignIn />
-					</Route>
-					<Route path="/signup">
-						<SignUp />
-					</Route>
-					<Route exact path="/notes/:itemKey">
-						<Item />
-					</Route>
-					<Route path="/tags">
-						<Tags />
-					</Route>
-					<Route path="/add-note">
-						<AddItem />
-					</Route>
-					<Route exact path="/notes/update-note/:itemKey">
-						<UpdateItem />
-					</Route>
-					<Route path="/">
-						<Items />
-					</Route>
-				</Switch>
+				<Routes>
+					{ROUTES.map((route) => (
+						<Route path={route.path} element={route.element} key={route.path} />
+					))}
+				</Routes>
 				<Footer />
 			</div>
 		</div>

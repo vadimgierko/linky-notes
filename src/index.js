@@ -18,14 +18,14 @@ const rootElement = document.getElementById("root");
 // Uncomment this code when build.
 
 ReactDOM.render(
-	<HashRouter>
-		<ThemeProvider>
+	<ThemeProvider>
+		<HashRouter>
 			<StoreProvider>
 				<Provider store={store}>
 					<App />
 				</Provider>
 			</StoreProvider>
-		</ThemeProvider>
-	</HashRouter>,
+		</HashRouter>
+	</ThemeProvider>,
 	rootElement
 );
