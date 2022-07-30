@@ -39,7 +39,10 @@ export default function SignUp() {
 			}}
 		>
 			<h3 className="text-center mb-3">Sign up!</h3>
-			<Form className="border rounded p-3 shadow" onSubmit={handleSubmit}>
+			<Form
+				className="border border-secondary rounded p-3 shadow"
+				onSubmit={handleSubmit}
+			>
 				<Form.Group className="mb-3">
 					<Form.Label>Email address</Form.Label>
 					<Form.Control
