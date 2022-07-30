@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
 import signIn from "../../auth/signIn";
 // react-bootstrap components:
@@ -14,7 +14,8 @@ export default function SignIn() {
 		password: "",
 	});
 
-	function handleSubmit() {
+	function handleSubmit(e) {
+		e.preventDefault();
 		if (
 			userSignInData.email.replace(/\s/g, "").length &&
 			userSignInData.password.replace(/\s/g, "").length
@@ -32,13 +33,12 @@ export default function SignIn() {
 			style={{
 				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
 				color: theme === "light" ? "black" : "white",
+				maxWidth: 360,
+				margin: "auto",
 			}}
 		>
 			<h3 className="text-center mb-3">Sign in</h3>
-			<Form
-				className="border rounded p-3 shadow col-md-6 mx-auto"
-				onSubmit={handleSubmit}
-			>
+			<Form className="border rounded p-3 shadow" onSubmit={handleSubmit}>
 				<Form.Group className="mb-3">
 					<Form.Label>Email address</Form.Label>
 					<Form.Control
@@ -51,9 +51,6 @@ export default function SignIn() {
 							})
 						}
 					/>
-					<Form.Text className="text-muted">
-						We'll never share your email with anyone else.
-					</Form.Text>
 				</Form.Group>
 
 				<Form.Group className="mb-3">
@@ -68,9 +65,13 @@ export default function SignIn() {
 							})
 						}
 					/>
+					<br />
+					<Form.Text>
+						Don't have an account? <Link to="/signup">Sign up!</Link>
+					</Form.Text>
 				</Form.Group>
 
-				<div className="d-grid">
+				<div className="d-grid my-2">
 					<Button variant="success" type="submit">
 						Sign in
 					</Button>

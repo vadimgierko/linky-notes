@@ -24,7 +24,14 @@ export default function () {
 	const user = useSelector((state) => state.user.value);
 
 	return (
-		<Navbar collapseOnSelect expand="lg" bg={theme} variant={theme} fixed="top">
+		<Navbar
+			collapseOnSelect
+			expand="lg"
+			bg={theme}
+			variant={theme}
+			fixed="top"
+			className="shadow"
+		>
 			<Container>
 				<Navbar.Brand href="#">linky_notes</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -58,15 +65,9 @@ export default function () {
 								</LinkContainer>
 							</>
 						)}
-						{theme === "light" ? (
-							<Nav.Link>
-								<BsMoonFill onClick={switchTheme} />
-							</Nav.Link>
-						) : (
-							<Nav.Link>
-								<BsSunFill onClick={switchTheme} />
-							</Nav.Link>
-						)}
+						<Nav.Link onClick={switchTheme}>
+							{theme === "light" ? <BsMoonFill /> : <BsSunFill />}
+						</Nav.Link>
 					</Nav>
 				</Navbar.Collapse>
 			</Container>
