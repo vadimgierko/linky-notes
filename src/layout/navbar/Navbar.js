@@ -14,7 +14,7 @@ import logOut from "../../auth/logOut";
 
 const SECTIONS_LIST = [
 	{ name: "about", link: "/about" },
-	{ name: "notes", link: "/notes" },
+	{ name: "notes", link: "/" },
 	{ name: "tags", link: "/tags" },
 	{ name: "add note", link: "/add-note" },
 ];
@@ -37,51 +37,36 @@ export default function () {
 							</LinkContainer>
 						))}
 					</Nav>
-					{/** buttons */}
+					<hr style={{ color: "grey" }} />
 					<Nav>
-						{/** auth buttons */}
-						{user.id && (
+						{user.id ? (
 							<>
-								<Navbar.Link href="#">{user.email}</Navbar.Link>
+								<Nav.Link href="#" disabled>
+									{user.email}
+								</Nav.Link>
 								<LinkContainer to="/about">
-									<Button
-										as={Nav.Link}
-										variant="outline-danger"
-										className="m-1"
-										onClick={logOut}
-									>
-										Log Out
-									</Button>
+									<Nav.Link onClick={logOut}>log out</Nav.Link>
 								</LinkContainer>
 							</>
-						)}
-						{!user.id && (
+						) : (
 							<>
 								<LinkContainer to="/signin">
-									<Button
-										as={Nav.Link}
-										variant="outline-success"
-										className="m-1"
-									>
-										Sign In
-									</Button>
+									<Nav.Link>sign in</Nav.Link>
 								</LinkContainer>
-								<LinkContainer to="/signup">
-									<Button as={Nav.Link} variant="outline-info" className="m-1">
-										Sign Up
-									</Button>
+								<LinkContainer as={Nav.Link} to="/signup">
+									<Nav.Link>sign up</Nav.Link>
 								</LinkContainer>
 							</>
 						)}
-						{/** mode button */}
-						<Button
-							variant={theme === "light" ? "outline-dark" : "outline-light"}
-							onClick={switchTheme}
-							className="m-1"
-						>
-							{theme === "light" && <BsMoonFill />}
-							{theme === "dark" && <BsSunFill />}
-						</Button>
+						{theme === "light" ? (
+							<Nav.Link>
+								<BsMoonFill onClick={switchTheme} />
+							</Nav.Link>
+						) : (
+							<Nav.Link>
+								<BsSunFill onClick={switchTheme} />
+							</Nav.Link>
+						)}
 					</Nav>
 				</Navbar.Collapse>
 			</Container>

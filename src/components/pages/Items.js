@@ -10,7 +10,18 @@ export default function Items() {
 	const user = useSelector((state) => state.user.value);
 	const { search } = useLocation();
 
-	if (!user.id) return <p>You need to be logged to see your items!</p>;
+	if (!user.id)
+		return (
+			<div
+				style={{
+					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+					color: theme === "light" ? "black" : "white",
+				}}
+				className="items-page"
+			>
+				<p>You need to be logged to see your items!</p>
+			</div>
+		);
 
 	return (
 		<div

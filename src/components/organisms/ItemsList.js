@@ -65,7 +65,7 @@ export default function ItemsList({ search }) {
 		<div
 			style={{
 				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "white" : "black",
+				color: theme === "light" ? "black" : "white",
 			}}
 			className="notes-list"
 		>
