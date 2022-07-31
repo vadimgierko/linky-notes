@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useStore } from "../../../store/Store";
+import { useSelector } from "react-redux";
 import FormTagButton from "../atoms/FormTagButton";
 import TagLinkButtonGeneratedByInput from "../atoms/TagLinkButtonGeneratedByInput";
 
@@ -11,24 +11,24 @@ export default function AvailableTagsList({
 	addNewTag,
 	resetInput,
 }) {
-	const { state } = useStore();
+	const tags = useSelector((state) => state.tags.value);
 	const [availableTags, setAvailableTags] = useState(); // [{tag: "", key: ""}]
 
 	function generateAvailableTags(input) {
 		if (input && input.length) {
-			if (state.tags && Object.entries(state.tags).length) {
-				const stateTagsArray = Object.entries(state.tags);
+			if (tags && Object.entries(tags).length) {
+				const stateTagsArray = Object.entries(tags);
 				// => [["sdcsdcasdcasd", {tag: "test"}], ["okvf98u98dfv", {tag: "app"}]
-				let tags = [];
+				let filteredTags = [];
 				for (let i = 0; i < stateTagsArray.length; i++) {
 					if (stateTagsArray[i][1].tag.includes(input)) {
-						tags.push({
+						filteredTags.push({
 							tag: stateTagsArray[i][1].tag,
 							key: stateTagsArray[i][0],
 						});
 					}
 				}
-				setAvailableTags(tags);
+				setAvailableTags(filteredTags);
 			}
 		} else {
 			setAvailableTags();

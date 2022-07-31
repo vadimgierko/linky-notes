@@ -21,6 +21,10 @@ export default function TagSearchForm({
 
 	useEffect(() => setInputValue(""), [search]);
 
+	useEffect(() => {
+		console.log("search in TagSearchForm:", search);
+	}, [search]);
+
 	return (
 		<div className="tag-search-form">
 			<TagSearchFormInput

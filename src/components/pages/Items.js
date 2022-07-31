@@ -4,6 +4,7 @@ import { useTheme } from "../../contexts/useTheme";
 // components:
 import TagSearchForm from "../organisms/TagSearchForm";
 import ItemsList from "../organisms/ItemsList";
+import { useEffect } from "react";
 
 export default function Items() {
 	const { theme } = useTheme();
@@ -22,6 +23,10 @@ export default function Items() {
 				<p>You need to be logged to see your items!</p>
 			</div>
 		);
+
+	useEffect(() => {
+		console.log("search in Items:", search);
+	}, [search]);
 
 	return (
 		<div

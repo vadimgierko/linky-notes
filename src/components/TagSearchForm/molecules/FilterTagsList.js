@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStore } from "../../../store/Store";
+import { useSelector } from "react-redux";
 import TagButtonWithTrashIcon from "../atoms/TagButtonWithTrashIcon";
 import TagLinkButtonWithTrashIcon from "../atoms/TagLinkButtonWithTrashIcon";
 
@@ -11,7 +11,7 @@ export default function FilterTagsList({
 	deleteExistingTag,
 	deleteNewTag,
 }) {
-	const { state } = useStore();
+	const tags = useSelector((state) => state.tags.value);
 	const [filterTags, setFilterTags] = useState(); // [{tag: "", key: ""}]
 
 	function getFilterTagsFromSearch(search) {
@@ -23,7 +23,7 @@ export default function FilterTagsList({
 
 				const retrievedTagsObjectsArray = tagsKeysArray.map((key) => ({
 					key: key,
-					tag: state.tags[key].tag,
+					tag: tags[key].tag,
 				}));
 
 				setFilterTags(retrievedTagsObjectsArray);
@@ -35,10 +35,7 @@ export default function FilterTagsList({
 		}
 	}
 
-	function generateNewSearchLinkAfterDeletionOfTag(
-		deletedTagKey,
-		prevSearch
-	) {
+	function generateNewSearchLinkAfterDeletionOfTag(deletedTagKey, prevSearch) {
 		const tagsKeysStringFromPrevSearch = prevSearch.slice(6);
 		const prevTagsKeysArray = tagsKeysStringFromPrevSearch.split("+");
 
@@ -56,14 +53,14 @@ export default function FilterTagsList({
 	}
 
 	useEffect(() => {
-		if (state && state.tags && Object.entries(state.tags).length) {
+		if (tags && Object.entries(tags).length) {
 			getFilterTagsFromSearch(search);
 		} else {
 			console.log(
 				"There are no tags in state... Cannot get tags from search at the moment. Wait until state tags will be fetched."
 			);
 		}
-	}, [search, state]);
+	}, [search, tags]);
 
 	if (form) {
 		if (
@@ -78,10 +75,7 @@ export default function FilterTagsList({
 									key={tagArray[0]}
 									tag={tagArray[1]}
 									onTrashIconClick={() => {
-										console.log(
-											"you want to delete me...",
-											tagArray[1].tag
-										);
+										console.log("you want to delete me...", tagArray[1].tag);
 										deleteExistingTag(tagArray[0]);
 									}}
 								/>
@@ -93,10 +87,7 @@ export default function FilterTagsList({
 									key={tag}
 									tag={{ tag: tag }}
 									onTrashIconClick={() => {
-										console.log(
-											"you want to delete me...",
-											tag
-										);
+										console.log("you want to delete me...", tag);
 										deleteNewTag(tag);
 									}}
 								/>
@@ -105,9 +96,7 @@ export default function FilterTagsList({
 				</div>
 			);
 		} else {
-			return (
-				<p className="filter-tags-list">There are no filter tags...</p>
-			);
+			return <p className="filter-tags-list">There are no filter tags...</p>;
 		}
 	}
 
@@ -120,9 +109,7 @@ export default function FilterTagsList({
 				<TagLinkButtonWithTrashIcon
 					key={tag.key}
 					tag={tag.tag}
-					link={() =>
-						generateNewSearchLinkAfterDeletionOfTag(tag.key, search)
-					}
+					link={() => generateNewSearchLinkAfterDeletionOfTag(tag.key, search)}
 				/>
 			))}
 		</div>

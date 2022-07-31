@@ -22,10 +22,10 @@ export const notesSlice = createSlice({
 			state.value = action.payload;
 		},
 		//=========================== ITEM CRUD =================================//
-		noteFetched: (state, action) => {
-			state.pending = false;
-			state.value[action.payload.id] = action.payload.note;
-		},
+		// noteFetched: (state, action) => {
+		// 	state.pending = false;
+		// 	state.value[action.payload.id] = action.payload.note;
+		// },
 		noteAdded: (state, action) => {
 			state.pending = false;
 			state.value[action.payload.id] = action.payload.note;
@@ -42,11 +42,11 @@ export const notesSlice = createSlice({
 		//======================== MORE SPECIFIC ACTIONS ========================//
 		// this is the example of more specific update action:
 		// update item value:
-		noteContentUpdated: (state, action) => {
-			state.pending = false;
-			const note = state.value[action.payload.id];
-			note.content = action.payload.content;
-		},
+		// noteContentUpdated: (state, action) => {
+		// 	state.pending = false;
+		// 	const note = state.value[action.payload.id];
+		// 	note.content = action.payload.content;
+		// },
 		//=========== RESET ITEMS STATE =======================/
 		resetState: (state) => {
 			state.value = {};

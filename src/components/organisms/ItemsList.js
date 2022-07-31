@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useTheme } from "../../contexts/useTheme";
-//import { useStore } from "../../store/Store";
 import NoteCard from "../molecules/NoteCard";
 
 export default function ItemsList({ search }) {
 	const { theme } = useTheme();
 	const notes = useSelector((state) => state.notes.value);
-	//const { state } = useStore();
 	const [itemsList, setItemsList] = useState();
 
 	function filterItems(search) {
@@ -57,6 +55,10 @@ export default function ItemsList({ search }) {
 			setItemsList();
 		}
 	}, [search, notes]);
+
+	useEffect(() => {
+		console.log("search in Items:", search);
+	}, [search]);
 
 	if (!itemsList || !Object.entries(itemsList).length)
 		return <p>There are no notes so far...</p>;

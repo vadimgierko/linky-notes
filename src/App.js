@@ -7,6 +7,7 @@ import { userSignedIn, userLoggedOut } from "./features/user/userSlice";
 import { resetState } from "./features/notes/notesSlice";
 // thunks:
 import { fetchNotes } from "./thunks/notes/fetchNotes";
+import { fetchTags } from "./thunks/tags/fetchTags";
 //================================================
 import { Routes, Route } from "react-router-dom";
 import { useStore } from "./store/Store";
@@ -76,7 +77,8 @@ export default function App() {
 					const email = user.email;
 					dispatch(userSignedIn({ email: email, id: uid }));
 					//========> UNCOMMENT THIS CODE TO FETCH AFTER APP MOUNTS & USER IS LOGGED:
-					//dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
+					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
+					dispatch(fetchTags({ reference: "tags/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
