@@ -1,7 +1,7 @@
 import { useTheme } from "../../contexts/useTheme";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ItemCard from "../molecules/ItemCard";
+import NoteCard from "../molecules/NoteCard";
 import { useStore } from "../../store/Store";
 
 export default function Item() {
@@ -38,7 +38,7 @@ export default function Item() {
 				color: theme === "light" ? "black" : "white",
 			}}
 		>
-			<ItemCard key={"item-" + itemKey} item={item} itemKey={itemKey} />
+			<NoteCard key={"item-" + itemKey} item={item} itemKey={itemKey} />
 		</div>
 	);
 }

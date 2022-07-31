@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useTheme } from "../../contexts/useTheme";
 //import { useStore } from "../../store/Store";
-import ItemCard from "../molecules/ItemCard";
+import NoteCard from "../molecules/NoteCard";
 
 export default function ItemsList({ search }) {
 	const { theme } = useTheme();
@@ -65,7 +65,7 @@ export default function ItemsList({ search }) {
 		<div
 			style={{
 				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "white" : "black",
+				color: theme === "light" ? "black" : "white",
 			}}
 			className="notes-list"
 		>
@@ -77,7 +77,7 @@ export default function ItemsList({ search }) {
 						const itemKey = itemArray[0];
 						const item = itemArray[1];
 						return (
-							<ItemCard key={"item-" + itemKey} item={item} itemKey={itemKey} />
+							<NoteCard key={"item-" + itemKey} item={item} itemKey={itemKey} />
 						);
 					})}
 			</div>

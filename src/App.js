@@ -9,7 +9,6 @@ import { resetState } from "./features/notes/notesSlice";
 import { fetchNotes } from "./thunks/notes/fetchNotes";
 //================================================
 import { Routes, Route } from "react-router-dom";
-import { useTheme } from "./contexts/useTheme";
 import { useStore } from "./store/Store";
 // layout:
 import Layout from "./layout/Layout";
@@ -59,8 +58,7 @@ const ROUTES = [
 ];
 
 export default function App() {
-	const { theme } = useTheme();
-	const { state } = useStore();
+	const { state } = useStore(); // the old context api based store => be replaced with redux
 
 	const dispatch = useDispatch();
 
