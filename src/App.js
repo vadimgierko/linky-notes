@@ -16,7 +16,8 @@ import Layout from "./layout/Layout";
 // pages:
 import About from "./components/pages/About";
 import SignIn from "./components/pages/SignIn";
-import Items from "./components/pages/Items";
+//import Items from "./components/pages/Items";
+import Notes from "./components/pages/Notes";
 import AddItem from "./components/pages/AddItem";
 import UpdateItem from "./components/pages/UpdateItem";
 import Item from "./components/pages/Item";
@@ -54,7 +55,7 @@ const ROUTES = [
 	},
 	{
 		path: "/",
-		element: <Items />,
+		element: <Notes />, //<Items />,
 	},
 ];
 
