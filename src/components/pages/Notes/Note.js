@@ -1,10 +1,12 @@
 import { useTheme } from "../../../contexts/useTheme";
+import { useSearchParams } from "react-router-dom";
 // custom components:
 import Tag from "./Tag";
 // react-bootstrap components:
 import { Card, Row, Col } from "react-bootstrap";
 
 export default function Note({ note }) {
+	const [searchParams, setSearchParams] = useSearchParams();
 	const { theme } = useTheme();
 	if (!note) return null;
 
@@ -36,7 +38,11 @@ export default function Note({ note }) {
 				<Card.Text>{note.content}</Card.Text>
 				{note.tags &&
 					Object.keys(note.tags).map((tagId) => (
-						<Tag key={tagId} value={note.tags[tagId].tag} />
+						<Tag
+							key={tagId}
+							value={note.tags[tagId].tag}
+							onClick={() => setSearchParams({ tag: tagId })}
+						/>
 					))}
 			</Card.Body>
 			<Card.Footer></Card.Footer>

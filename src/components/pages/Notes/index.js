@@ -5,11 +5,18 @@ import { useSelector } from "react-redux";
 import { useTheme } from "../../../contexts/useTheme";
 // custom components:
 import Tag from "./Tag";
+import TagWithTrashIcon from "./TagWithTrashIcon";
 import Note from "./Note";
+
+/*
+TODO:
+- inform about no notes for particular tag/ tags
+*/
 
 export default function Notes() {
 	const { theme } = useTheme();
 	const [searchParams, setSearchParams] = useSearchParams();
+	const user = useSelector((state) => state.user.value);
 	const TAGS = useSelector((state) => state.tags.value);
 	const NOTES = useSelector((state) => state.notes.value);
 
@@ -17,11 +24,30 @@ export default function Notes() {
 	const [foundTags, setFoundTags] = useState({});
 
 	useEffect(() => {
-		console.log(searchParams.get("tag"));
+		console.log("search params:", searchParams.get("tag"));
 	}, [searchParams]);
 
+	if (!user.id)
+		return (
+			<div
+				style={{
+					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+					color: theme === "light" ? "black" : "white",
+				}}
+				className="items-page"
+			>
+				<p>You need to be logged to see your items!</p>
+			</div>
+		);
+
 	return (
-		<div className="notes-page" style={{ marginTop: "1em" }}>
+		<div
+			className="notes-page"
+			style={{
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "black" : "white",
+			}}
+		>
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
 				<input
@@ -34,7 +60,7 @@ export default function Notes() {
 						(theme === "dark" ? "light" : "dark")
 					}
 					value={input}
-					placeholder="type some tag to filter your notes & press Enter"
+					placeholder="type some tag to filter your notes & click found tag"
 					onChange={(e) => {
 						const changedInput = e.target.value;
 						setInput(changedInput);
@@ -61,24 +87,17 @@ export default function Notes() {
 							// if input is cleared:
 							setFoundTags({});
 						}
-						// const filterTag = event.target.value;
-						// if (filterTag) {
-						//   setSearchParams({ tag: filterTag });
-						// } else {
-						//   setSearchParams({});
-						// }
 					}}
 				/>
-				<br />
+
+				{/*======================================== found tags */}
 				<div className="found-tags">
-					Found tags:{" "}
 					{Object.keys(foundTags).map((id) => (
 						<Tag
 							key={id}
 							value={TAGS[id].tag}
 							onClick={() => {
 								setSearchParams({ tag: id });
-								//setFilterTags({ [id]: TAGS[id] });
 								// clear found tags:
 								setFoundTags({});
 								// clear input:
@@ -87,29 +106,28 @@ export default function Notes() {
 						/>
 					))}
 				</div>
-				<div className="filter-tags">
-					Filter tags:{" "}
-					{searchParams.get("tag") && (
-						<Tag
+
+				{/*======================================== filter tags */}
+				{searchParams.get("tag") ? (
+					<div className="filter-tags">
+						<TagWithTrashIcon
 							key={searchParams.get("tag")}
-							value={TAGS[searchParams.get("tag")].tag}
-							onClick={() =>
-								console.log(
-									"You clicked",
-									TAGS[searchParams.get("tag")].tag,
-									"filter tag."
-								)
-							}
+							tag={TAGS[searchParams.get("tag")]}
+							onClick={() => setSearchParams({})}
 						/>
-					)}
-				</div>
-				<hr />
-				{/* filtered notes */}
+					</div>
+				) : (
+					<div className="filter-tags">There are no filter tags...</div>
+				)}
+
+				{/*========================================= filtered notes */}
 				<div className="filtered-notes">
 					{Object.keys(NOTES)
 						.filter((noteId) =>
 							Object.keys(NOTES[noteId].tags).includes(searchParams.get("tag"))
 						)
+						.slice()
+						.reverse()
 						.map((noteId) => (
 							<Note key={noteId} note={NOTES[noteId]} />
 						))}
@@ -118,20 +136,3 @@ export default function Notes() {
 		</div>
 	);
 }
-
-/* {Object.keys(TAGS)
-          .filter((tagKey) => {
-            let filter = searchParams.get("tag");
-            if (!filter) return false; // shows no tags if no input
-            let tag = TAGS[tagKey].value.toLowerCase();
-            return tag.startsWith(filter.toLowerCase());
-          })
-          .map((tagKey) => (
-            <Tag
-              key={TAGS[tagKey].value}
-              value={TAGS[tagKey].value}
-              onClick={() =>
-                console.log("You clicked", TAGS[tagKey].value, "tag.")
-              }
-            />
-          ))} */
