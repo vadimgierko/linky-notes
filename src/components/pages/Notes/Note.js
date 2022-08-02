@@ -41,7 +41,7 @@ export default function Note({ note }) {
 						<Tag
 							key={tagId}
 							value={note.tags[tagId].tag}
-							onClick={() => setSearchParams({ tag: tagId })}
+							onClick={() => setSearchParams({ tags: tagId })}
 						/>
 					))}
 			</Card.Body>

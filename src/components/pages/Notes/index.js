@@ -24,7 +24,7 @@ export default function Notes() {
 	const [foundTags, setFoundTags] = useState({});
 
 	useEffect(() => {
-		console.log("search params:", searchParams.get("tag"));
+		console.log("search params:", searchParams.get("tags"));
 	}, [searchParams]);
 
 	if (!user.id)
@@ -97,7 +97,10 @@ export default function Notes() {
 							key={id}
 							value={TAGS[id].tag}
 							onClick={() => {
-								setSearchParams({ tag: id });
+								const prevParamsString = searchParams.get("tags"); // abc+cds || abc || null
+								setSearchParams({
+									tags: prevParamsString ? prevParamsString + "+" + id : id,
+								});
 								// clear found tags:
 								setFoundTags({});
 								// clear input:
@@ -108,30 +111,55 @@ export default function Notes() {
 				</div>
 
 				{/*======================================== filter tags */}
-				{searchParams.get("tag") ? (
+				{searchParams.get("tags") ? (
 					<div className="filter-tags">
-						<TagWithTrashIcon
-							key={searchParams.get("tag")}
-							tag={TAGS[searchParams.get("tag")]}
-							onClick={() => setSearchParams({})}
-						/>
+						{searchParams
+							.get("tags")
+							.split("+")
+							.map((filterTagId) => (
+								<TagWithTrashIcon
+									key={filterTagId}
+									tag={TAGS[filterTagId]}
+									onClick={() => {
+										const updatedParamsString = searchParams
+											.get("tags")
+											.split("+")
+											.filter((id) => filterTagId !== id)
+											.join("+");
+										if (updatedParamsString) {
+											setSearchParams({
+												tags: updatedParamsString,
+											});
+										} else {
+											setSearchParams({});
+										}
+									}}
+								/>
+							))}
 					</div>
 				) : (
 					<div className="filter-tags">There are no filter tags...</div>
 				)}
 
 				{/*========================================= filtered notes */}
-				<div className="filtered-notes">
-					{Object.keys(NOTES)
-						.filter((noteId) =>
-							Object.keys(NOTES[noteId].tags).includes(searchParams.get("tag"))
-						)
-						.slice()
-						.reverse()
-						.map((noteId) => (
-							<Note key={noteId} note={NOTES[noteId]} />
-						))}
-				</div>
+				{searchParams.get("tags") ? (
+					<div className="filtered-notes">
+						{Object.keys(NOTES)
+							.filter((noteId) =>
+								searchParams
+									.get("tags")
+									.split("+")
+									.every((element) =>
+										Object.keys(NOTES[noteId].tags).includes(element)
+									)
+							)
+							.slice()
+							.reverse()
+							.map((noteId) => (
+								<Note key={noteId} note={NOTES[noteId]} />
+							))}
+					</div>
+				) : null}
 			</div>
 		</div>
 	);
