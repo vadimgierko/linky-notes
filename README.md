@@ -41,12 +41,17 @@ I've made this app first of all for myself. I read a lot, create a lot and... do
 - switch dark/ light mode
 
 ## Technologies I've used in this project:
-- React 17
-- React Router 5.2
-- React Context API
-- Redux (Toolkit)
-- Firebase 9.1 (authentication, realtime database, storage)
-- Bootstrap 5.1
+
+- [X] React 17.0
+- [X] React Router 5.2
+- [X] Redux Toolkit 1.8
+- [X] Firebase 9.1 (authentication, realtime database, storage)
+- [X] React Bootstrap 2.4
+- [X] Bootstrap 5.1
+- [X] React Icons 4.4
+- [X] Bootstrap Icons 1.6
+- [X] React Markdown 8.0
+- [X] GitHub Pages 3.2
 
 ## Note for users
 
