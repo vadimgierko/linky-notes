@@ -1,7 +1,7 @@
 import { useTheme } from "../../contexts/useTheme";
 import { useSearchParams } from "react-router-dom";
 // custom components:
-import Tag from "./Tag";
+import Tag from "../Tag";
 // react-bootstrap components:
 import { Card, Row, Col } from "react-bootstrap";
 

@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 // contexts:
 import { useTheme } from "../../contexts/useTheme";
 // custom components:
-import Tag from "./Tag";
-import TagWithTrashIcon from "./TagWithTrashIcon";
-import Note from "./Note";
+import NoteCard from "../../components/NoteCard";
+import Tag from "../../components/Tag";
+import TagWithTrashIcon from "../../components/TagWithTrashIcon";
 
 /*
 TODO:
@@ -156,7 +156,7 @@ export default function Notes() {
 							.slice()
 							.reverse()
 							.map((noteId) => (
-								<Note key={noteId} note={NOTES[noteId]} />
+								<NoteCard key={noteId} note={NOTES[noteId]} />
 							))}
 					</div>
 				) : null}

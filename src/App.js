@@ -59,13 +59,7 @@ const ROUTES = [
 ];
 
 export default function App() {
-	const { state } = useStore(); // the old context api based store => be replaced with redux
-
 	const dispatch = useDispatch();
-
-	useEffect(() => {
-		console.log("app store (Context API):", state);
-	}, [state]);
 
 	// listen to the user logs in & out:
 	useEffect(() => {
