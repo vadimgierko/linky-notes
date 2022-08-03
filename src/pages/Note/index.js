@@ -1,44 +1,40 @@
-// import { useTheme } from "../../contexts/useTheme";
-// import { useParams } from "react-router-dom";
-// import { useEffect, useState } from "react";
-// import NoteCard from "../molecules/NoteCard";
-// import { useStore } from "../../store/Store";
+import { useTheme } from "../../contexts/useTheme";
+import { useParams } from "react-router-dom";
+// custom components:
+import NoteCard from "../../components/NoteCard";
+import { useSelector } from "react-redux";
 
-// export default function Item() {
-// 	const { theme } = useTheme();
-// 	const { state } = useStore();
+export default function Note() {
+	const { theme } = useTheme();
+	const { itemKey } = useParams();
+	const NOTES = useSelector((state) => state.notes.value);
 
-// 	const { itemKey } = useParams();
+	if (!itemKey || !NOTES[itemKey])
+		return (
+			<div
+				className="note-page"
+				style={{
+					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+					color: theme === "light" ? "black" : "white",
+				}}
+			>
+				<p>There is no such note...</p>
+			</div>
+		);
 
-// 	const [item, setItem] = useState();
-
-// 	useEffect(() => {
-// 		if (state.items) {
-// 			if (state.items[itemKey]) {
-// 				setItem(state.items[itemKey]);
-// 				console.log(
-// 					"The item with the key",
-// 					itemKey,
-// 					"is in items, so there's no need to fetch it."
-// 				);
-// 			} else {
-// 				setItem();
-// 				console.log("There is no item with the key", itemKey, "in items.");
-// 			}
-// 		}
-// 	}, [state]);
-
-// 	if (!item) return <p>Loading item or there is no such item...</p>;
-
-// 	return (
-// 		<div
-// 			className="item-page"
-// 			style={{
-// 				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-// 				color: theme === "light" ? "black" : "white",
-// 			}}
-// 		>
-// 			<NoteCard key={"item-" + itemKey} item={item} itemKey={itemKey} />
-// 		</div>
-// 	);
-// }
+	return (
+		<div
+			className="note-page"
+			style={{
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				color: theme === "light" ? "black" : "white",
+			}}
+		>
+			<NoteCard
+				key={"item-" + itemKey}
+				note={NOTES[itemKey]}
+				noteKey={itemKey}
+			/>
+		</div>
+	);
+}

@@ -40,10 +40,10 @@ const ROUTES = [
 		path: "/",
 		element: <Notes />,
 	},
-	// {
-	// 	path: "/notes/:itemKey",
-	// 	element: <Note />,
-	// },
+	{
+		path: "/notes/:itemKey",
+		element: <Note />,
+	},
 	// {
 	// 	path: "/tags",
 	// 	element: <Tags />,

@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
 // custom components:
 import Tag from "../Tag";
@@ -9,11 +10,37 @@ import IconButton from "../IconButton";
 // thunks:
 import { deleteNote } from "../../thunks/notes/deleteNote";
 
-export default function Note({ note, noteKey }) {
+export default function NoteCard({ note, noteKey }) {
 	const { theme } = useTheme();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const user = useSelector((state) => state.user.value);
+
+	const ICON_BUTTONS = [
+		{
+			iconName: "eye",
+			color: "secondary",
+			onClick: () => navigate("notes/" + noteKey),
+		},
+		{
+			iconName: "pencil",
+			color: "info",
+			onClick: () => navigate("/notes/update-note/" + noteKey),
+		},
+
+		{
+			iconName: "trash",
+			color: "danger",
+			onClick: () =>
+				dispatch(
+					deleteNote({
+						reference: "items/" + user.id + "/" + noteKey,
+						itemKey: noteKey,
+					})
+				),
+		},
+	];
 
 	if (!note || !noteKey) return null;
 
@@ -31,20 +58,14 @@ export default function Note({ note, noteKey }) {
 						{note.createdAt} {note.updatedAt ? "/ " + note.updatedAt : null}
 					</Col>
 					<Col xs={4} className="text-end">
-						<IconButton iconName="eye" color="secondary" onClick={(f) => f} />
-						<IconButton iconName="pencil" color="info" onClick={(f) => f} />
-						<IconButton
-							iconName="trash"
-							color="danger"
-							onClick={() =>
-								dispatch(
-									deleteNote({
-										reference: "items/" + user.id + "/" + noteKey,
-										itemKey: noteKey,
-									})
-								)
-							}
-						/>
+						{ICON_BUTTONS.map((btn) => (
+							<IconButton
+								key={btn.iconName}
+								iconName={btn.iconName}
+								color={btn.color}
+								onClick={btn.onClick}
+							/>
+						))}
 					</Col>
 				</Row>
 			</Card.Header>
@@ -55,7 +76,26 @@ export default function Note({ note, noteKey }) {
 						<Tag
 							key={tagId}
 							value={note.tags[tagId].tag}
-							onClick={() => setSearchParams({ tags: tagId })}
+							onClick={() => {
+								// There are 3 ways to go back to main page
+								// & search for tag:
+
+								// 1. that is the most elegant way:
+								navigate({
+									pathname: "/",
+									search: `?tags=${tagId}`,
+								});
+
+								// 2. that works, but looks bad:
+								//navigate("/?tags=" + tagId);
+
+								// 3. that was the firs version
+								// but if the card is opened in separate window
+								// (not on the main page "/")
+								// then it sets searchParams for current page...
+								// so use it only on the page you want to search:
+								//setSearchParams({ tags: tagId });
+							}}
 						/>
 					))}
 			</Card.Body>

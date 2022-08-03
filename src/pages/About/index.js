@@ -42,15 +42,21 @@ I've made this app first of all for myself. I read a lot, create a lot and... do
 - switch dark/ light mode
 
 ## Technologies I've used in this project:
-- React 17
-- React Router 5.2
-- React Context & useContext
-- Firebase 9.1 (authentication, realtime database, storage)
-- Bootstrap 5.1
+
+- [X] React 17.0
+- [X] React Router 5.2
+- [X] Redux Toolkit 1.8
+- [X] Firebase 9.1 (authentication, realtime database, storage)
+- [X] React Bootstrap 2.4
+- [X] Bootstrap 5.1
+- [X] React Icons 4.4
+- [X] Bootstrap Icons 1.6
+- [X] React Markdown 8.0
+- [X] GitHub Pages 3.2
 
 ## Note for users
 
-The app can be changed/ refactored at any moment, there will be a database migration soon, so you can fully use this app & trust it only when this info will disapear. But if you're a programmer, you can clone this project, create a new Firebase project for your copy, change Firebase SDK in firebaseConfig.js file & use it without any worries about future changes of the app. But... at the moment I'm migrating from Context API state management to Redux, so the GitHub Pages version of this app currently doesn't reflect constantly changing repo. To clone this project, wait until this message disapear.
+DON'T USE THIS APP UNTIL THIS NOTE WILL BE DELETED! THE APP IS UNDER REFACTOR! The app can be changed/ refactored at any moment, there will be a database migration soon, so you can fully use this app & trust it only when this info will disapear. But if you're a programmer, you can clone this project, create a new Firebase project for your copy, change Firebase SDK in firebaseConfig.js file & use it without any worries about future changes of the app. But... at the moment I'm migrating from Context API state management to Redux, so the GitHub Pages version of this app currently doesn't reflect constantly changing repo. To clone this project, wait until this message disapear.
 `;
 
 export default function About() {
