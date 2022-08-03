@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import deleteItem from "../firebase-rtdb-crud/deleteItem";
+import deleteItem from "../../firebase-rtdb-crud/deleteItem";
 import { noteDeleted } from "../../features/notes/notesSlice";
 
 // arg: {reference, itemKey}

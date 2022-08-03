@@ -156,7 +156,7 @@ export default function Notes() {
 							.slice()
 							.reverse()
 							.map((noteId) => (
-								<NoteCard key={noteId} note={NOTES[noteId]} />
+								<NoteCard key={noteId} note={NOTES[noteId]} noteKey={noteId} />
 							))}
 					</div>
 				) : null}

@@ -1,14 +1,21 @@
-import { useTheme } from "../../contexts/useTheme";
 import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useTheme } from "../../contexts/useTheme";
 // custom components:
 import Tag from "../Tag";
 // react-bootstrap components:
 import { Card, Row, Col } from "react-bootstrap";
+import IconButton from "../IconButton";
+// thunks:
+import { deleteNote } from "../../thunks/notes/deleteNote";
 
-export default function Note({ note }) {
-	const [searchParams, setSearchParams] = useSearchParams();
+export default function Note({ note, noteKey }) {
 	const { theme } = useTheme();
-	if (!note) return null;
+	const [searchParams, setSearchParams] = useSearchParams();
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user.value);
+
+	if (!note || !noteKey) return null;
 
 	return (
 		<Card
@@ -24,13 +31,20 @@ export default function Note({ note }) {
 						{note.createdAt} {note.updatedAt ? "/ " + note.updatedAt : null}
 					</Col>
 					<Col xs={4} className="text-end">
-						{/* <EyeIconButton link={"/notes/" + itemKey} />
-						<PencilIconButton link={"/notes/update-note/" + itemKey} />
-						<TrashIconButton
-							handleOnTrashButtonClick={() =>
-								deleteItem(itemKey, state.user.id, dispatch)
+						<IconButton iconName="eye" color="secondary" onClick={(f) => f} />
+						<IconButton iconName="pencil" color="info" onClick={(f) => f} />
+						<IconButton
+							iconName="trash"
+							color="danger"
+							onClick={() =>
+								dispatch(
+									deleteNote({
+										reference: "items/" + user.id + "/" + noteKey,
+										itemKey: noteKey,
+									})
+								)
 							}
-						/> */}
+						/>
 					</Col>
 				</Row>
 			</Card.Header>
