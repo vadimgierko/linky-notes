@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 // contexts:
-import { useTheme } from "../../../contexts/useTheme";
+import { useTheme } from "../../contexts/useTheme";
 // custom components:
 import Tag from "./Tag";
 import TagWithTrashIcon from "./TagWithTrashIcon";

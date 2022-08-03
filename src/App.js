@@ -14,15 +14,14 @@ import { useStore } from "./store/Store";
 // layout:
 import Layout from "./layout/Layout";
 // pages:
-import About from "./components/pages/About";
-import SignIn from "./components/pages/SignIn";
-//import Items from "./components/pages/Items";
-import Notes from "./components/pages/Notes";
-import AddItem from "./components/pages/AddItem";
-import UpdateItem from "./components/pages/UpdateItem";
-import Item from "./components/pages/Item";
-import Tags from "./components/pages/Tags";
-import SignUp from "./components/pages/SignUp";
+import About from "./pages/About";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import Notes from "./pages/Notes";
+import Note from "./pages/Note";
+import AddNote from "./pages/AddNote";
+import UpdateNote from "./pages/UpdateNote";
+import Tags from "./pages/Tags";
 
 const ROUTES = [
 	{
@@ -38,25 +37,25 @@ const ROUTES = [
 		element: <SignUp />,
 	},
 	{
-		path: "/notes/:itemKey",
-		element: <Item />,
-	},
-	{
-		path: "/tags",
-		element: <Tags />,
-	},
-	{
-		path: "/add-note",
-		element: <AddItem />,
-	},
-	{
-		path: "/notes/update-note/:itemKey",
-		element: <UpdateItem />,
-	},
-	{
 		path: "/",
-		element: <Notes />, //<Items />,
+		element: <Notes />,
 	},
+	// {
+	// 	path: "/notes/:itemKey",
+	// 	element: <Note />,
+	// },
+	// {
+	// 	path: "/tags",
+	// 	element: <Tags />,
+	// },
+	// {
+	// 	path: "/add-note",
+	// 	element: <AddNote />,
+	// },
+	// {
+	// 	path: "/notes/update-note/:itemKey",
+	// 	element: <UpdateNote />,
+	// },
 ];
 
 export default function App() {
