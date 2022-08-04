@@ -1,7 +1,7 @@
 //====== NOTE !
 //====== createDate() creates UTC date => (current time in Poland - 1 hour)
 
-export function createDate() {
+export default function createDate() {
 	const date = new Date();
 	const day =
 		date.getUTCDate() < 10 ? "0" + date.getUTCDate() : date.getUTCDate();

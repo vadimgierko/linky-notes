@@ -2,7 +2,7 @@ import { rtdb } from "../firebaseConfig";
 import { ref, set } from "firebase/database";
 import generateFirebaseKeyFor from "./generateFirebaseKeyFor";
 
-export default async function addItem(reference, item) {
+export default async function addItemWithAutoKey(reference, item) {
 	try {
 		const key = generateFirebaseKeyFor(reference);
 		const refUpdatedWithTheKey = reference + "/" + key;

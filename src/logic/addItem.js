@@ -1,6 +1,6 @@
 import { rtdb } from "../firebaseConfig.js";
 import { ref, set, push, child } from "firebase/database";
-import { createDate } from "../functions/functions";
+import createDate from "../helper-functions/createDate.js";
 import addTag from "./addTag.js";
 
 function addItemToDatabase(item, userId, key) {
