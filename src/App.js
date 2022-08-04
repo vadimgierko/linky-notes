@@ -48,14 +48,14 @@ const ROUTES = [
 	// 	path: "/tags",
 	// 	element: <Tags />,
 	// },
-	// {
-	// 	path: "/add-note",
-	// 	element: <AddNote />,
-	// },
-	// {
-	// 	path: "/notes/update-note/:itemKey",
-	// 	element: <UpdateNote />,
-	// },
+	{
+		path: "/add-note",
+		element: <AddNote />,
+	},
+	{
+		path: "/notes/update-note/:itemKey",
+		element: <UpdateNote />,
+	},
 ];
 
 export default function App() {
