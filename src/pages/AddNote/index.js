@@ -5,9 +5,8 @@ import { useTheme } from "../../contexts/useTheme";
 import NoteForm from "../../components/NoteForm";
 // thunks:
 import { addNote } from "../../thunks/notes/addNote";
-import generateFirebaseKeyFor from "../../firebase-rtdb-crud/generateFirebaseKeyFor";
 // helper functions:
-import createDate from "../../helper-functions/createDate";
+import generateFirebaseKeyFor from "../../firebase-rtdb-crud/generateFirebaseKeyFor";
 
 export default function AddNote() {
 	const { theme } = useTheme();
@@ -18,23 +17,10 @@ export default function AddNote() {
 	function handleSubmit(e, note) {
 		e.preventDefault();
 		console.log("Note to add:", note);
-		const noteWithUnifiedTagsAndCreatedAt = {
-			content: note.content,
-			// TODO: enable adding new tags here:
-			tags: note.existingTags,
-			createdAt: createDate(),
-		};
-		// adding new note after refactor test
-		const rootReference = "items/" + user.id + "/";
-		const noteKey = generateFirebaseKeyFor(rootReference);
-		const referenceWithTheKey = rootReference + noteKey;
-		dispatch(
-			addNote({
-				reference: referenceWithTheKey,
-				note: noteWithUnifiedTagsAndCreatedAt,
-				noteKey: noteKey,
-			})
-		).then(() => navigate("/notes/" + noteKey));
+		const newKey = generateFirebaseKeyFor("items/" + user.id);
+		dispatch(addNote({ note: note, key: newKey })).then(() =>
+			navigate("/notes/" + newKey)
+		);
 	}
 
 	if (!user.id)

@@ -35,12 +35,7 @@ export const tagsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {
-	startPending,
-	stopPending,
-	tagsFetched,
-	tagFetched,
-	resetState,
-} = tagsSlice.actions;
+export const { startPending, stopPending, tagsFetched, tagAdded, resetState } =
+	tagsSlice.actions;
 
 export default tagsSlice.reducer;

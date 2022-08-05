@@ -10,7 +10,6 @@ import { fetchNotes } from "./thunks/notes/fetchNotes";
 import { fetchTags } from "./thunks/tags/fetchTags";
 //================================================
 import { Routes, Route } from "react-router-dom";
-import { useStore } from "./store/Store";
 // layout:
 import Layout from "./layout/Layout";
 // pages:

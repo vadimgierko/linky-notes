@@ -20,7 +20,7 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 	useEffect(() => {
 		if (noteKey) {
 			if (Object.keys(NOTES).length) {
-				// if noteKEy was passed,
+				// if noteKey was passed,
 				// it means that we are updating the existing note,
 				// so we need to fetch it from the store:
 				const noteObjectForUpdate = {

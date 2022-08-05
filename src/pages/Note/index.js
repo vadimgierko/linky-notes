@@ -9,7 +9,7 @@ export default function Note() {
 	const { itemKey } = useParams();
 	const NOTES = useSelector((state) => state.notes.value);
 
-	if (!itemKey || !NOTES[itemKey])
+	if (!NOTES[itemKey])
 		return (
 			<div
 				className="note-page"

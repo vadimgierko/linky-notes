@@ -5,10 +5,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
 import App from "./App";
 import { ThemeProvider } from "./contexts/useTheme";
-import { StoreProvider } from "./store/Store";
 // redux:
 // TODO: when old Context Store will be replaced, rename "redux-store" folder into "store":
-import store from "./redux-store/store";
+import store from "./store/store";
 import { Provider } from "react-redux";
 
 const rootElement = document.getElementById("root");
@@ -20,11 +19,9 @@ const rootElement = document.getElementById("root");
 ReactDOM.render(
 	<ThemeProvider>
 		<HashRouter>
-			<StoreProvider>
-				<Provider store={store}>
-					<App />
-				</Provider>
-			</StoreProvider>
+			<Provider store={store}>
+				<App />
+			</Provider>
 		</HashRouter>
 	</ThemeProvider>,
 	rootElement
