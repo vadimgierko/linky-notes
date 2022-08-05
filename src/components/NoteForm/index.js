@@ -41,16 +41,6 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 		}
 	}, [noteKey, NOTES]);
 
-	//============================================ delete this when finish:
-	useEffect(() => {
-		console.log("note:", note);
-	}, [note]);
-
-	useEffect(() => {
-		console.log("new tag:", newTag);
-	}, [newTag]);
-	//====================================================================/
-
 	if (!note) return null;
 
 	return (
@@ -60,9 +50,9 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 				color: theme === "light" ? "black" : "white",
 			}}
 		>
-			<h3 className="text-center mb-3">
+			<h1 className="text-center mb-3">
 				{noteKey ? "Update Note!" : "Add Note!"}
-			</h3>
+			</h1>
 			<Form
 				className="border border-secondary rounded p-3 shadow"
 				onSubmit={(e) => onSubmit(e, note)}

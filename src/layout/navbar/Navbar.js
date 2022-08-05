@@ -32,7 +32,7 @@ export default function () {
 			fixed="top"
 			className="shadow"
 		>
-			<Container>
+			<Container style={{ maxWidth: 900 }}>
 				<Navbar.Brand href="#">linky_notes</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">

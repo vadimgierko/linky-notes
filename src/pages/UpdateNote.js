@@ -1,13 +1,25 @@
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/useTheme";
 // custom components:
 import NoteForm from "../components/NoteForm";
+// thunks:
+import { updateNote } from "../thunks/notes/updateNote";
 
 export default function UpdateNote() {
 	const { theme } = useTheme();
-	const user = useSelector((state) => state.user.value);
 	const { itemKey } = useParams();
+	const user = useSelector((state) => state.user.value);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	function handleSubmit(e, note) {
+		e.preventDefault();
+		console.log("Note to update:", note);
+		dispatch(updateNote({ note: note, key: itemKey })).then(() =>
+			navigate("/notes/" + itemKey)
+		);
+	}
 
 	if (!user.id)
 		return (
@@ -30,13 +42,7 @@ export default function UpdateNote() {
 				color: theme === "light" ? "black" : "white",
 			}}
 		>
-			<NoteForm
-				noteKey={itemKey}
-				onSubmit={(e, note) => {
-					e.preventDefault();
-					console.log("Note updated:", note);
-				}}
-			/>
+			<NoteForm noteKey={itemKey} onSubmit={handleSubmit} />
 		</div>
 	);
 }

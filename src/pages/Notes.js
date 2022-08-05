@@ -8,11 +8,6 @@ import NoteCard from "../components/NoteCard";
 import Tag from "../components/Tag";
 import TagWithTrashIcon from "../components/TagWithTrashIcon";
 
-/*
-TODO:
-- inform about no notes for particular tag/ tags
-*/
-
 export default function Notes() {
 	const { theme } = useTheme();
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -23,9 +18,9 @@ export default function Notes() {
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState({});
 
-	useEffect(() => {
-		console.log("search params:", searchParams.get("tags"));
-	}, [searchParams]);
+	// useEffect(() => {
+	// 	console.log("search params:", searchParams.get("tags"));
+	// }, [searchParams]);
 
 	if (!user.id)
 		return (
@@ -48,6 +43,7 @@ export default function Notes() {
 				color: theme === "light" ? "black" : "white",
 			}}
 		>
+			<h1 className="text-center mb-3">Your notes</h1>
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
 				<input
@@ -144,6 +140,19 @@ export default function Notes() {
 				{/*========================================= filtered notes */}
 				{searchParams.get("tags") ? (
 					<div className="filtered-notes">
+						<p>
+							Found notes:{" "}
+							{
+								Object.keys(NOTES).filter((noteId) =>
+									searchParams
+										.get("tags")
+										.split("+")
+										.every((element) =>
+											Object.keys(NOTES[noteId].tags).includes(element)
+										)
+								).length
+							}
+						</p>
 						{Object.keys(NOTES)
 							.filter((noteId) =>
 								searchParams
@@ -159,7 +168,17 @@ export default function Notes() {
 								<NoteCard key={noteId} note={NOTES[noteId]} noteKey={noteId} />
 							))}
 					</div>
-				) : null}
+				) : (
+					<div className="filtered-notes">
+						<p>Found notes: {Object.keys(NOTES).length}</p>
+						{Object.keys(NOTES)
+							.slice()
+							.reverse()
+							.map((noteId) => (
+								<NoteCard key={noteId} note={NOTES[noteId]} noteKey={noteId} />
+							))}
+					</div>
+				)}
 			</div>
 		</div>
 	);

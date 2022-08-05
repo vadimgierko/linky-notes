@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 // custom components:
 import NoteCard from "../components/NoteCard";
+import { Link } from "react-router-dom";
 
 export default function Note() {
 	const { theme } = useTheme();
@@ -35,6 +36,9 @@ export default function Note() {
 				note={NOTES[itemKey]}
 				noteKey={itemKey}
 			/>
+			<p className="text-center">
+				<Link to="/">back to notes</Link>
+			</p>
 		</div>
 	);
 }

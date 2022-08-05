@@ -1,14 +1,12 @@
-import { useTheme } from "../../contexts/useTheme";
 import { Container } from "react-bootstrap";
 
 export default function Footer() {
-	const { theme } = useTheme();
-
 	return (
 		<Container
 			as="footer"
 			style={{
 				color: "grey",
+				maxWidth: 900,
 			}}
 		>
 			<hr />

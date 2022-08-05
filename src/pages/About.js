@@ -3,8 +3,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const ABOUT_MARKDOWN = `
-# Create, organize & filter your notes by tags!
-
 **Sign up & try** the app **for free** here: https://vadimgierko.github.io/linky-notes/
 
 ## Why use linky_notes?
@@ -53,10 +51,6 @@ I've made this app first of all for myself. I read a lot, create a lot and... do
 - [X] Bootstrap Icons 1.6
 - [X] React Markdown 8.0
 - [X] GitHub Pages 3.2
-
-## Note for users
-
-DON'T USE THIS APP UNTIL THIS NOTE WILL BE DELETED! THE APP IS UNDER REFACTOR! The app can be changed/ refactored at any moment, there will be a database migration soon, so you can fully use this app & trust it only when this info will disapear. But if you're a programmer, you can clone this project, create a new Firebase project for your copy, change Firebase SDK in firebaseConfig.js file & use it without any worries about future changes of the app. But... at the moment I'm migrating from Context API state management to Redux, so the GitHub Pages version of this app currently doesn't reflect constantly changing repo. To clone this project, wait until this message disapear.
 `;
 
 export default function About() {
@@ -69,6 +63,9 @@ export default function About() {
 				color: theme === "light" ? "black" : "white",
 			}}
 		>
+			<h1 className="text-center mb-3">
+				Create, organize & filter your notes by tags!
+			</h1>
 			<ReactMarkdown children={ABOUT_MARKDOWN} remarkPlugins={[remarkGfm]} />
 		</div>
 	);

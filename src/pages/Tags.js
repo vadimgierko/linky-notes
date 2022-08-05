@@ -77,6 +77,7 @@ export default function Tags() {
 				color: theme === "light" ? "black" : "white",
 			}}
 		>
+			<h1 className="text-center mb-3">Your tags</h1>
 			{ALPHABET.map((letter) => (
 				<div
 					key={letter + "-section"}

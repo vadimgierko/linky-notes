@@ -47,6 +47,8 @@ export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
 					};
 					thunkAPI.dispatch(addTag({ tag: newTag, key: key }));
 				});
+			} else {
+				console.log("There are no new tags to add to database!");
 			}
 			const rootReference = "items/" + user.id + "/";
 			const referenceWithTheKey = rootReference + arg.key;

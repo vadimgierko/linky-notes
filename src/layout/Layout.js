@@ -16,7 +16,10 @@ export default function Layout({ children }) {
 			}}
 		>
 			<Navbar />
-			<Container as="main" style={{ paddingTop: 70, flexGrow: 1 }}>
+			<Container
+				as="main"
+				style={{ paddingTop: 70, flexGrow: 1, maxWidth: 900 }}
+			>
 				{children}
 			</Container>
 			<Footer />
