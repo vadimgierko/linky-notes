@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../../contexts/useTheme";
+import { useTheme } from "../contexts/useTheme";
 // custom components:
-import NoteForm from "../../components/NoteForm";
+import NoteForm from "../components/NoteForm";
 // thunks:
-import { addNote } from "../../thunks/notes/addNote";
+import { addNote } from "../thunks/notes/addNote";
 // helper functions:
-import generateFirebaseKeyFor from "../../firebase-rtdb-crud/generateFirebaseKeyFor";
+import generateFirebaseKeyFor from "../firebase-rtdb-crud/generateFirebaseKeyFor";
 
 export default function AddNote() {
 	const { theme } = useTheme();

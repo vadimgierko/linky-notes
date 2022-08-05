@@ -1,4 +1,4 @@
-import { useTheme } from "../../contexts/useTheme";
+import { useTheme } from "../contexts/useTheme";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 

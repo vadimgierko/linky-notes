@@ -13,14 +13,14 @@ import { Routes, Route } from "react-router-dom";
 // layout:
 import Layout from "./layout/Layout";
 // pages:
-import About from "./pages/About";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import Notes from "./pages/Notes";
-import Note from "./pages/Note";
-import AddNote from "./pages/AddNote";
-import UpdateNote from "./pages/UpdateNote";
-import Tags from "./pages/Tags";
+import About from "./pages/About.js";
+import SignIn from "./pages/SignIn.js";
+import SignUp from "./pages/SignUp.js";
+import Notes from "./pages/Notes.js";
+import Note from "./pages/Note.js";
+import AddNote from "./pages/AddNote.js";
+import UpdateNote from "./pages/UpdateNote.js";
+import Tags from "./pages/Tags.js";
 
 const ROUTES = [
 	{
@@ -43,10 +43,10 @@ const ROUTES = [
 		path: "/notes/:itemKey",
 		element: <Note />,
 	},
-	// {
-	// 	path: "/tags",
-	// 	element: <Tags />,
-	// },
+	{
+		path: "/tags",
+		element: <Tags />,
+	},
 	{
 		path: "/add-note",
 		element: <AddNote />,

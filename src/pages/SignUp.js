@@ -1,29 +1,30 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useTheme } from "../../contexts/useTheme";
-import signIn from "../../auth/signIn";
+import { useTheme } from "../contexts/useTheme";
+import signUp from "../auth/signUp";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
 
-export default function SignIn() {
+export default function SignUp() {
 	const { theme } = useTheme();
 	const navigate = useNavigate();
 
-	const [userSignInData, setUserSignInData] = useState({
+	const [userSignUpData, setUserSignUpData] = useState({
 		email: "",
 		password: "",
 	});
 
 	function handleSubmit(e) {
 		e.preventDefault();
+
 		if (
-			userSignInData.email.replace(/\s/g, "").length &&
-			userSignInData.password.replace(/\s/g, "").length
+			userSignUpData.email.replace(/\s/g, "").length &&
+			userSignUpData.password.replace(/\s/g, "").length
 		) {
-			signIn(userSignInData).then(() => navigate("/"));
+			signUp(userSignUpData).then(() => navigate("/"));
 		} else {
 			alert(
-				"You need to complete all input fields (not only white spaces...) to sign in!"
+				"You need to complete all input fields (not only white spaces...) to create an account!"
 			);
 		}
 	}
@@ -37,7 +38,7 @@ export default function SignIn() {
 				margin: "auto",
 			}}
 		>
-			<h3 className="text-center mb-3">Sign in</h3>
+			<h3 className="text-center mb-3">Sign up!</h3>
 			<Form
 				className="border border-secondary rounded p-3 shadow"
 				onSubmit={handleSubmit}
@@ -48,12 +49,15 @@ export default function SignIn() {
 						type="email"
 						placeholder="Enter your email address"
 						onChange={(e) =>
-							setUserSignInData({
-								...userSignInData,
+							setUserSignUpData({
+								...userSignUpData,
 								email: e.target.value,
 							})
 						}
 					/>
+					<Form.Text className="text-muted">
+						We'll never share your email with anyone else.
+					</Form.Text>
 				</Form.Group>
 
 				<Form.Group className="mb-3">
@@ -62,21 +66,21 @@ export default function SignIn() {
 						type="password"
 						placeholder="Enter your password"
 						onChange={(e) =>
-							setUserSignInData({
-								...userSignInData,
+							setUserSignUpData({
+								...userSignUpData,
 								password: e.target.value,
 							})
 						}
 					/>
 					<br />
 					<Form.Text>
-						Don't have an account? <Link to="/signup">Sign up!</Link>
+						Already have an account? <Link to="/signin">Sign in!</Link>
 					</Form.Text>
 				</Form.Group>
 
 				<div className="d-grid my-2">
 					<Button variant="success" type="submit">
-						Sign in
+						Sign up
 					</Button>
 				</div>
 			</Form>

@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 // contexts:
-import { useTheme } from "../../contexts/useTheme";
+import { useTheme } from "../contexts/useTheme";
 // custom components:
-import NoteCard from "../../components/NoteCard";
-import Tag from "../../components/Tag";
-import TagWithTrashIcon from "../../components/TagWithTrashIcon";
+import NoteCard from "../components/NoteCard";
+import Tag from "../components/Tag";
+import TagWithTrashIcon from "../components/TagWithTrashIcon";
 
 /*
 TODO:

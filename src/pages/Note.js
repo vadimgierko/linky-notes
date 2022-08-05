@@ -1,41 +1,39 @@
-import { useSelector } from "react-redux";
+import { useTheme } from "../contexts/useTheme";
 import { useParams } from "react-router-dom";
-import { useTheme } from "../../contexts/useTheme";
+import { useSelector } from "react-redux";
 // custom components:
-import NoteForm from "../../components/NoteForm";
+import NoteCard from "../components/NoteCard";
 
-export default function UpdateNote() {
+export default function Note() {
 	const { theme } = useTheme();
-	const user = useSelector((state) => state.user.value);
 	const { itemKey } = useParams();
+	const NOTES = useSelector((state) => state.notes.value);
 
-	if (!user.id)
+	if (!NOTES[itemKey])
 		return (
 			<div
-				className="update-note-page"
+				className="note-page"
 				style={{
 					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
 					color: theme === "light" ? "black" : "white",
 				}}
 			>
-				<p>You need to log in to update an item...</p>
+				<p>There is no such note...</p>
 			</div>
 		);
 
 	return (
 		<div
-			className="update-note-page"
+			className="note-page"
 			style={{
 				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
 				color: theme === "light" ? "black" : "white",
 			}}
 		>
-			<NoteForm
+			<NoteCard
+				key={"item-" + itemKey}
+				note={NOTES[itemKey]}
 				noteKey={itemKey}
-				onSubmit={(e, note) => {
-					e.preventDefault();
-					console.log("Note updated:", note);
-				}}
 			/>
 		</div>
 	);
