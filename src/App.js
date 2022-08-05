@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "./firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 // reducers actions:
@@ -22,43 +22,44 @@ import AddNote from "./pages/AddNote.js";
 import UpdateNote from "./pages/UpdateNote.js";
 import Tags from "./pages/Tags.js";
 
-const ROUTES = [
-	{
-		path: "/about",
-		element: <About />,
-	},
-	{
-		path: "/signin",
-		element: <SignIn />,
-	},
-	{
-		path: "/signup",
-		element: <SignUp />,
-	},
-	{
-		path: "/",
-		element: <Notes />,
-	},
-	{
-		path: "/notes/:itemKey",
-		element: <Note />,
-	},
-	{
-		path: "/tags",
-		element: <Tags />,
-	},
-	{
-		path: "/add-note",
-		element: <AddNote />,
-	},
-	{
-		path: "/notes/update-note/:itemKey",
-		element: <UpdateNote />,
-	},
-];
-
 export default function App() {
+	const user = useSelector((state) => state.user.value);
 	const dispatch = useDispatch();
+
+	const ROUTES = [
+		{
+			path: "/",
+			element: user.id ? <Notes /> : <About />,
+		},
+		{
+			path: "/about",
+			element: <About />,
+		},
+		{
+			path: "/signin",
+			element: <SignIn />,
+		},
+		{
+			path: "/signup",
+			element: <SignUp />,
+		},
+		{
+			path: "/notes/:itemKey",
+			element: <Note />,
+		},
+		{
+			path: "/tags",
+			element: <Tags />,
+		},
+		{
+			path: "/add-note",
+			element: <AddNote />,
+		},
+		{
+			path: "/notes/update-note/:itemKey",
+			element: <UpdateNote />,
+		},
+	];
 
 	// listen to the user logs in & out:
 	useEffect(() => {
