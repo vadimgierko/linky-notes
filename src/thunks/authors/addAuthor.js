@@ -14,7 +14,7 @@ import createDate from "../../helper-functions/createDate";
 export const addAuthor = createAsyncThunk(
 	"authors/add",
 	async (arg, thunkAPI) => {
-		console.log("THUNK: adding author...");
+		console.log("THUNK: adding author:", arg.key, arg.author);
 		try {
 			// at the moment author object has only props set in the author's form, so
 			// we need to update it with all necessary props & metadata:
@@ -28,10 +28,15 @@ export const addAuthor = createAsyncThunk(
 					...authorObjectFromForm,
 					names: {
 						...authorObjectFromForm.names,
-						full:
-							authorObjectFromForm.names.first +
-							" " +
-							authorObjectFromForm.names.last,
+						full: authorObjectFromForm.names.middle
+							? authorObjectFromForm.names.first +
+							  " " +
+							  authorObjectFromForm.names.middle +
+							  " " +
+							  authorObjectFromForm.names.last
+							: authorObjectFromForm.names.first +
+							  " " +
+							  authorObjectFromForm.names.last,
 					},
 					createdAt: createDate(),
 					userId: user.id,
@@ -40,7 +45,7 @@ export const addAuthor = createAsyncThunk(
 				const referenceWithTheKey = rootReference + arg.key;
 				//===========================================================
 				await addItemWithGivenKey(referenceWithTheKey, updatedAuthorObject);
-				console.log("THUNK: author added.");
+				console.log("THUNK: author added:", arg.key, updatedAuthorObject);
 				thunkAPI.dispatch(
 					authorAdded({ id: arg.key, author: updatedAuthorObject })
 				);

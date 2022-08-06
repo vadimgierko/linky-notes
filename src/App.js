@@ -24,6 +24,7 @@ import Tags from "./pages/Tags.js";
 import AddAuthor from "./pages/AddAuthor";
 import Authors from "./pages/Authors";
 import { fetchAuthors } from "./thunks/authors/fetchAuthors";
+import UpdateAuthor from "./pages/UpdateAuthor";
 
 export default function App() {
 	const user = useSelector((state) => state.user.value);
@@ -69,6 +70,10 @@ export default function App() {
 		{
 			path: "/add-author",
 			element: <AddAuthor />,
+		},
+		{
+			path: "/authors/update-author/:itemKey",
+			element: <UpdateAuthor />,
 		},
 	];
 

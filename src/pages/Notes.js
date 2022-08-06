@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 // contexts:
 import { useTheme } from "../contexts/useTheme";
@@ -7,6 +7,8 @@ import { useTheme } from "../contexts/useTheme";
 import NoteCard from "../components/NoteCard";
 import Tag from "../components/Tag";
 import TagWithTrashIcon from "../components/TagWithTrashIcon";
+// react bootstrap components:
+import Button from "react-bootstrap/Button";
 
 export default function Notes() {
 	const { theme } = useTheme();
@@ -17,6 +19,8 @@ export default function Notes() {
 
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState({});
+
+	const navigate = useNavigate();
 
 	// useEffect(() => {
 	// 	console.log("search params:", searchParams.get("tags"));
@@ -43,7 +47,25 @@ export default function Notes() {
 				color: theme === "light" ? "black" : "white",
 			}}
 		>
-			<h1 className="text-center mb-3">Your notes</h1>
+			<h1 className="text-center mb-3">
+				Your filtered notes (
+				{searchParams.get("tags")
+					? Object.keys(NOTES).filter((noteId) =>
+							searchParams
+								.get("tags")
+								.split("+")
+								.every((element) =>
+									Object.keys(NOTES[noteId].tags).includes(element)
+								)
+					  ).length
+					: Object.keys(NOTES).length}
+				)
+			</h1>
+			<div className="d-grid my-2">
+				<Button variant="outline-primary" onClick={() => navigate("/add-note")}>
+					Add note
+				</Button>
+			</div>
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
 				<input
@@ -140,7 +162,7 @@ export default function Notes() {
 				{/*========================================= filtered notes */}
 				{searchParams.get("tags") ? (
 					<div className="filtered-notes">
-						<p>
+						{/* <p>
 							Found notes:{" "}
 							{
 								Object.keys(NOTES).filter((noteId) =>
@@ -152,7 +174,7 @@ export default function Notes() {
 										)
 								).length
 							}
-						</p>
+						</p> */}
 						{Object.keys(NOTES)
 							.filter((noteId) =>
 								searchParams
