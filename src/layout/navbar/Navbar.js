@@ -16,6 +16,7 @@ const SECTIONS_LIST = [
 	{ name: "about", link: "/about" },
 	{ name: "notes", link: "/" },
 	{ name: "tags", link: "/tags" },
+	{ name: "authors", link: "/authors" },
 	{ name: "add note", link: "/add-note" },
 ];
 

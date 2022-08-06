@@ -21,6 +21,9 @@ import Note from "./pages/Note.js";
 import AddNote from "./pages/AddNote.js";
 import UpdateNote from "./pages/UpdateNote.js";
 import Tags from "./pages/Tags.js";
+import AddAuthor from "./pages/AddAuthor";
+import Authors from "./pages/Authors";
+import { fetchAuthors } from "./thunks/authors/fetchAuthors";
 
 export default function App() {
 	const user = useSelector((state) => state.user.value);
@@ -59,6 +62,14 @@ export default function App() {
 			path: "/notes/update-note/:itemKey",
 			element: <UpdateNote />,
 		},
+		{
+			path: "/authors",
+			element: <Authors />,
+		},
+		{
+			path: "/add-author",
+			element: <AddAuthor />,
+		},
 	];
 
 	// listen to the user logs in & out:
@@ -73,6 +84,7 @@ export default function App() {
 					//========> UNCOMMENT THIS CODE TO FETCH AFTER APP MOUNTS & USER IS LOGGED:
 					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
 					dispatch(fetchTags({ reference: "tags/" + uid }));
+					dispatch(fetchAuthors({ reference: "authors/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
