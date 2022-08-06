@@ -17,7 +17,7 @@ const SECTIONS_LIST = [
 	{ name: "notes", link: "/" },
 	{ name: "tags", link: "/tags" },
 	{ name: "authors", link: "/authors" },
-	{ name: "add note", link: "/add-note" },
+	{ name: "sources", link: "/sources" },
 ];
 
 export default function () {

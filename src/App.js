@@ -8,6 +8,8 @@ import { resetState } from "./features/notes/notesSlice";
 // thunks:
 import { fetchNotes } from "./thunks/notes/fetchNotes";
 import { fetchTags } from "./thunks/tags/fetchTags";
+import { fetchAuthors } from "./thunks/authors/fetchAuthors";
+import { fetchSources } from "./thunks/sources/fetchSources";
 //================================================
 import { Routes, Route } from "react-router-dom";
 // layout:
@@ -23,8 +25,8 @@ import UpdateNote from "./pages/UpdateNote.js";
 import Tags from "./pages/Tags.js";
 import AddAuthor from "./pages/AddAuthor";
 import Authors from "./pages/Authors";
-import { fetchAuthors } from "./thunks/authors/fetchAuthors";
 import UpdateAuthor from "./pages/UpdateAuthor";
+import AddSource from "./pages/AddSource";
 
 export default function App() {
 	const user = useSelector((state) => state.user.value);
@@ -75,6 +77,10 @@ export default function App() {
 			path: "/authors/update-author/:itemKey",
 			element: <UpdateAuthor />,
 		},
+		{
+			path: "/add-source",
+			element: <AddSource />,
+		},
 	];
 
 	// listen to the user logs in & out:
@@ -90,10 +96,11 @@ export default function App() {
 					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
 					dispatch(fetchTags({ reference: "tags/" + uid }));
 					dispatch(fetchAuthors({ reference: "authors/" + uid }));
+					dispatch(fetchSources({ reference: "sources/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
-					dispatch(resetState());
+					dispatch(resetState()); // TODO: resetNotes, resetAuthors etc.
 				}
 			});
 		return unsubscribe();
