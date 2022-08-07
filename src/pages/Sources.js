@@ -1,40 +1,18 @@
 import { useSelector } from "react-redux";
-import { useTheme } from "../contexts/useTheme";
 import { useNavigate } from "react-router-dom";
 // react bootstrap components:
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
 // custom components:
+import PrivatePageContainer from "../components/PrivatePageContainer";
 import IconButton from "../components/IconButton";
 
 export default function Sources() {
-	const { theme } = useTheme();
-	const user = useSelector((state) => state.user.value);
 	const SOURCES = useSelector((state) => state.sources.value);
 	const AUTHORS = useSelector((state) => state.authors.value);
 	const navigate = useNavigate();
 
-	if (!user.id)
-		return (
-			<div
-				className="sources-page"
-				style={{
-					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					color: theme === "light" ? "black" : "white",
-				}}
-			>
-				<p>You need to be logged in to see stored sources...</p>
-			</div>
-		);
-
-	return (
-		<div
-			className="sources-page"
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
-		>
+	const page = (
+		<>
 			<h1 className="text-center mb-3">
 				Your sources ({Object.keys(SOURCES).length})
 			</h1>
@@ -68,6 +46,15 @@ export default function Sources() {
 			) : (
 				<p>There are no stored sources yet... Add one!</p>
 			)}
-		</div>
+		</>
+	);
+
+	return (
+		<PrivatePageContainer
+			pageNameWithoutWordPage="sources"
+			youNeedToLogInTo="see stored sources"
+		>
+			{page}
+		</PrivatePageContainer>
 	);
 }

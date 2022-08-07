@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 // contexts:
 import { useTheme } from "../contexts/useTheme";
 // custom components:
+import PrivatePageContainer from "../components/PrivatePageContainer";
 import NoteCard from "../components/NoteCard";
 import Tag from "../components/Tag";
 import TagWithTrashIcon from "../components/TagWithTrashIcon";
@@ -13,7 +14,6 @@ import Button from "react-bootstrap/Button";
 export default function Notes() {
 	const { theme } = useTheme();
 	const [searchParams, setSearchParams] = useSearchParams();
-	const user = useSelector((state) => state.user.value);
 	const TAGS = useSelector((state) => state.tags.value);
 	const NOTES = useSelector((state) => state.notes.value);
 
@@ -22,31 +22,8 @@ export default function Notes() {
 
 	const navigate = useNavigate();
 
-	// useEffect(() => {
-	// 	console.log("search params:", searchParams.get("tags"));
-	// }, [searchParams]);
-
-	if (!user.id)
-		return (
-			<div
-				style={{
-					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					color: theme === "light" ? "black" : "white",
-				}}
-				className="items-page"
-			>
-				<p>You need to be logged to see your items!</p>
-			</div>
-		);
-
-	return (
-		<div
-			className="notes-page"
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
-		>
+	const page = (
+		<>
 			<h1 className="text-center mb-3">
 				Your filtered notes (
 				{searchParams.get("tags")
@@ -162,19 +139,6 @@ export default function Notes() {
 				{/*========================================= filtered notes */}
 				{searchParams.get("tags") ? (
 					<div className="filtered-notes">
-						{/* <p>
-							Found notes:{" "}
-							{
-								Object.keys(NOTES).filter((noteId) =>
-									searchParams
-										.get("tags")
-										.split("+")
-										.every((element) =>
-											Object.keys(NOTES[noteId].tags).includes(element)
-										)
-								).length
-							}
-						</p> */}
 						{Object.keys(NOTES)
 							.filter((noteId) =>
 								searchParams
@@ -202,6 +166,15 @@ export default function Notes() {
 					</div>
 				)}
 			</div>
-		</div>
+		</>
+	);
+
+	return (
+		<PrivatePageContainer
+			pageNameWithoutWordPage="notes"
+			youNeedToLogInTo="see stored notes"
+		>
+			{page}
+		</PrivatePageContainer>
 	);
 }

@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../contexts/useTheme";
 // custom components:
+import PrivatePageContainer from "../components/PrivatePageContainer";
 import Tag from "../components/Tag";
 
 const ALPHABET = [
@@ -38,56 +38,16 @@ const ALPHABET = [
 ];
 
 export default function Tags() {
-	const { theme } = useTheme();
-	const user = useSelector((state) => state.user.value);
 	const TAGS = useSelector((state) => state.tags.value);
 	const navigate = useNavigate();
 
-	if (!user.id)
-		return (
-			<div
-				className="tags-page"
-				style={{
-					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					color: theme === "light" ? "black" : "white",
-				}}
-			>
-				You need to be logged to see your tags...
-			</div>
-		);
-
-	if (!TAGS || !Object.keys(TAGS).length)
-		return (
-			<div
-				className="tags-page"
-				style={{
-					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					color: theme === "light" ? "black" : "white",
-				}}
-			>
-				There are no tags yet...
-			</div>
-		);
-
-	return (
-		<div
-			className="tags-page"
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
-		>
+	const page = (
+		<>
 			<h1 className="text-center mb-3">
 				Your tags ({Object.keys(TAGS).length})
 			</h1>
 			{ALPHABET.map((letter) => (
-				<div
-					key={letter + "-section"}
-					style={{
-						backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-						color: theme === "light" ? "black" : "white",
-					}}
-				>
+				<div key={letter + "-section"}>
 					<h5>{letter}</h5>
 					<hr />
 					<div>
@@ -108,6 +68,15 @@ export default function Tags() {
 					</div>
 				</div>
 			))}
-		</div>
+		</>
+	);
+
+	return (
+		<PrivatePageContainer
+			pageNameWithoutWordPage="tags"
+			youNeedToLogInTo="see stored tags"
+		>
+			{page}
+		</PrivatePageContainer>
 	);
 }

@@ -1,39 +1,17 @@
 import { useSelector } from "react-redux";
-import { useTheme } from "../contexts/useTheme";
 import { useNavigate } from "react-router-dom";
 // react bootstrap components:
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
 // custom components:
+import PrivatePageContainer from "../components/PrivatePageContainer";
 import IconButton from "../components/IconButton";
 
 export default function Authors() {
-	const { theme } = useTheme();
-	const user = useSelector((state) => state.user.value);
 	const AUTHORS = useSelector((state) => state.authors.value);
 	const navigate = useNavigate();
 
-	if (!user.id)
-		return (
-			<div
-				className="authors-page"
-				style={{
-					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					color: theme === "light" ? "black" : "white",
-				}}
-			>
-				<p>You need to be logged in to see stored authors...</p>
-			</div>
-		);
-
-	return (
-		<div
-			className="authors-page"
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
-		>
+	const page = (
+		<>
 			<h1 className="text-center mb-3">
 				Your authors ({Object.keys(AUTHORS).length})
 			</h1>
@@ -62,6 +40,15 @@ export default function Authors() {
 			) : (
 				<p>There are no stored authors yet... Add one!</p>
 			)}
-		</div>
+		</>
+	);
+
+	return (
+		<PrivatePageContainer
+			pageNameWithoutWordPage="authors"
+			youNeedToLogInTo="see stored authors"
+		>
+			{page}
+		</PrivatePageContainer>
 	);
 }
