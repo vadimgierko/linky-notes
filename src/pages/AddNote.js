@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../contexts/useTheme";
 // custom components:
+import PrivatePageContainer from "../components/PrivatePageContainer";
 import NoteForm from "../components/NoteForm";
 // thunks:
 import { addNote } from "../thunks/notes/addNote";
@@ -9,7 +9,6 @@ import { addNote } from "../thunks/notes/addNote";
 import generateFirebaseKeyFor from "../firebase-rtdb-crud/generateFirebaseKeyFor";
 
 export default function AddNote() {
-	const { theme } = useTheme();
 	const user = useSelector((state) => state.user.value);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -23,28 +22,12 @@ export default function AddNote() {
 		);
 	}
 
-	if (!user.id)
-		return (
-			<div
-				className="add-note-page"
-				style={{
-					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					color: theme === "light" ? "black" : "white",
-				}}
-			>
-				<p>You need to log in to add an item...</p>
-			</div>
-		);
-
 	return (
-		<div
-			className="add-note-page"
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
+		<PrivatePageContainer
+			pageNameWithoutWordPage="add-note"
+			youNeedToLogInTo="add a new note"
 		>
 			<NoteForm onSubmit={handleSubmit} />
-		</div>
+		</PrivatePageContainer>
 	);
 }

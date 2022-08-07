@@ -1,15 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../contexts/useTheme";
 // thunks:
 import { addSource } from "../thunks/sources/addSource";
 // helper functions:
 import generateFirebaseKeyFor from "../firebase-rtdb-crud/generateFirebaseKeyFor";
 // custom components:
+import PrivatePageContainer from "../components/PrivatePageContainer";
 import SourceForm from "../components/SourceForm";
 
 export default function AddSource() {
-	const { theme } = useTheme();
 	const user = useSelector((state) => state.user.value);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -23,28 +22,12 @@ export default function AddSource() {
 		);
 	}
 
-	if (!user.id)
-		return (
-			<div
-				className="add-note-page"
-				style={{
-					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					color: theme === "light" ? "black" : "white",
-				}}
-			>
-				<p>You need to log in to add a source...</p>
-			</div>
-		);
-
 	return (
-		<div
-			className="add-source-page"
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
+		<PrivatePageContainer
+			pageNameWithoutWordPage="add-source"
+			youNeedToLogInTo="add a new source"
 		>
 			<SourceForm onSubmit={handleSubmit} />
-		</div>
+		</PrivatePageContainer>
 	);
 }

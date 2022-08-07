@@ -133,7 +133,7 @@ export default function Notes() {
 							))}
 					</div>
 				) : (
-					<div className="filter-tags">There are no filter tags...</div>
+					<div className="filter-tags mb-2">There are no filter tags...</div>
 				)}
 
 				{/*========================================= filtered notes */}
@@ -156,7 +156,6 @@ export default function Notes() {
 					</div>
 				) : (
 					<div className="filtered-notes">
-						<p>Found notes: {Object.keys(NOTES).length}</p>
 						{Object.keys(NOTES)
 							.slice()
 							.reverse()

@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-// contexts:
-import { useTheme } from "../contexts/useTheme";
 // custom components:
+import PrivatePageContainer from "../components/PrivatePageContainer";
 import AuthorForm from "../components/AuthorForm";
 // thunks:
 import { addAuthor } from "../thunks/authors/addAuthor";
@@ -11,7 +10,6 @@ import { addAuthor } from "../thunks/authors/addAuthor";
 import generateFirebaseKeyFor from "../firebase-rtdb-crud/generateFirebaseKeyFor";
 
 export default function AddAuthor() {
-	const { theme } = useTheme();
 	const user = useSelector((state) => state.user.value);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -54,28 +52,12 @@ export default function AddAuthor() {
 		);
 	}, [state]);
 
-	if (!user.id)
-		return (
-			<div
-				className="add-author-page"
-				style={{
-					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					color: theme === "light" ? "black" : "white",
-				}}
-			>
-				<p>You need to log in to add an author...</p>
-			</div>
-		);
-
 	return (
-		<div
-			className="add-author-page"
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
+		<PrivatePageContainer
+			pageNameWithoutWordPage="add-author"
+			youNeedToLogInTo="add a new author"
 		>
 			<AuthorForm onSubmit={handleSubmit} />
-		</div>
+		</PrivatePageContainer>
 	);
 }
