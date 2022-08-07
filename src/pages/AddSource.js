@@ -18,10 +18,9 @@ export default function AddSource() {
 		e.preventDefault();
 		console.log("Source to add:", source);
 		const newKey = generateFirebaseKeyFor("sources/" + user.id);
-		dispatch(addSource({ source: source, key: newKey }));
-		// .then(() =>
-		// 	navigate("/sources")
-		// );
+		dispatch(addSource({ source: source, key: newKey })).then(() =>
+			navigate("/sources")
+		);
 	}
 
 	if (!user.id)

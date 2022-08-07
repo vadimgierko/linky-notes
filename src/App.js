@@ -27,6 +27,7 @@ import AddAuthor from "./pages/AddAuthor";
 import Authors from "./pages/Authors";
 import UpdateAuthor from "./pages/UpdateAuthor";
 import AddSource from "./pages/AddSource";
+import Sources from "./pages/Sources";
 
 export default function App() {
 	const user = useSelector((state) => state.user.value);
@@ -76,6 +77,10 @@ export default function App() {
 		{
 			path: "/authors/update-author/:itemKey",
 			element: <UpdateAuthor />,
+		},
+		{
+			path: "/sources",
+			element: <Sources />,
 		},
 		{
 			path: "/add-source",
