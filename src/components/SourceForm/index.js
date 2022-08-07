@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
@@ -7,6 +8,8 @@ import { Link } from "react-router-dom";
 
 export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 	const { theme } = useTheme();
+	// this is needed, when adding new author & navigating back with new author key
+	const { state, pathname } = useLocation();
 	const SOURCES = useSelector((state) => state.sources.value);
 	const AUTHORS = useSelector((state) => state.authors.value);
 	const [source, setSource] = useState();
@@ -40,6 +43,17 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 			});
 		}
 	}, [sourceKey, SOURCES]);
+
+	useEffect(() => {
+		console.log("SourceForm state from useLocation:", state);
+		if (state && state.newAuthorKey && state.passedSourceObject) {
+			setSource({ ...state.passedSourceObject, authorKey: state.newAuthorKey });
+		}
+	}, [state]);
+
+	useEffect(() => {
+		console.log("SourceForm pathname from useLocation:", pathname);
+	}, [pathname]);
 
 	if (!source) return null;
 
@@ -78,6 +92,7 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 				<Form.Group className="mb-3">
 					<Form.Label>Author:</Form.Label>
 					<Form.Select
+						value={source.authorKey || ""}
 						style={{
 							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
 							color: theme === "light" ? "black" : "white",
@@ -89,7 +104,7 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 							})
 						}
 					>
-						<option>Select author or...</option>
+						<option>Select author</option>
 						{Object.keys(AUTHORS).length
 							? Object.keys(AUTHORS).map((id) => (
 									<option key={id} value={id}>
@@ -98,7 +113,12 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 							  ))
 							: null}
 					</Form.Select>
-					<Link to="/add-author">...or add new one</Link>
+					<Link
+						to="/add-author"
+						state={{ redirectedFrom: pathname, passedSourceObject: source }}
+					>
+						...or add new one
+					</Link>
 				</Form.Group>
 
 				<Form.Group className="mb-3">
