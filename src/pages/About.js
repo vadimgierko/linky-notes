@@ -1,4 +1,3 @@
-import { useTheme } from "../contexts/useTheme";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -52,19 +51,12 @@ So I've decided to build this note app & solved one of my biggest problems thank
 `;
 
 export default function About() {
-	const { theme } = useTheme();
-
 	return (
-		<div
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
-		>
+		<>
 			<h1 className="text-center mb-3">
 				Create, organize & filter your notes by tags!
 			</h1>
 			<ReactMarkdown children={ABOUT_MARKDOWN} remarkPlugins={[remarkGfm]} />
-		</div>
+		</>
 	);
 }

@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 // contexts:
 import { useTheme } from "../contexts/useTheme";
 // custom components:
-import PrivatePageContainer from "../components/PrivatePageContainer";
 import NoteCard from "../components/NoteCard";
 import Tag from "../components/Tag";
 import TagWithTrashIcon from "../components/TagWithTrashIcon";
@@ -22,7 +21,7 @@ export default function Notes() {
 
 	const navigate = useNavigate();
 
-	const page = (
+	return (
 		<>
 			<h1 className="text-center mb-3">
 				Your filtered notes (
@@ -166,14 +165,5 @@ export default function Notes() {
 				)}
 			</div>
 		</>
-	);
-
-	return (
-		<PrivatePageContainer
-			pageNameWithoutWordPage="notes"
-			youNeedToLogInTo="see stored notes"
-		>
-			{page}
-		</PrivatePageContainer>
 	);
 }

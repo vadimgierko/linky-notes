@@ -1,7 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // custom components:
-import PrivatePageContainer from "../components/PrivatePageContainer";
 import NoteForm from "../components/NoteForm";
 // thunks:
 import { addNote } from "../thunks/notes/addNote";
@@ -22,12 +21,5 @@ export default function AddNote() {
 		);
 	}
 
-	return (
-		<PrivatePageContainer
-			pageNameWithoutWordPage="add-note"
-			youNeedToLogInTo="add a new note"
-		>
-			<NoteForm onSubmit={handleSubmit} />
-		</PrivatePageContainer>
-	);
+	return <NoteForm onSubmit={handleSubmit} />;
 }

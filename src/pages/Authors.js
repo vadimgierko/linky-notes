@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 // react bootstrap components:
 import Button from "react-bootstrap/Button";
 // custom components:
-import PrivatePageContainer from "../components/PrivatePageContainer";
 import IconButton from "../components/IconButton";
 
 export default function Authors() {
 	const AUTHORS = useSelector((state) => state.authors.value);
 	const navigate = useNavigate();
 
-	const page = (
+	return (
 		<>
 			<h1 className="text-center mb-3">
 				Your authors ({Object.keys(AUTHORS).length})
@@ -41,14 +40,5 @@ export default function Authors() {
 				<p>There are no stored authors yet... Add one!</p>
 			)}
 		</>
-	);
-
-	return (
-		<PrivatePageContainer
-			pageNameWithoutWordPage="authors"
-			youNeedToLogInTo="see stored authors"
-		>
-			{page}
-		</PrivatePageContainer>
 	);
 }

@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // custom components:
-import PrivatePageContainer from "../components/PrivatePageContainer";
 import Tag from "../components/Tag";
 
 const ALPHABET = [
@@ -41,7 +40,7 @@ export default function Tags() {
 	const TAGS = useSelector((state) => state.tags.value);
 	const navigate = useNavigate();
 
-	const page = (
+	return (
 		<>
 			<h1 className="text-center mb-3">
 				Your tags ({Object.keys(TAGS).length})
@@ -69,14 +68,5 @@ export default function Tags() {
 				</div>
 			))}
 		</>
-	);
-
-	return (
-		<PrivatePageContainer
-			pageNameWithoutWordPage="tags"
-			youNeedToLogInTo="see stored tags"
-		>
-			{page}
-		</PrivatePageContainer>
 	);
 }

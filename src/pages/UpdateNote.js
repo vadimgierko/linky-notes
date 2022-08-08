@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 // custom components:
-import PrivatePageContainer from "../components/PrivatePageContainer";
 import NoteForm from "../components/NoteForm";
 // thunks:
 import { updateNote } from "../thunks/notes/updateNote";
@@ -19,12 +18,5 @@ export default function UpdateNote() {
 		);
 	}
 
-	return (
-		<PrivatePageContainer
-			pageNameWithoutWordPage="update-note"
-			youNeedToLogInTo="update the note"
-		>
-			<NoteForm noteKey={itemKey} onSubmit={handleSubmit} />
-		</PrivatePageContainer>
-	);
+	return <NoteForm noteKey={itemKey} onSubmit={handleSubmit} />;
 }

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 // react bootstrap components:
 import Button from "react-bootstrap/Button";
 // custom components:
-import PrivatePageContainer from "../components/PrivatePageContainer";
 import IconButton from "../components/IconButton";
 
 export default function Sources() {
@@ -11,7 +10,7 @@ export default function Sources() {
 	const AUTHORS = useSelector((state) => state.authors.value);
 	const navigate = useNavigate();
 
-	const page = (
+	return (
 		<>
 			<h1 className="text-center mb-3">
 				Your sources ({Object.keys(SOURCES).length})
@@ -47,14 +46,5 @@ export default function Sources() {
 				<p>There are no stored sources yet... Add one!</p>
 			)}
 		</>
-	);
-
-	return (
-		<PrivatePageContainer
-			pageNameWithoutWordPage="sources"
-			youNeedToLogInTo="see stored sources"
-		>
-			{page}
-		</PrivatePageContainer>
 	);
 }

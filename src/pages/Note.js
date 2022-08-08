@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 // custom components:
-import PrivatePageContainer from "../components/PrivatePageContainer";
 import NoteCard from "../components/NoteCard";
 
 export default function Note() {
@@ -10,10 +9,7 @@ export default function Note() {
 	const NOTES = useSelector((state) => state.notes.value);
 
 	return (
-		<PrivatePageContainer
-			pageNameWithoutWordPage="note"
-			youNeedToLogInTo="see this note"
-		>
+		<>
 			{NOTES[itemKey] ? (
 				<>
 					<NoteCard
@@ -28,6 +24,6 @@ export default function Note() {
 			) : (
 				<p>There is no such note...</p>
 			)}
-		</PrivatePageContainer>
+		</>
 	);
 }

@@ -1,12 +1,12 @@
 import { Container } from "react-bootstrap";
 
-export default function Footer() {
+export default function Footer({ maxWidth }) {
 	return (
 		<Container
 			as="footer"
 			style={{
 				color: "grey",
-				maxWidth: 900,
+				maxWidth: maxWidth,
 			}}
 		>
 			<hr />

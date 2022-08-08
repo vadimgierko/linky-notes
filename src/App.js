@@ -12,6 +12,8 @@ import { fetchAuthors } from "./thunks/authors/fetchAuthors";
 import { fetchSources } from "./thunks/sources/fetchSources";
 //================================================
 import { Routes, Route } from "react-router-dom";
+// custom components:
+import RequireAuth from "./components/RequireAuth";
 // layout:
 import Layout from "./layout/Layout";
 // pages:
@@ -33,60 +35,64 @@ export default function App() {
 	const user = useSelector((state) => state.user.value);
 	const dispatch = useDispatch();
 
-	const ROUTES = [
-		{
-			path: "/",
-			element: user.id ? <Notes /> : <About />,
-		},
-		{
-			path: "/about",
-			element: <About />,
-		},
-		{
-			path: "/signin",
-			element: <SignIn />,
-		},
-		{
-			path: "/signup",
-			element: <SignUp />,
-		},
-		{
-			path: "/notes/:itemKey",
-			element: <Note />,
-		},
-		{
-			path: "/tags",
-			element: <Tags />,
-		},
-		{
-			path: "/add-note",
-			element: <AddNote />,
-		},
-		{
-			path: "/notes/update-note/:itemKey",
-			element: <UpdateNote />,
-		},
-		{
-			path: "/authors",
-			element: <Authors />,
-		},
-		{
-			path: "/add-author",
-			element: <AddAuthor />,
-		},
-		{
-			path: "/authors/update-author/:itemKey",
-			element: <UpdateAuthor />,
-		},
-		{
-			path: "/sources",
-			element: <Sources />,
-		},
-		{
-			path: "/add-source",
-			element: <AddSource />,
-		},
-	];
+	const ROUTES = {
+		public: [
+			{
+				path: "/about",
+				element: <About />,
+			},
+			{
+				path: "/signin",
+				element: <SignIn />,
+			},
+			{
+				path: "/signup",
+				element: <SignUp />,
+			},
+		],
+		private: [
+			{
+				path: "/",
+				element: <Notes />,
+			},
+			{
+				path: "/notes/:itemKey",
+				element: <Note />,
+			},
+			{
+				path: "/tags",
+				element: <Tags />,
+			},
+			{
+				path: "/add-note",
+				element: <AddNote />,
+			},
+			{
+				path: "/notes/update-note/:itemKey",
+				element: <UpdateNote />,
+			},
+			{
+				path: "/authors",
+				element: <Authors />,
+			},
+			{
+				path: "/add-author",
+				element: <AddAuthor />,
+			},
+			{
+				path: "/authors/update-author/:itemKey",
+				element: <UpdateAuthor />,
+			},
+			{
+				path: "/sources",
+				element: <Sources />,
+			},
+			{
+				path: "/add-source",
+				element: <AddSource />,
+			},
+		],
+	};
 
 	// listen to the user logs in & out:
 	useEffect(() => {
@@ -97,11 +103,11 @@ export default function App() {
 					const uid = user.uid;
 					const email = user.email;
 					dispatch(userSignedIn({ email: email, id: uid }));
-					//========> UNCOMMENT THIS CODE TO FETCH AFTER APP MOUNTS & USER IS LOGGED:
-					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
-					dispatch(fetchTags({ reference: "tags/" + uid }));
-					dispatch(fetchAuthors({ reference: "authors/" + uid }));
-					dispatch(fetchSources({ reference: "sources/" + uid }));
+					//========> UNCOMMENT THIS CODE TO FETCH DATA AFTER APP MOUNTS & USER IS LOGGED:
+					// dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
+					// dispatch(fetchTags({ reference: "tags/" + uid }));
+					// dispatch(fetchAuthors({ reference: "authors/" + uid }));
+					// dispatch(fetchSources({ reference: "sources/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
@@ -115,8 +121,15 @@ export default function App() {
 		<div className="App">
 			<Layout>
 				<Routes>
-					{ROUTES.map((route) => (
+					{ROUTES.public.map((route) => (
 						<Route path={route.path} element={route.element} key={route.path} />
+					))}
+					{ROUTES.private.map((route) => (
+						<Route
+							path={route.path}
+							element={<RequireAuth>{route.element}</RequireAuth>}
+							key={route.path}
+						/>
 					))}
 				</Routes>
 			</Layout>

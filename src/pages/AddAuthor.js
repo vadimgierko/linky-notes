@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 // custom components:
-import PrivatePageContainer from "../components/PrivatePageContainer";
 import AuthorForm from "../components/AuthorForm";
 // thunks:
 import { addAuthor } from "../thunks/authors/addAuthor";
@@ -52,12 +51,5 @@ export default function AddAuthor() {
 		);
 	}, [state]);
 
-	return (
-		<PrivatePageContainer
-			pageNameWithoutWordPage="add-author"
-			youNeedToLogInTo="add a new author"
-		>
-			<AuthorForm onSubmit={handleSubmit} />
-		</PrivatePageContainer>
-	);
+	return <AuthorForm onSubmit={handleSubmit} />;
 }

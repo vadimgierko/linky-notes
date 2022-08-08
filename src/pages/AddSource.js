@@ -5,7 +5,6 @@ import { addSource } from "../thunks/sources/addSource";
 // helper functions:
 import generateFirebaseKeyFor from "../firebase-rtdb-crud/generateFirebaseKeyFor";
 // custom components:
-import PrivatePageContainer from "../components/PrivatePageContainer";
 import SourceForm from "../components/SourceForm";
 
 export default function AddSource() {
@@ -22,12 +21,5 @@ export default function AddSource() {
 		);
 	}
 
-	return (
-		<PrivatePageContainer
-			pageNameWithoutWordPage="add-source"
-			youNeedToLogInTo="add a new source"
-		>
-			<SourceForm onSubmit={handleSubmit} />
-		</PrivatePageContainer>
-	);
+	return <SourceForm onSubmit={handleSubmit} />;
 }

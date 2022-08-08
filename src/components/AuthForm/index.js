@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
+import { useLocation } from "react-router-dom";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
 
 export default function AuthForm({ headerText, onSubmit }) {
 	const { theme } = useTheme();
-
 	const [userData, setUserData] = useState({
 		email: "",
 		password: "",
 	});
+	const location = useLocation();
+	const from = location.state?.from?.pathname || "/";
+
+	// only to check:
+	useEffect(() => console.log("from from location in AuthForm:", from), [from]);
 
 	return (
 		<div
@@ -60,11 +65,19 @@ export default function AuthForm({ headerText, onSubmit }) {
 					<br />
 					{headerText === "Sign in" ? (
 						<Form.Text>
-							Don't have an account? <Link to="/signup">Sign up!</Link>
+							Don't have an account?{" "}
+							{/** this doesn't pass state from... don't know why */}
+							<Link to="/signup" state={{ from: from }} replace>
+								Sign up!
+							</Link>
 						</Form.Text>
 					) : (
 						<Form.Text>
-							Already have an account? <Link to="/signin">Sign in!</Link>
+							Already have an account?{" "}
+							{/** this doesn't pass state from too... */}
+							<Link to="/signin" state={{ from: from }} replace>
+								Sign in!
+							</Link>
 						</Form.Text>
 					)}
 				</Form.Group>
