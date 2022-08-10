@@ -30,6 +30,7 @@ import Authors from "./pages/Authors";
 import UpdateAuthor from "./pages/UpdateAuthor";
 import AddSource from "./pages/AddSource";
 import Sources from "./pages/Sources";
+import UpdateSource from "./pages/UpdateSource";
 
 export default function App() {
 	const user = useSelector((state) => state.user.value);
@@ -91,6 +92,10 @@ export default function App() {
 				path: "/add-source",
 				element: <AddSource />,
 			},
+			{
+				path: "/sources/update-source/:itemKey",
+				element: <UpdateSource />,
+			},
 		],
 	};
 
@@ -104,10 +109,10 @@ export default function App() {
 					const email = user.email;
 					dispatch(userSignedIn({ email: email, id: uid }));
 					//========> UNCOMMENT THIS CODE TO FETCH DATA AFTER APP MOUNTS & USER IS LOGGED:
-					// dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
-					// dispatch(fetchTags({ reference: "tags/" + uid }));
-					// dispatch(fetchAuthors({ reference: "authors/" + uid }));
-					// dispatch(fetchSources({ reference: "sources/" + uid }));
+					//dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
+					//dispatch(fetchTags({ reference: "tags/" + uid }));
+					dispatch(fetchAuthors({ reference: "authors/" + uid }));
+					dispatch(fetchSources({ reference: "sources/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
