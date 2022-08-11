@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useTheme } from "../../contexts/useTheme";
+import { Link, useLocation } from "react-router-dom";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
 // custom components:
@@ -9,8 +10,13 @@ import TagWithTrashIcon from "../TagWithTrashIcon";
 
 export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 	const { theme } = useTheme();
+	const { state, pathname } = useLocation();
+	// from state:
 	const NOTES = useSelector((state) => state.notes.value);
 	const TAGS = useSelector((state) => state.tags.value);
+	const SOURCES = useSelector((state) => state.sources.value);
+	const AUTHORS = useSelector((state) => state.authors.value);
+	// note object:
 	const [note, setNote] = useState();
 	// tag search bar:
 	const [input, setInput] = useState("");
@@ -37,9 +43,21 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 				content: "",
 				existingTags: {},
 				newTags: [],
+				sourceKey: "",
 			});
 		}
 	}, [noteKey, NOTES]);
+
+	useEffect(() => {
+		console.log("NoteForm state from useLocation:", state);
+		if (state && state.newSourceKey && state.passedNote) {
+			setNote({ ...state.passedNote, sourceKey: state.newSourceKey });
+		}
+	}, [state]);
+
+	useEffect(() => {
+		console.log("NoteForm pathname from useLocation:", pathname);
+	}, [pathname]);
 
 	if (!note) return null;
 
@@ -200,6 +218,43 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 						<div className="filter-tags">This note has no tags yet...</div>
 					)}
 				</div>
+
+				{/**==================== add source =========================*/}
+				<Form.Group className="mb-3">
+					<Form.Label>Source:</Form.Label>
+					<Form.Select
+						value={note.sourceKey || ""}
+						style={{
+							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+							color: theme === "light" ? "black" : "white",
+						}}
+						onChange={(e) =>
+							setNote({
+								...note,
+								sourceKey: e.target.value,
+							})
+						}
+					>
+						<option>Select source</option>
+						{Object.keys(SOURCES).length
+							? Object.keys(SOURCES).map((id) => (
+									<option key={id} value={id}>
+										{SOURCES[id].title},{" "}
+										{AUTHORS[SOURCES[id].authorKey].names.full}
+									</option>
+							  ))
+							: null}
+					</Form.Select>
+					<Link
+						to="/add-source"
+						state={{
+							initRedirectedFrom: pathname, //add/update-note
+							passedNote: note, // note object without new source key
+						}}
+					>
+						...or add new one source to database
+					</Link>
+				</Form.Group>
 
 				<div className="d-grid my-2">
 					<Button variant="success" type="submit">

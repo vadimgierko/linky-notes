@@ -1,4 +1,3 @@
-import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
@@ -9,19 +8,21 @@ import { Card, Row, Col } from "react-bootstrap";
 import IconButton from "../IconButton";
 // thunks:
 import { deleteNote } from "../../thunks/notes/deleteNote";
+import { Link } from "react-router-dom";
 
 export default function NoteCard({ note, noteKey }) {
 	const { theme } = useTheme();
-	const [searchParams, setSearchParams] = useSearchParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const user = useSelector((state) => state.user.value);
+	const SOURCES = useSelector((state) => state.sources.value);
+	const AUTHORS = useSelector((state) => state.authors.value);
 
 	const ICON_BUTTONS = [
 		{
 			iconName: "eye",
 			color: "secondary",
-			onClick: () => navigate("notes/" + noteKey),
+			onClick: () => navigate("/notes/" + noteKey),
 		},
 		{
 			iconName: "pencil",
@@ -99,7 +100,30 @@ export default function NoteCard({ note, noteKey }) {
 						/>
 					))}
 			</Card.Body>
-			<Card.Footer></Card.Footer>
+			<Card.Footer>
+				{note.sourceKey &&
+				SOURCES[note.sourceKey] &&
+				AUTHORS[SOURCES[note.sourceKey].authorKey] ? (
+					<Card.Text className="text-muted">
+						<strong>
+							<em>{SOURCES[note.sourceKey].title}</em>
+						</strong>{" "}
+						by {AUTHORS[SOURCES[note.sourceKey].authorKey].names.full}
+						{SOURCES[note.sourceKey].link && (
+							<span>
+								,{" "}
+								<Link to={SOURCES[note.sourceKey].link} target="_blank">
+									{SOURCES[note.sourceKey].link}
+								</Link>
+							</span>
+						)}
+					</Card.Text>
+				) : (
+					<Card.Text className="text-muted">
+						This note has no source...
+					</Card.Text>
+				)}
+			</Card.Footer>
 		</Card>
 	);
 }

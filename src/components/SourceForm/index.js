@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
 export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 	const { theme } = useTheme();
 	// this is needed, when adding new author & navigating back with new author key
+	// NOTE: state also consist redirectedFrom & passedNoteObject,
+	// when adding new source & navigating back to NoteForm with new source key.
+	// This is cascading navigation, so we can add note with new source, which has a new author
 	const { state, pathname } = useLocation();
 	const SOURCES = useSelector((state) => state.sources.value);
 	const AUTHORS = useSelector((state) => state.authors.value);
@@ -46,8 +48,8 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 
 	useEffect(() => {
 		console.log("SourceForm state from useLocation:", state);
-		if (state && state.newAuthorKey && state.passedSourceObject) {
-			setSource({ ...state.passedSourceObject, authorKey: state.newAuthorKey });
+		if (state && state.newAuthorKey && state.passedSource) {
+			setSource({ ...state.passedSource, authorKey: state.newAuthorKey });
 		}
 	}, [state]);
 
@@ -113,12 +115,28 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 							  ))
 							: null}
 					</Form.Select>
-					<Link
-						to="/add-author"
-						state={{ redirectedFrom: pathname, passedSourceObject: source }}
-					>
-						...or add new one
-					</Link>
+					{state && state.initRedirectedFrom && state.passedNote ? (
+						<Link
+							to="/add-author"
+							state={{
+								// state from /add/update-note:
+								initRedirectedFrom: state.initRedirectedFrom,
+								passedNote: state.passedNote,
+								// state from add-source:
+								redirectedFrom: pathname,
+								passedSource: source,
+							}}
+						>
+							...or add new one author to database
+						</Link>
+					) : (
+						<Link
+							to="/add-author"
+							state={{ redirectedFrom: pathname, passedSource: source }}
+						>
+							...or add new one author to database
+						</Link>
+					)}
 				</Form.Group>
 
 				<Form.Group className="mb-3">
