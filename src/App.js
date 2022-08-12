@@ -32,72 +32,72 @@ import AddSource from "./pages/AddSource";
 import Sources from "./pages/Sources";
 import UpdateSource from "./pages/UpdateSource";
 
+const ROUTES = {
+	public: [
+		{
+			path: "/about",
+			element: <About />,
+		},
+		{
+			path: "/signin",
+			element: <SignIn />,
+		},
+		{
+			path: "/signup",
+			element: <SignUp />,
+		},
+	],
+	private: [
+		{
+			path: "/",
+			element: <Notes />,
+		},
+		{
+			path: "/notes/:itemKey",
+			element: <Note />,
+		},
+		{
+			path: "/tags",
+			element: <Tags />,
+		},
+		{
+			path: "/add-note",
+			element: <AddNote />,
+		},
+		{
+			path: "/notes/update-note/:itemKey",
+			element: <UpdateNote />,
+		},
+		{
+			path: "/authors",
+			element: <Authors />,
+		},
+		{
+			path: "/add-author",
+			element: <AddAuthor />,
+		},
+		{
+			path: "/authors/update-author/:itemKey",
+			element: <UpdateAuthor />,
+		},
+		{
+			path: "/sources",
+			element: <Sources />,
+		},
+		{
+			path: "/add-source",
+			element: <AddSource />,
+		},
+		{
+			path: "/sources/update-source/:itemKey",
+			element: <UpdateSource />,
+		},
+	],
+};
+
 export default function App() {
 	const user = useSelector((state) => state.user.value);
 	const dispatch = useDispatch();
-
-	const ROUTES = {
-		public: [
-			{
-				path: "/about",
-				element: <About />,
-			},
-			{
-				path: "/signin",
-				element: <SignIn />,
-			},
-			{
-				path: "/signup",
-				element: <SignUp />,
-			},
-		],
-		private: [
-			{
-				path: "/",
-				element: <Notes />,
-			},
-			{
-				path: "/notes/:itemKey",
-				element: <Note />,
-			},
-			{
-				path: "/tags",
-				element: <Tags />,
-			},
-			{
-				path: "/add-note",
-				element: <AddNote />,
-			},
-			{
-				path: "/notes/update-note/:itemKey",
-				element: <UpdateNote />,
-			},
-			{
-				path: "/authors",
-				element: <Authors />,
-			},
-			{
-				path: "/add-author",
-				element: <AddAuthor />,
-			},
-			{
-				path: "/authors/update-author/:itemKey",
-				element: <UpdateAuthor />,
-			},
-			{
-				path: "/sources",
-				element: <Sources />,
-			},
-			{
-				path: "/add-source",
-				element: <AddSource />,
-			},
-			{
-				path: "/sources/update-source/:itemKey",
-				element: <UpdateSource />,
-			},
-		],
-	};
 
 	// listen to the user logs in & out:
 	useEffect(() => {
@@ -109,8 +109,8 @@ export default function App() {
 					const email = user.email;
 					dispatch(userSignedIn({ email: email, id: uid }));
 					//========> UNCOMMENT THIS CODE TO FETCH DATA AFTER APP MOUNTS & USER IS LOGGED:
-					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
-					dispatch(fetchTags({ reference: "tags/" + uid }));
+					// dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
+					// dispatch(fetchTags({ reference: "tags/" + uid }));
 					dispatch(fetchAuthors({ reference: "authors/" + uid }));
 					dispatch(fetchSources({ reference: "sources/" + uid }));
 				} else {

@@ -20,21 +20,19 @@ export const addSource = createAsyncThunk(
 			// we need to update it with all necessary props & metadata:
 			const user = thunkAPI.getState().user.value;
 			const sourceObjectFromForm = arg.source;
-			if (sourceObjectFromForm.title && sourceObjectFromForm.authorKey) {
-				const updatedSourceObject = {
-					...sourceObjectFromForm,
-					createdAt: createDate(),
-					userId: user.id,
-				};
-				const rootReference = "sources/" + user.id + "/";
-				const referenceWithTheKey = rootReference + arg.key;
-				//===========================================================
-				await addItemWithGivenKey(referenceWithTheKey, updatedSourceObject);
-				console.log("THUNK: source added:", arg.key, updatedSourceObject);
-				thunkAPI.dispatch(
-					sourceAdded({ id: arg.key, source: updatedSourceObject })
-				);
-			}
+			const updatedSourceObject = {
+				...sourceObjectFromForm,
+				createdAt: createDate(),
+				userId: user.id,
+			};
+			const rootReference = "sources/" + user.id + "/";
+			const referenceWithTheKey = rootReference + arg.key;
+			//===========================================================
+			await addItemWithGivenKey(referenceWithTheKey, updatedSourceObject);
+			console.log("THUNK: source added:", arg.key, updatedSourceObject);
+			thunkAPI.dispatch(
+				sourceAdded({ id: arg.key, source: updatedSourceObject })
+			);
 		} catch (error) {
 			console.log(error);
 		}

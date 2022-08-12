@@ -5,10 +5,38 @@ import { useTheme } from "../../contexts/useTheme";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
 
+// FORM_STRUCTURE consists only inputs after select author
+const FORM_STRUCTURE = {
+	title: {
+		label: "Title",
+		placeholder: "Input source's title",
+	},
+	placeOfPublishing: {
+		label: "Place of publishing",
+		placeholder: "Input source's place of publishing",
+	},
+	yearOfPublishing: {
+		label: "Year of publishing",
+		placeholder: "Input source's year of publishing",
+	},
+	link: {
+		label: "Link",
+		placeholder: "Copy full link (URL) of source here",
+	},
+};
+
+const INIT_SOURCE_SCHEMA = {
+	title: "",
+	authorKey: "", // author's data will be fetched by author's key from the store
+	placeOfPublishing: "",
+	yearOfPublishing: "",
+	link: "",
+};
+
 export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 	const { theme } = useTheme();
 	// this is needed, when adding new author & navigating back with new author key
-	// NOTE: state also consist redirectedFrom & passedNoteObject,
+	// NOTE: state also consist initRedirectedFrom & passedNote,
 	// when adding new source & navigating back to NoteForm with new source key.
 	// This is cascading navigation, so we can add note with new source, which has a new author
 	const { state, pathname } = useLocation();
@@ -22,50 +50,38 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 				// if sourceKey was passed,
 				// it means that we are updating the existing source,
 				// so we need to fetch it from the store:
-				setSource({
-					...SOURCES[sourceKey],
-					title: SOURCES[sourceKey].title,
-					authorKey: SOURCES[sourceKey].authorKey,
-					yearOfPublishing: SOURCES[sourceKey].yearOfPublishing,
-					link: SOURCES[sourceKey].link,
-				});
+				const fillSourceSchemaWithData = () => {
+					let item = {};
+					Object.keys(INIT_SOURCE_SCHEMA).forEach(
+						(key) => (item = { ...item, [key]: SOURCES[sourceKey][key] || "" })
+					);
+					return {
+						...SOURCES[sourceKey],
+						...item,
+					};
+				};
+				setSource(fillSourceSchemaWithData());
 			}
 		} else {
-			setSource({
-				// TODO: there are the basic props, need to rethink & expand:
-				// props grouped by type of source ??
-				title: "",
-				//subTitle: "",
-				authorKey: "", // author's data will be fetched by author's key from the store
-				//type: "", // book, article (from a book, journal, blog)
-				// placeOfPublishing: "",
-				yearOfPublishing: "",
-				// dateOfPublishing: "",
-				link: "",
-			});
+			setSource(INIT_SOURCE_SCHEMA);
 		}
 	}, [sourceKey, SOURCES]);
 
 	useEffect(() => {
-		console.log("SourceForm state from useLocation:", state);
+		//console.log("SourceForm state from useLocation:", state);
 		if (state && state.newAuthorKey && state.passedSource) {
 			setSource({ ...state.passedSource, authorKey: state.newAuthorKey });
 		}
 	}, [state]);
 
-	useEffect(() => {
-		console.log("SourceForm pathname from useLocation:", pathname);
-	}, [pathname]);
+	// useEffect(() => {
+	// 	console.log("SourceForm pathname from useLocation:", pathname);
+	// }, [pathname]);
 
 	if (!source) return null;
 
 	return (
-		<div
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
-		>
+		<>
 			<h1 className="text-center mb-3">
 				{sourceKey ? "Update source!" : "Add source!"}
 			</h1>
@@ -73,24 +89,7 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 				className="border border-secondary rounded p-3 shadow"
 				onSubmit={(e) => onSubmit(e, source)}
 			>
-				<Form.Group className="mb-3">
-					<Form.Label>Title:</Form.Label>
-					<Form.Control
-						placeholder="Input source's title"
-						value={source.title}
-						style={{
-							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-							color: theme === "light" ? "black" : "white",
-						}}
-						onChange={(e) =>
-							setSource({
-								...source,
-								title: e.target.value,
-							})
-						}
-					/>
-				</Form.Group>
-
+				{/**======================== SELECT AUTHOR ======================== */}
 				<Form.Group className="mb-3">
 					<Form.Label>Author:</Form.Label>
 					<Form.Select
@@ -139,41 +138,27 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 					)}
 				</Form.Group>
 
-				<Form.Group className="mb-3">
-					<Form.Label>Link:</Form.Label>
-					<Form.Control
-						placeholder="copy full link (URL) of source here"
-						value={source.link}
-						style={{
-							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-							color: theme === "light" ? "black" : "white",
-						}}
-						onChange={(e) =>
-							setSource({
-								...source,
-								link: e.target.value,
-							})
-						}
-					/>
-				</Form.Group>
-
-				<Form.Group className="mb-3">
-					<Form.Label>Year of publishing:</Form.Label>
-					<Form.Control
-						placeholder="input source's year of publishing"
-						value={source.yearOfPublishing}
-						style={{
-							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-							color: theme === "light" ? "black" : "white",
-						}}
-						onChange={(e) =>
-							setSource({
-								...source,
-								yearOfPublishing: e.target.value,
-							})
-						}
-					/>
-				</Form.Group>
+				{/**======================== INPUTS ========================*/}
+				{Object.keys(FORM_STRUCTURE).map((formKey) => (
+					<Form.Group className="mb-3" key={formKey}>
+						<Form.Label>{FORM_STRUCTURE[formKey].label}:</Form.Label>
+						<Form.Control
+							placeholder={FORM_STRUCTURE[formKey].placeholder}
+							value={source[formKey]}
+							style={{
+								backgroundColor:
+									theme === "light" ? "white" : "rgb(13, 17, 23)",
+								color: theme === "light" ? "black" : "white",
+							}}
+							onChange={(e) =>
+								setSource({
+									...source,
+									[formKey]: e.target.value,
+								})
+							}
+						/>
+					</Form.Group>
+				))}
 
 				<div className="d-grid my-2">
 					<Button variant="success" type="submit">
@@ -181,6 +166,6 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 					</Button>
 				</div>
 			</Form>
-		</div>
+		</>
 	);
 }
