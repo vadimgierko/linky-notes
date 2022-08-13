@@ -25,6 +25,7 @@ export const updateNote = createAsyncThunk(
 					content: noteToUpdate.content,
 					tags: noteToUpdate.existingTags,
 					sourceKey: noteToUpdate.sourceKey,
+					pages: noteToUpdate.pages,
 					createdAt: noteToUpdate.createdAt,
 					updatedAt: createDate(),
 					userId: noteToUpdate.userId,

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 // custom components:
 import IconButton from "../components/IconButton";
+import SourceReferenceString from "../components/SourceReferenceString";
 
 export default function Sources() {
 	const SOURCES = useSelector((state) => state.sources.value);
@@ -28,10 +29,7 @@ export default function Sources() {
 					{Object.keys(SOURCES).map((key) => (
 						<li key={key}>
 							<p>
-								<strong>
-									<em>{SOURCES[key].title}</em>
-								</strong>
-								, {AUTHORS[SOURCES[key].authorKey].names.full}
+								<SourceReferenceString source={SOURCES[key]} />
 								<IconButton
 									iconName="pencil"
 									color="secondary"

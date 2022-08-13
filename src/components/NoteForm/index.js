@@ -7,6 +7,8 @@ import { Form, Button } from "react-bootstrap";
 // custom components:
 import Tag from "../Tag";
 import TagWithTrashIcon from "../TagWithTrashIcon";
+import SourceReferenceString from "../SourceReferenceString";
+import generateSourceReferenceString from "../../helper-functions/generateSourceReferenceString";
 
 export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 	const { theme } = useTheme();
@@ -44,6 +46,7 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 				existingTags: {},
 				newTags: [],
 				sourceKey: "",
+				pages: "",
 			});
 		}
 	}, [noteKey, NOTES]);
@@ -55,9 +58,9 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 		}
 	}, [state]);
 
-	useEffect(() => {
-		console.log("NoteForm pathname from useLocation:", pathname);
-	}, [pathname]);
+	// useEffect(() => {
+	// 	console.log("NoteForm pathname from useLocation:", pathname);
+	// }, [pathname]);
 
 	if (!note) return null;
 
@@ -81,7 +84,7 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 						as="textarea"
 						rows={5}
 						placeholder="type your note here"
-						value={note ? note.content : ""}
+						value={note.content || ""}
 						style={{
 							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
 							color: theme === "light" ? "black" : "white",
@@ -235,12 +238,11 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 							})
 						}
 					>
-						<option>Select source</option>
+						<option value="">Select source</option>
 						{Object.keys(SOURCES).length
 							? Object.keys(SOURCES).map((id) => (
 									<option key={id} value={id}>
-										{SOURCES[id].title},{" "}
-										{AUTHORS[SOURCES[id].authorKey].names.full}
+										{generateSourceReferenceString(SOURCES[id], AUTHORS)}
 									</option>
 							  ))
 							: null}
@@ -255,6 +257,22 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 						...or add new one source to database
 					</Link>
 				</Form.Group>
+
+				{note.sourceKey && (
+					<Form.Group>
+						<Form.Label>Page/s number/s in the source (optional):</Form.Label>
+						<Form.Control
+							placeholder="type page/s number/s in the source, e.x. 34-36"
+							value={note.pages || ""}
+							style={{
+								backgroundColor:
+									theme === "light" ? "white" : "rgb(13, 17, 23)",
+								color: theme === "light" ? "black" : "white",
+							}}
+							onChange={(e) => setNote({ ...note, pages: e.target.value })}
+						/>
+					</Form.Group>
+				)}
 
 				<div className="d-grid my-2">
 					<Button variant="success" type="submit">

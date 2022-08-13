@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
 // custom components:
 import Tag from "../Tag";
+import SourceReferenceString from "../SourceReferenceString";
 // react-bootstrap components:
 import { Card, Row, Col } from "react-bootstrap";
 import IconButton from "../IconButton";
 // thunks:
 import { deleteNote } from "../../thunks/notes/deleteNote";
-import { Link } from "react-router-dom";
 
 export default function NoteCard({ note, noteKey }) {
 	const { theme } = useTheme();
@@ -16,7 +16,6 @@ export default function NoteCard({ note, noteKey }) {
 	const navigate = useNavigate();
 	const user = useSelector((state) => state.user.value);
 	const SOURCES = useSelector((state) => state.sources.value);
-	const AUTHORS = useSelector((state) => state.authors.value);
 
 	const ICON_BUTTONS = [
 		{
@@ -101,22 +100,12 @@ export default function NoteCard({ note, noteKey }) {
 					))}
 			</Card.Body>
 			<Card.Footer>
-				{note.sourceKey &&
-				SOURCES[note.sourceKey] &&
-				AUTHORS[SOURCES[note.sourceKey].authorKey] ? (
+				{note.sourceKey && SOURCES[note.sourceKey] ? (
 					<Card.Text className="text-muted">
-						<strong>
-							<em>{SOURCES[note.sourceKey].title}</em>
-						</strong>{" "}
-						by {AUTHORS[SOURCES[note.sourceKey].authorKey].names.full}
-						{SOURCES[note.sourceKey].link && (
-							<span>
-								,{" "}
-								<Link to={SOURCES[note.sourceKey].link} target="_blank">
-									{SOURCES[note.sourceKey].link}
-								</Link>
-							</span>
-						)}
+						<SourceReferenceString
+							source={SOURCES[note.sourceKey]}
+							pages={note.pages}
+						/>
 					</Card.Text>
 				) : (
 					<Card.Text className="text-muted">

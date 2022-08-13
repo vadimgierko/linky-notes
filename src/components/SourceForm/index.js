@@ -105,7 +105,7 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 							})
 						}
 					>
-						<option>Select author</option>
+						<option value="">Select author</option>
 						{Object.keys(AUTHORS).length
 							? Object.keys(AUTHORS).map((id) => (
 									<option key={id} value={id}>
