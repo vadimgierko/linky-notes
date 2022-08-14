@@ -32,21 +32,15 @@ export default function AddSource() {
 						passedNote: state.passedNote,
 						newSourceKey: newKey,
 					},
+					replace: true,
 				});
 			} else {
 				// if the source was added after "add note" button click
 				// redirect to /sources:
-				navigate("/sources");
+				navigate("/sources", { replace: true });
 			}
 		});
 	}
-
-	useEffect(() => {
-		console.log(
-			"AddSource state from useLocation (state passed from NoteForm):",
-			state
-		);
-	}, [state]);
 
 	return <SourceForm onSubmit={handleSubmit} />;
 }

@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
-
 export default function generateSourceReferenceString(source, authors) {
 	if (!source) return null;
+
 	const neededSourceData = {
 		title: source.title,
 		authorKey: source.authorKey,
@@ -9,7 +8,9 @@ export default function generateSourceReferenceString(source, authors) {
 		yearOfPublishing: source.yearOfPublishing,
 		link: source.link,
 	};
+
 	let reference = "";
+
 	Object.keys(neededSourceData).forEach((key) => {
 		if (neededSourceData[key]) {
 			if (!reference) {
@@ -35,5 +36,6 @@ export default function generateSourceReferenceString(source, authors) {
 			}
 		}
 	});
+
 	return reference;
 }

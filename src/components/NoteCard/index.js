@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
 // custom components:
 import Tag from "../Tag";
+import IconButton from "../IconButton";
 import SourceReferenceString from "../SourceReferenceString";
 // react-bootstrap components:
 import { Card, Row, Col } from "react-bootstrap";
-import IconButton from "../IconButton";
 // thunks:
 import { deleteNote } from "../../thunks/notes/deleteNote";
 

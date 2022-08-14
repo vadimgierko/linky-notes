@@ -36,6 +36,7 @@ export default function AddAuthor() {
 						passedSource: state.passedSource,
 						newAuthorKey: newKey,
 					},
+					replace: true,
 				});
 			} else if (state && state.redirectedFrom && state.passedSource) {
 				// if we were initially redirected from add/update-source,
@@ -46,21 +47,15 @@ export default function AddAuthor() {
 						passedSource: state.passedSource,
 						newAuthorKey: newKey,
 					},
+					replace: true,
 				});
 			} else {
 				// if the author was added after "add author" button click
 				// redirect to /authors:
-				navigate("/authors");
+				navigate("/authors", { replace: true });
 			}
 		});
 	}
-
-	useEffect(() => {
-		console.log(
-			"AddAuthor state from useLocation (state passed from SourceForm):",
-			state
-		);
-	}, [state]);
 
 	return <AuthorForm onSubmit={handleSubmit} />;
 }

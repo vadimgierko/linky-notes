@@ -68,15 +68,10 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 	}, [sourceKey, SOURCES]);
 
 	useEffect(() => {
-		//console.log("SourceForm state from useLocation:", state);
 		if (state && state.newAuthorKey && state.passedSource) {
 			setSource({ ...state.passedSource, authorKey: state.newAuthorKey });
 		}
 	}, [state]);
-
-	// useEffect(() => {
-	// 	console.log("SourceForm pathname from useLocation:", pathname);
-	// }, [pathname]);
 
 	if (!source) return null;
 

@@ -7,7 +7,6 @@ import { Form, Button } from "react-bootstrap";
 // custom components:
 import Tag from "../Tag";
 import TagWithTrashIcon from "../TagWithTrashIcon";
-import SourceReferenceString from "../SourceReferenceString";
 import generateSourceReferenceString from "../../helper-functions/generateSourceReferenceString";
 
 export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
@@ -57,10 +56,6 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 			setNote({ ...state.passedNote, sourceKey: state.newSourceKey });
 		}
 	}, [state]);
-
-	// useEffect(() => {
-	// 	console.log("NoteForm pathname from useLocation:", pathname);
-	// }, [pathname]);
 
 	if (!note) return null;
 

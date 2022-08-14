@@ -17,7 +17,7 @@ export default function AddNote() {
 		console.log("Note to add:", note);
 		const newKey = generateFirebaseKeyFor("items/" + user.id);
 		dispatch(addNote({ note: note, key: newKey })).then(() =>
-			navigate("/notes/" + newKey)
+			navigate("/notes/" + newKey, { replace: true })
 		);
 	}
 

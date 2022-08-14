@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
 export default function SourceReferenceString({ source, pages }) {
 	const AUTHORS = useSelector((state) => state.authors.value);
@@ -28,7 +27,6 @@ export default function SourceReferenceString({ source, pages }) {
 					: null
 			);
 			setValidatedSource(item);
-			console.log("validated source:", item);
 		}
 	}, [neededSourceData]);
 
@@ -36,33 +34,24 @@ export default function SourceReferenceString({ source, pages }) {
 
 	return (
 		<>
-			{Object.keys(validatedSource).map((key, i) =>
-				key === "title" ? (
-					<span key={key}>
+			{Object.keys(validatedSource).map((key, i) => (
+				<span key={key}>
+					{key === "title" ? (
 						<strong>
 							<em>{validatedSource.title}</em>
 						</strong>
-					</span>
-				) : key === "authorKey" ? (
-					<span key={key}>
-						{i > 0 ? <span>, </span> : null}
-						{i && <span>, </span>}
-						{AUTHORS[validatedSource.authorKey].names.full}
-					</span>
-				) : key === "link" ? (
-					<span key={key}>
-						{i > 0 ? <span>, </span> : null}
-						<Link to={validatedSource.link} target="_blank">
+					) : key === "authorKey" ? (
+						AUTHORS[validatedSource.authorKey].names.full
+					) : key === "link" ? (
+						<a href={validatedSource.link} target="_blank">
 							{validatedSource.link}
-						</Link>
-					</span>
-				) : (
-					<span key={key}>
-						{i > 0 ? <span>, </span> : null}
-						{validatedSource[key]}
-					</span>
-				)
-			)}
+						</a>
+					) : (
+						validatedSource[key]
+					)}
+					{i < Object.keys(validatedSource).length - 1 ? ", " : null}
+				</span>
+			))}
 			{pages && <span>, {pages}</span>}
 		</>
 	);
