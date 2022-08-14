@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
+import { useLocation } from "react-router-dom";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
 
 export default function AuthForm({ headerText, onSubmit }) {
 	const { theme } = useTheme();
-
+	const { state } = useLocation();
 	const [userData, setUserData] = useState({
 		email: "",
 		password: "",
@@ -60,11 +61,25 @@ export default function AuthForm({ headerText, onSubmit }) {
 					<br />
 					{headerText === "Sign in" ? (
 						<Form.Text>
-							Don't have an account? <Link to="/signup">Sign up!</Link>
+							Don't have an account?{" "}
+							<Link
+								to="/signup"
+								state={{ from: state && state.from ? state.from : "/" }}
+								replace
+							>
+								Sign up!
+							</Link>
 						</Form.Text>
 					) : (
 						<Form.Text>
-							Already have an account? <Link to="/signin">Sign in!</Link>
+							Already have an account?{" "}
+							<Link
+								to="/signin"
+								state={{ from: state && state.from ? state.from : "/" }}
+								replace
+							>
+								Sign in!
+							</Link>
 						</Form.Text>
 					)}
 				</Form.Group>

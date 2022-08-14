@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 
 export default function Layout({ children }) {
 	const { theme } = useTheme();
+	const maxWidth = 900;
 
 	return (
 		<div
@@ -15,14 +16,20 @@ export default function Layout({ children }) {
 				minHeight: "100vh",
 			}}
 		>
-			<Navbar />
+			<Navbar maxWidth={maxWidth} />
 			<Container
 				as="main"
-				style={{ paddingTop: 70, flexGrow: 1, maxWidth: 900 }}
+				style={{
+					paddingTop: 70,
+					flexGrow: 1,
+					maxWidth: maxWidth,
+					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+					color: theme === "light" ? "black" : "white",
+				}}
 			>
 				{children}
 			</Container>
-			<Footer />
+			<Footer maxWidth={maxWidth} />
 		</div>
 	);
 }

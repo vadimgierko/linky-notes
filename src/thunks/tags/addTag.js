@@ -14,8 +14,7 @@ import createDate from "../../helper-functions/createDate";
 export const addTag = createAsyncThunk("tags/add", async (arg, thunkAPI) => {
 	console.log("THUNK: adding tag...");
 	try {
-		// at the moment note has only props set in the note form, so
-		// we need to update it with all necessary props & metadata:
+		// we need to update our tag (string) with all necessary props & metadata:
 		const user = thunkAPI.getState().user.value;
 		const tagString = arg.tag;
 		if (tagString.length) {

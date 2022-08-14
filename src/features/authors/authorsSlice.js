@@ -5,8 +5,8 @@ const initialState = {
 	pending: false, // pending = true when the data is fetching, deleting, adding or updating
 };
 
-export const notesSlice = createSlice({
-	name: "items",
+export const authorsSlice = createSlice({
+	name: "authors",
 	initialState,
 	reducers: {
 		//============================ PENDING =================================//
@@ -17,21 +17,21 @@ export const notesSlice = createSlice({
 			state.pending = false;
 		},
 		//=========================== ITEMS CRUD ================================//
-		notesFetched: (state, action) => {
+		authorsFetched: (state, action) => {
 			//state.pending = false; // no need, because there is stopPending() in the thunk
 			state.value = action.payload;
 		},
 		//=========================== ITEM CRUD =================================//
-		noteAdded: (state, action) => {
+		authorAdded: (state, action) => {
 			state.pending = false;
-			state.value[action.payload.id] = action.payload.note;
+			state.value[action.payload.id] = action.payload.author;
 		},
 		// update the whole item:
-		noteUpdated: (state, action) => {
+		authorUpdated: (state, action) => {
 			state.pending = false;
-			state.value[action.payload.id] = action.payload.note;
+			state.value[action.payload.id] = action.payload.author;
 		},
-		noteDeleted: (state, action) => {
+		authorDeleted: (state, action) => {
 			state.pending = false;
 			delete state.value[action.payload.id];
 		},
@@ -47,12 +47,11 @@ export const notesSlice = createSlice({
 export const {
 	startPending,
 	stopPending,
-	notesFetched,
-	noteFetched,
-	noteAdded,
-	noteUpdated,
-	noteDeleted,
+	authorsFetched,
+	authorAdded,
+	authorUpdated,
+	authorDeleted,
 	resetState,
-} = notesSlice.actions;
+} = authorsSlice.actions;
 
-export default notesSlice.reducer;
+export default authorsSlice.reducer;

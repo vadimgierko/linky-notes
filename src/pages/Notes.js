@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 // contexts:
 import { useTheme } from "../contexts/useTheme";
@@ -7,43 +7,41 @@ import { useTheme } from "../contexts/useTheme";
 import NoteCard from "../components/NoteCard";
 import Tag from "../components/Tag";
 import TagWithTrashIcon from "../components/TagWithTrashIcon";
+// react bootstrap components:
+import Button from "react-bootstrap/Button";
 
 export default function Notes() {
 	const { theme } = useTheme();
 	const [searchParams, setSearchParams] = useSearchParams();
-	const user = useSelector((state) => state.user.value);
 	const TAGS = useSelector((state) => state.tags.value);
 	const NOTES = useSelector((state) => state.notes.value);
 
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState({});
 
-	// useEffect(() => {
-	// 	console.log("search params:", searchParams.get("tags"));
-	// }, [searchParams]);
-
-	if (!user.id)
-		return (
-			<div
-				style={{
-					backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					color: theme === "light" ? "black" : "white",
-				}}
-				className="items-page"
-			>
-				<p>You need to be logged to see your items!</p>
-			</div>
-		);
+	const navigate = useNavigate();
 
 	return (
-		<div
-			className="notes-page"
-			style={{
-				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-				color: theme === "light" ? "black" : "white",
-			}}
-		>
-			<h1 className="text-center mb-3">Your notes</h1>
+		<>
+			<h1 className="text-center mb-3">
+				Your filtered notes (
+				{searchParams.get("tags")
+					? Object.keys(NOTES).filter((noteId) =>
+							searchParams
+								.get("tags")
+								.split("+")
+								.every((element) =>
+									Object.keys(NOTES[noteId].tags).includes(element)
+								)
+					  ).length
+					: Object.keys(NOTES).length}
+				)
+			</h1>
+			<div className="d-grid my-2">
+				<Button variant="outline-primary" onClick={() => navigate("/add-note")}>
+					Add note
+				</Button>
+			</div>
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
 				<input
@@ -134,25 +132,12 @@ export default function Notes() {
 							))}
 					</div>
 				) : (
-					<div className="filter-tags">There are no filter tags...</div>
+					<div className="filter-tags mb-2">There are no filter tags...</div>
 				)}
 
 				{/*========================================= filtered notes */}
 				{searchParams.get("tags") ? (
 					<div className="filtered-notes">
-						<p>
-							Found notes:{" "}
-							{
-								Object.keys(NOTES).filter((noteId) =>
-									searchParams
-										.get("tags")
-										.split("+")
-										.every((element) =>
-											Object.keys(NOTES[noteId].tags).includes(element)
-										)
-								).length
-							}
-						</p>
 						{Object.keys(NOTES)
 							.filter((noteId) =>
 								searchParams
@@ -170,7 +155,6 @@ export default function Notes() {
 					</div>
 				) : (
 					<div className="filtered-notes">
-						<p>Found notes: {Object.keys(NOTES).length}</p>
 						{Object.keys(NOTES)
 							.slice()
 							.reverse()
@@ -180,6 +164,6 @@ export default function Notes() {
 					</div>
 				)}
 			</div>
-		</div>
+		</>
 	);
 }

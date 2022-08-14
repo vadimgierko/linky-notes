@@ -12,14 +12,17 @@ import { useSelector } from "react-redux";
 // auth:
 import logOut from "../../auth/logOut";
 
-const SECTIONS_LIST = [
-	{ name: "about", link: "/about" },
-	{ name: "notes", link: "/" },
-	{ name: "tags", link: "/tags" },
-	{ name: "add note", link: "/add-note" },
-];
+const LINKS = {
+	public: [{ name: "about", link: "/about" }],
+	private: [
+		{ name: "notes", link: "/" },
+		{ name: "tags", link: "/tags" },
+		{ name: "authors", link: "/authors" },
+		{ name: "sources", link: "/sources" },
+	],
+};
 
-export default function () {
+export default function ({ maxWidth }) {
 	const { theme, switchTheme } = useTheme();
 	const user = useSelector((state) => state.user.value);
 
@@ -32,17 +35,23 @@ export default function () {
 			fixed="top"
 			className="shadow"
 		>
-			<Container style={{ maxWidth: 900 }}>
+			<Container style={{ maxWidth: maxWidth }}>
 				<Navbar.Brand href="#">linky_notes</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
-					{/** sections */}
+					{/** links */}
 					<Nav className="me-auto">
-						{SECTIONS_LIST.map((section) => (
-							<LinkContainer key={section.name} to={section.link}>
-								<Nav.Link>{section.name}</Nav.Link>
+						{LINKS.public.map((link) => (
+							<LinkContainer key={link.name} to={link.link}>
+								<Nav.Link>{link.name}</Nav.Link>
 							</LinkContainer>
 						))}
+						{user.id &&
+							LINKS.private.map((link) => (
+								<LinkContainer key={link.name} to={link.link}>
+									<Nav.Link>{link.name}</Nav.Link>
+								</LinkContainer>
+							))}
 					</Nav>
 					<hr style={{ color: "grey" }} />
 					<Nav>

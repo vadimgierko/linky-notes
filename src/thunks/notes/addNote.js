@@ -25,6 +25,8 @@ export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
 			let noteWithUnifiedTagsAndCreatedAt = {
 				content: noteFromForm.content,
 				tags: noteFromForm.existingTags,
+				sourceKey: noteFromForm.sourceKey,
+				pages: noteFromForm.pages,
 				createdAt: createDate(),
 				userId: user.id,
 			};

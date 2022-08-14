@@ -24,6 +24,8 @@ export const updateNote = createAsyncThunk(
 				let noteWithUnifiedTagsAndUpdatedAt = {
 					content: noteToUpdate.content,
 					tags: noteToUpdate.existingTags,
+					sourceKey: noteToUpdate.sourceKey,
+					pages: noteToUpdate.pages,
 					createdAt: noteToUpdate.createdAt,
 					updatedAt: createDate(),
 					userId: noteToUpdate.userId,
