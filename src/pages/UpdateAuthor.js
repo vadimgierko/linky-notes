@@ -12,11 +12,21 @@ export default function UpdateAuthor() {
 
 	function handleSubmit(e, author) {
 		e.preventDefault();
-		console.log("Author to update:", author);
+		//console.log("Author to update:", author);
 		dispatch(updateAuthor({ author: author, key: itemKey })).then(() =>
-			navigate("/authors")
+			navigate("/authors", { replace: true })
 		);
 	}
 
-	return <AuthorForm authorKey={itemKey} onSubmit={handleSubmit} />;
+	function handleCancel() {
+		navigate("/authors", { replace: true });
+	}
+
+	return (
+		<AuthorForm
+			authorKey={itemKey}
+			onSubmit={handleSubmit}
+			onCancel={handleCancel}
+		/>
+	);
 }

@@ -12,37 +12,56 @@ import createDate from "../../helper-functions/createDate";
 export const updateAuthor = createAsyncThunk(
 	"authors/update",
 	async (arg, thunkAPI) => {
-		console.log("THUNK: updating author:", arg.key, arg.author);
+		//console.log("THUNK: updating author:", arg.key, arg.author);
 		try {
 			// we need to update author object with updatedAt prop:
 			const user = thunkAPI.getState().user.value;
 			const authorToUpdate = arg.author;
-			if (
-				authorToUpdate.names.first.length &&
-				authorToUpdate.names.last.length
-			) {
-				const updatedAuthor = {
-					...authorToUpdate,
-					names: {
-						...authorToUpdate.names,
-						full: authorToUpdate.names.middle
-							? authorToUpdate.names.first +
-							  " " +
-							  authorToUpdate.names.middle +
-							  " " +
-							  authorToUpdate.names.last
-							: authorToUpdate.names.first + " " + authorToUpdate.names.last,
-					},
-					updatedAt: createDate(),
-				};
-				const rootReference = "authors/" + user.id + "/";
-				const referenceWithTheKey = rootReference + arg.key;
-				//===========================================================
-				await updateItem(referenceWithTheKey, updatedAuthor);
-				console.log("THUNK: author updated:", arg.key, updatedAuthor);
-				thunkAPI.dispatch(
-					authorUpdated({ id: arg.key, author: updatedAuthor })
-				);
+			if (authorToUpdate.names.last.length) {
+				let fullName = "";
+				if (authorToUpdate.names.first.length) {
+					fullName += authorToUpdate.names.first;
+				}
+				if (authorToUpdate.names.middle.length) {
+					fullName += fullName.length
+						? " " + authorToUpdate.names.middle
+						: authorToUpdate.names.middle;
+				}
+				if (authorToUpdate.names.last.length) {
+					fullName += fullName.length
+						? " " + authorToUpdate.names.last
+						: authorToUpdate.names.last;
+				}
+				let updatedAuthor = {};
+				if (fullName.length) {
+					updatedAuthor = {
+						...authorToUpdate,
+						names: {
+							...authorToUpdate.names,
+							full: authorToUpdate.names.middle
+								? authorToUpdate.names.first +
+								  " " +
+								  authorToUpdate.names.middle +
+								  " " +
+								  authorToUpdate.names.last
+								: authorToUpdate.names.first + " " + authorToUpdate.names.last,
+						},
+						updatedAt: createDate(),
+					};
+					const rootReference = "authors/" + user.id + "/";
+					const referenceWithTheKey = rootReference + arg.key;
+					//===========================================================
+					await updateItem(referenceWithTheKey, updatedAuthor);
+					//console.log("THUNK: author updated:", arg.key, updatedAuthor);
+					thunkAPI.dispatch(
+						authorUpdated({ id: arg.key, author: updatedAuthor })
+					);
+				} else {
+					alert(
+						"Can not update author, because there are no author's names..."
+					);
+					return;
+				}
 			}
 		} catch (error) {
 			console.log(error);

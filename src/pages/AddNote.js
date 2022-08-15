@@ -14,12 +14,22 @@ export default function AddNote() {
 
 	function handleSubmit(e, note) {
 		e.preventDefault();
-		console.log("Note to add:", note);
-		const newKey = generateFirebaseKeyFor("items/" + user.id);
-		dispatch(addNote({ note: note, key: newKey })).then(() =>
-			navigate("/notes/" + newKey, { replace: true })
-		);
+		//console.log("Note to add:", note);
+		if (note.content.length) {
+			const newKey = generateFirebaseKeyFor("items/" + user.id);
+			dispatch(addNote({ note: note, key: newKey })).then(() =>
+				navigate("/notes/" + newKey, { replace: true })
+			);
+		} else {
+			alert(
+				"Your note is empty! Add some content to your note to add it to database."
+			);
+		}
 	}
 
-	return <NoteForm onSubmit={handleSubmit} />;
+	function handleCancel() {
+		navigate("/", { replace: true });
+	}
+
+	return <NoteForm onSubmit={handleSubmit} onCancel={handleCancel} />;
 }

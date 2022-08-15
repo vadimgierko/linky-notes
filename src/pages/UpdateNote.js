@@ -12,11 +12,27 @@ export default function UpdateNote() {
 
 	function handleSubmit(e, note) {
 		e.preventDefault();
-		console.log("Note to update:", note);
-		dispatch(updateNote({ note: note, key: itemKey })).then(() =>
-			navigate("/notes/" + itemKey)
-		);
+		//console.log("Note to update:", note);
+		if (note.content.length) {
+			dispatch(updateNote({ note: note, key: itemKey })).then(() =>
+				navigate("/notes/" + itemKey, { replace: true })
+			);
+		} else {
+			alert(
+				"Your note is empty! Add some content to your note to add it to database."
+			);
+		}
 	}
 
-	return <NoteForm noteKey={itemKey} onSubmit={handleSubmit} />;
+	function handleCancel() {
+		navigate("/notes/" + itemKey, { replace: true });
+	}
+
+	return (
+		<NoteForm
+			noteKey={itemKey}
+			onSubmit={handleSubmit}
+			onCancel={handleCancel}
+		/>
+	);
 }

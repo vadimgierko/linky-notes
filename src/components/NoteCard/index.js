@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 // custom components:
 import Tag from "../Tag";
 import IconButton from "../IconButton";
@@ -70,7 +72,7 @@ export default function NoteCard({ note, noteKey }) {
 				</Row>
 			</Card.Header>
 			<Card.Body>
-				<Card.Text>{note.content}</Card.Text>
+				<ReactMarkdown children={note.content} remarkPlugins={[remarkGfm]} />
 				{note.tags &&
 					Object.keys(note.tags).map((tagId) => (
 						<Tag

@@ -6,10 +6,10 @@ import { noteDeleted } from "../../features/notes/notesSlice";
 export const deleteNote = createAsyncThunk(
 	"items/delete",
 	async (arg, thunkAPI) => {
-		console.log("THUNK: deleting item...");
+		//console.log("THUNK: deleting item...");
 		try {
 			await deleteItem(arg.reference);
-			console.log("THUNK: item successfully deleted from", arg.reference);
+			//console.log("THUNK: item successfully deleted from", arg.reference);
 			thunkAPI.dispatch(noteDeleted({ id: arg.itemKey }));
 		} catch (error) {
 			console.log(error);

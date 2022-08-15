@@ -27,7 +27,7 @@ export const tagsSlice = createSlice({
 			state.value[action.payload.id] = action.payload.tag;
 		},
 		//=========== RESET ITEMS STATE =======================/
-		resetState: (state) => {
+		resetTags: (state) => {
 			state.value = {};
 			state.pending = false;
 		},
@@ -35,7 +35,7 @@ export const tagsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { startPending, stopPending, tagsFetched, tagAdded, resetState } =
+export const { startPending, stopPending, tagsFetched, tagAdded, resetTags } =
 	tagsSlice.actions;
 
 export default tagsSlice.reducer;

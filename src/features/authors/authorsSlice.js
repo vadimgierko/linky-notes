@@ -35,8 +35,7 @@ export const authorsSlice = createSlice({
 			state.pending = false;
 			delete state.value[action.payload.id];
 		},
-		//=========== RESET ITEMS STATE =======================/
-		resetState: (state) => {
+		resetAuthors: (state) => {
 			state.value = {};
 			state.pending = false;
 		},
@@ -51,7 +50,7 @@ export const {
 	authorAdded,
 	authorUpdated,
 	authorDeleted,
-	resetState,
+	resetAuthors,
 } = authorsSlice.actions;
 
 export default authorsSlice.reducer;

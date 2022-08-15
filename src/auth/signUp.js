@@ -10,7 +10,7 @@ export default async function signUp(userData) {
 		);
 		// Signed in
 		const user = userCredential.user;
-		console.log(user);
+		//console.log(user);
 	} catch (error) {
 		alert(error.message);
 	}

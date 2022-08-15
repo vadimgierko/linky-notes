@@ -7,7 +7,7 @@ export default async function addItemWithAutoKey(reference, item) {
 		const key = generateFirebaseKeyFor(reference);
 		const refUpdatedWithTheKey = reference + "/" + key;
 		await set(ref(rtdb, refUpdatedWithTheKey), item);
-		console.log("Item was successfully added to", refUpdatedWithTheKey);
+		//console.log("Item was successfully added to", refUpdatedWithTheKey);
 		// return item's key, because it's needed in addItemWithAutoKey() thunk:
 		return key;
 	} catch (error) {

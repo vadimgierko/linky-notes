@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useTheme } from "../../contexts/useTheme";
 import { Link, useLocation } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
 // custom components:
@@ -9,7 +11,11 @@ import Tag from "../Tag";
 import TagWithTrashIcon from "../TagWithTrashIcon";
 import generateSourceReferenceString from "../../helper-functions/generateSourceReferenceString";
 
-export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
+export default function NoteForm({
+	noteKey,
+	onSubmit = (f) => f,
+	onCancel = (f) => f,
+}) {
 	const { theme } = useTheme();
 	const { state, pathname } = useLocation();
 	// from state:
@@ -23,6 +29,8 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState({}); // tags which exist in database
 	const [newTag, setNewTag] = useState(""); // new tag added by user
+	// editor mode: (edit, preview)
+	const [editorMode, setEditorMode] = useState("edit"); // edit, perview
 
 	useEffect(() => {
 		if (noteKey) {
@@ -51,9 +59,15 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 	}, [noteKey, NOTES]);
 
 	useEffect(() => {
-		console.log("NoteForm state from useLocation:", state);
-		if (state && state.newSourceKey && state.passedNote) {
-			setNote({ ...state.passedNote, sourceKey: state.newSourceKey });
+		//console.log("NoteForm state from useLocation:", state);
+		if (state && state.passedNote) {
+			if (state.newSourceKey) {
+				// if new source was added:
+				setNote({ ...state.passedNote, sourceKey: state.newSourceKey });
+			} else {
+				// if adding new source was canceledL
+				setNote(state.passedNote);
+			}
 		}
 	}, [state]);
 
@@ -75,25 +89,45 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 			>
 				<Form.Group className="mb-3">
 					<Form.Label>Note content:</Form.Label>
-					<Form.Control
-						as="textarea"
-						rows={5}
-						placeholder="type your note here"
-						value={note.content || ""}
-						style={{
-							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-							color: theme === "light" ? "black" : "white",
-						}}
-						onChange={(e) => setNote({ ...note, content: e.target.value })}
-					/>
+					{editorMode === "edit" && (
+						<Form.Control
+							as="textarea"
+							rows={5}
+							placeholder="type your note here"
+							value={note.content || ""}
+							style={{
+								backgroundColor:
+									theme === "light" ? "white" : "rgb(13, 17, 23)",
+								color: theme === "light" ? "black" : "white",
+							}}
+							onChange={(e) => setNote({ ...note, content: e.target.value })}
+						/>
+					)}
+					{editorMode === "preview" && (
+						<div className="border py-2 px-3">
+							<ReactMarkdown
+								children={note.content}
+								remarkPlugins={[remarkGfm]}
+							/>
+						</div>
+					)}
 				</Form.Group>
+				<Form.Check
+					className="mb-3"
+					type="checkbox"
+					label="preview"
+					checked={editorMode === "preview"}
+					onChange={() =>
+						setEditorMode(editorMode === "edit" ? "preview" : "edit")
+					}
+				/>
 
 				{/*================== search bar ==================*/}
-				<div className="search-bar">
-					<input
-						type="text"
+				<Form.Group className="search-bar mb-3">
+					<Form.Label>Tags:</Form.Label>
+					<Form.Control
 						className={
-							"form-control mb-2 + bg-" +
+							"mb-2 + bg-" +
 							theme +
 							" text-" +
 							(theme === "dark" ? "light" : "dark")
@@ -215,7 +249,7 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 					) : (
 						<div className="filter-tags">This note has no tags yet...</div>
 					)}
-				</div>
+				</Form.Group>
 
 				{/**==================== add source =========================*/}
 				<Form.Group className="mb-3">
@@ -270,8 +304,24 @@ export default function NoteForm({ noteKey, onSubmit = (f) => f }) {
 				)}
 
 				<div className="d-grid my-2">
-					<Button variant="success" type="submit">
+					<Button className="mb-3" variant="success" type="submit">
 						{noteKey ? "Update note" : "Add note"}
+					</Button>
+					<Button
+						className="mb-3"
+						variant="secondary"
+						onClick={() => {
+							setNote({
+								content: "",
+								existingTags: {},
+								newTags: [],
+								sourceKey: "",
+								pages: "",
+							});
+							onCancel();
+						}}
+					>
+						Cancel
 					</Button>
 				</div>
 			</Form>

@@ -36,7 +36,7 @@ export const sourcesSlice = createSlice({
 			delete state.value[action.payload.id];
 		},
 		//=========== RESET ITEMS STATE =======================/
-		resetState: (state) => {
+		resetSources: (state) => {
 			state.value = {};
 			state.pending = false;
 		},
@@ -51,7 +51,7 @@ export const {
 	sourceAdded,
 	sourceUpdated,
 	sourceDeleted,
-	resetState,
+	resetSources,
 } = sourcesSlice.actions;
 
 export default sourcesSlice.reducer;

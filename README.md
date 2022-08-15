@@ -1,10 +1,19 @@
-# linky_notes
+# Welcome to linky_notes!
 
-## Build your easy to filter knowledge base or/and store, organize & filter your notes by tags!
+## Build your own easy to filter knowledge base and store, organize & filter your notes by tags!
 
-With linky_notes app you can create notes containing text content, organize and filter them by one or more tags you've added to every note.
+With linky_notes app you can:
+- create, update & delete notes containing:
+  - tags,
+  - sources (containing title, author, link, page/s number/s & more)
+  - textual content,
+  - links,
+  - images,
+  - ordered, unordered and nested lists and more
+- format your notes using built-in markdown editor
+- organize and filter your notes by tags.
 
-**Sign up for free** here: https://vadimgierko.github.io/linky-notes/
+**Sign up for free** here: https://vadimgierko.github.io/linky-notes/ & build your own knowledge base!
 
 <img src="public/linky-notes-app-screen-vadim-gierko.png">
 
@@ -12,6 +21,8 @@ With linky_notes app you can create notes containing text content, organize and 
 
 - you can build your knowledge base by storing notes containing content from different sources (books, articles, blogs, podcasts, videos etc.) & your personal notes containing your own knowledge, ideas & reflections on any topic
 - all of your notes are automatically organized (without any effort) in one place by tags you've added to them
+- you can format your notes with built-in markdown editor easily & fast (you need only a few minutes to figure out [markdown syntax basics](https://www.markdownguide.org/cheat-sheet/))
+- you can add sources to your notes & automatically build your source base
 - your notes are easy to search & filter via tags search bar on the main page (you can also use ctrl-f search if you need)
 - you don't need folders, categories or labels to organize your notes, so there is no structure or hierarchy to manage (and strugle) with
 - you can add as many tags to your note/s, as you need (no limits)
@@ -21,17 +32,27 @@ With linky_notes app you can create notes containing text content, organize and 
 
 ## What you can do with linky_notes?
 
-- add, update & delete notes containing text content,
+- add, update & delete notes containing:
+  - textual content,
+  - links,
+  - images (from the web),
+  - ordered, unordered and nested lists and more
 - see when the note was added & updated (the app does it automatically, so you don't have to worry about it)
 - add, update & delete tag/s for/to each note,
-- add, update & delete note's sources containing information about:
-  - the title of source
+- add, update & delete note's sources containing:
+  - the title of the source
   - the source's author
   - link
   - page/s number/s
+  - place of publishing
+  - year of publishing
 - filter notes by one or more tags you've added to your notes
 - navigate beetween searching sessions
-- check lists of all the tags, sources & authors stored in the app** ordered alphabetically, so you can be up to date with all topics you were interested and sources you've used
+- check lists of all the
+  - tags,
+  - sources,
+  - authors  
+  stored in the app ordered alphabetically, so you can be up to date with all topics you were interested and sources you've used
 - BONUS: you can do all of things mentioned above using light or dark mode to make your work more comfortable
 
 ## How efficiently use linky_notes?
@@ -43,6 +64,7 @@ With linky_notes app you can create notes containing text content, organize and 
 - ~~in the tags you can also include the author of the note/ quote (it's better to add the author's name and surname as two separate tags) and add a tag with the name of the note source, e.g. book or article title etc.~~
 - => you don't have to add tags with source's title, author's first and last name anymore (the crossed paragraph above), because you can add a source separately via source form or note form and I'm suggesting you to do that, because in the near future I'll add the possibility to filter notes by sources, authors & sources types.
 - if the content of your note comes from the website, add a source's link to your note via source form
+- use built-in markdown editor to format your notes & make them more readable
 - remember, that you can always go back to any note & update it with the new tags or delete ones
 
 ## Motivation (problem I wanted to solve & solution)
@@ -55,11 +77,11 @@ I've made this app first of all for my own needs. I read a lot, create a lot (de
 
 So...
 
-### Problem:
+### Problem
 
 I couldn't manage & organize thousands of my paper & digital notes properly (I have developed my own system, but it's too far from what I need). So I've tried a few note apps, but none of them where satisfying - something always was missing.
 
-### Solution:
+### Solution
 
 I've understood, that I need to:
 
@@ -74,7 +96,6 @@ And when I've tested the app, I've decided to share it with the world to let eve
 
 - sources types (like: book, magazine, article, blog, web page, web platform, multimedia etc.)
 - notes types (like: quotes, ideas, personal, definition, question etc.)
-- markdown editor (to enable formatting notes, adding links, images etc.)
 - filtering notes not only by tags, but also by sources, authors, sources and notes types
 and much more!
 

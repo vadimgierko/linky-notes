@@ -6,6 +6,8 @@ const ABOUT_MARKDOWN = `
 
 - you can build your knowledge base by storing notes containing content from different sources (books, articles, blogs, podcasts, videos etc.) & your personal notes containing your own knowledge, ideas & reflections on any topic
 - all of your notes are automatically organized (without any effort) in one place by tags you've added to them
+- you can format your notes with built-in markdown editor easily & fast (you need only a few minutes to figure out markdown syntax basics (link to the guide is available in app's header)
+- you can add sources to your notes & automatically build your source base
 - your notes are easy to search & filter via tags search bar on the main page (you can also use ctrl-f search if you need)
 - you don't need folders, categories or labels to organize your notes, so there is no structure or hierarchy to manage (and strugle) with
 - you can add as many tags to your note/s, as you need (no limits)
@@ -15,17 +17,27 @@ const ABOUT_MARKDOWN = `
 
 ## What you can do with linky_notes?
 
-- add, update & delete notes containing text content,
+- add, update & delete notes containing:
+  - textual content,
+  - links,
+  - images (from the web),
+  - ordered, unordered and nested lists and more
 - see when the note was added & updated (the app does it automatically, so you don't have to worry about it)
 - add, update & delete tag/s for/to each note,
-- add, update & delete note's sources containing information about:
-  - the title of source
+- add, update & delete note's sources containing:
+  - the title of the source
   - the source's author
   - link
   - page/s number/s
+  - place of publishing
+  - year of publishing
 - filter notes by one or more tags you've added to your notes
 - navigate beetween searching sessions
-- check lists of all the tags, sources & authors stored in the app** ordered alphabetically, so you can be up to date with all topics you were interested and sources you've used
+- check lists of all the
+  - tags,
+  - sources,
+  - authors  
+stored in the app ordered alphabetically, so you can be up to date with all topics you were interested and sources you've used
 - BONUS: you can do all of things mentioned above using light or dark mode to make your work more comfortable
 
 ## How efficiently use linky_notes?
@@ -37,6 +49,7 @@ const ABOUT_MARKDOWN = `
 - ~~in the tags you can also include the author of the note/ quote (it's better to add the author's name and surname as two separate tags) and add a tag with the name of the note source, e.g. book or article title etc.~~
 - => you don't have to add tags with source's title, author's first and last name anymore (the crossed paragraph above), because you can add a source separately via source form or note form and I'm suggesting you to do that, because in the near future I'll add the possibility to filter notes by sources, authors & sources types.
 - if the content of your note comes from the website, add a source's link to your note via source form
+- use built-in markdown editor to format your notes & make them more readable
 - remember, that you can always go back to any note & update it with the new tags or delete ones
 
 ## Motivation (problem I wanted to solve & solution)
@@ -62,15 +75,12 @@ I've understood, that I need to:
 
 So I've decided to build this note app & solved one of my biggest problems thanks to my own app. Now my notes will be tagged, organized & easy to find/ filter.
 
-And when I've tested the app, I've decided to share it with the world to let everybody to build an easy to use, but effiecient knowledge/ notes base!
+And when I've tested the app, I've decided to share it with the world to let everybody to build an easy to use, but effiecient knowledge/ notes base! Sign up & try here: https://vadimgierko.github.io/linky-notes/!
 
 ## Future of the app
 
-Features I plan to add:
-
 - sources types (like: book, magazine, article, blog, web page, web platform, multimedia etc.)
 - notes types (like: quotes, ideas, personal, definition, question etc.)
-- markdown editor (to enable formatting notes, adding links, images etc.)
 - filtering notes not only by tags, but also by sources, authors, sources and notes types
 and much more!
 
@@ -94,10 +104,13 @@ and much more!
 export default function About() {
 	return (
 		<>
-			<h1 className="text-center mb-3">
-				Build your easy to filter knowledge base or/and store, organize & filter
-				your notes by tags!
-			</h1>
+			<h1 className="text-center mb-3">Welcome to linky_notes!</h1>
+			<p className="text-center">
+				<strong>
+					Build your easy to filter knowledge base and store, organize & filter
+					your notes by tags!
+				</strong>
+			</p>
 			<ReactMarkdown children={ABOUT_MARKDOWN} remarkPlugins={[remarkGfm]} />
 		</>
 	);

@@ -9,6 +9,7 @@ import Tag from "../components/Tag";
 import TagWithTrashIcon from "../components/TagWithTrashIcon";
 // react bootstrap components:
 import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 export default function Notes() {
 	const { theme } = useTheme();
@@ -37,13 +38,14 @@ export default function Notes() {
 					: Object.keys(NOTES).length}
 				)
 			</h1>
-			<div className="d-grid my-2">
+			<div className="d-grid mt-2 mb-3">
 				<Button variant="outline-primary" onClick={() => navigate("/add-note")}>
 					Add note
 				</Button>
 			</div>
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
+				<Form.Label>Filter your notes by tags:</Form.Label>
 				<input
 					//value={searchParams.get("tag") || ""}
 					type="text"

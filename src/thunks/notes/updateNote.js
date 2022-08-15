@@ -15,7 +15,7 @@ import generateFirebaseKeyFor from "../../firebase-rtdb-crud/generateFirebaseKey
 export const updateNote = createAsyncThunk(
 	"notes/update",
 	async (arg, thunkAPI) => {
-		console.log("THUNK: updating note:", arg.note);
+		//console.log("THUNK: updating note:", arg.note);
 		try {
 			// we need to update note with updatedAt prop:
 			const user = thunkAPI.getState().user.value;
@@ -32,9 +32,9 @@ export const updateNote = createAsyncThunk(
 				};
 				// check for new tags to add:
 				if (noteToUpdate.newTags && noteToUpdate.newTags.length) {
-					console.log("There are new tags to add to database!");
+					//console.log("There are new tags to add to database!");
 					noteToUpdate.newTags.forEach((newTag) => {
-						console.log("There is a new tag to add to database:", newTag);
+						//console.log("There is a new tag to add to database:", newTag);
 						const key = generateFirebaseKeyFor("tags/" + user.id);
 						noteWithUnifiedTagsAndUpdatedAt = {
 							...noteWithUnifiedTagsAndUpdatedAt,
@@ -50,13 +50,13 @@ export const updateNote = createAsyncThunk(
 						thunkAPI.dispatch(addTag({ tag: newTag, key: key }));
 					});
 				} else {
-					console.log("There are no new tags to add to database...");
+					//console.log("There are no new tags to add to database...");
 				}
 				const rootReference = "items/" + user.id + "/";
 				const referenceWithTheKey = rootReference + arg.key;
 				//===========================================================
 				await updateItem(referenceWithTheKey, noteWithUnifiedTagsAndUpdatedAt);
-				console.log("THUNK: item updated:", noteWithUnifiedTagsAndUpdatedAt);
+				//console.log("THUNK: item updated:", noteWithUnifiedTagsAndUpdatedAt);
 				thunkAPI.dispatch(
 					noteUpdated({ id: arg.key, note: noteWithUnifiedTagsAndUpdatedAt })
 				);

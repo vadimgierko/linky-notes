@@ -6,7 +6,11 @@ import { Form, Button } from "react-bootstrap";
 // helper functions:
 import capitalizeString from "../../helper-functions/capitalizeString";
 
-export default function AuthorForm({ authorKey, onSubmit = (f) => f }) {
+export default function AuthorForm({
+	authorKey,
+	onSubmit = (f) => f,
+	onCancel = (f) => f,
+}) {
 	const { theme } = useTheme();
 	const AUTHORS = useSelector((state) => state.authors.value);
 	const [author, setAuthor] = useState();
@@ -52,7 +56,16 @@ export default function AuthorForm({ authorKey, onSubmit = (f) => f }) {
 			</h1>
 			<Form
 				className="border border-secondary rounded p-3 shadow"
-				onSubmit={(e) => onSubmit(e, author)}
+				onSubmit={(e) => {
+					if (author.names.last.length) {
+						onSubmit(e, author);
+					} else {
+						e.preventDefault();
+						alert(
+							"Can not add/update author, because there is no author's last name provided. Add at least author's last name."
+						);
+					}
+				}}
 			>
 				{Object.keys(author.names)
 					.filter((name) => (authorKey ? name !== "full" : true))
@@ -78,8 +91,24 @@ export default function AuthorForm({ authorKey, onSubmit = (f) => f }) {
 					))}
 
 				<div className="d-grid my-2">
-					<Button variant="success" type="submit">
+					<Button className="mb-3" variant="success" type="submit">
 						{authorKey ? "Update author" : "Add author"}
+					</Button>
+					<Button
+						className="mb-3"
+						variant="secondary"
+						onClick={() => {
+							setAuthor({
+								names: {
+									first: "",
+									middle: "",
+									last: "",
+								},
+							});
+							onCancel();
+						}}
+					>
+						Cancel
 					</Button>
 				</div>
 			</Form>
