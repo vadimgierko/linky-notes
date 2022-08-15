@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useTheme } from "../../contexts/useTheme";
 // react-router-bootstrap for link container:
 import { LinkContainer } from "react-router-bootstrap";
@@ -5,7 +6,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import Button from "react-bootstrap/Button";
+import Badge from "react-bootstrap/Badge";
 // react icons:
 import { BsSunFill, BsMoonFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
@@ -25,6 +26,16 @@ const LINKS = {
 export default function ({ maxWidth }) {
 	const { theme, switchTheme } = useTheme();
 	const user = useSelector((state) => state.user.value);
+	const NOTES = useSelector((state) => state.notes.value);
+	const [screenWidth, setScreenWidth] = useState();
+
+	// check & set screen width to show | in navbar if >=992:
+	useEffect(() => {
+		window.addEventListener("resize", (e) => {
+			setScreenWidth(window.innerWidth);
+			//console.log("screen width:", window.innerWidth);
+		});
+	}, []);
 
 	return (
 		<Navbar
@@ -46,10 +57,30 @@ export default function ({ maxWidth }) {
 								<Nav.Link>{link.name}</Nav.Link>
 							</LinkContainer>
 						))}
+						<Nav.Link
+							href="https://www.markdownguide.org/cheat-sheet/"
+							target="_blank"
+						>
+							markdown guide
+						</Nav.Link>
+						<hr style={{ color: "grey" }} />
+						{screenWidth >= 992 && user.id ? (
+							<Nav.Link disabled>
+								<span> | </span>
+							</Nav.Link>
+						) : null}
 						{user.id &&
 							LINKS.private.map((link) => (
 								<LinkContainer key={link.name} to={link.link}>
 									<Nav.Link>{link.name}</Nav.Link>
+									{/* {link.name === "notes" ? (
+										<Nav.Link>
+											{link.name}{" "}
+											<Badge bg="danger">{Object.keys(NOTES).length}</Badge>
+										</Nav.Link>
+									) : (
+										<Nav.Link>{link.name}</Nav.Link>
+									)} */}
 								</LinkContainer>
 							))}
 					</Nav>

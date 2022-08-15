@@ -36,7 +36,7 @@ export const notesSlice = createSlice({
 			delete state.value[action.payload.id];
 		},
 		//=========== RESET ITEMS STATE =======================/
-		resetState: (state) => {
+		resetNotes: (state) => {
 			state.value = {};
 			state.pending = false;
 		},
@@ -52,7 +52,7 @@ export const {
 	noteAdded,
 	noteUpdated,
 	noteDeleted,
-	resetState,
+	resetNotes,
 } = notesSlice.actions;
 
 export default notesSlice.reducer;

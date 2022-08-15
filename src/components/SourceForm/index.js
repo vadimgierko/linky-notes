@@ -33,7 +33,11 @@ const INIT_SOURCE_SCHEMA = {
 	link: "",
 };
 
-export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
+export default function SourceForm({
+	sourceKey,
+	onSubmit = (f) => f,
+	onCancel = (f) => f,
+}) {
 	const { theme } = useTheme();
 	// this is needed, when adding new author & navigating back with new author key
 	// NOTE: state also consist initRedirectedFrom & passedNote,
@@ -156,8 +160,18 @@ export default function SourceForm({ sourceKey, onSubmit = (f) => f }) {
 				))}
 
 				<div className="d-grid my-2">
-					<Button variant="success" type="submit">
+					<Button variant="success" type="submit" className="mb-3">
 						{sourceKey ? "Update source" : "Add source"}
+					</Button>
+					<Button
+						className="mb-3"
+						variant="secondary"
+						onClick={() => {
+							setSource(INIT_SOURCE_SCHEMA);
+							onCancel();
+						}}
+					>
+						Cancel
 					</Button>
 				</div>
 			</Form>

@@ -12,7 +12,7 @@ import createDate from "../../helper-functions/createDate";
  * before using this thunk & pass it in key prop in arg object.
  */
 export const addTag = createAsyncThunk("tags/add", async (arg, thunkAPI) => {
-	console.log("THUNK: adding tag...");
+	//console.log("THUNK: adding tag...");
 	try {
 		// we need to update our tag (string) with all necessary props & metadata:
 		const user = thunkAPI.getState().user.value;
@@ -27,7 +27,7 @@ export const addTag = createAsyncThunk("tags/add", async (arg, thunkAPI) => {
 			const referenceWithTheKey = rootReference + arg.key;
 			//===========================================================
 			await addItemWithGivenKey(referenceWithTheKey, tagWithExtraData);
-			console.log("THUNK: tag added.");
+			//console.log("THUNK: tag added.");
 			thunkAPI.dispatch(tagAdded({ id: arg.key, tag: tagWithExtraData }));
 		}
 	} catch (error) {

@@ -15,7 +15,7 @@ import generateFirebaseKeyFor from "../../firebase-rtdb-crud/generateFirebaseKey
  * before using this thunk & pass it in key prop in arg object.
  */
 export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
-	console.log("THUNK: adding note:", arg.note);
+	//console.log("THUNK: adding note:", arg.note);
 	try {
 		// at the moment note has only props set in the note form, so
 		// we need to update it with all necessary props & metadata:
@@ -32,9 +32,9 @@ export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
 			};
 			// check for new tags to add:
 			if (noteFromForm.newTags && noteFromForm.newTags.length) {
-				console.log("There are new tags to add to database!");
+				//console.log("There are new tags to add to database!");
 				noteFromForm.newTags.forEach((newTag) => {
-					console.log("There is a new tag to add to database:", newTag);
+					//console.log("There is a new tag to add to database:", newTag);
 					const key = generateFirebaseKeyFor("tags/" + user.id);
 					noteWithUnifiedTagsAndCreatedAt = {
 						...noteWithUnifiedTagsAndCreatedAt,
@@ -50,7 +50,7 @@ export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
 					thunkAPI.dispatch(addTag({ tag: newTag, key: key }));
 				});
 			} else {
-				console.log("There are no new tags to add to database!");
+				//console.log("There are no new tags to add to database!");
 			}
 			const rootReference = "items/" + user.id + "/";
 			const referenceWithTheKey = rootReference + arg.key;
@@ -59,7 +59,7 @@ export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
 				referenceWithTheKey,
 				noteWithUnifiedTagsAndCreatedAt
 			);
-			console.log("THUNK: item added.");
+			//console.log("THUNK: item added.");
 			thunkAPI.dispatch(
 				noteAdded({ id: arg.key, note: noteWithUnifiedTagsAndCreatedAt })
 			);

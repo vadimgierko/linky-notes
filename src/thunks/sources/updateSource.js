@@ -12,7 +12,7 @@ import createDate from "../../helper-functions/createDate";
 export const updateSource = createAsyncThunk(
 	"sources/update",
 	async (arg, thunkAPI) => {
-		console.log("THUNK: updating soure:", arg.source);
+		//console.log("THUNK: updating soure:", arg.source);
 		try {
 			// we need to update source with updatedAt prop:
 			const user = thunkAPI.getState().user.value;
@@ -25,7 +25,7 @@ export const updateSource = createAsyncThunk(
 			const referenceWithTheKey = rootReference + arg.key;
 			//===========================================================
 			await updateItem(referenceWithTheKey, updatedSource);
-			console.log("THUNK: source updated:", updatedSource);
+			//console.log("THUNK: source updated:", updatedSource);
 			thunkAPI.dispatch(sourceUpdated({ id: arg.key, source: updatedSource }));
 		} catch (error) {
 			console.log(error);

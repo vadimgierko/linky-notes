@@ -14,7 +14,7 @@ import createDate from "../../helper-functions/createDate";
 export const addSource = createAsyncThunk(
 	"sources/add",
 	async (arg, thunkAPI) => {
-		console.log("THUNK: adding source:", arg.key, arg.source);
+		//console.log("THUNK: adding source:", arg.key, arg.source);
 		try {
 			// at the moment source object has only props set in the source's form, so
 			// we need to update it with all necessary props & metadata:
@@ -29,7 +29,7 @@ export const addSource = createAsyncThunk(
 			const referenceWithTheKey = rootReference + arg.key;
 			//===========================================================
 			await addItemWithGivenKey(referenceWithTheKey, updatedSourceObject);
-			console.log("THUNK: source added:", arg.key, updatedSourceObject);
+			//console.log("THUNK: source added:", arg.key, updatedSourceObject);
 			thunkAPI.dispatch(
 				sourceAdded({ id: arg.key, source: updatedSourceObject })
 			);

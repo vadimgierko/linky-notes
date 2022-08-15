@@ -4,7 +4,10 @@ import { auth } from "./firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 // reducers actions:
 import { userSignedIn, userLoggedOut } from "./features/user/userSlice";
-import { resetState } from "./features/notes/notesSlice";
+import { resetNotes } from "./features/notes/notesSlice";
+import { resetAuthors } from "./features/authors/authorsSlice";
+import { resetSources } from "./features/sources/sourcesSlice";
+import { resetTags } from "./features/tags/tagsSlice";
 // thunks:
 import { fetchNotes } from "./thunks/notes/fetchNotes";
 import { fetchTags } from "./thunks/tags/fetchTags";
@@ -97,6 +100,11 @@ const ROUTES = {
 
 export default function App() {
 	const user = useSelector((state) => state.user.value);
+	// const NOTES = useSelector((state) => state.notes.value);
+	// const SOURCES = useSelector((state) => state.sources.value);
+	// const AUTHORS = useSelector((state) => state.authors.value);
+	// const TAGS = useSelector((state) => state.tags.value);
+
 	const dispatch = useDispatch();
 
 	// listen to the user logs in & out:
@@ -116,11 +124,24 @@ export default function App() {
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
-					dispatch(resetState()); // TODO: resetNotes, resetAuthors etc.
+					dispatch(resetNotes());
+					dispatch(resetAuthors());
+					dispatch(resetSources());
+					dispatch(resetTags());
 				}
 			});
 		return unsubscribe();
 	}, [dispatch]);
+
+	// useEffect(() => {
+	// 	const APP_STATE = {
+	// 		notes: NOTES,
+	// 		sources: SOURCES,
+	// 		authors: AUTHORS,
+	// 		tags: TAGS,
+	// 	};
+	// 	console.log("APP_STATE:", APP_STATE);
+	// }, [NOTES, SOURCES, AUTHORS, TAGS]);
 
 	return (
 		<div className="App">

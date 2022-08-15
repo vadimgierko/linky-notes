@@ -9,11 +9,11 @@ import {
 export const fetchTags = createAsyncThunk(
 	"tags/fetch",
 	async (arg, thunkAPI) => {
-		console.log("THUNK: pending...");
+		//console.log("THUNK: pending...");
 		thunkAPI.dispatch(startPending());
 		try {
 			const tags = await fetchItems(arg.reference);
-			console.log("THUNK: pending is over. Data fetched:", tags);
+			//console.log("THUNK: pending is over. Data fetched:", tags);
 			if (tags) {
 				thunkAPI.dispatch(tagsFetched(tags));
 			}
