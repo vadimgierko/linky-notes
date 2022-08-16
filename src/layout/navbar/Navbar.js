@@ -63,11 +63,13 @@ export default function ({ maxWidth }) {
 						>
 							markdown guide
 						</Nav.Link>
-						<hr style={{ color: "grey" }} />
 						{screenWidth >= 992 && user.id ? (
 							<Nav.Link disabled>
 								<span> | </span>
 							</Nav.Link>
+						) : null}
+						{screenWidth < 992 && user.id ? (
+							<hr style={{ color: "grey" }} />
 						) : null}
 						{user.id &&
 							LINKS.private.map((link) => (

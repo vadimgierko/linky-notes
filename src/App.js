@@ -20,7 +20,7 @@ import RequireAuth from "./components/RequireAuth";
 // layout:
 import Layout from "./layout/Layout";
 // pages:
-import About from "./pages/About.js";
+import About from "./pages/About"; // index.js from "About" folder
 import SignIn from "./pages/SignIn.js";
 import SignUp from "./pages/SignUp.js";
 import Notes from "./pages/Notes.js";

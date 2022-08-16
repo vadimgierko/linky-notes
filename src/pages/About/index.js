@@ -1,5 +1,10 @@
+import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Section from "./Section";
+// functions that add iconProps to icons & return lists with card data:
+import generateTechnologies from "./generateTechnologies";
+import generateFeatures from "./generateFeatures";
 
 const ABOUT_MARKDOWN = `
 ## Why use linky_notes?
@@ -102,16 +107,59 @@ and much more!
 `;
 
 export default function About() {
+	const [windowSize, setWindowSize] = useState(window.innerWidth);
+	const [iconProps, setIconProps] = useState();
+	const [sections, setSections] = useState([]);
+
+	useEffect(() => {
+		window.addEventListener("resize", () => {
+			const size = window.innerWidth;
+			setWindowSize(size);
+		});
+	}, []);
+
+	useEffect(() => {
+		// define icons props:
+		const size = windowSize > 576 ? 80 : 60;
+		const style = { margin: "0.5em" };
+		const props = { style, size };
+		setIconProps(props);
+	}, [windowSize]);
+
+	useEffect(() => {
+		if (iconProps) {
+			const TECHNOLOGIES = generateTechnologies(iconProps);
+			const FEATURES = generateFeatures(iconProps);
+			setSections([
+				{
+					header: "Technologies used to build the app",
+					cardsList: TECHNOLOGIES,
+				},
+				{
+					header: "What you can do with linky_notes",
+					cardsList: FEATURES,
+				},
+			]);
+		}
+	}, [iconProps]);
+
 	return (
 		<>
 			<h1 className="text-center mb-3">Welcome to linky_notes!</h1>
 			<p className="text-center">
-				<strong>
-					Build your easy to filter knowledge base and store, organize & filter
-					your notes by tags!
-				</strong>
+				Build your easy to filter knowledge base & store, organize & filter your
+				notes by tags!
 			</p>
-			<ReactMarkdown children={ABOUT_MARKDOWN} remarkPlugins={[remarkGfm]} />
+			{sections.length
+				? sections.map((section, i) => (
+						<Section
+							key={"section-" + i}
+							header={section.header}
+							cardsList={section.cardsList}
+						/>
+				  ))
+				: null}
+			{/* <ReactMarkdown children={ABOUT_MARKDOWN} remarkPlugins={[remarkGfm]} /> */}
 		</>
 	);
 }
