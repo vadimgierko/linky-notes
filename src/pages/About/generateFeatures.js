@@ -1,6 +1,6 @@
 // import icons:
 import { MdDarkMode, MdFormatSize } from "react-icons/md";
-import { GrNotes } from "react-icons/gr";
+import { CgNotes } from "react-icons/cg";
 import {
 	AiOutlineLock,
 	AiOutlineCloud,
@@ -12,9 +12,9 @@ import {
 export default function generateFeatures(props) {
 	return [
 		{
-			icon: <GrNotes {...props} />,
+			icon: <CgNotes {...props} />,
 			header: "Notes",
-			paragraph: "Add, update & delete notes.",
+			paragraph: "Add, update & delete notes to your cloud storage.",
 		},
 		{
 			icon: <AiOutlineTags {...props} />,
@@ -26,7 +26,7 @@ export default function generateFeatures(props) {
 			icon: <AiOutlineBook {...props} />,
 			header: "Sources",
 			paragraph:
-				"Add sources/ references to your notes (including title, author, link, page/s numbers). If the source is already in your base, you can easily use it.",
+				"Add sources/ references to your notes (including title, author, link, page/s numbers).",
 		},
 		{
 			icon: <AiOutlineSearch {...props} />,
@@ -38,7 +38,7 @@ export default function generateFeatures(props) {
 			icon: <MdFormatSize {...props} />,
 			header: "Format",
 			paragraph:
-				"Format your notes using built-in markdown editor. Your notes can contain headers of 6 sizes, ordered, unordered & nested lists, images from the web, links, tables and more.",
+				"Format your notes using built-in markdown editor to include headers, lists, images from the web, links, tables and more in your notes.",
 		},
 		{
 			icon: <AiOutlineCloud {...props} />,

@@ -5,6 +5,8 @@ import Section from "./Section";
 // functions that add iconProps to icons & return lists with card data:
 import generateTechnologies from "./generateTechnologies";
 import generateFeatures from "./generateFeatures";
+// react-bootstrap components:
+import { Button } from "react-bootstrap";
 
 const ABOUT_MARKDOWN = `
 ## Why use linky_notes?
@@ -120,7 +122,7 @@ export default function About() {
 
 	useEffect(() => {
 		// define icons props:
-		const size = windowSize > 576 ? 80 : 60;
+		const size = windowSize > 576 ? 80 : 50;
 		const style = { margin: "0.5em" };
 		const props = { style, size };
 		setIconProps(props);
@@ -132,34 +134,59 @@ export default function About() {
 			const FEATURES = generateFeatures(iconProps);
 			setSections([
 				{
-					header: "Technologies used to build the app",
-					cardsList: TECHNOLOGIES,
-				},
-				{
 					header: "What you can do with linky_notes",
 					cardsList: FEATURES,
+					cardStyle: {
+						padding: "0.5em",
+						width: windowSize > 576 ? "33%" : "50%",
+					},
+				},
+				{
+					header: "Technologies used to build the app",
+					cardsList: TECHNOLOGIES,
+					cardStyle: {
+						marginLeft: "1em",
+						marginRight: "1em",
+					},
 				},
 			]);
 		}
 	}, [iconProps]);
 
 	return (
-		<>
-			<h1 className="text-center mb-3">Welcome to linky_notes!</h1>
-			<p className="text-center">
+		<div className="text-center">
+			<h1 className="mb-3" style={{ fontSize: windowSize > 576 ? 50 : 40 }}>
+				Welcome to linky_notes!
+			</h1>
+			<p className="mb-3" style={{ fontSize: windowSize > 576 ? 20 : 16 }}>
 				Build your easy to filter knowledge base & store, organize & filter your
 				notes by tags!
 			</p>
+			<Button
+				variant="success"
+				size={windowSize > 576 ? "lg" : "md"}
+				className="mb-3 me-3"
+			>
+				Sign In
+			</Button>
+			<Button
+				variant="primary"
+				size={windowSize > 576 ? "lg" : "md"}
+				className="mb-3"
+			>
+				Sign Up
+			</Button>
 			{sections.length
 				? sections.map((section, i) => (
 						<Section
 							key={"section-" + i}
 							header={section.header}
 							cardsList={section.cardsList}
+							cardStyle={section.cardStyle}
 						/>
 				  ))
 				: null}
 			{/* <ReactMarkdown children={ABOUT_MARKDOWN} remarkPlugins={[remarkGfm]} /> */}
-		</>
+		</div>
 	);
 }

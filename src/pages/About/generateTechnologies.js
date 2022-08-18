@@ -22,7 +22,7 @@ export default function generateTechnologies(props) {
 		},
 		{
 			icon: <SiRedux {...props} />,
-			header: "Redux (Toolkit)",
+			header: "Redux",
 		},
 		{
 			icon: <SiReactrouter {...props} />,

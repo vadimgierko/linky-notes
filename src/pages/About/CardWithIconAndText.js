@@ -1,11 +1,8 @@
-export default function CardWithIconAndText({ card }) {
+export default function CardWithIconAndText({ card, cardStyle }) {
 	if (!card) return null;
 
 	return (
-		<div
-			className="text-center"
-			style={{ marginLeft: "0.5em", marginRight: "0.5em" }}
-		>
+		<div className="text-center" style={cardStyle}>
 			{card.icon}
 			{card.header && <h5>{card.header}</h5>}
 			{card.paragraph && <p>{card.paragraph}</p>}
