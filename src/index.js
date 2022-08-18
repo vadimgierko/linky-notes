@@ -5,10 +5,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
 import App from "./App";
 import { ThemeProvider } from "./contexts/useTheme";
-// redux:
-// TODO: when old Context Store will be replaced, rename "redux-store" folder into "store":
 import store from "./store/store";
 import { Provider } from "react-redux";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const rootElement = document.getElementById("root");
 
@@ -26,3 +25,8 @@ ReactDOM.render(
 	</ThemeProvider>,
 	rootElement
 );
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.register();
