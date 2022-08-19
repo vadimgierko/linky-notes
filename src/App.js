@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "./firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -19,6 +19,8 @@ import { Routes, Route } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
 // layout:
 import Layout from "./layout/Layout";
+// contexts:
+import { useTheme } from "./contexts/useTheme";
 // pages:
 import About from "./pages/About"; // index.js from "About" folder
 import SignIn from "./pages/SignIn.js";
@@ -99,6 +101,8 @@ const ROUTES = {
 };
 
 export default function App() {
+	const { theme, setTheme } = useTheme();
+	const [isDarkModeBrowser, setIsDarkModeBrowser] = useState(false);
 	const user = useSelector((state) => state.user.value);
 	// const NOTES = useSelector((state) => state.notes.value);
 	// const SOURCES = useSelector((state) => state.sources.value);
@@ -132,6 +136,23 @@ export default function App() {
 			});
 		return unsubscribe();
 	}, [dispatch]);
+
+	useEffect(() => {
+		const userPreferDarkMode = () =>
+			window.matchMedia &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches;
+		console.log("Does user prefer dark mode?", userPreferDarkMode());
+		setIsDarkModeBrowser(userPreferDarkMode());
+		// if (userPreferDarkMode) {
+		// 	setTheme("dark");
+		// }
+	}, [isDarkModeBrowser]);
+
+	useEffect(() => {
+		if (isDarkModeBrowser) {
+			setTheme("dark");
+		}
+	}, [isDarkModeBrowser]);
 
 	// useEffect(() => {
 	// 	const APP_STATE = {
