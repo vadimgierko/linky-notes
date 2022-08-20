@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Section from "./Section";
@@ -110,6 +111,7 @@ and much more!
 
 export default function About() {
 	const [windowSize, setWindowSize] = useState(window.innerWidth);
+	const navigate = useNavigate();
 	const [iconProps, setIconProps] = useState();
 	const [sections, setSections] = useState([]);
 
@@ -163,16 +165,18 @@ export default function About() {
 				notes by tags!
 			</p>
 			<Button
+				className="mb-3 me-3"
 				variant="success"
 				size={windowSize > 576 ? "lg" : "md"}
-				className="mb-3 me-3"
+				onClick={() => navigate("/signin")}
 			>
 				Sign In
 			</Button>
 			<Button
+				className="mb-3"
 				variant="primary"
 				size={windowSize > 576 ? "lg" : "md"}
-				className="mb-3"
+				onClick={() => navigate("/signup")}
 			>
 				Sign Up
 			</Button>

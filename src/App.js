@@ -102,7 +102,7 @@ const ROUTES = {
 
 export default function App() {
 	const { theme, setTheme } = useTheme();
-	const [isDarkModeBrowser, setIsDarkModeBrowser] = useState(false);
+	const [isDarkModePrefered, setIsDarkModePrefered] = useState();
 	const user = useSelector((state) => state.user.value);
 	// const NOTES = useSelector((state) => state.notes.value);
 	// const SOURCES = useSelector((state) => state.sources.value);
@@ -122,9 +122,9 @@ export default function App() {
 					dispatch(userSignedIn({ email: email, id: uid }));
 					//========> UNCOMMENT THIS CODE TO FETCH DATA AFTER APP MOUNTS & USER IS LOGGED:
 					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
-					dispatch(fetchTags({ reference: "tags/" + uid }));
-					dispatch(fetchAuthors({ reference: "authors/" + uid }));
-					dispatch(fetchSources({ reference: "sources/" + uid }));
+					// dispatch(fetchTags({ reference: "tags/" + uid }));
+					// dispatch(fetchAuthors({ reference: "authors/" + uid }));
+					// dispatch(fetchSources({ reference: "sources/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
@@ -137,22 +137,21 @@ export default function App() {
 		return unsubscribe();
 	}, [dispatch]);
 
+	// DARK MODE:
 	useEffect(() => {
-		const userPreferDarkMode = () =>
+		const userPrefersDarkMode = () =>
 			window.matchMedia &&
 			window.matchMedia("(prefers-color-scheme: dark)").matches;
-		console.log("Does user prefer dark mode?", userPreferDarkMode());
-		setIsDarkModeBrowser(userPreferDarkMode());
-		// if (userPreferDarkMode) {
-		// 	setTheme("dark");
-		// }
-	}, [isDarkModeBrowser]);
+		console.log("Does user prefer dark mode?", userPrefersDarkMode());
+		setIsDarkModePrefered(userPrefersDarkMode());
+	}, []);
 
 	useEffect(() => {
-		if (isDarkModeBrowser) {
+		if (isDarkModePrefered) {
 			setTheme("dark");
+			console.log("App: switched to the dark mode.");
 		}
-	}, [isDarkModeBrowser]);
+	}, [isDarkModePrefered]);
 
 	// useEffect(() => {
 	// 	const APP_STATE = {

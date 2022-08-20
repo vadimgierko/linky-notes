@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
 import App from "./App";
@@ -17,11 +17,11 @@ const rootElement = document.getElementById("root");
 
 ReactDOM.render(
 	<ThemeProvider>
-		<HashRouter>
+		<BrowserRouter basename={process.env.PUBLIC_URL}>
 			<Provider store={store}>
 				<App />
 			</Provider>
-		</HashRouter>
+		</BrowserRouter>
 	</ThemeProvider>,
 	rootElement
 );
