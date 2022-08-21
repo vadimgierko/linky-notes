@@ -7,6 +7,7 @@ import {
 	AiOutlineBook,
 	AiOutlineTags,
 	AiOutlineSearch,
+	AiOutlineCloudDownload,
 } from "react-icons/ai";
 
 export default function generateFeatures(props) {
@@ -14,7 +15,7 @@ export default function generateFeatures(props) {
 		{
 			icon: <CgNotes {...props} />,
 			header: "Notes",
-			paragraph: "Add, update & delete notes to your cloud storage.",
+			paragraph: "Add, update & delete private notes to your cloud storage.",
 		},
 		{
 			icon: <AiOutlineTags {...props} />,
@@ -38,13 +39,13 @@ export default function generateFeatures(props) {
 			icon: <MdFormatSize {...props} />,
 			header: "Format",
 			paragraph:
-				"Format your notes using built-in markdown editor to include headers, lists, images from the web, links, tables and more in your notes.",
+				"Format your notes using built-in markdown editor to include headers, lists, images from the web, links etc.",
 		},
 		{
-			icon: <AiOutlineCloud {...props} />,
+			icon: <AiOutlineCloudDownload {...props} />,
 			header: "Access & sync on all devices",
 			paragraph:
-				"This app works in browser, so all you need is a device with Internet connection. You can use the app on your mobile, tablet or laptop etc. & you will be synced to your notes base.",
+				"This app works in browser & is installable (PWA), so all you need is a device (mobile, tablet or laptop) with Internet connection.",
 		},
 		{
 			icon: <MdDarkMode {...props} />,
