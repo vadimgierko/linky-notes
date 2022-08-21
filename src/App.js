@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "./firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -19,8 +19,10 @@ import { Routes, Route } from "react-router-dom";
 import RequireAuth from "./components/RequireAuth";
 // layout:
 import Layout from "./layout/Layout";
+// contexts:
+import { useTheme } from "./contexts/useTheme";
 // pages:
-import About from "./pages/About.js";
+import About from "./pages/About"; // index.js from "About" folder
 import SignIn from "./pages/SignIn.js";
 import SignUp from "./pages/SignUp.js";
 import Notes from "./pages/Notes.js";
@@ -99,6 +101,8 @@ const ROUTES = {
 };
 
 export default function App() {
+	const { theme, setTheme } = useTheme();
+	const [isDarkModePrefered, setIsDarkModePrefered] = useState();
 	const user = useSelector((state) => state.user.value);
 	// const NOTES = useSelector((state) => state.notes.value);
 	// const SOURCES = useSelector((state) => state.sources.value);
@@ -118,9 +122,9 @@ export default function App() {
 					dispatch(userSignedIn({ email: email, id: uid }));
 					//========> UNCOMMENT THIS CODE TO FETCH DATA AFTER APP MOUNTS & USER IS LOGGED:
 					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
-					dispatch(fetchTags({ reference: "tags/" + uid }));
-					dispatch(fetchAuthors({ reference: "authors/" + uid }));
-					dispatch(fetchSources({ reference: "sources/" + uid }));
+					// dispatch(fetchTags({ reference: "tags/" + uid }));
+					// dispatch(fetchAuthors({ reference: "authors/" + uid }));
+					// dispatch(fetchSources({ reference: "sources/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
@@ -132,6 +136,22 @@ export default function App() {
 			});
 		return unsubscribe();
 	}, [dispatch]);
+
+	// DARK MODE:
+	useEffect(() => {
+		const userPrefersDarkMode = () =>
+			window.matchMedia &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches;
+		console.log("Does user prefer dark mode?", userPrefersDarkMode());
+		setIsDarkModePrefered(userPrefersDarkMode());
+	}, []);
+
+	useEffect(() => {
+		if (isDarkModePrefered) {
+			setTheme("dark");
+			console.log("App: switched to the dark mode.");
+		}
+	}, [isDarkModePrefered]);
 
 	// useEffect(() => {
 	// 	const APP_STATE = {

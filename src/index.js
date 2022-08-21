@@ -1,14 +1,13 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
 import App from "./App";
 import { ThemeProvider } from "./contexts/useTheme";
-// redux:
-// TODO: when old Context Store will be replaced, rename "redux-store" folder into "store":
 import store from "./store/store";
 import { Provider } from "react-redux";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const rootElement = document.getElementById("root");
 
@@ -18,11 +17,16 @@ const rootElement = document.getElementById("root");
 
 ReactDOM.render(
 	<ThemeProvider>
-		<HashRouter>
+		<BrowserRouter basename={process.env.PUBLIC_URL}>
 			<Provider store={store}>
 				<App />
 			</Provider>
-		</HashRouter>
+		</BrowserRouter>
 	</ThemeProvider>,
 	rootElement
 );
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.register();

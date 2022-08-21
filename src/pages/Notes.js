@@ -38,11 +38,11 @@ export default function Notes() {
 					: Object.keys(NOTES).length}
 				)
 			</h1>
-			<div className="d-grid mt-2 mb-3">
+			{/* <div className="d-grid mt-2 mb-3">
 				<Button variant="outline-primary" onClick={() => navigate("/add-note")}>
 					Add note
 				</Button>
-			</div>
+			</div> */}
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
 				<Form.Label>Filter your notes by tags:</Form.Label>
@@ -136,36 +136,35 @@ export default function Notes() {
 				) : (
 					<div className="filter-tags mb-2">There are no filter tags...</div>
 				)}
-
-				{/*========================================= filtered notes */}
-				{searchParams.get("tags") ? (
-					<div className="filtered-notes">
-						{Object.keys(NOTES)
-							.filter((noteId) =>
-								searchParams
-									.get("tags")
-									.split("+")
-									.every((element) =>
-										Object.keys(NOTES[noteId].tags).includes(element)
-									)
-							)
-							.slice()
-							.reverse()
-							.map((noteId) => (
-								<NoteCard key={noteId} note={NOTES[noteId]} noteKey={noteId} />
-							))}
-					</div>
-				) : (
-					<div className="filtered-notes">
-						{Object.keys(NOTES)
-							.slice()
-							.reverse()
-							.map((noteId) => (
-								<NoteCard key={noteId} note={NOTES[noteId]} noteKey={noteId} />
-							))}
-					</div>
-				)}
 			</div>
+			{/*========================================= filtered notes */}
+			{searchParams.get("tags") ? (
+				<div className="filtered-notes">
+					{Object.keys(NOTES)
+						.filter((noteId) =>
+							searchParams
+								.get("tags")
+								.split("+")
+								.every((element) =>
+									Object.keys(NOTES[noteId].tags).includes(element)
+								)
+						)
+						.slice()
+						.reverse()
+						.map((noteId) => (
+							<NoteCard key={noteId} note={NOTES[noteId]} noteKey={noteId} />
+						))}
+				</div>
+			) : (
+				<div className="filtered-notes">
+					{Object.keys(NOTES)
+						.slice()
+						.reverse()
+						.map((noteId) => (
+							<NoteCard key={noteId} note={NOTES[noteId]} noteKey={noteId} />
+						))}
+				</div>
+			)}
 		</>
 	);
 }

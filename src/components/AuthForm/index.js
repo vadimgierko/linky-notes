@@ -38,6 +38,10 @@ export default function AuthForm({ headerText, onSubmit }) {
 								email: e.target.value,
 							})
 						}
+						style={{
+							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+							color: theme === "light" ? "black" : "white",
+						}}
 					/>
 					{headerText === "Sign up" && (
 						<Form.Text className="text-muted">
@@ -57,6 +61,10 @@ export default function AuthForm({ headerText, onSubmit }) {
 								password: e.target.value,
 							})
 						}
+						style={{
+							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+							color: theme === "light" ? "black" : "white",
+						}}
 					/>
 					<br />
 					{headerText === "Sign in" ? (
