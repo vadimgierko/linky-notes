@@ -11,7 +11,8 @@ With linky_notes app you can:
   - images,
   - ordered, unordered and nested lists and more
 - format your notes using built-in markdown editor
-- organize and filter your notes by tags.
+- organize and filter your notes by tags
+- install this app through the browser on your device/s (laptop, mobile, desktop or tablet) & have all of your notes synced!
 
 **Sign up for free** here: https://vadimgierko.github.io/linky-notes/ & build your own knowledge base!
 
@@ -53,7 +54,8 @@ With linky_notes app you can:
   - sources,
   - authors  
   stored in the app ordered alphabetically, so you can be up to date with all topics you were interested and sources you've used
-- BONUS: you can do all of things mentioned above using light or dark mode to make your work more comfortable
+- switch to light or dark mode to make your work more comfortable
+- download/ install this app on your device (this app is a PWA) through the browser
 
 ## How efficiently use linky_notes?
 
@@ -65,6 +67,7 @@ With linky_notes app you can:
 - => you don't have to add tags with source's title, author's first and last name anymore (the crossed paragraph above), because you can add a source separately via source form or note form and I'm suggesting you to do that, because in the near future I'll add the possibility to filter notes by sources, authors & sources types.
 - if the content of your note comes from the website, add a source's link to your note via source form
 - use built-in markdown editor to format your notes & make them more readable
+- you can also **refer to other notes stored in your database using links** (see markdown guide how to do a link), because every note has it's own URL. You can organize/ group your notes this way by particular project or topic => **create notes containing lists of notes links**. The possibilities are endless.
 - remember, that you can always go back to any note & update it with the new tags or delete ones
 
 ## Motivation (problem I wanted to solve & solution)
@@ -94,9 +97,15 @@ And when I've tested the app, I've decided to share it with the world to let eve
 
 ## Future of the app
 
-- sources types (like: book, magazine, article, blog, web page, web platform, multimedia etc.)
-- notes types (like: quotes, ideas, personal, definition, question etc.)
-- filtering notes not only by tags, but also by sources, authors, sources and notes types
+This app in its current form will stay stable, so you can safely use it.
+
+But soonly linky_notes & my [todo-app](https://vadimgierko.github.io/todo-app/) will be combined into one complex app, published on custom domain, enabling:
+- adding tasks
+- adding lists
+- adding tasks to notes or lists, notes to tasks or lists
+- defining sources types (like: book, magazine, article, blog, web page, web platform, multimedia etc.)
+- defining notes types (like: quotes, ideas, personal, definition, question etc.)
+- filtering notes not only by tags, but also by sources, authors, sources and notes types etc.
 and much more!
 
 ## Technologies I've used in this project:
@@ -114,3 +123,4 @@ and much more!
 - Bootstrap Icons 1.6
 - React Markdown 8.0
 - GitHub Pages 3.2
+- PWA

@@ -122,9 +122,9 @@ export default function App() {
 					dispatch(userSignedIn({ email: email, id: uid }));
 					//========> UNCOMMENT THIS CODE TO FETCH DATA AFTER APP MOUNTS & USER IS LOGGED:
 					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
-					// dispatch(fetchTags({ reference: "tags/" + uid }));
-					// dispatch(fetchAuthors({ reference: "authors/" + uid }));
-					// dispatch(fetchSources({ reference: "sources/" + uid }));
+					dispatch(fetchTags({ reference: "tags/" + uid }));
+					dispatch(fetchAuthors({ reference: "authors/" + uid }));
+					dispatch(fetchSources({ reference: "sources/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
