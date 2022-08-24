@@ -29,7 +29,10 @@ export default function SignUp() {
 		}
 	}
 
-	if (user.id) return <Navigate to={state.from} replace />;
+	if (user.id)
+		return (
+			<Navigate to={state && state.from ? state.from : "/about"} replace />
+		);
 
 	return <AuthForm headerText="Sign up" onSubmit={handleSubmit} />;
 }

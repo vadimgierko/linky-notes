@@ -92,6 +92,7 @@ export default function NoteForm({
 					{editorMode === "edit" && (
 						<Form.Control
 							as="textarea"
+							className="auto-resize"
 							rows={5}
 							placeholder="type your note here"
 							value={note.content || ""}

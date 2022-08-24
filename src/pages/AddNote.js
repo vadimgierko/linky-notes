@@ -17,9 +17,10 @@ export default function AddNote() {
 		//console.log("Note to add:", note);
 		if (note.content.length) {
 			const newKey = generateFirebaseKeyFor("items/" + user.id);
-			dispatch(addNote({ note: note, key: newKey })).then(() =>
-				navigate("/notes/" + newKey, { replace: true })
-			);
+			dispatch(addNote({ note: note, key: newKey })).then(() => {
+				navigate("/notes/" + newKey, { replace: true });
+				window.scrollTo({ top: 0 });
+			});
 		} else {
 			alert(
 				"Your note is empty! Add some content to your note to add it to database."
@@ -29,6 +30,7 @@ export default function AddNote() {
 
 	function handleCancel() {
 		navigate("/", { replace: true });
+		window.scrollTo({ top: 0 });
 	}
 
 	return <NoteForm onSubmit={handleSubmit} onCancel={handleCancel} />;

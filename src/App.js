@@ -173,7 +173,7 @@ export default function App() {
 					{ROUTES.private.map((route) => (
 						<Route
 							path={route.path}
-							element={<RequireAuth>{route.element}</RequireAuth>}
+							element={user.id ? route.element : <RequireAuth />}
 							key={route.path}
 						/>
 					))}

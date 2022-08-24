@@ -1,11 +1,17 @@
+import Button from "react-bootstrap/Button";
+
 export default function Tag({ value, onClick = (f) => f }) {
+	if (!value) return null;
+
 	return (
-		<button
-			className="btn btn-outline-primary mb-2 me-2"
+		<Button
+			variant="outline-primary"
+			size="sm"
+			className="mb-2 me-2"
 			style={{ borderRadius: 20 }}
 			onClick={onClick}
 		>
 			{value}
-		</button>
+		</Button>
 	);
 }

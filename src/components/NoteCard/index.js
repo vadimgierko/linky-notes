@@ -11,8 +11,9 @@ import SourceReferenceString from "../SourceReferenceString";
 import { Card, Row, Col } from "react-bootstrap";
 // thunks:
 import { deleteNote } from "../../thunks/notes/deleteNote";
+import { useEffect } from "react";
 
-export default function NoteCard({ note, noteKey }) {
+export default function NoteCard({ note, noteKey, show140chars = false }) {
 	const { theme } = useTheme();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -44,6 +45,8 @@ export default function NoteCard({ note, noteKey }) {
 		},
 	];
 
+	//useEffect(() => window.scrollTo({ top: 0 }), []);
+
 	if (!note || !noteKey) return null;
 
 	return (
@@ -72,7 +75,12 @@ export default function NoteCard({ note, noteKey }) {
 				</Row>
 			</Card.Header>
 			<Card.Body>
-				<ReactMarkdown children={note.content} remarkPlugins={[remarkGfm]} />
+				<ReactMarkdown
+					children={
+						show140chars ? note.content.slice(0, 137) + "..." : note.content
+					}
+					remarkPlugins={[remarkGfm]}
+				/>
 				{note.tags &&
 					Object.keys(note.tags).map((tagId) => (
 						<Tag
@@ -87,6 +95,7 @@ export default function NoteCard({ note, noteKey }) {
 									pathname: "/",
 									search: `?tags=${tagId}`,
 								});
+								window.scrollTo({ top: 0, behavior: "smooth" });
 
 								// 2. that works, but looks bad:
 								//navigate("/?tags=" + tagId);

@@ -14,9 +14,10 @@ export default function UpdateNote() {
 		e.preventDefault();
 		//console.log("Note to update:", note);
 		if (note.content.length) {
-			dispatch(updateNote({ note: note, key: itemKey })).then(() =>
-				navigate("/notes/" + itemKey, { replace: true })
-			);
+			dispatch(updateNote({ note: note, key: itemKey })).then(() => {
+				navigate("/notes/" + itemKey, { replace: true });
+				window.scrollTo({ top: 0 });
+			});
 		} else {
 			alert(
 				"Your note is empty! Add some content to your note to add it to database."
@@ -26,6 +27,7 @@ export default function UpdateNote() {
 
 	function handleCancel() {
 		navigate("/notes/" + itemKey, { replace: true });
+		window.scrollTo({ top: 0 });
 	}
 
 	return (
