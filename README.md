@@ -110,7 +110,7 @@ and much more!
 
 ## Technologies I've used in this project:
 
-- React 17.0
+- React 18.2
 - React Router 6.3
 - React Redux 8.0
 - Redux Toolkit 1.8

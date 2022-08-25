@@ -18,7 +18,9 @@ export default function Note() {
 						noteKey={itemKey}
 					/>
 					<p className="text-center">
-						<Link to="/">back to notes</Link>
+						<Link to="/" onClick={() => window.scrollTo({ top: 0 })}>
+							back to notes
+						</Link>
 					</p>
 				</>
 			) : (
