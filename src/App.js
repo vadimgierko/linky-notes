@@ -36,12 +36,17 @@ import UpdateAuthor from "./pages/UpdateAuthor";
 import AddSource from "./pages/AddSource";
 import Sources from "./pages/Sources";
 import UpdateSource from "./pages/UpdateSource";
+import MarkdownGuide from "./pages/MarkdownGuide";
 
 const ROUTES = {
 	public: [
 		{
 			path: "/about",
 			element: <About />,
+		},
+		{
+			path: "/markdown-guide",
+			element: <MarkdownGuide />,
 		},
 		{
 			path: "/signin",

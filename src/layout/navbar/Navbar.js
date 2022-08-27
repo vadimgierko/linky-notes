@@ -28,9 +28,14 @@ import { BiUserCheck } from "react-icons/bi";
 const LINKS = {
 	public: [
 		{
-			name: "about",
+			name: "about the app",
 			link: "/about",
 			icon: <AiOutlineInfoCircle className="me-3" />,
+		},
+		{
+			name: "how to format your notes",
+			link: "/markdown-guide",
+			icon: <AiOutlineFileMarkdown className="me-3" />,
 		},
 	],
 	private: [
@@ -129,13 +134,6 @@ export default function ({ maxWidth }) {
 								</Nav.Link>
 							</LinkContainer>
 						))}
-						<Nav.Link
-							href="https://www.markdownguide.org/cheat-sheet/"
-							target="_blank"
-						>
-							<AiOutlineFileMarkdown className="me-3" />
-							<span>markdown guide</span>
-						</Nav.Link>
 						<hr style={{ color: "grey" }} />
 						<Nav.Link onClick={switchTheme}>
 							{theme === "light" ? (

@@ -8,8 +8,9 @@ With linky_notes app you can:
   - sources (containing title, author, link, page/s number/s & more)
   - textual content,
   - links,
-  - images,
-  - ordered, unordered and nested lists and more
+  - ordered, unordered and nested lists,
+  - tables,
+  - bold, italicized & strikethrough text and more
 - format your notes using built-in markdown editor
 - organize and filter your notes by tags
 - install this app through the browser on your device/s (laptop, mobile, desktop or tablet) & have all of your notes synced!
@@ -22,7 +23,7 @@ With linky_notes app you can:
 
 - you can build your knowledge base by storing notes containing content from different sources (books, articles, blogs, podcasts, videos etc.) & your personal notes containing your own knowledge, ideas & reflections on any topic
 - all of your notes are automatically organized (without any effort) in one place by tags you've added to them
-- you can format your notes with built-in markdown editor easily & fast (you need only a few minutes to figure out [markdown syntax basics](https://www.markdownguide.org/cheat-sheet/))
+- you can format your notes with built-in markdown editor easily & fast (check the markdown guide linked in the app's nav menu)
 - you can add sources to your notes & automatically build your source base
 - your notes are easy to search & filter via tags search bar on the main page (you can also use ctrl-f search if you need)
 - you don't need folders, categories or labels to organize your notes, so there is no structure or hierarchy to manage (and strugle) with
@@ -36,8 +37,9 @@ With linky_notes app you can:
 - add, update & delete notes containing:
   - textual content,
   - links,
-  - images (from the web),
-  - ordered, unordered and nested lists and more
+  - ordered, unordered and nested lists,
+  - tables,
+  - bold, italicized & strikethrough text and more
 - see when the note was added & updated (the app does it automatically, so you don't have to worry about it)
 - add, update & delete tag/s for/to each note,
 - add, update & delete note's sources containing:
