@@ -37,6 +37,7 @@ import AddSource from "./pages/AddSource";
 import Sources from "./pages/Sources";
 import UpdateSource from "./pages/UpdateSource";
 import MarkdownGuide from "./pages/MarkdownGuide";
+import AppGuide from "./pages/AppGuide";
 
 const ROUTES = {
 	public: [
@@ -47,6 +48,10 @@ const ROUTES = {
 		{
 			path: "/markdown-guide",
 			element: <MarkdownGuide />,
+		},
+		{
+			path: "/app-guide",
+			element: <AppGuide />,
 		},
 		{
 			path: "/signin",

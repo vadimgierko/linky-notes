@@ -23,7 +23,7 @@ import {
 	AiOutlineLogout,
 	AiOutlineLogin,
 } from "react-icons/ai";
-import { BiUserCheck } from "react-icons/bi";
+import { BiUserCheck, BiRocket, BiBrain } from "react-icons/bi";
 
 const LINKS = {
 	public: [
@@ -36,6 +36,11 @@ const LINKS = {
 			name: "how to format your notes",
 			link: "/markdown-guide",
 			icon: <AiOutlineFileMarkdown className="me-3" />,
+		},
+		{
+			name: "how to use the app efficiently",
+			link: "/app-guide",
+			icon: <BiRocket className="me-3" />,
 		},
 	],
 	private: [
