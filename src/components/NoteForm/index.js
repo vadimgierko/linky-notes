@@ -74,17 +74,7 @@ export default function NoteForm({
 	if (!note) return null;
 
 	return (
-		// <div
-		// 	style={{
-		// 		backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-		// 		color: theme === "light" ? "black" : "white",
-		// 	}}
-		// >
-		// 	<h1 className="text-center mb-3">
-		// 		{noteKey ? "Update Note!" : "Add Note!"}
-		// 	</h1>
 		<Form
-			//className="border border-secondary rounded p-3 shadow"
 			style={{
 				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
 				color: theme === "light" ? "black" : "white",
@@ -92,7 +82,6 @@ export default function NoteForm({
 			onSubmit={(e) => onSubmit(e, note)}
 		>
 			<Form.Group className="mb-3">
-				{/* <Form.Label>Note content:</Form.Label> */}
 				{editorMode === "edit" && (
 					<Form.Control
 						as="textarea"
@@ -128,7 +117,6 @@ export default function NoteForm({
 
 			{/*================== search bar ==================*/}
 			<Form.Group className="search-bar mb-3">
-				{/* <Form.Label>Tags:</Form.Label> */}
 				<Form.Control
 					className={
 						"mb-2 + bg-" +
@@ -257,7 +245,6 @@ export default function NoteForm({
 
 			{/**==================== add source =========================*/}
 			<Form.Group className="mb-3">
-				{/* <Form.Label>Source:</Form.Label> */}
 				<Form.Select
 					value={note.sourceKey || ""}
 					style={{
@@ -293,7 +280,6 @@ export default function NoteForm({
 
 			{note.sourceKey && (
 				<Form.Group className="mb-3">
-					{/* <Form.Label>Page/s number/s in the source (optional):</Form.Label> */}
 					<Form.Control
 						placeholder="page/s number/s, e.x. 34-36"
 						value={note.pages || ""}
@@ -306,7 +292,6 @@ export default function NoteForm({
 				</Form.Group>
 			)}
 
-			{/* <div className="d-grid my-2"> */}
 			<Form.Group className="text-end">
 				<Button
 					className="me-2"
@@ -329,6 +314,5 @@ export default function NoteForm({
 				</Button>
 			</Form.Group>
 		</Form>
-		// </div>
 	);
 }

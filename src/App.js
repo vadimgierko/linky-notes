@@ -22,7 +22,7 @@ import Layout from "./layout/Layout";
 // contexts:
 import { useTheme } from "./contexts/useTheme";
 // pages:
-import About from "./pages/About"; // index.js from "About" folder
+import About from "./pages/About";
 import SignIn from "./pages/SignIn.js";
 import SignUp from "./pages/SignUp.js";
 import Notes from "./pages/Notes.js";

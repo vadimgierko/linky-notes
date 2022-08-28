@@ -59,18 +59,20 @@ With linky_notes app you can:
 - switch to light or dark mode to make your work more comfortable
 - download/ install this app on your device (this app is a PWA) through the browser
 
-## How efficiently use linky_notes?
+## How efficiently use *linky_notes*?
 
-- always add at least one tag to your note (or you won't be able to find it without using ctrl-f or group it with other notes)
-- try to add tags that not only define the content of a given note, but also define the embedding of this content in a broader context, e.g. if your note is about creating a function in JavaScript (this is a programming language), add tags: "function", "creating function", "javascript", "programming languages", "frontend", "learning" etc.
-- try to add tags containing the description of the type of note, e.g. "quote", "idea", "definition", "question",
-- try to add tags containing the description of the project / area of ​​interest that this note refers to, e.g. "learning programming", "productivity", "meeting with management", "note app project" etc.
-- ~~in the tags you can also include the author of the note/ quote (it's better to add the author's name and surname as two separate tags) and add a tag with the name of the note source, e.g. book or article title etc.~~
-- => you don't have to add tags with source's title, author's first and last name anymore (the crossed paragraph above), because you can add a source separately via source form or note form and I'm suggesting you to do that, because in the near future I'll add the possibility to filter notes by sources, authors & sources types.
-- if the content of your note comes from the website, add a source's link to your note via source form
-- use built-in markdown editor to format your notes & make them more readable
-- you can also **refer to other notes stored in your database using links** (see markdown guide how to do a link), because every note has it's own URL. You can organize/ group your notes this way by particular project or topic => **create notes containing lists of notes links**. The possibilities are endless.
-- remember, that you can always go back to any note & update it with the new tags or delete ones
+Although the *linky_notes* app has only a few simple functionalities,
+it offers **endless possibilities** for organizing, searching and using your notes in the way,
+which is impossible to many other note apps around.
+
+Those functionalities are:
+- adding one or more **tags** to each note,
+- the ability to **filter** your notes *by* one or more *tags*,
+- markdown editor, which enables **links** adding to your notes,
+- each note has its own link (URL).
+
+The way you can organize & filter your notes using those features is very **customizible**.
+You can use my tips mentioned in my [app guide](https://vadimgierko.github.io/linky-notes/app-guide) or **create your own system**!
 
 ## Motivation (problem I wanted to solve & solution)
 

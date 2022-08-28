@@ -2,6 +2,18 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const MARKDOWN = `
+# How to format your notes using Markdown Syntax
+
+This app allows you to format/ style your notes with built-in Markdown Editor.
+Not all Markdown features are available at the moment, but You can create
+**headers, lists, footnotes, tasks lists, strikethrough text, bold & italic text, links & tables**.
+Check out the examples of what you're able to do below.
+
+You may also be interested in checking out,
+[how to use tags, links & other app's features to organize your notes efficiently](app-guide).
+
+---
+
 ## Headers
 
 *What you need to type:*
@@ -174,23 +186,5 @@ ${"```"}
 `;
 
 export default function MarkdownGuide() {
-	return (
-		<>
-			<h1 className="text-center mb-3">
-				How to format your notes using Markdown Syntax
-			</h1>
-			<p className="text-center">
-				This app allows you to format/ style your notes with built-in Markdown
-				Editor. Not all Markdown features are available at the moment, but You
-				can create{" "}
-				<strong>
-					headers, lists, footnotes, tasks lists, strikethrough text, bold &
-					italic text, links & tables
-				</strong>
-				. Check out the examples of what you're able to do below.
-			</p>
-			<hr />
-			<ReactMarkdown children={MARKDOWN} remarkPlugins={[remarkGfm]} />
-		</>
-	);
+	return <ReactMarkdown children={MARKDOWN} remarkPlugins={[remarkGfm]} />;
 }
