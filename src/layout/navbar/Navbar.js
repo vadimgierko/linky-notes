@@ -3,7 +3,7 @@ import { useTheme } from "../../contexts/useTheme";
 import { useSelector } from "react-redux";
 // react-router-bootstrap for link container:
 import { LinkContainer } from "react-router-bootstrap";
-// react-bootstrap components:
+// react-bootstrap:
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -140,14 +140,16 @@ export default function ({ maxWidth }) {
 							</LinkContainer>
 						))}
 						<hr style={{ color: "grey" }} />
-						<Nav.Link onClick={switchTheme}>
-							{theme === "light" ? (
-								<BsMoonFill className="me-3" />
-							) : (
-								<BsSunFill className="me-3" />
-							)}
-							{theme === "light" ? "switch to dark" : "switch to light"}
-						</Nav.Link>
+						<LinkContainer to="">
+							<Nav.Link onClick={switchTheme}>
+								{theme === "light" ? (
+									<BsMoonFill className="me-3" />
+								) : (
+									<BsSunFill className="me-3" />
+								)}
+								{theme === "light" ? "switch to dark" : "switch to light"}
+							</Nav.Link>
+						</LinkContainer>
 						<hr style={{ color: "grey" }} />
 						{user.id ? (
 							<LinkContainer to="/about">
