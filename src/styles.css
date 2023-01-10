@@ -8,6 +8,8 @@ textarea {
   resize: vertical;
 }
 
+/* SCROLL TO TOP */
+
 .scroll-to-top {
   z-index: 1;
   color: grey;
@@ -19,4 +21,28 @@ textarea {
 
 .scroll-to-top:hover {
   color:rgb(27, 71, 216)
+}
+
+/* PRINT STYLES */
+
+@media print {
+  #navbar, .scroll-to-top {
+    display: none;
+  }
+
+  * {
+    /* font-family: serif !important;
+    font-size: 16pt !important;
+    line-height: 1.5 !important; */
+    color: black !important;
+    background-color: white !important;
+  }
+
+  h1, h2, h3 {
+    break-after: avoid;
+  }
+
+  img, svg {
+    break-inside: avoid;
+  }
 }

@@ -75,6 +75,7 @@ export default function ({ maxWidth }) {
 
 	return (
 		<Navbar
+			id="navbar"
 			collapseOnSelect
 			expand={false} // there will be always only brand & hamburger button shown
 			bg={theme}
@@ -140,7 +141,7 @@ export default function ({ maxWidth }) {
 							</LinkContainer>
 						))}
 						<hr style={{ color: "grey" }} />
-						<LinkContainer to="">
+						<LinkContainer to="#">
 							<Nav.Link onClick={switchTheme}>
 								{theme === "light" ? (
 									<BsMoonFill className="me-3" />

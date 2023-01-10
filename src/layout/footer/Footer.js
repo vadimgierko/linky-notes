@@ -11,7 +11,7 @@ export default function Footer({ maxWidth }) {
 		>
 			<hr />
 			<p className="text-center mb-0 pb-3">
-				&copy; 2021-2022{" "}
+				&copy; 2021-{new Date().getFullYear()}{" "}
 				<a
 					href="https://github.com/vadimgierko"
 					target="_blank"
@@ -19,6 +19,14 @@ export default function Footer({ maxWidth }) {
 					style={{ textDecoration: "none" }}
 				>
 					Vadim Gierko
+				</a>{" "}
+				<a
+					href="https://github.com/vadimgierko/linky-notes"
+					target="_blank"
+					rel="noreferrer"
+					style={{ textDecoration: "none" }}
+				>
+					[see the code]
 				</a>
 			</p>
 		</Container>
