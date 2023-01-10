@@ -2,6 +2,7 @@ import { useTheme } from "../contexts/useTheme";
 import Footer from "./footer/Footer";
 import Navbar from "./navbar/Navbar";
 import { Container } from "react-bootstrap";
+import ScrollToTop from "../components/ScrollToTop";
 
 export default function Layout({ children }) {
 	const { theme } = useTheme();
@@ -29,6 +30,7 @@ export default function Layout({ children }) {
 			>
 				{children}
 			</Container>
+			<ScrollToTop />
 			<Footer maxWidth={maxWidth} />
 		</div>
 	);

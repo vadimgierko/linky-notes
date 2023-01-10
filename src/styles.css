@@ -7,3 +7,16 @@ body {
 textarea {
   resize: vertical;
 }
+
+.scroll-to-top {
+  z-index: 1;
+  color: grey;
+  position: fixed;
+  right: 30px;
+  bottom: 20px;
+  cursor: pointer;
+}
+
+.scroll-to-top:hover {
+  color:rgb(27, 71, 216)
+}
