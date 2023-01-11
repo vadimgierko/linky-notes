@@ -83,30 +83,30 @@ const ROUTES = {
 			path: "/notes/update-note/:itemKey",
 			element: <UpdateNote />,
 		},
-		{
-			path: "/authors",
-			element: <Authors />,
-		},
+		// {
+		// 	path: "/authors",
+		// 	element: <Authors />,
+		// },
 		{
 			path: "/add-author",
 			element: <AddAuthor />,
 		},
-		{
-			path: "/authors/update-author/:itemKey",
-			element: <UpdateAuthor />,
-		},
-		{
-			path: "/sources",
-			element: <Sources />,
-		},
+		// {
+		// 	path: "/authors/update-author/:itemKey",
+		// 	element: <UpdateAuthor />,
+		// },
+		// {
+		// 	path: "/sources",
+		// 	element: <Sources />,
+		// },
 		{
 			path: "/add-source",
 			element: <AddSource />,
 		},
-		{
-			path: "/sources/update-source/:itemKey",
-			element: <UpdateSource />,
-		},
+		// {
+		// 	path: "/sources/update-source/:itemKey",
+		// 	element: <UpdateSource />,
+		// },
 	],
 };
 
@@ -114,10 +114,12 @@ export default function App() {
 	const { theme, setTheme } = useTheme();
 	const [isDarkModePrefered, setIsDarkModePrefered] = useState();
 	const user = useSelector((state) => state.user.value);
-	// const NOTES = useSelector((state) => state.notes.value);
-	// const SOURCES = useSelector((state) => state.sources.value);
-	// const AUTHORS = useSelector((state) => state.authors.value);
-	// const TAGS = useSelector((state) => state.tags.value);
+	//========= UNCOMMENT THE CODE BELOW TO CHECK THE DATA IN CONSOLE:
+	const NOTES = useSelector((state) => state.notes.value);
+	const SOURCES = useSelector((state) => state.sources.value);
+	const AUTHORS = useSelector((state) => state.authors.value);
+	const TAGS = useSelector((state) => state.tags.value);
+	//===============================================================//
 
 	const dispatch = useDispatch();
 
@@ -163,15 +165,15 @@ export default function App() {
 		}
 	}, [isDarkModePrefered]);
 
-	// useEffect(() => {
-	// 	const APP_STATE = {
-	// 		notes: NOTES,
-	// 		sources: SOURCES,
-	// 		authors: AUTHORS,
-	// 		tags: TAGS,
-	// 	};
-	// 	console.log("APP_STATE:", APP_STATE);
-	// }, [NOTES, SOURCES, AUTHORS, TAGS]);
+	useEffect(() => {
+		const APP_STATE = {
+			notes: NOTES,
+			sources: SOURCES,
+			authors: AUTHORS,
+			tags: TAGS,
+		};
+		console.log("APP_STATE:", APP_STATE);
+	}, [NOTES, SOURCES, AUTHORS, TAGS]);
 
 	return (
 		<div className="App">

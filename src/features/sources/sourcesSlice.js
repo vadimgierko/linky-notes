@@ -27,14 +27,14 @@ export const sourcesSlice = createSlice({
 			state.value[action.payload.id] = action.payload.source;
 		},
 		// update the whole item:
-		sourceUpdated: (state, action) => {
-			state.pending = false;
-			state.value[action.payload.id] = action.payload.source;
-		},
-		sourceDeleted: (state, action) => {
-			state.pending = false;
-			delete state.value[action.payload.id];
-		},
+		// sourceUpdated: (state, action) => {
+		// 	state.pending = false;
+		// 	state.value[action.payload.id] = action.payload.source;
+		// },
+		// sourceDeleted: (state, action) => {
+		// 	state.pending = false;
+		// 	delete state.value[action.payload.id];
+		// },
 		//=========== RESET ITEMS STATE =======================/
 		resetSources: (state) => {
 			state.value = {};
@@ -49,8 +49,8 @@ export const {
 	stopPending,
 	sourcesFetched,
 	sourceAdded,
-	sourceUpdated,
-	sourceDeleted,
+	// sourceUpdated,
+	// sourceDeleted,
 	resetSources,
 } = sourcesSlice.actions;
 

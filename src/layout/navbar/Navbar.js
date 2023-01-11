@@ -46,16 +46,16 @@ const LINKS = {
 	private: [
 		{ name: "notes", link: "/", icon: <CgNotes className="me-3" /> },
 		{ name: "tags", link: "/tags", icon: <AiOutlineTags className="me-3" /> },
-		{
-			name: "authors",
-			link: "/authors",
-			icon: <AiOutlineUser className="me-3" />,
-		},
-		{
-			name: "sources",
-			link: "/sources",
-			icon: <AiOutlineBook className="me-3" />,
-		},
+		// {
+		// 	name: "authors",
+		// 	link: "/authors",
+		// 	icon: <AiOutlineUser className="me-3" />,
+		// },
+		// {
+		// 	name: "sources",
+		// 	link: "/sources",
+		// 	icon: <AiOutlineBook className="me-3" />,
+		// },
 	],
 };
 

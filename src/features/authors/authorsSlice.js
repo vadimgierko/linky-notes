@@ -27,14 +27,14 @@ export const authorsSlice = createSlice({
 			state.value[action.payload.id] = action.payload.author;
 		},
 		// update the whole item:
-		authorUpdated: (state, action) => {
-			state.pending = false;
-			state.value[action.payload.id] = action.payload.author;
-		},
-		authorDeleted: (state, action) => {
-			state.pending = false;
-			delete state.value[action.payload.id];
-		},
+		// authorUpdated: (state, action) => {
+		// 	state.pending = false;
+		// 	state.value[action.payload.id] = action.payload.author;
+		// },
+		// authorDeleted: (state, action) => {
+		// 	state.pending = false;
+		// 	delete state.value[action.payload.id];
+		// },
 		resetAuthors: (state) => {
 			state.value = {};
 			state.pending = false;
@@ -48,8 +48,8 @@ export const {
 	stopPending,
 	authorsFetched,
 	authorAdded,
-	authorUpdated,
-	authorDeleted,
+	// authorUpdated,
+	// authorDeleted,
 	resetAuthors,
 } = authorsSlice.actions;
 
