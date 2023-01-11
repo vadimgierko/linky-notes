@@ -15,7 +15,7 @@ export default function generateFeatures(props) {
 		{
 			icon: <CgNotes {...props} />,
 			header: "Notes",
-			paragraph: "Add, update & delete private notes to your cloud storage.",
+			paragraph: "Add, update & delete notes.",
 		},
 		{
 			icon: <AiOutlineTags {...props} />,
@@ -45,13 +45,12 @@ export default function generateFeatures(props) {
 			icon: <AiOutlineCloudDownload {...props} />,
 			header: "Access & sync on all devices",
 			paragraph:
-				"This app works in browser & is installable (PWA), so all you need is a device (mobile, tablet or laptop) with Internet connection.",
+				"This app works in a browser & is installable (PWA), so all you need is a device (mobile, tablet or laptop) with the Internet connection.",
 		},
 		{
 			icon: <MdDarkMode {...props} />,
 			header: "Darkmode",
-			paragraph:
-				"You can use the app in 2 modes: light & dark. You can switch between them on one click!",
+			paragraph: "You can use the app in light & dark mode.",
 		},
 		{
 			icon: <AiOutlineLock {...props} />,

@@ -24,10 +24,10 @@ With linky_notes app you can:
 - you can build your knowledge base by storing notes containing content from different sources (books, articles, blogs, podcasts, videos etc.) & your personal notes containing your own knowledge, ideas & reflections on any topic
 - all of your notes are automatically organized (without any effort) in one place by tags you've added to them
 - you can format your notes with built-in markdown editor easily & fast (check the markdown guide linked in the app's nav menu)
-- you can add sources to your notes & automatically build your source base
 - your notes are easy to search & filter via tags search bar on the main page (you can also use ctrl-f search if you need)
 - you don't need folders, categories or labels to organize your notes, so there is no structure or hierarchy to manage (and strugle) with
 - you can add as many tags to your note/s, as you need (no limits)
+- you can add sources & authors to your notes (& automatically build your sources & authors base, which will be available in the future)
 - this app is not overloaded with crazy features & has simple user friendly interface
 - no more overthinking about how to organize or find your notes
 - you'll save a tone of time & mental resources you can use for creative activities, learning or developing projects
@@ -42,7 +42,7 @@ With linky_notes app you can:
   - bold, italicized & strikethrough text and more
 - see when the note was added & updated (the app does it automatically, so you don't have to worry about it)
 - add, update & delete tag/s for/to each note,
-- add, update & delete note's sources containing:
+- add~~, update & delete~~ note's source containing:
   - the title of the source
   - the source's author
   - link
@@ -53,9 +53,9 @@ With linky_notes app you can:
 - navigate beetween searching sessions
 - check lists of all the
   - tags,
-  - sources,
-  - authors  
-  stored in the app ordered alphabetically, so you can be up to date with all topics you were interested and sources you've used
+  - ~~sources,~~
+  - ~~authors~~
+  stored in the app ordered alphabetically, so you can be up to date with all topics you were interested ~~and sources you've used~~
 - switch to light or dark mode to make your work more comfortable
 - download/ install this app on your device (this app is a PWA) through the browser
 
@@ -95,22 +95,9 @@ I've understood, that I need to:
 - have all notes (paper & digital) in one place
 - organize them by tags, because my paper notes were in so many folders and places & also sometimes some notes were needed to be in a few project folders in the same time
 
-So I've decided to build this note app & solved one of my biggest problems thanks to my own app. Now my notes will be tagged, organized & easy to find/ filter.
+So I've decided to build this note app & solved one of my biggest problems thanks to my own app. Now my notes are tagged, organized & easy to find/ filter.
 
 And when I've tested the app, I've decided to share it with the world to let everybody to build an easy to use, but effiecient knowledge/ notes base! Sign up & try here: https://vadimgierko.github.io/linky-notes/!
-
-## Future of the app
-
-This app in its current form will stay stable, so you can safely use it.
-
-But soonly linky_notes & my [todo-app](https://vadimgierko.github.io/todo-app/) will be combined into one complex app, published on custom domain, enabling:
-- adding tasks
-- adding lists
-- adding tasks to notes or lists, notes to tasks or lists
-- defining sources types (like: book, magazine, article, blog, web page, web platform, multimedia etc.)
-- defining notes types (like: quotes, ideas, personal, definition, question etc.)
-- filtering notes not only by tags, but also by sources, authors, sources and notes types etc.
-and much more!
 
 ## Technologies I've used in this project:
 

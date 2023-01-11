@@ -63,6 +63,7 @@ export default function ({ maxWidth }) {
 	const { theme, switchTheme } = useTheme();
 	const user = useSelector((state) => state.user.value);
 	const NOTES = useSelector((state) => state.notes.value);
+	const TAGS = useSelector((state) => state.tags.value);
 	const [isHovering, setIsHovering] = useState(false);
 
 	const handleMouseEnter = () => {
@@ -121,6 +122,14 @@ export default function ({ maxWidth }) {
 											<strong>{link.name}</strong>
 											<Badge bg="secondary" className="ms-3">
 												{Object.keys(NOTES).length}
+											</Badge>
+										</Nav.Link>
+									) : link.name === "tags" ? (
+										<Nav.Link>
+											{link.icon ? link.icon : null}
+											{link.name}
+											<Badge bg="secondary" className="ms-3">
+												{Object.keys(TAGS).length}
 											</Badge>
 										</Nav.Link>
 									) : (

@@ -4,9 +4,9 @@ export default function Section({ header, cardsList = [], cardStyle = {} }) {
 	if (!cardsList.length) return null;
 
 	return (
-		<section className="mb-5">
+		<section className="mb-3">
 			<hr />
-			<h2 className="text-center mb-3">{header}</h2>
+			<h2 className="text-center my-5">{header}</h2>
 			<div
 				style={{
 					display: "flex",
