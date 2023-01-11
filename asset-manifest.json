@@ -1,25 +1,14 @@
 {
   "files": {
-    "main.css": "/linky-notes/static/css/main.b393e3bb.chunk.css",
-    "main.js": "/linky-notes/static/js/main.a5f1384b.chunk.js",
-    "main.js.map": "/linky-notes/static/js/main.a5f1384b.chunk.js.map",
-    "runtime-main.js": "/linky-notes/static/js/runtime-main.43f0f1d5.js",
-    "runtime-main.js.map": "/linky-notes/static/js/runtime-main.43f0f1d5.js.map",
-    "static/css/2.9ec07ce6.chunk.css": "/linky-notes/static/css/2.9ec07ce6.chunk.css",
-    "static/js/2.bb501961.chunk.js": "/linky-notes/static/js/2.bb501961.chunk.js",
-    "static/js/2.bb501961.chunk.js.map": "/linky-notes/static/js/2.bb501961.chunk.js.map",
-    "index.html": "/linky-notes/index.html",
+    "main.css": "/linky-notes/static/css/main.c970a85e.css",
+    "main.js": "/linky-notes/static/js/main.68fc5ff0.js",
     "service-worker.js": "/linky-notes/service-worker.js",
-    "service-worker.js.map": "/linky-notes/service-worker.js.map",
-    "static/css/2.9ec07ce6.chunk.css.map": "/linky-notes/static/css/2.9ec07ce6.chunk.css.map",
-    "static/css/main.b393e3bb.chunk.css.map": "/linky-notes/static/css/main.b393e3bb.chunk.css.map",
-    "static/js/2.bb501961.chunk.js.LICENSE.txt": "/linky-notes/static/js/2.bb501961.chunk.js.LICENSE.txt"
+    "index.html": "/linky-notes/index.html",
+    "main.c970a85e.css.map": "/linky-notes/static/css/main.c970a85e.css.map",
+    "main.68fc5ff0.js.map": "/linky-notes/static/js/main.68fc5ff0.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.43f0f1d5.js",
-    "static/css/2.9ec07ce6.chunk.css",
-    "static/js/2.bb501961.chunk.js",
-    "static/css/main.b393e3bb.chunk.css",
-    "static/js/main.a5f1384b.chunk.js"
+    "static/css/main.c970a85e.css",
+    "static/js/main.68fc5ff0.js"
   ]
 }
