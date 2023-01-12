@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 // contexts:
@@ -8,7 +8,6 @@ import NoteCard from "../components/NoteCard";
 import Tag from "../components/Tag";
 import TagWithTrashIcon from "../components/TagWithTrashIcon";
 // react bootstrap components:
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 export default function Notes() {
@@ -20,7 +19,7 @@ export default function Notes() {
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState({});
 
-	const navigate = useNavigate();
+	useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
 
 	return (
 		<>

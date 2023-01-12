@@ -19,7 +19,6 @@ export default function AddNote() {
 			const newKey = generateFirebaseKeyFor("items/" + user.id);
 			dispatch(addNote({ note: note, key: newKey })).then(() => {
 				navigate("/notes/" + newKey, { replace: true });
-				window.scrollTo({ top: 0 });
 			});
 		} else {
 			alert(
@@ -30,7 +29,6 @@ export default function AddNote() {
 
 	function handleCancel() {
 		navigate("/", { replace: true });
-		window.scrollTo({ top: 0 });
 	}
 
 	return <NoteForm onSubmit={handleSubmit} onCancel={handleCancel} />;

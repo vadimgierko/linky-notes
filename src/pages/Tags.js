@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // custom components:
@@ -39,6 +40,8 @@ const ALPHABET = [
 export default function Tags() {
 	const TAGS = useSelector((state) => state.tags.value);
 	const navigate = useNavigate();
+
+	useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
 
 	return (
 		<>
