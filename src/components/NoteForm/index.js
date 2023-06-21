@@ -149,7 +149,27 @@ export default function NoteForm({
 											})
 									);
 									setFoundTags(updatedFoundTags);
-									setNewTag("");
+									// set new tag if there is no exact match with any of found tags or existing & new:
+									const isExactMatch =
+										Object.keys(updatedFoundTags).find(
+											(tagId) => updatedFoundTags[tagId].tag === changedInput
+										) ||
+										(Object.keys(note.existingTags).length
+											? Object.keys(note.existingTags).find(
+													(tagId) =>
+														updatedFoundTags[tagId].tag === changedInput
+											  )
+											: false) ||
+										(note.newTags.length
+											? note.newTags.find((tag) => tag === changedInput)
+											: false)
+											? true
+											: false;
+									if (isExactMatch) {
+										setNewTag("");
+									} else {
+										setNewTag(changedInput);
+									}
 								} else {
 									// if there are no such tag
 									// enable to create and add new one:
@@ -206,6 +226,8 @@ export default function NoteForm({
 								setNewTag("");
 								// clear input:
 								setInput("");
+								// clear found tags:
+								setFoundTags({});
 							}}
 						/>
 					</div>
