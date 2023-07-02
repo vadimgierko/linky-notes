@@ -87,10 +87,10 @@ const ROUTES = {
 		// 	path: "/authors",
 		// 	element: <Authors />,
 		// },
-		{
-			path: "/add-author",
-			element: <AddAuthor />,
-		},
+		// {
+		// 	path: "/add-author",
+		// 	element: <AddAuthor />,
+		// },
 		// {
 		// 	path: "/authors/update-author/:itemKey",
 		// 	element: <UpdateAuthor />,
@@ -99,10 +99,10 @@ const ROUTES = {
 		// 	path: "/sources",
 		// 	element: <Sources />,
 		// },
-		{
-			path: "/add-source",
-			element: <AddSource />,
-		},
+		// {
+		// 	path: "/add-source",
+		// 	element: <AddSource />,
+		// },
 		// {
 		// 	path: "/sources/update-source/:itemKey",
 		// 	element: <UpdateSource />,
@@ -133,16 +133,16 @@ export default function App() {
 					const email = user.email;
 					dispatch(userSignedIn({ email: email, id: uid }));
 					//========> UNCOMMENT THIS CODE TO FETCH DATA AFTER APP MOUNTS & USER IS LOGGED:
-					dispatch(fetchNotes({ reference: "items/" + uid })); // TODO: change "items" into "notes" (in rtdb too)
+					dispatch(fetchNotes({ reference: "items/" + uid }));
 					dispatch(fetchTags({ reference: "tags/" + uid }));
-					dispatch(fetchAuthors({ reference: "authors/" + uid }));
-					dispatch(fetchSources({ reference: "sources/" + uid }));
+					//dispatch(fetchAuthors({ reference: "authors/" + uid }));
+					//dispatch(fetchSources({ reference: "sources/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
 					dispatch(resetNotes());
-					dispatch(resetAuthors());
-					dispatch(resetSources());
+					//dispatch(resetAuthors());
+					//dispatch(resetSources());
 					dispatch(resetTags());
 				}
 			});
@@ -168,8 +168,8 @@ export default function App() {
 	useEffect(() => {
 		const APP_STATE = {
 			notes: NOTES,
-			sources: SOURCES,
-			authors: AUTHORS,
+			//sources: SOURCES,
+			//authors: AUTHORS,
 			tags: TAGS,
 		};
 		console.log("APP_STATE:", APP_STATE);

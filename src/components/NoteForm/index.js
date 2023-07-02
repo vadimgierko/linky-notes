@@ -157,7 +157,7 @@ export default function NoteForm({
 										(Object.keys(note.existingTags).length
 											? Object.keys(note.existingTags).find(
 													(tagId) =>
-														updatedFoundTags[tagId].tag === changedInput
+														note.existingTags[tagId].tag === changedInput
 											  )
 											: false) ||
 										(note.newTags.length
@@ -206,6 +206,8 @@ export default function NoteForm({
 									setFoundTags({});
 									// clear input:
 									setInput("");
+									// clear new tag:
+									setNewTag("");
 								}}
 							/>
 						))}
@@ -266,7 +268,7 @@ export default function NoteForm({
 			</Form.Group>
 
 			{/**==================== add source =========================*/}
-			<Form.Group className="mb-3">
+			{/* <Form.Group className="mb-3">
 				<Form.Select
 					value={note.sourceKey || ""}
 					style={{
@@ -298,9 +300,9 @@ export default function NoteForm({
 				>
 					...or add a new source to database
 				</Link>
-			</Form.Group>
+			</Form.Group> */}
 
-			{note.sourceKey && (
+			{/* {note.sourceKey && (
 				<Form.Group className="mb-3">
 					<Form.Control
 						placeholder="page/s number/s, e.x. 34-36"
@@ -312,7 +314,7 @@ export default function NoteForm({
 						onChange={(e) => setNote({ ...note, pages: e.target.value })}
 					/>
 				</Form.Group>
-			)}
+			)} */}
 
 			<Form.Group className="text-end">
 				<Button

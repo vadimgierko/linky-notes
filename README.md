@@ -5,7 +5,6 @@
 With linky_notes app you can:
 - create, update & delete notes containing:
   - tags,
-  - sources (containing title, author, link, page/s number/s & more)
   - textual content,
   - links,
   - ordered, unordered and nested lists,
@@ -27,7 +26,6 @@ With linky_notes app you can:
 - your notes are easy to search & filter via tags search bar on the main page (you can also use ctrl-f search if you need)
 - you don't need folders, categories or labels to organize your notes, so there is no structure or hierarchy to manage (and strugle) with
 - you can add as many tags to your note/s, as you need (no limits)
-- you can add sources & authors to your notes (& automatically build your sources & authors base, which will be available in the future)
 - this app is not overloaded with crazy features & has simple user friendly interface
 - no more overthinking about how to organize or find your notes
 - you'll save a tone of time & mental resources you can use for creative activities, learning or developing projects
@@ -41,21 +39,10 @@ With linky_notes app you can:
   - tables,
   - bold, italicized & strikethrough text and more
 - see when the note was added & updated (the app does it automatically, so you don't have to worry about it)
-- add, update & delete tag/s for/to each note,
-- add~~, update & delete~~ note's source containing:
-  - the title of the source
-  - the source's author
-  - link
-  - page/s number/s
-  - place of publishing
-  - year of publishing
+- add, update & delete tag/s for/to each note
 - filter notes by one or more tags you've added to your notes
 - navigate beetween searching sessions
-- check lists of all the
-  - tags,
-  - ~~sources,~~
-  - ~~authors~~
-  stored in the app ordered alphabetically, so you can be up to date with all topics you were interested ~~and sources you've used~~
+- check lists of all tags stored in the app ordered alphabetically, so you can be up to date with all topics you were interested
 - switch to light or dark mode to make your work more comfortable
 - download/ install this app on your device (this app is a PWA) through the browser
 

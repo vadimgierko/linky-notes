@@ -110,7 +110,7 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 						/>
 					))}
 			</Card.Body>
-			<Card.Footer>
+			{/* <Card.Footer>
 				{note.sourceKey && SOURCES[note.sourceKey] ? (
 					<Card.Text className="text-muted">
 						<SourceReferenceString
@@ -123,7 +123,7 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 						This note has no source...
 					</Card.Text>
 				)}
-			</Card.Footer>
+			</Card.Footer> */}
 		</Card>
 	);
 }

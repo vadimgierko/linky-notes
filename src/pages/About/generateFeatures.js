@@ -23,12 +23,12 @@ export default function generateFeatures(props) {
 			paragraph:
 				"Organize your notes by tags. You can add as many tags to your notes as you want.",
 		},
-		{
-			icon: <AiOutlineBook {...props} />,
-			header: "Sources",
-			paragraph:
-				"Add sources/ references to your notes (including title, author, link, page/s numbers).",
-		},
+		// {
+		// 	icon: <AiOutlineBook {...props} />,
+		// 	header: "Sources",
+		// 	paragraph:
+		// 		"Add sources/ references to your notes (including title, author, link, page/s numbers).",
+		// },
 		{
 			icon: <AiOutlineSearch {...props} />,
 			header: "Filter/ Search",

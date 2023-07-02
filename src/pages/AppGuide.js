@@ -57,13 +57,6 @@ You may also add footnotes using [built-in markdown editor](markdown-guide)
 & include references (as a link) to other notes stored in your app there.
 The possibilities are endless.
 
-## Sources
-
-Add sources to your notes via source form. It is usefull, because you may store not only the title of the source & its author,
-but also a link to a source and the number/s of the page/s.
-
-You may also add footnotes using [built-in markdown editor](markdown-guide) & include references there.
-
 ## Markdown Syntax
 
 **Use [built-in markdown editor](markdown-guide) to format your notes** & make them more readable (not only for links).
