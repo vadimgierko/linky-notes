@@ -1,8 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/useTheme";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 // custom components:
 import Tag from "../Tag";
 import IconButton from "../IconButton";
@@ -12,6 +10,7 @@ import { Card, Row, Col } from "react-bootstrap";
 // thunks:
 import { deleteNote } from "../../thunks/notes/deleteNote";
 import { useEffect } from "react";
+import MarkdownRenderer from "../MarkdownRenderer";
 
 export default function NoteCard({ note, noteKey, show140chars = false }) {
 	const { theme } = useTheme();
@@ -75,11 +74,10 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 				</Row>
 			</Card.Header>
 			<Card.Body>
-				<ReactMarkdown
-					children={
+				<MarkdownRenderer
+					markdown={
 						show140chars ? note.content.slice(0, 137) + "..." : note.content
 					}
-					remarkPlugins={[remarkGfm]}
 				/>
 				{note.tags &&
 					Object.keys(note.tags).map((tagId) => (
@@ -99,13 +97,6 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 
 								// 2. that works, but looks bad:
 								//navigate("/?tags=" + tagId);
-
-								// 3. that was the firs version
-								// but if the card is opened in separate window
-								// (not on the main page "/")
-								// then it sets searchParams for current page...
-								// so use it only on the page you want to search:
-								//setSearchParams({ tags: tagId });
 							}}
 						/>
 					))}

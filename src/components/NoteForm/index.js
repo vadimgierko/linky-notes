@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useTheme } from "../../contexts/useTheme";
 import { Link, useLocation } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
 // custom components:
 import Tag from "../Tag";
 import TagWithTrashIcon from "../TagWithTrashIcon";
 import generateSourceReferenceString from "../../helper-functions/generateSourceReferenceString";
+import MarkdownRenderer from "../MarkdownRenderer";
 
 export default function NoteForm({
 	noteKey,
@@ -59,13 +58,12 @@ export default function NoteForm({
 	}, [noteKey, NOTES]);
 
 	useEffect(() => {
-		//console.log("NoteForm state from useLocation:", state);
 		if (state && state.passedNote) {
 			if (state.newSourceKey) {
 				// if new source was added:
 				setNote({ ...state.passedNote, sourceKey: state.newSourceKey });
 			} else {
-				// if adding new source was canceledL
+				// if adding new source was canceled:
 				setNote(state.passedNote);
 			}
 		}
@@ -98,10 +96,7 @@ export default function NoteForm({
 				)}
 				{editorMode === "preview" && (
 					<div className="border py-2 px-3">
-						<ReactMarkdown
-							children={note.content}
-							remarkPlugins={[remarkGfm]}
-						/>
+						<MarkdownRenderer markdown={note.content} />
 					</div>
 				)}
 			</Form.Group>
