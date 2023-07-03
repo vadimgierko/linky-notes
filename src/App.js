@@ -38,6 +38,7 @@ import Sources from "./pages/Sources";
 import UpdateSource from "./pages/UpdateSource";
 import MarkdownGuide from "./pages/MarkdownGuide";
 import AppGuide from "./pages/AppGuide";
+import PasswordReset from "./pages/PasswordReset";
 
 const ROUTES = {
 	public: [
@@ -60,6 +61,10 @@ const ROUTES = {
 		{
 			path: "/signup",
 			element: <SignUp />,
+		},
+		{
+			path: "/password-reset",
+			element: <PasswordReset />,
 		},
 	],
 	private: [

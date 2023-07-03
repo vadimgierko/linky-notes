@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./styles.css";
 import App from "./App";
 import { ThemeProvider } from "./contexts/useTheme";
-import store from "./store/store";
+import store from "./store";
 import { Provider } from "react-redux";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 

@@ -21,10 +21,11 @@ export default function MarkdownRenderer({ markdown }) {
 
 	return (
 		<ReactMarkdown
-			children={markdown}
 			remarkPlugins={[remarkGfm]}
 			rehypePlugins={[rehypeRaw]} // enables rendering HTML tags
 			components={{ a: ReactRouterLink }}
-		/>
+		>
+			{markdown}
+		</ReactMarkdown>
 	);
 }
