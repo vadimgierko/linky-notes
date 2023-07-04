@@ -12,17 +12,22 @@ export default function UpdateNote() {
 
 	function handleSubmit(e, note) {
 		e.preventDefault();
-		//console.log("Note to update:", note);
-		if (note.content.length) {
-			dispatch(updateNote({ note: note, key: itemKey })).then(() => {
-				navigate("/notes/" + itemKey, { replace: true });
-				window.scrollTo({ top: 0 });
-			});
-		} else {
-			alert(
-				"Your note is empty! Add some content to your note to add it to database."
+		console.log("Note to update:", note);
+
+		if (!note.content.length)
+			return alert(
+				"Your note is empty! Add some content to your note to update it in database."
 			);
-		}
+
+		if (!Object.keys(note.existingTags).length && !note.newTags.length)
+			return alert(
+				"Your note has no tags! Add at least 1 tag to update it in database."
+			);
+
+		dispatch(updateNote({ note: note, key: itemKey })).then(() => {
+			navigate("/notes/" + itemKey, { replace: true });
+			window.scrollTo({ top: 0 });
+		});
 	}
 
 	function handleCancel() {

@@ -14,17 +14,22 @@ export default function AddNote() {
 
 	function handleSubmit(e, note) {
 		e.preventDefault();
-		//console.log("Note to add:", note);
-		if (note.content.length) {
-			const newKey = generateFirebaseKeyFor("items/" + user.id);
-			dispatch(addNote({ note: note, key: newKey })).then(() => {
-				navigate("/notes/" + newKey, { replace: true });
-			});
-		} else {
-			alert(
+		console.log("Note to add:", note);
+
+		if (!note.content.length)
+			return alert(
 				"Your note is empty! Add some content to your note to add it to database."
 			);
-		}
+
+		if (!Object.keys(note.existingTags).length && !note.newTags.length)
+			return alert(
+				"Your note has no tags! Add at least 1 tag to add it to database."
+			);
+
+		const newKey = generateFirebaseKeyFor("items/" + user.id);
+		dispatch(addNote({ note: note, key: newKey })).then(() => {
+			navigate("/notes/" + newKey, { replace: true });
+		});
 	}
 
 	function handleCancel() {

@@ -21,10 +21,15 @@ export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
 		// we need to update it with all necessary props & metadata:
 		const user = thunkAPI.getState().user.value;
 		const noteFromForm = arg.note;
+
 		if (noteFromForm.content.length) {
 			let noteWithUnifiedTagsAndCreatedAt = {
 				content: noteFromForm.content,
-				tags: noteFromForm.existingTags,
+				tags:
+					noteFromForm.existingTags &&
+					Object.keys(noteFromForm.existingTags).length
+						? noteFromForm.existingTags
+						: {},
 				sourceKey: noteFromForm.sourceKey,
 				pages: noteFromForm.pages,
 				createdAt: createDate(),
@@ -32,7 +37,8 @@ export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
 			};
 			// check for new tags to add:
 			if (noteFromForm.newTags && noteFromForm.newTags.length) {
-				//console.log("There are new tags to add to database!");
+				console.log("There are new tags to add to database!");
+
 				noteFromForm.newTags.forEach((newTag) => {
 					//console.log("There is a new tag to add to database:", newTag);
 					const key = generateFirebaseKeyFor("tags/" + user.id);
@@ -50,7 +56,7 @@ export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
 					thunkAPI.dispatch(addTag({ tag: newTag, key: key }));
 				});
 			} else {
-				//console.log("There are no new tags to add to database!");
+				console.log("There are no new tags to add to database!");
 			}
 			const rootReference = "items/" + user.id + "/";
 			const referenceWithTheKey = rootReference + arg.key;
@@ -59,7 +65,9 @@ export const addNote = createAsyncThunk("notes/add", async (arg, thunkAPI) => {
 				referenceWithTheKey,
 				noteWithUnifiedTagsAndCreatedAt
 			);
-			//console.log("THUNK: item added.");
+
+			console.log("THUNK: item added:", noteWithUnifiedTagsAndCreatedAt);
+
 			thunkAPI.dispatch(
 				noteAdded({ id: arg.key, note: noteWithUnifiedTagsAndCreatedAt })
 			);
