@@ -1,65 +1,115 @@
-# Welcome to linky_notes!
+# Store, organize & filter your notes by tags & style/ format them using Markdown & HTML with inline CSS styles
 
-## Build your own easy to filter knowledge base and store, organize & filter your notes by tags!
+Build your own easy to filter and internally linked notes system!
 
-With linky_notes app you can:
-- create, update & delete notes containing:
-  - tags,
-  - textual content,
-  - links,
-  - ordered, unordered and nested lists,
-  - tables,
-  - bold, italicized & strikethrough text and more
-- format your notes using built-in markdown editor
-- organize and filter your notes by tags
-- install this app through the browser on your device/s (laptop, mobile, desktop or tablet) & have all of your notes synced!
-
-**Sign up for free** here: https://vadimgierko.github.io/linky-notes/ & build your own knowledge base!
+**Sign up for free** [here](https://vadimgierko.github.io/linky-notes/)!
 
 <img src="public/linky-notes-app-screen-vadim-gierko.png">
 
-## Why use linky_notes?
+---
 
-- you can build your knowledge base by storing notes containing content from different sources (books, articles, blogs, podcasts, videos etc.) & your personal notes containing your own knowledge, ideas & reflections on any topic
-- all of your notes are automatically organized (without any effort) in one place by tags you've added to them
-- you can format your notes with built-in markdown editor easily & fast (check the markdown guide linked in the app's nav menu)
-- your notes are easy to search & filter via tags search bar on the main page (you can also use ctrl-f search if you need)
-- you don't need folders, categories or labels to organize your notes, so there is no structure or hierarchy to manage (and strugle) with
-- you can add as many tags to your note/s, as you need (no limits)
-- this app is not overloaded with crazy features & has simple user friendly interface
-- no more overthinking about how to organize or find your notes
-- you'll save a tone of time & mental resources you can use for creative activities, learning or developing projects
+## Notes
 
-## What you can do with linky_notes?
+You can **create, update & delete notes**. Every note has its own **id and URL based on the id**, so that means that every note is basically the **standalone web page**.
 
-- add, update & delete notes containing:
-  - textual content,
-  - links,
-  - ordered, unordered and nested lists,
-  - tables,
-  - bold, italicized & strikethrough text and more
-- see when the note was added & updated (the app does it automatically, so you don't have to worry about it)
-- add, update & delete tag/s for/to each note
-- filter notes by one or more tags you've added to your notes
-- navigate beetween searching sessions
-- check lists of all tags stored in the app ordered alphabetically, so you can be up to date with all topics you were interested
-- switch to light or dark mode to make your work more comfortable
-- download/ install this app on your device (this app is a PWA) through the browser
+Everytime you add or update the note, current **date is saved automatically**.
 
-## How efficiently use *linky_notes*?
+## Tags
 
-Although the *linky_notes* app has only a few simple functionalities,
-it offers **endless possibilities** for organizing, searching and using your notes in the way,
-which is impossible to many other note apps around.
+To be able to add/ update note, you need to add **at least 1 tag** to it. There are **no limits** to how many tags you can add to your notes. There are also no limits about how you can name your tags: it can be as simple as that *linky notes* or it can be *project_status: in progress*. Tags are also stored under the unique ids.
 
-Those functionalities are:
-- adding one or more **tags** to each note,
-- the ability to **filter** your notes *by* one or more *tags*,
-- markdown editor, which enables **links** adding to your notes,
-- each note has its own link (URL).
+You can have an **overview of all of your tags** on tags page ordered alphabetically, so you can be up to date with all topics you were interested.
 
-The way you can organize & filter your notes using those features is very **customizible**.
-You can use my tips mentioned in my [app guide](https://vadimgierko.github.io/linky-notes/app-guide) or **create your own system**!
+Every **tag works as a link**, so you can click on any tag in any note or on the tags page and you will be redirected to the page with notes filtered by that tag, where you can continue filtering notes by adding new tags to the filter.
+
+## Filtering by tag/s
+
+You can **filter** your notes **by one or many tags simultaniously** using the built-in tag search engine. Every search/ filter session generates a dedicated URL, so you can navigate between search/filter sessions or save the link to particular session.
+
+## Multiline Text
+
+Every note is accepting Markdown syntax. Even if you don't know, what is it, or you wouldn't be using Markdown, it enables you to sava a multiline text: to start a new paragraph you just need to leave an empty line after the previous paragraph (by clicking ENTER). This is the most basic usage of Markdown in this app.
+
+## Markdown Formatting
+
+As mentioned before, you can **format your notes with Markdown**. Using basic Markdown syntax enables you to add:
+
+- headers (h1-h6)
+- links
+  - external => open a new tab,
+  - internal => redirecting to linked existing note inside the app
+- lists
+  - ordered,
+  - unordered,
+  - mixed,
+  - nested,
+- tables,
+- text decoration
+  - bold,
+  - italicized,
+  - strikethrough,
+- checked & unchecked checkboxes (to simulate todo-lists),
+- images (published on Internet),
+- horizontal rules,
+- footnotes
+
+to your notes.
+
+Check out [my app's guide](https://vadimgierko.github.io/linky-notes/markdown-guide) to learn how to use basic Markdown in a few minutes!
+
+These features can **make your notes more readable, unique and containing a lot of useful references and additional materials**. But... you'll discover, that you can do much more with your notes' content!
+
+## Referencing already existing notes (internal links)
+
+As mentioned before, you can add **internal links to your notes**, what means, that you can refer to other existing note. To do that you need to copy note's id and pass it into your link, like that: `[check out this note](/notes/note-id-goes-here)`. That's all you need. Now, when you click this this link, you'll be redirected to refered note inside the app.
+
+You **combine this feature with any other Markdown enabled features** mentioned before & create:
+
+- lists (and todo lists) of linked notes inside some note *(for example, you can create a note which will be the description of the project or a book or a long article you're writing & such list of linked notes may be a table of content of all project's/ book's/ article's notes)*,
+- put the reference to some note in a footnote,
+- put links to notes to tables etc.
+
+## HTML with inline CSS styling
+
+In addition to formatting your notes with Markdown syntax, you can also use HTML with inline CSS styling! Of course, that requires some basic knowledge of HTML & CSS, but if you are really motivated to turn your note into complete web page full of colors, shapes, embed elements and any layout, than you can learn, how to do that pretty fast.
+
+I will add some basic tutorial on the topic soon, but... you can start learning right now - this knowledge is available online for free.
+
+## Add videos, images &... even the whole websites to your notes!
+
+As been mentioned, thanks to ability of using HTML in your notes, you can also add different embed elements to your note. For example, you can add... the whole website (for instance, Linky Notes) to your notes by adding this: `<iframe src="https://vadimgierko.github.io/linky-notes/about" width="100%" height="500px" title="Linky Notes About Page"></iframe>`!
+
+I will add some basic tutorial on the topic soon...
+
+## Cloud Database => Sync on all devices
+
+All your notes, tags and data are stored in a Cloud, so you can use the app on any device with the Internet connection (mobile, tablet, laptop, desktop) and have access to your synced notes anywhere.
+
+## No folders, no labels, no hierarchial structure. Your customizable management system only
+
+Although the linky_notes app has only a few simple functionalities, it offers endless possibilities for organizing, searching and using your notes in the way, which is impossible to many other note apps around. No need for folders, categories, labels etc., so there is no structure or hierarchy to manage (and strugle) with. You can do all of this using tags! You can even simulate other apps (I will add some examples soon).
+
+No more overthinking about how to organize or find your notes. You'll save a tone of time & mental resources you can use for creative activities, learning or developing projects.
+
+To read more, how to efficiently organize your notes, [read this app's tutorial](https://vadimgierko.github.io/linky-notes/app-guide).
+
+## RWD
+
+The app is made with responsive web design in mind, so it looks nice on any screen size.
+
+## Installable PWA (Progressive Web App)
+
+You can use this app in a browser, but also you can install it directly from the browser on your device's desktop/ main screen. You can do that by clicking a download icon, which appears in the URL bar in browser.  
+
+## Dark Mode
+
+You can use the app in light & dark mode. The app will automatically detect if you're preferring using dark or light mode on your system and change the mode of the app accordingly. You can switch the mode anytime by clicking the mode button in app's navigation menu/ bar. 
+
+## Privacy
+
+All your notes & data are **private**, what means that only the logged owner/ author of the note can see it. If you won't share your password with anyone, your data is absolutely secure.
+
+---
 
 ## Motivation (problem I wanted to solve & solution)
 
