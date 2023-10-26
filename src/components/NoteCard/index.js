@@ -34,13 +34,18 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 		{
 			iconName: "trash",
 			color: "danger",
-			onClick: () =>
-				dispatch(
-					deleteNote({
-						reference: "items/" + user.id + "/" + noteKey,
-						itemKey: noteKey,
-					})
-				),
+			onClick: () => {
+				if (confirm("Are you sure you want to delete this note? This action cannot be undone!")) {
+					dispatch(
+						deleteNote({
+							reference: "items/" + user.id + "/" + noteKey,
+							itemKey: noteKey,
+						})
+					)
+				} else {
+					return;
+				}
+			}
 		},
 	];
 
@@ -74,6 +79,7 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 				</Row>
 			</Card.Header>
 			<Card.Body>
+				<Card.Text className="text-muted">{noteKey}</Card.Text>
 				<MarkdownRenderer
 					markdown={
 						show140chars ? note.content.slice(0, 137) + "..." : note.content
@@ -101,20 +107,12 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 						/>
 					))}
 			</Card.Body>
-			{/* <Card.Footer>
-				{note.sourceKey && SOURCES[note.sourceKey] ? (
-					<Card.Text className="text-muted">
-						<SourceReferenceString
-							source={SOURCES[note.sourceKey]}
-							pages={note.pages}
-						/>
-					</Card.Text>
-				) : (
-					<Card.Text className="text-muted">
-						This note has no source...
-					</Card.Text>
-				)}
-			</Card.Footer> */}
+			<Card.Footer>
+				<Card.Text className="text-muted">
+					to link to this note in other one, copy this:<br />
+					[some text goes here](/notes/{noteKey})
+				</Card.Text>
+			</Card.Footer>
 		</Card>
 	);
 }

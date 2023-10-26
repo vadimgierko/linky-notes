@@ -1,16 +1,15 @@
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import MarkdownRenderer from "../components/MarkdownRenderer";
 
 const MARKDOWN = `
 # How to format your notes using Markdown Syntax
 
 This app allows you to format/ style your notes with built-in Markdown Editor.
-Not all Markdown features are available at the moment, but You can create
-**headers, lists, footnotes, tasks lists, strikethrough text, bold & italic text, links & tables**.
+Not all Markdown features are available at the moment, but you can create
+**headers, lists, footnotes, tasks lists, strikethrough text, bold & italic text, links, images & tables**.
 Check out the examples of what you're able to do below.
 
 You may also be interested in checking out,
-[how to use tags, links & other app's features to organize your notes efficiently](app-guide).
+[how to use tags, links & other app's features to organize your notes efficiently](/app-guide).
 
 ---
 
@@ -149,6 +148,7 @@ ${"```"}
 ~~The world is flat.~~
 
 ---
+
 ## Task List
 
 *What you need to type:*
@@ -166,6 +166,7 @@ ${"```"}
 - [ ] Contact the media
 
 ---
+
 ## Table
 
 *What you need to type:*
@@ -183,8 +184,40 @@ ${"```"}
 | --------------- | --------------- |
 | column content | column content |
 | column content | column content |
+
+---
+
+## Image
+
+*What you need to type:*
+
+${"```"}
+![Screenshot of Linky Notes app](https://vadimgierko.github.io/linky-notes/linky-notes-app-screen-vadim-gierko.png)
+${"```"}
+
+***Warning:*** The Markdown syntax for images doesn’t allow you to specify the width and height of images.
+If you need to resize an image, you can use the img HTML tag with the width and height attributes to set the dimensions of an image in pixels:
+
+${"```"}
+<img src="https://vadimgierko.github.io/linky-notes/linky-notes-app-screen-vadim-gierko.png" width="300">
+${"```"}
+
+or if you want to ensure that the image will not be bigger than the available note space, then use this code:
+
+${"```"}
+<img src="https://vadimgierko.github.io/linky-notes/linky-notes-app-screen-vadim-gierko.png" width="100%">
+${"```"}
+
+*What you get (the second and third code snippets):*
+
+<img src="https://vadimgierko.github.io/linky-notes/linky-notes-app-screen-vadim-gierko.png" width="300">
+
+---
+
+<img src="https://vadimgierko.github.io/linky-notes/linky-notes-app-screen-vadim-gierko.png" width="100%">
+
 `;
 
 export default function MarkdownGuide() {
-	return <ReactMarkdown children={MARKDOWN} remarkPlugins={[remarkGfm]} />;
+	return <MarkdownRenderer markdown={MARKDOWN}/>;
 }

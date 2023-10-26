@@ -8,6 +8,7 @@ import {
 	SiReactrouter,
 	SiCss3,
 	SiMarkdown,
+	SiHtml5
 } from "react-icons/si";
 
 export default function generateTechnologies(props) {
@@ -42,7 +43,11 @@ export default function generateTechnologies(props) {
 		},
 		{
 			icon: <SiCss3 {...props} />,
-			header: "CSS3",
+			header: "CSS",
+		},
+		{
+			icon: <SiHtml5 {...props} />,
+			header: "HTML",
 		},
 	];
 }

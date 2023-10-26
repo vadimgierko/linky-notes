@@ -1,5 +1,4 @@
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import MarkdownRenderer from "../components/MarkdownRenderer";
 
 const MARKDOWN = `
 # How to use *linky_notes* app efficiently
@@ -48,22 +47,22 @@ and add a tag with the **name of the note source, e.g. book or article title** e
 If the content of your note comes from the website, add a source's link to your note via source form or paste the URL straight to the note.
 
 You can also **refer to other notes stored in your database using links**
-(see [markdown guide](markdown-guide) how to do a link),
+(see [markdown guide](/markdown-guide) how to do a link),
 because **every note has it's own URL**.
 
 You can organize/ group your notes this way by particular project or topic,
 like **create notes containing lists of notes links**.
-You may also add footnotes using [built-in markdown editor](markdown-guide)
+You may also add footnotes using [built-in markdown editor](/markdown-guide)
 & include references (as a link) to other notes stored in your app there.
 The possibilities are endless.
 
 ## Markdown Syntax
 
-**Use [built-in markdown editor](markdown-guide) to format your notes** & make them more readable (not only for links).
+**Use [built-in markdown editor](/markdown-guide) to format your notes** & make them more readable (not only for links).
 
 ## Todo/ Check Lists
 
-You may also create todo/check lists using [built-in markdown editor](markdown-guide).
+You may also create todo/check lists using [built-in markdown editor](/markdown-guide).
 
 ## Edit & update
 
@@ -71,5 +70,5 @@ Remember, that you can always go back to any note & update it with the new tags 
 `;
 
 export default function AppGuide() {
-	return <ReactMarkdown children={MARKDOWN} remarkPlugins={[remarkGfm]} />;
+	return <MarkdownRenderer markdown={MARKDOWN} />;
 }

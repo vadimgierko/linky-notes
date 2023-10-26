@@ -39,7 +39,7 @@ export default function generateFeatures(props) {
 			icon: <MdFormatSize {...props} />,
 			header: "Format",
 			paragraph:
-				"Format your notes using built-in markdown editor to include headers, lists, images from the web, links etc.",
+				"Format/style your notes with Markdown syntax or/and HTML with inline styles to include headers, lists, images from the web, links etc.",
 		},
 		{
 			icon: <AiOutlineCloudDownload {...props} />,

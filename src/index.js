@@ -16,6 +16,7 @@ const root = createRoot(container);
 // <StrictMode> is off (deleted) to prevent the double fetching data from database in dev mode.
 // Uncomment this code when build.
 
+// basename={process.env.PUBLIC_URL} <= use this in the router if app is published on gh pages
 root.render(
 	<ThemeProvider>
 		<BrowserRouter basename={process.env.PUBLIC_URL}>
