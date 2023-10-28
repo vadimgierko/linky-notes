@@ -4,12 +4,10 @@ import { useTheme } from "../../contexts/useTheme";
 // custom components:
 import Tag from "../Tag";
 import IconButton from "../IconButton";
-import SourceReferenceString from "../SourceReferenceString";
 // react-bootstrap components:
 import { Card, Row, Col } from "react-bootstrap";
 // thunks:
 import { deleteNote } from "../../thunks/notes/deleteNote";
-import { useEffect } from "react";
 import MarkdownRenderer from "../MarkdownRenderer";
 
 export default function NoteCard({ note, noteKey, show140chars = false }) {
@@ -17,7 +15,6 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const user = useSelector((state) => state.user.value);
-	const SOURCES = useSelector((state) => state.sources.value);
 
 	const ICON_BUTTONS = [
 		{
@@ -35,21 +32,23 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 			iconName: "trash",
 			color: "danger",
 			onClick: () => {
-				if (confirm("Are you sure you want to delete this note? This action cannot be undone!")) {
+				if (
+					confirm(
+						"Are you sure you want to delete this note? This action cannot be undone!"
+					)
+				) {
 					dispatch(
 						deleteNote({
 							reference: "items/" + user.id + "/" + noteKey,
 							itemKey: noteKey,
 						})
-					)
+					);
 				} else {
 					return;
 				}
-			}
+			},
 		},
 	];
-
-	//useEffect(() => window.scrollTo({ top: 0 }), []);
 
 	if (!note || !noteKey) return null;
 
@@ -109,7 +108,8 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 			</Card.Body>
 			<Card.Footer>
 				<Card.Text className="text-muted">
-					to link to this note in other one, copy this:<br />
+					to link to this note in other one, copy this:
+					<br />
 					[some text goes here](/notes/{noteKey})
 				</Card.Text>
 			</Card.Footer>

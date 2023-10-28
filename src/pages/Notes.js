@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 // contexts:
 import { useTheme } from "../contexts/useTheme";
@@ -37,11 +37,6 @@ export default function Notes() {
 					: Object.keys(NOTES).length}
 				)
 			</h1>
-			{/* <div className="d-grid mt-2 mb-3">
-				<Button variant="outline-primary" onClick={() => navigate("/add-note")}>
-					Add note
-				</Button>
-			</div> */}
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
 				<Form.Label>Filter your notes by tags:</Form.Label>

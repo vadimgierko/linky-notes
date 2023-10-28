@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useTheme } from "../../contexts/useTheme";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 // react-bootstrap components:
 import { Form, Button } from "react-bootstrap";
 // custom components:
 import Tag from "../Tag";
 import TagWithTrashIcon from "../TagWithTrashIcon";
-import generateSourceReferenceString from "../../helper-functions/generateSourceReferenceString";
 import MarkdownRenderer from "../MarkdownRenderer";
 
 export default function NoteForm({
@@ -20,8 +19,6 @@ export default function NoteForm({
 	// from state:
 	const NOTES = useSelector((state) => state.notes.value);
 	const TAGS = useSelector((state) => state.tags.value);
-	const SOURCES = useSelector((state) => state.sources.value);
-	const AUTHORS = useSelector((state) => state.authors.value);
 	// note object:
 	const [note, setNote] = useState();
 	// tag search bar:
@@ -261,55 +258,6 @@ export default function NoteForm({
 					<div className="filter-tags">This note has no tags yet...</div>
 				)}
 			</Form.Group>
-
-			{/**==================== add source =========================*/}
-			{/* <Form.Group className="mb-3">
-				<Form.Select
-					value={note.sourceKey || ""}
-					style={{
-						backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-						color: theme === "light" ? "black" : "white",
-					}}
-					onChange={(e) =>
-						setNote({
-							...note,
-							sourceKey: e.target.value,
-						})
-					}
-				>
-					<option value="">Select source</option>
-					{Object.keys(SOURCES).length
-						? Object.keys(SOURCES).map((id) => (
-								<option key={id} value={id}>
-									{generateSourceReferenceString(SOURCES[id], AUTHORS)}
-								</option>
-						  ))
-						: null}
-				</Form.Select>
-				<Link
-					to="/add-source"
-					state={{
-						initRedirectedFrom: pathname, //add/update-note
-						passedNote: note, // note object without new source key
-					}}
-				>
-					...or add a new source to database
-				</Link>
-			</Form.Group> */}
-
-			{/* {note.sourceKey && (
-				<Form.Group className="mb-3">
-					<Form.Control
-						placeholder="page/s number/s, e.x. 34-36"
-						value={note.pages || ""}
-						style={{
-							backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-							color: theme === "light" ? "black" : "white",
-						}}
-						onChange={(e) => setNote({ ...note, pages: e.target.value })}
-					/>
-				</Form.Group>
-			)} */}
 
 			<Form.Group className="text-end">
 				<Button

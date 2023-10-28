@@ -15,15 +15,13 @@ import { BsSunFill, BsMoonFill } from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
 import { CgNotes } from "react-icons/cg";
 import {
-	AiOutlineBook,
 	AiOutlineTags,
-	AiOutlineUser,
 	AiOutlineInfoCircle,
 	AiOutlineFileMarkdown,
 	AiOutlineLogout,
 	AiOutlineLogin,
 } from "react-icons/ai";
-import { BiUserCheck, BiRocket, BiBrain } from "react-icons/bi";
+import { BiUserCheck, BiRocket } from "react-icons/bi";
 
 const LINKS = {
 	public: [
@@ -46,16 +44,6 @@ const LINKS = {
 	private: [
 		{ name: "notes", link: "/", icon: <CgNotes className="me-3" /> },
 		{ name: "tags", link: "/tags", icon: <AiOutlineTags className="me-3" /> },
-		// {
-		// 	name: "authors",
-		// 	link: "/authors",
-		// 	icon: <AiOutlineUser className="me-3" />,
-		// },
-		// {
-		// 	name: "sources",
-		// 	link: "/sources",
-		// 	icon: <AiOutlineBook className="me-3" />,
-		// },
 	],
 };
 

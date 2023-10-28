@@ -1,6 +1,6 @@
 import MarkdownRenderer from "../components/MarkdownRenderer";
 
-const MARKDOWN = `
+const CONTENT = `
 # How to use *linky_notes* app efficiently
 
 Although the *linky_notes* app has only a few simple functionalities,
@@ -70,5 +70,5 @@ Remember, that you can always go back to any note & update it with the new tags 
 `;
 
 export default function AppGuide() {
-	return <MarkdownRenderer markdown={MARKDOWN} />;
+	return <MarkdownRenderer markdown={CONTENT} />;
 }

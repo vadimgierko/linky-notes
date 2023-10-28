@@ -71,9 +71,7 @@ You **combine this feature with any other Markdown enabled features** mentioned 
 
 ## HTML with inline CSS styling
 
-In addition to formatting your notes with Markdown syntax, you can also use HTML with inline CSS styling! Of course, that requires some basic knowledge of HTML & CSS, but if you are really motivated to turn your note into complete web page full of colors, shapes, embed elements and any layout, than you can learn, how to do that pretty fast.
-
-I will add some basic tutorial on the topic soon, but... you can start learning right now - this knowledge is available online for free.
+In addition to formatting your notes with Markdown syntax, you can also use HTML with optional inline CSS styling! Of course, that requires some basic knowledge of HTML & CSS, but if you are really motivated to turn your note into complete web page full of colors, shapes, embed elements and any layout, than you can learn it online for free pretty fast.
 
 ## Add videos, images &... even the whole websites to your notes!
 

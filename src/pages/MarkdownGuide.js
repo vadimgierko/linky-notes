@@ -1,6 +1,6 @@
 import MarkdownRenderer from "../components/MarkdownRenderer";
 
-const MARKDOWN = `
+const CONTENT = `
 # How to format your notes using Markdown Syntax
 
 This app allows you to format/ style your notes with built-in Markdown Editor.
@@ -219,5 +219,5 @@ ${"```"}
 `;
 
 export default function MarkdownGuide() {
-	return <MarkdownRenderer markdown={MARKDOWN}/>;
+	return <MarkdownRenderer markdown={CONTENT} />;
 }

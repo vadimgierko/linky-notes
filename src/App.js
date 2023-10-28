@@ -5,14 +5,10 @@ import { onAuthStateChanged } from "firebase/auth";
 // reducers actions:
 import { userSignedIn, userLoggedOut } from "./features/user/userSlice";
 import { resetNotes } from "./features/notes/notesSlice";
-import { resetAuthors } from "./features/authors/authorsSlice";
-import { resetSources } from "./features/sources/sourcesSlice";
 import { resetTags } from "./features/tags/tagsSlice";
 // thunks:
 import { fetchNotes } from "./thunks/notes/fetchNotes";
 import { fetchTags } from "./thunks/tags/fetchTags";
-import { fetchAuthors } from "./thunks/authors/fetchAuthors";
-import { fetchSources } from "./thunks/sources/fetchSources";
 //================================================
 import { Routes, Route } from "react-router-dom";
 // custom components:
@@ -30,12 +26,6 @@ import Note from "./pages/Note.js";
 import AddNote from "./pages/AddNote.js";
 import UpdateNote from "./pages/UpdateNote.js";
 import Tags from "./pages/Tags.js";
-import AddAuthor from "./pages/AddAuthor";
-import Authors from "./pages/Authors";
-import UpdateAuthor from "./pages/UpdateAuthor";
-import AddSource from "./pages/AddSource";
-import Sources from "./pages/Sources";
-import UpdateSource from "./pages/UpdateSource";
 import MarkdownGuide from "./pages/MarkdownGuide";
 import AppGuide from "./pages/AppGuide";
 import PasswordReset from "./pages/PasswordReset";
@@ -88,30 +78,6 @@ const ROUTES = {
 			path: "/notes/update-note/:itemKey",
 			element: <UpdateNote />,
 		},
-		// {
-		// 	path: "/authors",
-		// 	element: <Authors />,
-		// },
-		// {
-		// 	path: "/add-author",
-		// 	element: <AddAuthor />,
-		// },
-		// {
-		// 	path: "/authors/update-author/:itemKey",
-		// 	element: <UpdateAuthor />,
-		// },
-		// {
-		// 	path: "/sources",
-		// 	element: <Sources />,
-		// },
-		// {
-		// 	path: "/add-source",
-		// 	element: <AddSource />,
-		// },
-		// {
-		// 	path: "/sources/update-source/:itemKey",
-		// 	element: <UpdateSource />,
-		// },
 	],
 };
 
@@ -121,8 +87,6 @@ export default function App() {
 	const user = useSelector((state) => state.user.value);
 	//========= UNCOMMENT THE CODE BELOW TO CHECK THE DATA IN CONSOLE:
 	const NOTES = useSelector((state) => state.notes.value);
-	const SOURCES = useSelector((state) => state.sources.value);
-	const AUTHORS = useSelector((state) => state.authors.value);
 	const TAGS = useSelector((state) => state.tags.value);
 	//===============================================================//
 
@@ -140,14 +104,10 @@ export default function App() {
 					//========> UNCOMMENT THIS CODE TO FETCH DATA AFTER APP MOUNTS & USER IS LOGGED:
 					dispatch(fetchNotes({ reference: "items/" + uid }));
 					dispatch(fetchTags({ reference: "tags/" + uid }));
-					//dispatch(fetchAuthors({ reference: "authors/" + uid }));
-					//dispatch(fetchSources({ reference: "sources/" + uid }));
 				} else {
 					// User is signed out
 					dispatch(userLoggedOut());
 					dispatch(resetNotes());
-					//dispatch(resetAuthors());
-					//dispatch(resetSources());
 					dispatch(resetTags());
 				}
 			});
@@ -173,12 +133,10 @@ export default function App() {
 	useEffect(() => {
 		const APP_STATE = {
 			notes: NOTES,
-			//sources: SOURCES,
-			//authors: AUTHORS,
 			tags: TAGS,
 		};
 		console.log("APP_STATE:", APP_STATE);
-	}, [NOTES, SOURCES, AUTHORS, TAGS]);
+	}, [NOTES, TAGS]);
 
 	return (
 		<div className="App">
