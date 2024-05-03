@@ -1,8 +1,8 @@
-# Store, organize & filter your notes by tags & style/ format them using Markdown & HTML with inline CSS styles
+# linky_notes 👉 build your own easy-to-filter and internally linked notes system!
 
-Build your own easy to filter and internally linked notes system!
+Store, organize & filter your notes by tags & style/ format them using Markdown & HTML with inline CSS styles
 
-**Sign up for free** [here](https://vadimgierko.github.io/linky-notes/)!
+**Sign up & use for free** [here](https://vadimgierko.github.io/linky-notes/)!
 
 <img src="public/linky-notes-app-screen-vadim-gierko.png">
 
@@ -107,33 +107,6 @@ You can use the app in light & dark mode. The app will automatically detect if y
 
 All your notes & data are **private**, what means that only the logged owner/ author of the note can see it. If you won't share your password with anyone, your data is absolutely secure.
 
----
-
-## Motivation (problem I wanted to solve & solution)
-
-I've made this app first of all for my own needs. I read a lot, create a lot (developing different knowledge-based projects) and... do a lot of notes:
-
-- using different techniques, like: mindmapping, sketchnoting, Cornell Note Taking method
-- noting on different materials, like: paper, books pages, phone, laptop
-- storing notes... everywhere
-
-So...
-
-### Problem
-
-I couldn't manage & organize thousands of my paper & digital notes properly (I have developed my own system, but it's too far from what I need). So I've tried a few note apps, but none of them where satisfying - something always was missing.
-
-### Solution
-
-I've understood, that I need to:
-
-- have all notes (paper & digital) in one place
-- organize them by tags, because my paper notes were in so many folders and places & also sometimes some notes were needed to be in a few project folders in the same time
-
-So I've decided to build this note app & solved one of my biggest problems thanks to my own app. Now my notes are tagged, organized & easy to find/ filter.
-
-And when I've tested the app, I've decided to share it with the world to let everybody to build an easy to use, but effiecient knowledge/ notes base! Sign up & try here: https://vadimgierko.github.io/linky-notes/!
-
 ## Technologies I've used in this project:
 
 - React 18.2
@@ -150,3 +123,13 @@ And when I've tested the app, I've decided to share it with the world to let eve
 - React Markdown 8.0
 - GitHub Pages 3.2
 - PWA
+
+## 🚀 TODO (future/maybe todo list for myself)
+
+- enable searching/ filtering notes via dialog or side menu while creating/ updating the current note to easily grab links/ notes ids we want to refer ([see how to internally link the note here](#referencing-already-existing-notes-internal-links)).
+- migrate to Next.js (but keep PWA or maybe just adding shortcut to main screen is enough?)
+- migrate to TypeScript
+- get rid of Redux
+- do smth with loading all user notes & tags when app mounts... if there is a lot of those, it takes long, so at least show loading spinner or... optimize it (**what basically means rewrite it from scratch, apply pagination, use Firestore instead of RTDB & probably filter notes & tags using Firestore queries OR/AND use Firebase Caching - check out how to do it)
+- enable showing lastly updated notes, not only lastly created
+- fix filtering/searching tags bug
