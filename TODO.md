@@ -2,20 +2,20 @@
 
 ## Future/maybe changes/ updates for an EXISTING APP in current stack without major changes
 
-*do these improvements & freeze maintaining/ adding new features, but rathr start from a scratch with the new app*
+*do these improvements & freeze maintaining/ adding new features, but rather start from a scratch with the new app*
 
-- `enable searching/ filtering notes via dialog or side menu while creating/ updating the current note to easily grab links/ notes ids we want to refer`.
-<br>⚠️ *But now this can be done by opening an app in 2 separate browser windows and use one to browse the notes, and another to create/ update a note*.
-- `show loading spinner when init data loads`
-- enable showing `lastly updated notes`, not only lastly created
-- fix `filtering/searching tags bug`
-- (*if this won't force to rewrite the app - check it*) `add onSnapshot listener to sync state in all opened app instances`
-- tags on top of the note or aside ???
+- ~~`show loading spinner when init data loads`~~
 - `add suggestions` below for users in some of the guides:
   - split bigger/growing notes into smaller one unit-notes & then reuse/combine them into notes with internal links, table-of-content-like notes
   - add more internal links to other notes
   - when note A describes smth and you use a term described in the note B, make a link to the term instead of describing term B
   - if some tag has really a lot of notes linked & is a vast area, like *web development*, then create it's own note as a table-of-content-like note or index-note with links to other related tags-chapters or separate notes as you're trying to write an article or a chapter in the book to organize them
+- enable showing `lastly updated notes`, not only lastly created
+- tags on top of the note or aside ???
+- `enable searching/ filtering notes via dialog or side menu while creating/ updating the current note to easily grab links/ notes ids we want to refer`.
+<br>⚠️ *Now this can be partially done by opening an app in 2 separate browser windows and use one to browse the notes, and another to create/ update a note, but ⚠️⚠️ the app uses local state after init fetch, so 2 opened windows will be not synced...*.
+- fix `filtering/searching tags bug`
+- (*if this won't force to rewrite the app - check it*) `add onSnapshot listener to sync state in all opened app instances`
 
 ## Features/ ideas for a an app rewritten from scratch or the new one
 

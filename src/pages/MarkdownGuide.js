@@ -94,7 +94,8 @@ ${"```"}
 *italicized text*
 
 ---
-## Linked text
+
+## Linked text/ external source (*opens in the new window*)
 
 *What you need to type:*
 
@@ -105,6 +106,29 @@ ${"```"}
 *What you get:*
 
 [This is linked text (click & try)](https://www.this-is-your-link.com)
+
+⚠️ In this case, link will be opened in the new browser window!
+
+---
+
+## Linked internal note (*opens in the same window*)
+
+Remember, that you can also (& basically should!)
+**refer to other notes stored in your database using links**,
+because **every note has it's own id & URL**.
+
+To link the note in the other one, use this syntax:
+${"```"}
+[some text/ note title goes here](/notes/some-note-id-goes-here).
+${"```"}
+
+And you'll get this internal link to your note:
+[some text/ note title goes here](/notes/some-note-id-goes-here).
+
+⚠️ In this case, new note will be opened in the same browser window!
+
+For convinience, note's id is placed on top of each note card
+& ready-to-copy note's link is placed at the bottom of each note card.
 
 ---
 

@@ -44,7 +44,7 @@ and add a tag with the **name of the note source, e.g. book or article title** e
 
 ## Links
 
-If the content of your note comes from the website, add a source's link to your note via source form or paste the URL straight to the note.
+If the content of your note comes from the website, add a source's link to your note or paste the URL.
 
 You can also **refer to other notes stored in your database using links**
 (see [markdown guide](/markdown-guide) how to do a link),

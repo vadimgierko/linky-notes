@@ -9,6 +9,7 @@ import Tag from "../components/Tag";
 import TagWithTrashIcon from "../components/TagWithTrashIcon";
 // react bootstrap components:
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 
 export default function Notes() {
 	const { theme } = useTheme();
@@ -16,26 +17,41 @@ export default function Notes() {
 	const TAGS = useSelector((state) => state.tags.value);
 	const NOTES = useSelector((state) => state.notes.value);
 
+	const areNotesPending = useSelector((state) => state.notes.pending);
+
+	const filteredNotes = searchParams.get("tags")
+		? Object.keys(NOTES)
+				.filter((noteId) =>
+					searchParams
+						.get("tags")
+						.split("+")
+						.every((element) =>
+							Object.keys(NOTES[noteId].tags).includes(element)
+						)
+				)
+				.slice()
+				.reverse()
+		: Object.keys(NOTES).slice().reverse();
+
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState({});
 
 	useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
 
+	if (areNotesPending)
+		return (
+			<h1 className="text-center mb-3">
+				Your notes are pending...{" "}
+				<Spinner animation="border" role="status">
+					<span className="visually-hidden">Loading...</span>
+				</Spinner>
+			</h1>
+		);
+
 	return (
 		<>
 			<h1 className="text-center mb-3">
-				Your filtered notes (
-				{searchParams.get("tags")
-					? Object.keys(NOTES).filter((noteId) =>
-							searchParams
-								.get("tags")
-								.split("+")
-								.every((element) =>
-									Object.keys(NOTES[noteId].tags).includes(element)
-								)
-					  ).length
-					: Object.keys(NOTES).length}
-				)
+				Your filtered notes ({filteredNotes.length})
 			</h1>
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
@@ -131,44 +147,17 @@ export default function Notes() {
 					<div className="filter-tags mb-2">There are no filter tags...</div>
 				)}
 			</div>
-			{/*========================================= filtered notes */}
-			{searchParams.get("tags") ? (
-				<div className="filtered-notes">
-					{Object.keys(NOTES)
-						.filter((noteId) =>
-							searchParams
-								.get("tags")
-								.split("+")
-								.every((element) =>
-									Object.keys(NOTES[noteId].tags).includes(element)
-								)
-						)
-						.slice()
-						.reverse()
-						.map((noteId) => (
-							<NoteCard
-								key={noteId}
-								note={NOTES[noteId]}
-								noteKey={noteId}
-								show140chars={true}
-							/>
-						))}
-				</div>
-			) : (
-				<div className="filtered-notes">
-					{Object.keys(NOTES)
-						.slice()
-						.reverse()
-						.map((noteId) => (
-							<NoteCard
-								key={noteId}
-								note={NOTES[noteId]}
-								noteKey={noteId}
-								show140chars={true}
-							/>
-						))}
-				</div>
-			)}
+
+			<div className="filtered-notes">
+				{filteredNotes.map((noteId) => (
+					<NoteCard
+						key={noteId}
+						note={NOTES[noteId]}
+						noteKey={noteId}
+						show140chars={true}
+					/>
+				))}
+			</div>
 		</>
 	);
 }
