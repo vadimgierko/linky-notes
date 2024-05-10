@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/linky-notes/static/css/main.c970a85e.css",
+    "main.js": "/linky-notes/static/js/main.2f48d322.js",
+    "service-worker.js": "/linky-notes/service-worker.js",
+    "index.html": "/linky-notes/index.html",
+    "main.c970a85e.css.map": "/linky-notes/static/css/main.c970a85e.css.map",
+    "main.2f48d322.js.map": "/linky-notes/static/js/main.2f48d322.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c970a85e.css",
+    "static/js/main.2f48d322.js"
+  ]
+}
