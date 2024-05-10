@@ -90,6 +90,10 @@ export default function App() {
 	const TAGS = useSelector((state) => state.tags.value);
 	//===============================================================//
 
+	// NEEDED FOR EXTERNAL BROWSER EXPERIMENTS ON DATA:
+	window.NOTES = NOTES
+	window.TAGS = TAGS
+
 	const dispatch = useDispatch();
 
 	// listen to the user logs in & out:
