@@ -10,6 +10,7 @@ import TagWithTrashIcon from "../components/TagWithTrashIcon";
 // react bootstrap components:
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
+import sortNotes from "../helper-functions/sortNotes";
 
 export default function Notes() {
 	const { theme } = useTheme();
@@ -17,21 +18,33 @@ export default function Notes() {
 	const TAGS = useSelector((state) => state.tags.value);
 	const NOTES = useSelector((state) => state.notes.value);
 
+	/**
+	 * options: lastUpdated (default), firstUpdated, lastCreated, firstCreated
+	 */
+	//const [sortBy, setSortBy] = useState("lastUpdated");
+	const sortBy = searchParams.get("sortBy") || "lastUpdated"
+	const tags = searchParams.get("tags");
+
 	const areNotesPending = useSelector((state) => state.notes.pending);
 
+	const NOTES_ARRAY = Object.keys(NOTES).map(id => ({
+		...NOTES[id],
+		id
+	}))
+
+	const sortedNotes = sortNotes(NOTES_ARRAY, sortBy); // ⚠️ note object consists noteId
+
 	const filteredNotes = searchParams.get("tags")
-		? Object.keys(NOTES)
-				.filter((noteId) =>
-					searchParams
-						.get("tags")
-						.split("+")
-						.every((element) =>
-							Object.keys(NOTES[noteId].tags).includes(element)
-						)
-				)
-				.slice()
-				.reverse()
-		: Object.keys(NOTES).slice().reverse();
+		? sortedNotes
+			.filter((note) =>
+				searchParams
+					.get("tags")
+					.split("+")
+					.every((element) =>
+						Object.keys(note.tags).includes(element)
+					)
+			)
+		: sortedNotes
 
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState({});
@@ -57,7 +70,6 @@ export default function Notes() {
 			<div className="search-bar">
 				<Form.Label>Filter your notes by tags:</Form.Label>
 				<input
-					//value={searchParams.get("tag") || ""}
 					type="text"
 					className={
 						"form-control mb-2 + bg-" +
@@ -81,10 +93,10 @@ export default function Notes() {
 									let updatedFoundTags = {};
 									foundTagsId.forEach(
 										(id) =>
-											(updatedFoundTags = {
-												...updatedFoundTags,
-												[id]: TAGS[id],
-											})
+										(updatedFoundTags = {
+											...updatedFoundTags,
+											[id]: TAGS[id],
+										})
 									);
 									setFoundTags(updatedFoundTags);
 								}
@@ -106,6 +118,7 @@ export default function Notes() {
 								const prevParamsString = searchParams.get("tags"); // abc+cds || abc || null
 								setSearchParams({
 									tags: prevParamsString ? prevParamsString + "+" + id : id,
+									sortBy
 								});
 								// clear found tags:
 								setFoundTags({});
@@ -135,9 +148,10 @@ export default function Notes() {
 										if (updatedParamsString) {
 											setSearchParams({
 												tags: updatedParamsString,
+												sortBy
 											});
 										} else {
-											setSearchParams({});
+											setSearchParams({sortBy});
 										}
 									}}
 								/>
@@ -148,12 +162,35 @@ export default function Notes() {
 				)}
 			</div>
 
+			<div className="sort">
+				<select
+					className={
+						"form-control mb-2 + bg-" +
+						theme +
+						" text-" +
+						(theme === "dark" ? "light" : "dark")
+					}
+					onChange={e => {
+						setSearchParams({
+							tags,
+							sortBy: e.target.value,
+						})
+					}}
+					value={sortBy}
+				>
+					<option value="lastUpdated">last updated</option>
+					<option value="firstUpdated">first updated</option>
+					<option value="lastCreated">last created</option>
+					<option value="firstCreated">first created</option>
+				</select>
+			</div>
+
 			<div className="filtered-notes">
-				{filteredNotes.map((noteId) => (
+				{filteredNotes.map((note) => (
 					<NoteCard
-						key={noteId}
-						note={NOTES[noteId]}
-						noteKey={noteId}
+						key={note.id}
+						note={note}
+						noteKey={note.id}
 						show140chars={true}
 					/>
 				))}
