@@ -15,13 +15,13 @@ import sortNotes from "../helper-functions/sortNotes";
 export default function Notes() {
 	const { theme } = useTheme();
 	const [searchParams, setSearchParams] = useSearchParams();
+
 	const TAGS = useSelector((state) => state.tags.value);
 	const NOTES = useSelector((state) => state.notes.value);
 
 	/**
 	 * options: lastUpdated (default), firstUpdated, lastCreated, firstCreated
 	 */
-	//const [sortBy, setSortBy] = useState("lastUpdated");
 	const sortBy = searchParams.get("sortBy") || "lastUpdated"
 	const tags = searchParams.get("tags");
 
@@ -34,11 +34,10 @@ export default function Notes() {
 
 	const sortedNotes = sortNotes(NOTES_ARRAY, sortBy); // ⚠️ note object consists noteId
 
-	const filteredNotes = searchParams.get("tags")
+	const filteredNotes = tags
 		? sortedNotes
 			.filter((note) =>
-				searchParams
-					.get("tags")
+				tags
 					.split("+")
 					.every((element) =>
 						Object.keys(note.tags).includes(element)
@@ -115,7 +114,7 @@ export default function Notes() {
 							key={id}
 							value={TAGS[id].tag}
 							onClick={() => {
-								const prevParamsString = searchParams.get("tags"); // abc+cds || abc || null
+								const prevParamsString = tags; // abc+cds || abc || null
 								setSearchParams({
 									tags: prevParamsString ? prevParamsString + "+" + id : id,
 									sortBy
@@ -130,18 +129,16 @@ export default function Notes() {
 				</div>
 
 				{/*======================================== filter tags */}
-				{searchParams.get("tags") ? (
+				{tags ? (
 					<div className="filter-tags">
-						{searchParams
-							.get("tags")
+						{tags
 							.split("+")
 							.map((filterTagId) => (
 								<TagWithTrashIcon
 									key={filterTagId}
 									tag={TAGS[filterTagId]}
 									onClick={() => {
-										const updatedParamsString = searchParams
-											.get("tags")
+										const updatedParamsString = tags
 											.split("+")
 											.filter((id) => filterTagId !== id)
 											.join("+");
@@ -151,7 +148,7 @@ export default function Notes() {
 												sortBy
 											});
 										} else {
-											setSearchParams({sortBy});
+											setSearchParams({ sortBy });
 										}
 									}}
 								/>
@@ -171,8 +168,10 @@ export default function Notes() {
 						(theme === "dark" ? "light" : "dark")
 					}
 					onChange={e => {
-						setSearchParams({
+						tags ? setSearchParams({
 							tags,
+							sortBy: e.target.value,
+						}) : setSearchParams({
 							sortBy: e.target.value,
 						})
 					}}

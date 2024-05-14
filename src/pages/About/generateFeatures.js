@@ -3,12 +3,12 @@ import { MdDarkMode, MdFormatSize } from "react-icons/md";
 import { CgNotes } from "react-icons/cg";
 import {
 	AiOutlineLock,
-	AiOutlineCloud,
-	AiOutlineBook,
 	AiOutlineTags,
 	AiOutlineSearch,
 	AiOutlineCloudDownload,
+	AiOutlinePaperClip,
 } from "react-icons/ai";
+import { TbArrowsSort } from "react-icons/tb";
 
 export default function generateFeatures(props) {
 	return [
@@ -23,17 +23,23 @@ export default function generateFeatures(props) {
 			paragraph:
 				"Organize your notes by tags. You can add as many tags to your notes as you want.",
 		},
-		// {
-		// 	icon: <AiOutlineBook {...props} />,
-		// 	header: "Sources",
-		// 	paragraph:
-		// 		"Add sources/ references to your notes (including title, author, link, page/s numbers).",
-		// },
 		{
 			icon: <AiOutlineSearch {...props} />,
 			header: "Filter/ Search",
 			paragraph:
 				"You can filter your notes by one or a few tags. You can also navigate between filtering sessions.",
+		},
+		{
+			icon: <TbArrowsSort {...props} />,
+			header: "Sort",
+			paragraph:
+				"You can sort your notes by creation or update date along filtering by tags.",
+		},
+		{
+			icon: <AiOutlinePaperClip {...props} />,
+			header: "Link Notes",
+			paragraph:
+				"You can link notes internally inside other notes & create higher ordered notes that contain table of contents/ consolidating related notes. ",
 		},
 		{
 			icon: <MdFormatSize {...props} />,

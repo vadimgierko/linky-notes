@@ -22,7 +22,7 @@ root.render(
 		<BrowserRouter
 		    // COMMENT THIS CODE WHEN IN DEV MODE;
 			// UNCOMMENT THIS CODE WHEN DEPLOYING ON GITHUB PAGES:
-			//basename={process.env.PUBLIC_URL}
+			basename={process.env.PUBLIC_URL}
 		>
 			<Provider store={store}>
 				<App />
