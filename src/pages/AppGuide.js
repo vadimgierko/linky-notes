@@ -3,6 +3,8 @@ import MarkdownRenderer from "../components/MarkdownRenderer";
 const CONTENT = `
 # How to use *linky_notes* app efficiently
 
+---
+
 Although the *linky_notes* app has only a few simple functionalities,
 it offers **endless possibilities** for organizing, searching and using your notes in the way,
 which is impossible to many other note apps around.

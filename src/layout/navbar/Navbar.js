@@ -22,6 +22,7 @@ import {
 	AiOutlineLogin,
 } from "react-icons/ai";
 import { BiUserCheck, BiRocket } from "react-icons/bi";
+import { BsBoxSeam } from "react-icons/bs";
 
 const LINKS = {
 	public: [
@@ -39,6 +40,11 @@ const LINKS = {
 			name: "how to use the app efficiently",
 			link: "/app-guide",
 			icon: <BiRocket className="me-3" />,
+		},
+		{
+			name: "how to create an inner app inside the app",
+			link: "/inner-app-guide",
+			icon: <BsBoxSeam className="me-3" />,
 		},
 	],
 	private: [

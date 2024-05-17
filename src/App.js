@@ -28,6 +28,7 @@ import UpdateNote from "./pages/UpdateNote.js";
 import Tags from "./pages/Tags.js";
 import MarkdownGuide from "./pages/MarkdownGuide";
 import AppGuide from "./pages/AppGuide";
+import InnerAppGuide from "./pages/InnerAppGuide.js"
 import PasswordReset from "./pages/PasswordReset";
 
 const ROUTES = {
@@ -43,6 +44,10 @@ const ROUTES = {
 		{
 			path: "/app-guide",
 			element: <AppGuide />,
+		},
+		{
+			path: "/inner-app-guide",
+			element: <InnerAppGuide />,
 		},
 		{
 			path: "/signin",
