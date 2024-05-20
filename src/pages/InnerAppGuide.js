@@ -1,7 +1,7 @@
 import MarkdownRenderer from "../components/MarkdownRenderer";
 
 const CONTENT = `
-# How to create an inner app in *linky_notes*
+<h1 align="center">How to create an inner app in <em>linky_notes</em></h1>
 
 ---
 

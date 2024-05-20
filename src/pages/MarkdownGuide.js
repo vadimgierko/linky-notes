@@ -1,7 +1,7 @@
 import MarkdownRenderer from "../components/MarkdownRenderer";
 
 const CONTENT = `
-# How to format your notes using Markdown Syntax
+<h1 align="center">How to format your notes using Markdown Syntax</h1>
 
 This app allows you to format/ style your notes with built-in Markdown Editor.
 Not all Markdown features are available at the moment, but you can create
