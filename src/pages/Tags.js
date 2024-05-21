@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // custom components:
 import Tag from "../components/Tag";
+import { getTagNotesNum } from "../helper-functions/tags";
 
 const ALPHABET = [
 	"a",
@@ -39,6 +40,8 @@ const ALPHABET = [
 
 export default function Tags() {
 	const TAGS = useSelector((state) => state.tags.value);
+	const NOTES = useSelector((state) => state.notes.value);
+
 	const navigate = useNavigate();
 
 	useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
@@ -63,7 +66,7 @@ export default function Tags() {
 											search: `?tags=${tagId}`,
 										})
 									}
-									value={TAGS[tagId].tag}
+									value={`${TAGS[tagId].tag} (${getTagNotesNum(tagId, NOTES)})`}
 								/>
 							) : null
 						)}
