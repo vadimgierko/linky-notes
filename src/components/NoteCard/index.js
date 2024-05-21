@@ -9,12 +9,15 @@ import { Card, Row, Col } from "react-bootstrap";
 // thunks:
 import { deleteNote } from "../../thunks/notes/deleteNote";
 import MarkdownRenderer from "../MarkdownRenderer";
+import { getTagNotesNum } from "../../helper-functions/tags";
 
 export default function NoteCard({ note, noteKey, show140chars = false }) {
 	const { theme } = useTheme();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const user = useSelector((state) => state.user.value);
+
+	const NOTES = useSelector((state) => state.notes.value);
 
 	const ICON_BUTTONS = [
 		{
@@ -88,7 +91,7 @@ export default function NoteCard({ note, noteKey, show140chars = false }) {
 					Object.keys(note.tags).map((tagId) => (
 						<Tag
 							key={tagId}
-							value={note.tags[tagId].tag}
+							value={`${note.tags[tagId].tag} (${getTagNotesNum(tagId, NOTES)})`}
 							onClick={() => {
 								// There are 3 ways to go back to main page
 								// & search for tag:
