@@ -2,9 +2,35 @@
 
 ⚠️ REMEMBER TO UNCOMMENT `basename` BEFORE DEPLOYING ❗❗❗
 
+---
+
+## Why there is no sense to add new features, rewrite the app & why I should freeze & quit maintaining the app ASAP
+
+- ❌ this app's tech stack is outdated,
+- ❌ the way code is organized is not what I'm used to currently,
+- ❌ domain name is taken,
+- ❌ even the name of the app is not reflecting what I want it to be anymore, 
+
+👇
+
+there is **no sense to add the features listed below to the actual app & maintain it anymore**.
+
+## So what to do with new features ideas?
+
+Those features listed below must be rather a **wish-list/ meta-plan for my 2 other knowledge & tasks management future apps**,
+which already have their domains & are built upon the foundation of *linky_notes*
+(*the names of the apps cannot be revealed publicly for now*).
+
+## What's need to be done to stop maintaince of the *linky_notes*
+
+- add the info for users that the app will no longer be maintained & mention about future apps - better/ different/ richer versions of *linky_notes*
+- when at least one future app mentioned before will be ready, announce it in the app & provide links.
+
+---
+
 ## Future/maybe changes/ updates for an EXISTING APP in current stack without major changes
 
-*do these improvements & freeze maintaining/ adding new features, but rather start from a scratch with the new app*
+⚠️ *do these improvements & freeze maintaining/ adding new features, but rather start from a scratch with the new app*
 
 - ADD HTML with INLINE CSS GUIDE
 - NOTE PAGE UI & FEATURES
@@ -56,7 +82,7 @@ getTagsStats()
 
 ---
 
-- Określ zależności pomiędzy tagami ( dodaj możliwość organizacji tagów w apce)
+- Określ zależności pomiędzy tagami (dodaj możliwość organizacji tagów w apce)
 
 ```js
 note {
@@ -64,8 +90,6 @@ note {
   linkedNotes: [], // noteIds
 }
 ```
-
-
 
 ## Features/ ideas for a an app rewritten from scratch or the new one
 
