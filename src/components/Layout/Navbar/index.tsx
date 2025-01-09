@@ -21,7 +21,7 @@ import { BsBoxSeam } from "react-icons/bs";
 import Link from "next/link";
 import { Nav, Navbar } from "react-bootstrap";
 import { useState } from "react";
-import useTheme from "@/app/context/useTheme";
+import useTheme from "@/context/useTheme";
 
 const LINKS = {
     public: [

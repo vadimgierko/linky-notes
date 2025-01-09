@@ -5,8 +5,8 @@ import "./globals.css";
 // (without this rehype-highlight will not be highlighting)
 // 🚀 TODO: how to add it to Metadata?
 // import "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.css"
-import Layout from "./components/Layout";
-import { ThemeProvider } from "./context/useTheme";
+import Layout from "../components/Layout";
+import { ThemeProvider } from "../context/useTheme";
 
 /**
  * This below is added automatically:
