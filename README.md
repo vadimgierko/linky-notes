@@ -112,18 +112,18 @@ All your notes & data are **private**, what means that only the logged owner/ au
 
 ## Tech Stack (*after 2025 upgrade*)
 
-- Next.js 15
-- React ~~18.2~~ 19
+- Next.js 15.1.4
+- React ~~18.2~~ 19.0.0
 - ~~React Router 6.3~~
 - ~~React Redux 8.0~~
 - ~~Redux Toolkit 1.8~~
 - Firebase 9.1
   - Authentication
   - Realtime Database
-- React Bootstrap 2.4
-- Bootstrap 5.1
-- React Icons 4.4
-- Bootstrap Icons 1.6
-- React Markdown 8.0
+- React Bootstrap ~~2.4~~ 2.10.7
+- Bootstrap ~~5.1~~ 5.3.3
+- React Icons ~~4.4~~ 5.4.0
+- ~~Bootstrap Icons 1.6~~
+- React Markdown ~~8.0~~ 9.0.3
 - GitHub Pages 3.2
 - ~~PWA~~
