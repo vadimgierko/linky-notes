@@ -90,31 +90,3 @@ note {
   linkedNotes: [], // noteIds
 }
 ```
-
-## Features/ ideas for a an app rewritten from scratch or the new one
-
-### REWRITE/ UPGRADE TECH STACK
-
-- migrate to `Next.js` (but keep PWA or maybe just adding shortcut to main screen is enough?) + static about pages & guides
-- migrate to `TypeScript`
-- get rid of/ do not use ~~`Redux`~~
-- items => notes (in database, CRUD, thunks etc. + migrate from items to notes when log in if there is no notes in db, then delete items folder)
-- add users folder to store users data, preferences (mode), settings
-- use `Firestore` instead of ~~`RTDB`~~
-- optimize data loading, filtering & querying
-  - do not load all notes & tags on app mount
-  - pagination
-  - filter notes & tags using Firestore queries
-  - implement Firebase Caching
-  - this leads to rewriting db schemas
-- auto create mentioned in sugestions above tag-page for every tag ???
-- notes types???
-  - idea (yellow)
-  - from the source/ author
-  - personal
-  - todo list or list (or separate notes, todos and lists?)
-
-### NEW FEATURES
-
-
-

@@ -1,6 +1,12 @@
 {
   "name": "linky-notes",
   "version": "0.1.0",
+  "homepage": "https://vadimgierko.github.io/linky-notes/",
+  "author": {
+    "name": "Vadim Gierko",
+    "url": "https://vadimgierko.com"
+  },
+  "description": "linky_notes app allows you to create, organize & filter your notes by tags & create your own knowledge base",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -9,17 +15,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bootstrap": "^5.3.3",
+    "next": "15.1.4",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.7",
     "react-dom": "^19.0.0",
-    "next": "15.1.4"
+    "react-icons": "^5.4.0",
+    "react-markdown": "^9.0.3",
+    "rehype-highlight": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
-    "@eslint/eslintrc": "^3"
+    "typescript": "^5"
   }
 }
