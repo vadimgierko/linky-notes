@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "firebase": "^11.1.0",
+    "firebase-admin": "^13.0.2",
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.7",
