@@ -6,14 +6,14 @@ import rehypeRaw from "rehype-raw";
 import { AnchorHTMLAttributes } from "react";
 import Link from "next/link";
 
-interface NextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {}
+// interface NextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {}
 
 /**
  * convert all internal links into React Router link,
  * open external links in the new tab,
  * scroll to top after internal redirecting
  */
-function NextLink(props: NextLinkProps) {
+function NextLink(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
 	const { href, ...rest } = props;
 
 	if (href && href.match(/^(https?:)?\/\//)) {
@@ -24,13 +24,12 @@ function NextLink(props: NextLinkProps) {
 		);
 	}
 
-	const url = new URL(href || "", window.location.origin);
-
-	return (
-		<Link href={url.toString()} {...rest}>
+	if (typeof window !== "undefined") {
+		const url = new URL(href || "", window.location.origin);
+		return <Link href={url.toString()} {...rest}>
 			{props.children}
 		</Link>
-	);
+	}
 }
 
 interface MarkdownRendererProps {

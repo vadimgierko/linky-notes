@@ -2,7 +2,7 @@
 // import { useTheme } from "../../contexts/useTheme";
 // react-bootstrap:
 import Container from "react-bootstrap/Container";
-import Badge from "react-bootstrap/Badge";
+// import Badge from "react-bootstrap/Badge";
 // auth:
 // import logOut from "../../auth/logOut";
 // react-icons:
@@ -13,10 +13,10 @@ import {
     AiOutlineTags,
     AiOutlineInfoCircle,
     AiOutlineFileMarkdown,
-    AiOutlineLogout,
+    // AiOutlineLogout,
     AiOutlineLogin,
 } from "react-icons/ai";
-import { BiUserCheck, BiRocket } from "react-icons/bi";
+import {BiRocket } from "react-icons/bi";
 import { BsBoxSeam } from "react-icons/bs";
 import Link from "next/link";
 import { Nav, Navbar } from "react-bootstrap";
@@ -54,7 +54,7 @@ const LINKS = {
 
 const pencilSquareButtonClassName = "collapsed ms-auto me-2 text-"
 
-export default function ({ maxWidth }: { maxWidth: number }) {
+export default function NavBar({ maxWidth }: { maxWidth: number }) {
     const { theme, switchTheme } = useTheme()
     // const user = useSelector((state) => state.user.value);
     // const NOTES = useSelector((state) => state.notes.value);

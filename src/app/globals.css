@@ -9,6 +9,65 @@ textarea {
   resize: vertical;
 }
 
+/* About Page */
+#about-page {
+  h1 {
+    font-size: 40px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  /* icon */
+  svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  .card-with-icon-and-text {
+    padding: 0.5px;
+    width: 50%;
+  }
+
+  .tech-card {
+    width: auto
+  }
+
+  @media only screen and (min-width: 576px) {
+    h1 {
+      font-size: 50px;
+    }
+
+    p {
+      font-size: 20px;
+    }
+
+    button {
+      padding: 0.5rem 1rem;  /* Larger padding for bigger buttons */
+      font-size: 1.25rem;    /* Larger font size */
+      line-height: 1.5;      /* Adjust line height for better spacing */
+      border-radius: 0.3rem; /* Slightly rounded corners */
+    }
+
+    /* icon */
+    svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    .card-with-icon-and-text {
+      padding: 0.5px;
+      width: 33%;
+    }
+
+    .tech-card {
+      width: auto
+    }
+  }
+}
+/* About Page - END */
+
 /* SCROLL TO TOP */
 
 .scroll-to-top {
@@ -21,13 +80,15 @@ textarea {
 }
 
 .scroll-to-top:hover {
-  color:rgb(27, 71, 216)
+  color: rgb(27, 71, 216)
 }
 
 /* PRINT STYLES */
 
 @media print {
-  #navbar, .scroll-to-top {
+
+  #navbar,
+  .scroll-to-top {
     display: none;
   }
 
@@ -39,11 +100,14 @@ textarea {
     background-color: white !important;
   }
 
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     break-after: avoid;
   }
 
-  img, svg {
+  img,
+  svg {
     break-inside: avoid;
   }
 }
