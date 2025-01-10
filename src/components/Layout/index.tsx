@@ -1,12 +1,13 @@
-// import { useTheme } from "../contexts/useTheme";
+"use client"
+import useTheme from "@/context/useTheme";
 import { ReactNode } from "react";
 import { Container } from "react-bootstrap";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-// import ScrollToTop from "../components/ScrollToTop";
+import ScrollToTop from "../ScrollToTop";
 
 export default function Layout({ children }: {children: ReactNode}) {
-	//const { theme } = useTheme();
+	const { theme } = useTheme();
 	const maxWidth = 900;
 
 	return (
@@ -14,12 +15,12 @@ export default function Layout({ children }: {children: ReactNode}) {
 			style={{
 				display: "flex",
 				flexDirection: "column",
-				//backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
+				backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
 				minHeight: "100vh",
 			}}
 		>
 			<Navbar
-            maxWidth={maxWidth}
+            	maxWidth={maxWidth}
             />
 			<Container
 				as="main"
@@ -33,7 +34,7 @@ export default function Layout({ children }: {children: ReactNode}) {
 			>
 				{children}
 			</Container>
-			{/* <ScrollToTop /> */}
+			<ScrollToTop />
 			<Footer maxWidth={maxWidth} />
 		</div>
 	);

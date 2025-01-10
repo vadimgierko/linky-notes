@@ -31,7 +31,8 @@ textarea {
   }
 
   .tech-card {
-    width: auto
+    width: auto;
+    margin: 1em;
   }
 
   @media only screen and (min-width: 576px) {
