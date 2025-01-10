@@ -7,6 +7,7 @@ import "./globals.css";
 // import "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.css"
 import Layout from "../components/Layout";
 import { ThemeProvider } from "../context/useTheme";
+import { UserProvider } from "@/context/useUser";
 
 /**
  * This below is added automatically:
@@ -14,29 +15,26 @@ import { ThemeProvider } from "../context/useTheme";
  * `<meta name="viewport" content="width=device-width, initial-scale=1" />`
  */
 export const metadata: Metadata = {
-  title: "linky_notes | organize & filter your notes by tags",
-  description: "linky_notes app allows you to create, organize & filter your notes by tags & create your own knowledge base",
-  authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
-
+	title: "linky_notes | organize & filter your notes by tags",
+	description:
+		"linky_notes app allows you to create, organize & filter your notes by tags & create your own knowledge base",
+	authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html
-      lang="en"
-      data-bs-theme="dark"
-    >
-      <body>
-        <ThemeProvider>
-          <Layout>
-            {children}
-          </Layout>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en" data-bs-theme="dark">
+			<body>
+				<ThemeProvider>
+					<UserProvider>
+						<Layout>{children}</Layout>
+					</UserProvider>
+				</ThemeProvider>
+			</body>
+		</html>
+	);
 }

@@ -20,11 +20,10 @@ import { BiRocket, BiUserCheck } from "react-icons/bi";
 import { BsBoxSeam } from "react-icons/bs";
 import Link from "next/link";
 import { Nav, Navbar } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useTheme from "@/context/useTheme";
-import { auth } from "@/firebaseConfig";
-import { User } from "firebase/auth";
 import logOut from "@/auth/logOut";
+import useUser from "@/context/useUser";
 
 const LINKS = {
 	public: [
@@ -59,8 +58,7 @@ const pencilSquareButtonClassName = "collapsed ms-auto me-2 text-";
 
 export default function NavBar({ maxWidth }: { maxWidth: number }) {
 	const { theme, switchTheme } = useTheme();
-	const [user, setUser] = useState<User | null>(null);
-	// const user = useSelector((state) => state.user.value);
+	const { user } = useUser();
 	// const NOTES = useSelector((state) => state.notes.value);
 	// const TAGS = useSelector((state) => state.tags.value);
 	const [isHovering, setIsHovering] = useState(false);
@@ -68,15 +66,6 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 	const handleMouseEnter = () => setIsHovering(true);
 
 	const handleMouseLeave = () => setIsHovering(false);
-
-	// check for logged user:
-	useEffect(() => {
-		if (auth.currentUser) {
-			setUser(auth.currentUser);
-		} else {
-			setUser(null);
-		}
-	}, []);
 
 	return (
 		<Navbar

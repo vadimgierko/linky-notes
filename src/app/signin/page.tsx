@@ -1,15 +1,14 @@
 "use client";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect } from "react";
 import signIn from "@/auth/signin";
 // react-bootstrap components:
 import AuthForm from "@/components/AuthForm";
 import { UserData } from "@/components/AuthForm";
-import { auth } from "@/firebaseConfig";
 import { useRouter } from "next/navigation";
-import { User } from "firebase/auth";
+import useUser from "@/context/useUser";
 
 export default function SignIn() {
-	const [user, setUser] = useState<User | null>(null);
+	const { user } = useUser();
 	const router = useRouter();
 
 	function handleSubmit(e: FormEvent<HTMLFormElement>, userData: UserData) {
@@ -26,6 +25,7 @@ export default function SignIn() {
 			// 	signIn(userData).then(() => navigate("/", { replace: true }));
 			// }
 			signIn(userData);
+			router.push("/");
 		} else {
 			alert(
 				"You need to complete all input fields (not only white spaces...) to sign in!"
@@ -33,15 +33,9 @@ export default function SignIn() {
 		}
 	}
 
-	// check for logged user:
 	useEffect(() => {
-		if (auth.currentUser) {
-			setUser(auth.currentUser);
-			router.push("/");
-		} else {
-			setUser(null);
-		}
-	}, [router]);
+		if (user) router.push("/");
+	}, [router, user]);
 
 	return <AuthForm headerText="Sign in" onSubmit={handleSubmit} />;
 }
