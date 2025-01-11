@@ -8,6 +8,7 @@ import "./globals.css";
 import Layout from "../components/Layout";
 import { ThemeProvider } from "../context/useTheme";
 import { UserProvider } from "@/context/useUser";
+import { NotesProvider } from "@/context/useNotes";
 
 /**
  * This below is added automatically:
@@ -31,7 +32,9 @@ export default function RootLayout({
 			<body>
 				<ThemeProvider>
 					<UserProvider>
-						<Layout>{children}</Layout>
+						<NotesProvider>
+							<Layout>{children}</Layout>
+						</NotesProvider>
 					</UserProvider>
 				</ThemeProvider>
 			</body>
