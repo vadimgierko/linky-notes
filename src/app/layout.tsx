@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
-// css for highlighting code in vs2015 dark mode style
-// (without this rehype-highlight will not be highlighting)
-// 🚀 TODO: how to add it to Metadata?
-// import "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.css"
 import Layout from "../components/Layout";
 import { ThemeProvider } from "../context/useTheme";
 import { UserProvider } from "@/context/useUser";

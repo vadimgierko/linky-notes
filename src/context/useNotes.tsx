@@ -1,6 +1,6 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, get } from "firebase/database";
+import { ref, get, query, limitToLast } from "firebase/database";
 import { createContext, useContext, useEffect, useState } from "react";
 import useUser from "./useUser";
 import { Note } from "@/types";
@@ -30,7 +30,11 @@ export function NotesProvider({ children }: NotesProviderProps) {
 	useEffect(() => {
 		async function fetchNotes(reference: string) {
 			try {
-				const snapshot = await get(ref(rtdb, reference));
+				// const snapshot = await get(ref(rtdb, reference)); => fetches all notes
+
+				const firstTenNotesRef = query(ref(rtdb, reference), limitToLast(10));
+				const snapshot = await get(firstTenNotesRef);
+
 				if (snapshot.exists()) {
 					const data = snapshot.val() as { [key: string]: Note };
 					console.log("DATA WAS FETCHED: ALL USER'S ITEMS FROM", reference);

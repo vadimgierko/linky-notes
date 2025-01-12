@@ -1,3 +1,9 @@
+/* BOOTSTRAP ICONS */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+/* css for highlighting code in vs2015 dark mode style */
+/* (without this rehype-highlight will not be highlighting) */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.css");
+
 body {
   margin: 0;
   padding: 0;

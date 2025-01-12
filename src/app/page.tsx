@@ -1,5 +1,5 @@
 "use client";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
+import NoteCard from "@/components/NoteCard";
 import useNotes from "@/context/useNotes";
 import useUser from "@/context/useUser";
 import { useRouter } from "next/navigation";
@@ -17,13 +17,20 @@ export default function Home() {
 	}, [router, user]);
 
 	return (
-		<ul>
+		<>
+			<h1 className="text-center">
+				Your Notes ({notes && Object.keys(notes).length})
+			</h1>
+			<hr />
 			{notes &&
 				Object.keys(notes).map((noteId) => (
-					<li key={noteId}>
-						<MarkdownRenderer markdown={notes[noteId].content} />
-					</li>
+					<NoteCard
+						key={noteId}
+						note={notes[noteId]}
+						noteKey={noteId}
+						show140chars={true}
+					/>
 				))}
-		</ul>
+		</>
 	);
 }
