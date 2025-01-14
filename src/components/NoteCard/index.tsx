@@ -5,6 +5,7 @@ import { Card, Row, Col } from "react-bootstrap";
 import IconButton from "../IconButton";
 import MarkdownRenderer from "../MarkdownRenderer";
 import Link from "next/link";
+import Tag from "../Tag";
 
 type NoteCardProps = {
 	note: Note;
@@ -97,27 +98,13 @@ export default function NoteCard({
 						show140chars ? note.content.slice(0, 137) + "..." : note.content
 					}
 				/>
-				{/* {note.tags &&
+				{note.tags &&
+					Object.keys(note.tags).length > 0 &&
 					Object.keys(note.tags).map((tagId) => (
-						<Tag
-							key={tagId}
-							value={`${note.tags[tagId].tag} (${getTagNotesNum(tagId, NOTES)})`}
-							onClick={() => {
-								// There are 3 ways to go back to main page
-								// & search for tag:
-
-								// 1. that is the most elegant way:
-								navigate({
-									pathname: "/",
-									search: `?tags=${tagId}`,
-								});
-								window.scrollTo({ top: 0, behavior: "smooth" });
-
-								// 2. that works, but looks bad:
-								//navigate("/?tags=" + tagId);
-							}}
-						/>
-					))} */}
+						<Link href={`/?tags=${tagId}`} key={tagId}>
+							<Tag value={`${note.tags![tagId].tag}`} />
+						</Link>
+					))}
 			</Card.Body>
 			<Card.Footer>
 				<Card.Text className="text-muted">

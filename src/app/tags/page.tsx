@@ -1,6 +1,7 @@
-"use client"
+"use client";
 import Tag from "@/components/Tag";
 import useTags from "@/context/useTags";
+import Link from "next/link";
 import { useEffect } from "react";
 
 const ALPHABET = [
@@ -36,12 +37,12 @@ const ALPHABET = [
 	"ż",
 ];
 
-export default function tags() {
-	const {tags} = useTags();
+export default function Tags() {
+	const { tags } = useTags();
 
 	useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
 
-    if (!tags) return null
+	if (!tags) return null;
 
 	return (
 		<>
@@ -55,10 +56,9 @@ export default function tags() {
 					<div>
 						{Object.keys(tags).map((tagId) =>
 							tags[tagId].tag[0] === letter ? (
-								<Tag
-									key={tagId}
-									value={`${tags[tagId].tag}`}
-								/>
+								<Link href={`/?tags=${tagId}`} key={tagId}>
+									<Tag value={`${tags[tagId].tag}`} />
+								</Link>
 							) : null
 						)}
 					</div>
