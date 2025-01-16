@@ -7,7 +7,8 @@ import { Note } from "@/types";
 
 const NotesContext = createContext<{
 	notes: { [key: string]: Note } | null;
-}>({ notes: null });
+	getNoteById: (id: string) => Note | null;
+} | null>(null);
 
 export default function useNotes() {
 	const context = useContext(NotesContext);
@@ -26,6 +27,12 @@ interface NotesProviderProps {
 export function NotesProvider({ children }: NotesProviderProps) {
 	const { user } = useUser();
 	const [notes, setNotes] = useState<{ [key: string]: Note } | null>(null);
+
+	function getNoteById(id: string) {
+		if (!notes) return null;
+
+		return notes[id];
+	}
 
 	useEffect(() => {
 		async function fetchNotes(reference: string) {
@@ -59,6 +66,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 	const value = {
 		notes,
+		getNoteById,
 	};
 
 	return (
