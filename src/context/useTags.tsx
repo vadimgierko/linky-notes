@@ -1,9 +1,6 @@
 "use client";
-import { rtdb } from "@/firebaseConfig";
-import { ref, get, query, limitToLast } from "firebase/database";
-import { createContext, useContext, useEffect, useState } from "react";
-import useUser from "./useUser";
-import { Note, Tag } from "@/types";
+import { createContext, useContext } from "react";
+import { Tag } from "@/types";
 import useNotes from "./useNotes";
 
 const TagsContext = createContext<{
