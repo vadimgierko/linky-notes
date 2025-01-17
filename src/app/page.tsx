@@ -3,7 +3,6 @@ import NoteCard from "@/components/NoteCard";
 import Tag from "@/components/Tag";
 import TagWithTrashIcon from "@/components/TagWithTrashIcon";
 import useNotes from "@/context/useNotes";
-import useTags from "@/context/useTags";
 import useUser from "@/context/useUser";
 import sortNotes from "@/lib/sortNotes";
 import { NoteWithId, Tag as ITag } from "@/types";
@@ -18,8 +17,7 @@ function HomePage() {
 
 	const searchParams = useSearchParams();
 
-	const { notes } = useNotes();
-	const { tags } = useTags();
+	const { notes, tags } = useNotes();
 
 	// for tags search form:
 	const [input, setInput] = useState<string>("");

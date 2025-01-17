@@ -1,13 +1,17 @@
 "use client";
 
 import NoteForm, { NoteObjectForUpdate } from "@/components/NoteForm";
+import useNotes from "@/context/useNotes";
 import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
+import { Spinner } from "react-bootstrap";
 
 export default function AddNote() {
 	const router = useRouter();
+	const { addNote, getNoteById } = useNotes();
+	const [isAdding, setIsAdding] = useState(false);
 
-	function handleSubmit(
+	async function handleSubmit(
 		e: FormEvent<HTMLFormElement>,
 		note: NoteObjectForUpdate
 	) {
@@ -24,10 +28,20 @@ export default function AddNote() {
 				"Your note has no tags! Add at least 1 tag to add it to database."
 			);
 
-		// const newKey = "" // TODO: 🚀❗ generateFirebaseKeyFor("items/" + user.id);
-		console.log("New note was added:", note);
-		// implement adding note
-		// => navigate("/notes/" + newKey, { replace: true });
+		setIsAdding(true);
+
+		const newNoteId = await addNote(note);
+
+		if (!newNoteId) {
+			setIsAdding(false);
+			return console.error("No newNoteId provided... Cannot add note...");
+		}
+
+		const newNote = getNoteById(newNoteId);
+		console.log("New note was added:", newNote);
+
+		// navigate to new note:
+		router.push("/notes/" + newNoteId);
 	}
 
 	function handleCancel() {
@@ -37,7 +51,11 @@ export default function AddNote() {
 	return (
 		<>
 			<h1 className="text-center">Add New Note</h1>
-			<NoteForm onSubmit={handleSubmit} onCancel={handleCancel} />
+			{
+				isAdding
+					? <Spinner />
+					: <NoteForm onSubmit={handleSubmit} onCancel={handleCancel} />
+			}
 		</>
 	);
 }

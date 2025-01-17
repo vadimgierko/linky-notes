@@ -9,7 +9,8 @@ export default function Note({
 	params: Promise<{ slug: string }>;
 }) {
 	const [itemKey, setItemKey] = useState<string | undefined>(undefined);
-	const { notes } = useNotes();
+	const { getNoteById } = useNotes();
+	const note = itemKey ? getNoteById(itemKey) : null;
 
 	useEffect(() => {
 		async function getItemKey() {
@@ -24,20 +25,15 @@ export default function Note({
 	// always scroll to top:
 	useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
 
+	if (!itemKey) return <p>There is no such note id...</p>
+	if (!note) return <p>There is no such note...</p>
+
 	return (
-		<>
-			{notes && itemKey && notes[itemKey] ? (
-				<>
-					<NoteCard
-						key={"item-" + itemKey}
-						note={notes[itemKey]}
-						noteKey={itemKey}
-						show140chars={false}
-					/>
-				</>
-			) : (
-				<p>There is no such note...</p>
-			)}
-		</>
+		<NoteCard
+			key={"note-" + itemKey}
+			note={note}
+			noteKey={itemKey}
+			show140chars={false}
+		/>
 	);
 }

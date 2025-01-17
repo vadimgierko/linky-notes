@@ -6,7 +6,6 @@ import Tag from "../Tag";
 import TagWithTrashIcon from "../TagWithTrashIcon";
 import MarkdownRenderer from "../MarkdownRenderer";
 import useNotes from "@/context/useNotes";
-import useTags from "@/context/useTags";
 import { Tag as ITag } from "@/types";
 
 interface NoteFormProps {
@@ -29,8 +28,7 @@ export default function NoteForm({
 	onCancel,
 }: NoteFormProps) {
 	// from state:
-	const { getNoteById } = useNotes();
-	const { tags: TAGS } = useTags();
+	const { getNoteById, tags: TAGS } = useNotes();
 	// note object:
 	const [note, setNote] = useState<NoteObjectForUpdate | null>(null);
 	// tag search bar:
