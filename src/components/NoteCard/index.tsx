@@ -6,6 +6,7 @@ import IconButton from "../IconButton";
 import MarkdownRenderer from "../MarkdownRenderer";
 import Link from "next/link";
 import Tag from "../Tag";
+import useNotes from "@/context/useNotes";
 
 type NoteCardProps = {
 	note: Note;
@@ -19,6 +20,7 @@ export default function NoteCard({
 	show140chars,
 }: NoteCardProps) {
 	const { theme } = useTheme();
+	const { deleteNote } = useNotes();
 
 	const ICON_BUTTONS = [
 		{
@@ -35,18 +37,13 @@ export default function NoteCard({
 		{
 			iconName: "trash",
 			color: "danger",
-			onClick: () => {
+			onClick: async () => {
 				if (
 					confirm(
 						"Are you sure you want to delete this note? This action cannot be undone!"
 					)
 				) {
-					// dispatch(
-					// 	deleteNote({
-					// 		reference: "items/" + user.id + "/" + noteKey,
-					// 		itemKey: noteKey,
-					// 	})
-					// );
+					await deleteNote(noteKey);
 				} else {
 					return;
 				}

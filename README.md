@@ -117,7 +117,7 @@ All your notes & data are **private**, what means that only the logged owner/ au
 - ~~React Router 6.3~~
 - ~~React Redux 8.0~~
 - ~~Redux Toolkit 1.8~~
-- Firebase 9.1
+- Firebase ~~9.1~~ 11.1.0
   - Authentication
   - Realtime Database
 - React Bootstrap ~~2.4~~ 2.10.7
@@ -125,5 +125,5 @@ All your notes & data are **private**, what means that only the logged owner/ au
 - React Icons ~~4.4~~ 5.4.0
 - ~~Bootstrap Icons 1.6~~
 - React Markdown ~~8.0~~ 9.0.3
-- GitHub Pages 3.2
+- ~~GitHub Pages 3.2~~ GitHub Actions
 - ~~PWA~~

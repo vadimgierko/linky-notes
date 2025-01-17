@@ -5,6 +5,7 @@ import Layout from "../components/Layout";
 import { ThemeProvider } from "../context/useTheme";
 import { UserProvider } from "@/context/useUser";
 import { NotesProvider } from "@/context/useNotes";
+import { TagsProvider } from "@/context/useTags";
 
 /**
  * This below is added automatically:
@@ -28,9 +29,11 @@ export default function RootLayout({
 			<body>
 				<ThemeProvider>
 					<UserProvider>
-						<NotesProvider>
-							<Layout>{children}</Layout>
-						</NotesProvider>
+						<TagsProvider>
+							<NotesProvider>
+								<Layout>{children}</Layout>
+							</NotesProvider>
+						</TagsProvider>
 					</UserProvider>
 				</ThemeProvider>
 			</body>

@@ -1,21 +1,20 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, get, query, limitToLast, update } from "firebase/database";
+import { ref, get, query, limitToLast, update, remove } from "firebase/database";
 import { createContext, useContext, useEffect, useState } from "react";
 import useUser from "./useUser";
 import { Note, Tag } from "@/types";
 import { NoteObjectForUpdate } from "@/components/NoteForm";
 import createDate from "@/lib/createDate";
 import generateFirebaseKeyFor from "@/lib/generateFirebaseKeyFor";
+import useTags from "./useTags";
 
 const NotesContext = createContext<{
 	notes: { [key: string]: Note } | null;
-	tags: {
-		[key: string]: Tag;
-	} | null;
 	getNoteById: (id: string) => Note | null;
 	addNote: (note: NoteObjectForUpdate) => Promise<string | null>;
-	updateNote: (note: NoteObjectForUpdate, noteId: string) => Promise<Note | null>
+	updateNote: (note: NoteObjectForUpdate, noteId: string) => Promise<Note | null>;
+	deleteNote: (noteId: string) => Promise<void>
 } | null>(null);
 
 export default function useNotes() {
@@ -36,15 +35,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 	const { user } = useUser();
 	const [notes, setNotes] = useState<{ [key: string]: Note } | null>(null);
 	// filter tags from notes
-    const tags = notes
-    ? Object.keys(notes).reduce((cumulatedTags, noteId) => {
-        const note = notes[noteId] 
-        return {
-            ...cumulatedTags,
-            ...(note.tags ? note.tags : {}) // we do not check for unique tags, becuase it will be overwritten
-        }
-    }, {} as { [key: string]: Tag })
-    : null
+	const {setTags} = useTags();
 
 	function getNoteById(id: string) {
 		if (!notes) return null;
@@ -119,7 +110,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		const tagsRef = "tags/" + user.uid + "/";
 		//===========================================================
 		// add note to rtdb & new tags using update
-		const updates: {[key: string]: Note | Tag} = {}
+		const updates: { [key: string]: Note | Tag } = {}
 		// update note in rtdb:
 		updates[notesRef + noteId] = newNote;
 		// update new tags in rtdb:
@@ -129,8 +120,10 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		await update(ref(rtdb), updates);
 
-		// update notes (tags will be updated automatically from notes)
-		setNotes(prevNotes => ({...prevNotes, [noteId]: newNote}));
+		// update notes
+		setNotes(prevNotes => ({ ...prevNotes, [noteId]: newNote }));
+		// update tags
+		setTags(prevTags => ({...prevTags, ...tagsToAdd}))
 
 		return noteId
 	}
@@ -207,7 +200,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		const tagsRef = "tags/" + user.uid + "/";
 		//===========================================================
 		// update note in rtdb & new tags using update
-		const updates: {[key: string]: Note | Tag} = {}
+		const updates: { [key: string]: Note | Tag } = {}
 		// update note in rtdb:
 		updates[notesRef + noteId] = updatedNote;
 		// update new tags in rtdb:
@@ -217,10 +210,31 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		await update(ref(rtdb), updates);
 
-		// update notes (tags will be updated automatically from notes)
-		setNotes(prevNotes => ({...prevNotes, [noteId]: updatedNote}));
+		// update notes
+		setNotes(prevNotes => ({ ...prevNotes, [noteId]: updatedNote }));
+		// update tags
+		// update tags
+		setTags(prevTags => ({...prevTags, ...tagsToAdd}))
 
 		return updatedNote;
+	}
+
+	async function deleteNote(noteId: string) {
+		if (!user) {
+			console.error("Cannot delete note when user is not logged...");
+			return;
+		}
+
+		await remove(ref(rtdb, "items/" + user.uid + "/" + noteId));
+
+		setNotes(prevNotes => {
+			if (prevNotes) {
+				const updatedNotes = { ...prevNotes }
+				delete updatedNotes[noteId];
+				return updatedNotes
+			}
+			return prevNotes
+		})
 	}
 
 	useEffect(() => {
@@ -255,10 +269,10 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 	const value = {
 		notes,
-		tags,
 		getNoteById,
 		addNote,
-		updateNote
+		updateNote,
+		deleteNote
 	};
 
 	return (

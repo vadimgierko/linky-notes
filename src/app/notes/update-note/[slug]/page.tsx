@@ -12,7 +12,7 @@ export default function UpdateNote({
 	params: Promise<{ slug: string }>;
 }) {
 	const router = useRouter();
-	const { updateNote, getNoteById } = useNotes();
+	const { updateNote } = useNotes();
 	const [noteId, setNoteId] = useState<string | undefined>(undefined);
 
 	const [isUpdating, setIsUpdating] = useState(false);

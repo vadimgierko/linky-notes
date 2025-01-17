@@ -1,6 +1,6 @@
 "use client";
 import Tag from "@/components/Tag";
-import useNotes from "@/context/useNotes";
+import useTags from "@/context/useTags";
 import Link from "next/link";
 import { useEffect } from "react";
 
@@ -38,7 +38,7 @@ const ALPHABET = [
 ];
 
 export default function Tags() {
-	const { tags } = useNotes();
+	const { tags } = useTags();
 
 	useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
 

@@ -7,6 +7,7 @@ import TagWithTrashIcon from "../TagWithTrashIcon";
 import MarkdownRenderer from "../MarkdownRenderer";
 import useNotes from "@/context/useNotes";
 import { Tag as ITag } from "@/types";
+import useTags from "@/context/useTags";
 
 interface NoteFormProps {
 	noteKey?: string;
@@ -28,7 +29,8 @@ export default function NoteForm({
 	onCancel,
 }: NoteFormProps) {
 	// from state:
-	const { getNoteById, tags: TAGS } = useNotes();
+	const { getNoteById } = useNotes();
+	const { tags: TAGS } = useTags();
 	// note object:
 	const [note, setNote] = useState<NoteObjectForUpdate | null>(null);
 	// tag search bar:
@@ -123,10 +125,10 @@ export default function NoteForm({
 									let updatedFoundTags: { [key: string]: ITag } = {};
 									foundTagsId.forEach(
 										(id) =>
-											(updatedFoundTags = {
-												...updatedFoundTags,
-												[id]: TAGS[id],
-											})
+										(updatedFoundTags = {
+											...updatedFoundTags,
+											[id]: TAGS[id],
+										})
 									);
 									setFoundTags(updatedFoundTags);
 									// set new tag if there is no exact match with any of found tags or existing & new:
@@ -134,15 +136,15 @@ export default function NoteForm({
 										Object.keys(updatedFoundTags).find(
 											(tagId) => updatedFoundTags[tagId].tag === changedInput
 										) ||
-										(Object.keys(note.existingTags).length
-											? Object.keys(note.existingTags).find(
+											(Object.keys(note.existingTags).length
+												? Object.keys(note.existingTags).find(
 													(tagId) =>
 														note.existingTags[tagId].tag === changedInput
-											  )
-											: false) ||
-										(note.newTags.length
-											? note.newTags.find((tag) => tag === changedInput)
-											: false)
+												)
+												: false) ||
+											(note.newTags.length
+												? note.newTags.find((tag) => tag === changedInput)
+												: false)
 											? true
 											: false;
 									if (isExactMatch) {
