@@ -55,7 +55,7 @@ export default function Tags() {
 					<hr />
 					<div>
 						{Object.keys(tags).map((tagId) =>
-							tags[tagId].tag[0] === letter ? (
+							tags[tagId].tag[0].toLowerCase() === letter ? (
 								<Link href={`/?tags=${tagId}`} key={tagId}>
 									<Tag value={`${tags[tagId].tag}`} />
 								</Link>

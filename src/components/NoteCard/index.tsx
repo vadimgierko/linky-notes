@@ -29,7 +29,7 @@ export default function NoteCard({
 		{
 			iconName: "pencil",
 			color: "info",
-			href: "/notes/update-note/",
+			href: "/notes/update-note/" + noteKey,
 		},
 
 		{
