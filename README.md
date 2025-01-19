@@ -95,9 +95,12 @@ To read more, how to efficiently organize your notes, [read this app's tutorial]
 
 The app is made with responsive web design in mind, so it looks nice on any screen size.
 
-## Installable PWA (Progressive Web App)
+## ~~Installable PWA (Progressive Web App)~~
 
-You can use this app in a browser, but also you can install it directly from the browser on your device's desktop/ main screen. You can do that by clicking a download icon, which appears in the URL bar in browser.  
+~~You can use this app in a browser, but also you can install it directly from the browser on your device's desktop/ main screen. You can do that by clicking a download icon, which appears in the URL bar in browser.~~
+
+After migration to `Next.js` PWA features were not reimplemented, becuase I've considered them as not needed.
+If you want a native-like experience, you can always add shortcut to your device's screen for quick access.
 
 ## Dark Mode
 
@@ -107,19 +110,20 @@ You can use the app in light & dark mode. The app will automatically detect if y
 
 All your notes & data are **private**, what means that only the logged owner/ author of the note can see it. If you won't share your password with anyone, your data is absolutely secure.
 
-## Technologies I've used in this project:
+## Tech Stack (*after 2025 upgrade*)
 
-- React 18.2
-- React Router 6.3
-- React Redux 8.0
-- Redux Toolkit 1.8
-- Firebase 9.1
+- Next.js 15.1.4
+- React ~~18.2~~ 19.0.0
+- ~~React Router 6.3~~
+- ~~React Redux 8.0~~
+- ~~Redux Toolkit 1.8~~
+- Firebase ~~9.1~~ 11.1.0
   - Authentication
   - Realtime Database
-- React Bootstrap 2.4
-- Bootstrap 5.1
-- React Icons 4.4
-- Bootstrap Icons 1.6
-- React Markdown 8.0
-- GitHub Pages 3.2
-- PWA
+- React Bootstrap ~~2.4~~ 2.10.7
+- Bootstrap ~~5.1~~ 5.3.3
+- React Icons ~~4.4~~ 5.4.0
+- ~~Bootstrap Icons 1.6~~
+- React Markdown ~~8.0~~ 9.0.3
+- ~~GitHub Pages 3.2~~ GitHub Actions
+- ~~PWA~~
