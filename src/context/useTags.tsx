@@ -1,6 +1,6 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, get, query, limitToLast } from "firebase/database";
+import { ref, get } from "firebase/database";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import useUser from "./useUser";
 import { Tag } from "@/types";
@@ -42,10 +42,10 @@ export function TagsProvider({ children }: TagsProviderProps) {
     useEffect(() => {
         async function fetchTags(reference: string) {
             try {
-                // const snapshot = await get(ref(rtdb, reference)); => fetches all notes
+                const snapshot = await get(ref(rtdb, reference)); // => fetches all notes
 
-                const firstTenTagsRef = query(ref(rtdb, reference), limitToLast(100));
-                const snapshot = await get(firstTenTagsRef);
+                // const firstTenTagsRef = query(ref(rtdb, reference), limitToLast(100));
+                // const snapshot = await get(firstTenTagsRef);
 
                 if (snapshot.exists()) {
                     const data = snapshot.val() as { [key: string]: Tag };
