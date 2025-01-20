@@ -1,12 +1,21 @@
 "use client";
 
 import NoteForm, { NoteObjectForUpdate } from "@/components/NoteForm";
+import PrivateRoute from "@/components/PrivateRoute";
 import useNotes from "@/context/useNotes";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { Spinner } from "react-bootstrap";
 
-export default function AddNote() {
+export default function AddNotePage() {
+	return (
+		<PrivateRoute>
+			<AddNote />
+		</PrivateRoute>
+	);
+}
+
+function AddNote() {
 	const router = useRouter();
 	const { addNote, getNoteById } = useNotes();
 	const [isAdding, setIsAdding] = useState(false);

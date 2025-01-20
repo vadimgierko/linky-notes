@@ -1,9 +1,10 @@
 "use client";
 import NoteCard from "@/components/NoteCard";
+import PrivateRoute from "@/components/PrivateRoute";
 import useNotes from "@/context/useNotes";
 import { useEffect, useState } from "react";
 
-export default function Note({
+function Note({
 	params,
 }: {
 	params: Promise<{ slug: string }>;
@@ -29,11 +30,23 @@ export default function Note({
 	if (!note) return <p>There is no such note...</p>
 
 	return (
-		<NoteCard
-			key={"note-" + itemKey}
-			note={note}
-			noteKey={itemKey}
-			show140chars={false}
-		/>
+			<NoteCard
+				key={"note-" + itemKey}
+				note={note}
+				noteKey={itemKey}
+				show140chars={false}
+			/>
+	);
+}
+
+export default function NotePage({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
+	return (
+		<PrivateRoute>
+			<Note params={params} />
+		</PrivateRoute>
 	);
 }

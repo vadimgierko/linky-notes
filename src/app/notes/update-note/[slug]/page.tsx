@@ -1,12 +1,13 @@
 "use client";
 
 import NoteForm, { NoteObjectForUpdate } from "@/components/NoteForm";
+import PrivateRoute from "@/components/PrivateRoute";
 import useNotes from "@/context/useNotes";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 
-export default function UpdateNote({
+function UpdateNote({
 	params,
 }: {
 	params: Promise<{ slug: string }>;
@@ -77,5 +78,17 @@ export default function UpdateNote({
 					: <NoteForm noteKey={noteId} onSubmit={handleSubmit} onCancel={handleCancel} />
 			}
 		</>
+	);
+}
+
+export default function UpdateNotePage({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
+	return (
+		<PrivateRoute>
+			<UpdateNote params={params} />
+		</PrivateRoute>
 	);
 }

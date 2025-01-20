@@ -1,17 +1,15 @@
 "use client";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { auth } from "@/firebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
 import useTheme from "@/context/useTheme";
-import useUser from "@/context/useUser";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function PasswordReset() {
 	const { theme } = useTheme();
-	const { user } = useUser();
 	const [email, setEmail] = useState("");
 	const router = useRouter();
 
@@ -34,10 +32,6 @@ export default function PasswordReset() {
 			);
 		}
 	}
-
-	useEffect(() => {
-		if (user) router.push("/");
-	}, [router, user]);
 
 	return (
 		<div

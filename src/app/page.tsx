@@ -1,20 +1,36 @@
 "use client";
 import NoteCard from "@/components/NoteCard";
+import PrivateRoute from "@/components/PrivateRoute";
 import Tag from "@/components/Tag";
 import TagWithTrashIcon from "@/components/TagWithTrashIcon";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
-import useUser from "@/context/useUser";
 import sortNotes from "@/lib/sortNotes";
 import { NoteWithId, Tag as ITag } from "@/types";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { Form, Spinner } from "react-bootstrap";
+
+export default function HomePageWrappedInSuspense() {
+	return (
+		<Suspense
+			fallback={
+				<h1 className="text-center">
+					Your Notes Are Pending...{" "}
+					<Spinner animation="border" role="status">
+						<span className="visually-hidden">Loading...</span>
+					</Spinner>
+				</h1>
+			}
+		>
+			<HomePage />
+		</Suspense>
+	);
+}
 
 function HomePage() {
 	const router = useRouter();
-	const { user } = useUser();
 
 	const searchParams = useSearchParams();
 
@@ -51,18 +67,8 @@ function HomePage() {
 		  )
 		: sortedNotes;
 
-	useEffect(() => {
-		if (!user) {
-			router.push("signin");
-		}
-	}, [router, user]);
-
-	useEffect(() => {
-		console.log(searchTags);
-	}, [searchTags]);
-
 	return (
-		<>
+		<PrivateRoute>
 			<h1 className="text-center">
 				Your Filtered Notes ({filteredNotes.length})
 			</h1>
@@ -178,23 +184,6 @@ function HomePage() {
 					show140chars={true}
 				/>
 			))}
-		</>
-	);
-}
-
-export default function HomePageWrappedInSuspense() {
-	return (
-		<Suspense
-			fallback={
-				<h1 className="text-center">
-					Your Notes Are Pending...{" "}
-					<Spinner animation="border" role="status">
-						<span className="visually-hidden">Loading...</span>
-					</Spinner>
-				</h1>
-			}
-		>
-			<HomePage />
-		</Suspense>
+		</PrivateRoute>
 	);
 }
