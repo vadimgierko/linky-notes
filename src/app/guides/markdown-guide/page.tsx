@@ -1,4 +1,13 @@
 import MarkdownRenderer from "@/components/MarkdownRenderer"
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "linky_notes | markdown guide",
+	description:
+		"How to format your notes in Linky Notes App using Markdown Syntax",
+	// authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
+	keywords: ["linky notes", "notes app", "notetaking app", "tags", "tags", "knowledge base", "second brain", "markdown", "guide"]
+};
 
 const CONTENT = `
 <h1 align="center">How to format your notes using Markdown Syntax</h1>
@@ -9,7 +18,7 @@ Not all Markdown features are available at the moment, but you can create
 Check out the examples of what you're able to do below.
 
 You may also be interested in checking out,
-[how to use tags, links & other app's features to organize your notes efficiently](/app-guide).
+[how to use tags, links & other app's features to organize your notes efficiently](/guides/app-guide).
 
 ---
 

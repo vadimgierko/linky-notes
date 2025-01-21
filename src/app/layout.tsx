@@ -11,12 +11,15 @@ import { TagsProvider } from "@/context/useTags";
  * This below is added automatically:
  * `<meta charset="utf-8" />`
  * `<meta name="viewport" content="width=device-width, initial-scale=1" />`
+ * 
+ * ❗❗❗ metadata cannot be exported from client components with "use client"❗❗❗
  */
 export const metadata: Metadata = {
 	title: "linky_notes | organize & filter your notes by tags",
 	description:
 		"linky_notes app allows you to create, organize & filter your notes by tags & create your own knowledge base",
 	authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
+	keywords: ["linky notes", "notes app", "notetaking app", "tags", "tags", "knowledge base", "second brain"]
 };
 
 export default function RootLayout({

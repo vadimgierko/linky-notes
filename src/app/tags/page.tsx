@@ -63,7 +63,7 @@ function Tags() {
 					<div>
 						{tags && Object.keys(tags).map((tagId) =>
 							tags[tagId].tag[0].toLowerCase() === letter ? (
-								<Link href={`/?tags=${tagId}`} key={tagId}>
+								<Link href={`/notes?tags=${tagId}`} key={tagId}>
 									<Tag value={`${tags[tagId].tag}`} />
 								</Link>
 							) : null

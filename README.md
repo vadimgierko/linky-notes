@@ -4,8 +4,6 @@ Store, organize & filter your notes by tags & style/ format them using Markdown 
 
 **Sign up & use for free** [here](https://vadimgierko.github.io/linky-notes/)!
 
-<img src="public/linky-notes-app-screen-vadim-gierko.png">
-
 ---
 
 ## Notes
@@ -55,7 +53,7 @@ As mentioned before, you can **format your notes with Markdown**. Using basic Ma
 
 to your notes.
 
-Check out [my app's guide](https://vadimgierko.github.io/linky-notes/markdown-guide) to learn how to use basic Markdown in a few minutes!
+Check out [my app's guide](https://vadimgierko.github.io/linky-notes/guides/markdown-guide) to learn how to use basic Markdown in a few minutes!
 
 These features can **make your notes more readable, unique and containing a lot of useful references and additional materials**. But... you'll discover, that you can do much more with your notes' content!
 
@@ -75,7 +73,7 @@ In addition to formatting your notes with Markdown syntax, you can also use HTML
 
 ## Add videos, images &... even the whole websites to your notes!
 
-As been mentioned, thanks to ability of using HTML in your notes, you can also add different embed elements to your note. For example, you can add... the whole website (for instance, Linky Notes) to your notes by adding this: `<iframe src="https://vadimgierko.github.io/linky-notes/about" width="100%" height="500px" title="Linky Notes About Page"></iframe>`!
+As been mentioned, thanks to ability of using HTML in your notes, you can also add different embed elements to your note. For example, you can add... the whole website (for instance, Linky Notes) to your notes by adding this: `<iframe src="https://vadimgierko.github.io/linky-notes/" width="100%" height="500px" title="Linky Notes About Page"></iframe>`!
 
 I will add some basic tutorial on the topic soon...
 
@@ -89,7 +87,7 @@ Although the linky_notes app has only a few simple functionalities, it offers en
 
 No more overthinking about how to organize or find your notes. You'll save a tone of time & mental resources you can use for creative activities, learning or developing projects.
 
-To read more, how to efficiently organize your notes, [read this app's tutorial](https://vadimgierko.github.io/linky-notes/app-guide).
+To read more, how to efficiently organize your notes, [read this app's tutorial](https://vadimgierko.github.io/linky-notes/guides/app-guide).
 
 ## RWD
 
@@ -110,7 +108,7 @@ You can use the app in light & dark mode. The app will automatically detect if y
 
 All your notes & data are **private**, what means that only the logged owner/ author of the note can see it. If you won't share your password with anyone, your data is absolutely secure.
 
-## Tech Stack (*after 2025 upgrade*)
+## Tech Stack (*2025 upgrade*)
 
 - Next.js 15.1.4
 - React ~~18.2~~ 19.0.0
@@ -127,3 +125,28 @@ All your notes & data are **private**, what means that only the logged owner/ au
 - React Markdown ~~8.0~~ 9.0.3
 - ~~GitHub Pages 3.2~~ GitHub Actions
 - ~~PWA~~
+
+## Sitemap (*2025 upgrade*)
+
+### Public Routes
+
+```
+/(about/home page)
+/guides
+  /app-guide
+  /markdown-guide
+  /inner-app-guide
+/signin
+/signup
+/password-reset
+```
+
+### Private Routes
+
+```
+/notes(?tags=...?sortBy=...)
+  /add
+  /[slug] (note id)
+    /update
+/tags
+```

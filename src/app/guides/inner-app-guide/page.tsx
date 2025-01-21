@@ -1,4 +1,13 @@
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "linky_notes | inner app guide",
+	description:
+		"How to create an inner app in Linky Notes App",
+	// authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
+	keywords: ["linky notes", "notes app", "notetaking app", "tags", "tags", "knowledge base", "second brain", "inner app", "guide"]
+};
 
 const CONTENT = `
 <h1 align="center">How to create an inner app in <em>linky_notes</em></h1>

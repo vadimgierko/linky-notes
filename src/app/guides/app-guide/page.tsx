@@ -1,4 +1,14 @@
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "linky_notes | app guide",
+	description:
+		"How to use Linky Notes App app efficiently",
+	// authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
+	keywords: ["linky notes", "notes app", "notetaking app", "tags", "tags", "knowledge base", "second brain", "guide"]
+};
+
 
 const CONTENT = `
 <h1 align="center">How to use <em>linky_notes</em> app efficiently</h1>
@@ -57,12 +67,12 @@ and add a tag with the **name of the note source, e.g. book or article title** e
 If the content of your note comes from the website, add a source's link to your note or paste the URL.
 
 You can also **refer to other notes stored in your database using links**
-(see [markdown guide](/markdown-guide) how to do a link),
+(see [markdown guide](/guides/markdown-guide) how to do a link),
 because **every note has it's own URL**.
 
 You can organize/ group your notes this way by particular project or topic,
 like **create notes containing lists of notes links**.
-You may also add footnotes using [built-in markdown editor](/markdown-guide)
+You may also add footnotes using [built-in markdown editor](/guides/markdown-guide)
 & include references (as a link) to other notes stored in your app there.
 The possibilities are endless.
 
@@ -72,9 +82,9 @@ The possibilities are endless.
 
 ---
 
-**Use [built-in markdown editor](/markdown-guide) to format your notes** & make them more readable (not only for links).
+**Use [built-in markdown editor](/guides/markdown-guide) to format your notes** & make them more readable (not only for links).
 
-In addition to [formatting your notes with Markdown syntax](/markdown-guide),
+In addition to [formatting your notes with Markdown syntax](/guides/markdown-guide),
 which gives a lot of possibilities, but is quite limited,
 you can also use HTML with optional inline CSS styling!
 
@@ -88,7 +98,7 @@ than you can learn it online for free pretty fast ([HTML Tutorial](https://www.w
 
 ---
 
-You may also create todo/check lists using [built-in markdown editor](/markdown-guide).
+You may also create todo/check lists using [built-in markdown editor](/guides/markdown-guide).
 
 ---
 
