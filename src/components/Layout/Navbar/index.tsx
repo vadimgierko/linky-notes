@@ -28,28 +28,28 @@ import useUser from "@/context/useUser";
 const LINKS = {
 	public: [
 		{
-			name: "about the app",
-			link: "/about",
+			name: "about",
+			link: "/",
 			icon: <AiOutlineInfoCircle className="me-3" />,
 		},
 		{
 			name: "how to format your notes",
-			link: "/markdown-guide",
+			link: "/guides/markdown-guide",
 			icon: <AiOutlineFileMarkdown className="me-3" />,
 		},
 		{
 			name: "how to use the app efficiently",
-			link: "/app-guide",
+			link: "/guides/app-guide",
 			icon: <BiRocket className="me-3" />,
 		},
 		{
 			name: "how to create an inner app inside the app",
-			link: "/inner-app-guide",
+			link: "/guides/inner-app-guide",
 			icon: <BsBoxSeam className="me-3" />,
 		},
 	],
 	private: [
-		{ name: "notes", link: "/", icon: <CgNotes className="me-3" /> },
+		{ name: "notes", link: "/notes", icon: <CgNotes className="me-3" /> },
 		{ name: "tags", link: "/tags", icon: <AiOutlineTags className="me-3" /> },
 	],
 };
@@ -77,10 +77,10 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 			className="shadow"
 		>
 			<Container style={{ maxWidth: maxWidth }}>
-				<Link href="/about" passHref legacyBehavior>
+				<Link href="/" passHref legacyBehavior>
 					<Navbar.Brand>linky_notes</Navbar.Brand>
 				</Link>
-				<Link href="/add-note" passHref legacyBehavior>
+				<Link href="/notes/add" passHref legacyBehavior>
 					<Nav.Link
 						className={
 							isHovering
@@ -162,7 +162,7 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 						<hr style={{ color: "grey" }} />
 
 						{user ? (
-							<Link href="/about" passHref legacyBehavior>
+							<Link href="/" passHref legacyBehavior>
 								<Nav.Link onClick={logOut}>
 									<AiOutlineLogout className="me-3" />
 									<span>log out</span>

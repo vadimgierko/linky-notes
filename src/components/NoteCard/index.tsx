@@ -31,7 +31,7 @@ export default function NoteCard({
 		{
 			iconName: "pencil",
 			color: "info",
-			href: "/notes/update-note/" + noteKey,
+			href: "/notes/" + noteKey + "/update",
 		},
 
 		{
@@ -98,7 +98,7 @@ export default function NoteCard({
 				{note.tags &&
 					Object.keys(note.tags).length > 0 &&
 					Object.keys(note.tags).map((tagId) => (
-						<Link href={`/?tags=${tagId}`} key={tagId}>
+						<Link href={`/notes?tags=${tagId}`} key={tagId}>
 							<Tag value={`${note.tags![tagId].tag}`} />
 						</Link>
 					))}

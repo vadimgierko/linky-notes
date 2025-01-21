@@ -15,6 +15,7 @@ export default function SignIn() {
 		e.preventDefault();
 
 		if (user) return;
+
 		if (
 			userData.email.replace(/\s/g, "").length &&
 			userData.password.replace(/\s/g, "").length
@@ -25,7 +26,7 @@ export default function SignIn() {
 			// 	signIn(userData).then(() => navigate("/", { replace: true }));
 			// }
 			signIn(userData);
-			router.push("/");
+			router.push("/notes");
 		} else {
 			alert(
 				"You need to complete all input fields (not only white spaces...) to sign in!"
@@ -34,7 +35,7 @@ export default function SignIn() {
 	}
 
 	useEffect(() => {
-		if (user) router.push("/");
+		if (user) router.push("/notes");
 	}, [router, user]);
 
 	return <AuthForm headerText="Sign in" onSubmit={handleSubmit} />;

@@ -26,7 +26,7 @@ export default function SignUp() {
 			// 	signUp(userData).then(() => navigate("/", { replace: true }));
 			// }
 			await signUp(userData);
-			router.push("/");
+			router.push("/notes");
 		} else {
 			alert(
 				"You need to complete all input fields (not only white spaces...) to create an account!"
@@ -35,7 +35,7 @@ export default function SignUp() {
 	}
 
 	useEffect(() => {
-		if (user) router.push("/");
+		if (user) router.push("/notes");
 	}, [router, user]);
 
 	return <AuthForm headerText="Sign up" onSubmit={handleSubmit} />;

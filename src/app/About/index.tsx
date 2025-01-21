@@ -3,6 +3,15 @@ import { Button } from "react-bootstrap";
 import generateTechnologies from "./generateTechnologies"
 import generateFeatures from "./generateFeatures"
 import Section from "./Section";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "linky_notes | about",
+	description:
+		"linky_notes app allows you to create, organize & filter your notes by tags & create your own knowledge base",
+	// authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
+	// keywords: ["linky notes", "notes app", "notetaking app", "tags", "tags", "knowledge base", "second brain"]
+};
 
 export default function About() {
     const iconProps = {
