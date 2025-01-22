@@ -20,7 +20,7 @@ export default function NoteCard({
 	show140chars,
 }: NoteCardProps) {
 	const { theme } = useTheme();
-	const { deleteNote } = useNotes();
+	const { deleteNote, getTagNotesNum } = useNotes();
 
 	const ICON_BUTTONS = [
 		{
@@ -99,7 +99,7 @@ export default function NoteCard({
 					Object.keys(note.tags).length > 0 &&
 					Object.keys(note.tags).map((tagId) => (
 						<Link href={`/notes?tags=${tagId}`} key={tagId}>
-							<Tag value={`${note.tags![tagId].tag}`} />
+							<Tag value={`${note.tags![tagId].tag} (${getTagNotesNum(tagId)})`} />
 						</Link>
 					))}
 			</Card.Body>

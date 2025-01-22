@@ -34,8 +34,8 @@ function NotesPage() {
 
 	const searchParams = useSearchParams();
 
-	const { notes } = useNotes();
-	const { tags } = useTags()
+	const { notes, isFetching: areNotesFetching, getTagNotesNum } = useNotes();
+	const { tags, isFetching: areTagsFetching } = useTags()
 
 	// for tags search form:
 	const [input, setInput] = useState<string>("");
@@ -49,9 +49,9 @@ function NotesPage() {
 
 	const NOTES_ARRAY: NoteWithId[] = notes
 		? Object.keys(notes).map((id) => ({
-				...notes[id],
-				id,
-		  }))
+			...notes[id],
+			id,
+		}))
 		: [];
 
 	const sortedNotes = sortNotes(
@@ -61,10 +61,10 @@ function NotesPage() {
 
 	const filteredNotes = searchTags
 		? sortedNotes.filter((note) =>
-				searchTags
-					.split(" ") // "+"
-					.every((element) => Object.keys(note.tags!).includes(element))
-		  )
+			searchTags
+				.split(" ") // "+"
+				.every((element) => Object.keys(note.tags!).includes(element))
+		)
 		: sortedNotes;
 
 	return (
@@ -94,10 +94,10 @@ function NotesPage() {
 									let updatedFoundTags = {};
 									foundTagsId.forEach(
 										(id) =>
-											(updatedFoundTags = {
-												...updatedFoundTags,
-												[id]: tags[id],
-											})
+										(updatedFoundTags = {
+											...updatedFoundTags,
+											[id]: tags[id],
+										})
 									);
 									setFoundTags(updatedFoundTags);
 								}
@@ -113,13 +113,12 @@ function NotesPage() {
 				<div className="found-tags">
 					{Object.keys(foundTags).map((id) => (
 						<Link
-							href={`?tags=${
-								searchTags ? searchTags + "+" + id : id
-							}&sortBy=${sortBy}`}
+							href={`?tags=${searchTags ? searchTags + "+" + id : id
+								}&sortBy=${sortBy}`}
 							key={id}
 						>
 							<Tag
-								value={tags![id].tag} // 🚀❗ fix using !
+								value={`${tags![id].tag} (${getTagNotesNum(id)})`} // 🚀❗ fix using !
 								onClick={() => {
 									// clear found tags:
 									setFoundTags({});
@@ -175,6 +174,24 @@ function NotesPage() {
 					<option value="firstCreated">first created</option>
 				</select>
 			</div>
+
+			{areNotesFetching && (
+				<div className="text-center">
+					Loading your notes...{" "}
+					<Spinner animation="border" role="status">
+						<span className="visually-hidden">Loading...</span>
+					</Spinner>
+				</div>
+			)}
+
+			{areTagsFetching && (
+				<div className="text-center">
+					Loading your tags...{" "}
+					<Spinner animation="border" role="status">
+						<span className="visually-hidden">Loading...</span>
+					</Spinner>
+				</div>
+			)}
 
 			{filteredNotes.map((note) => (
 				<NoteCard

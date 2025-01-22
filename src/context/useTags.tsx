@@ -9,6 +9,7 @@ const TagsContext = createContext<{
     tags: {
         [key: string]: Tag;
     } | null;
+    isFetching: boolean;
     setTags: Dispatch<SetStateAction<{
         [key: string]: Tag;
     } | null>>
@@ -32,6 +33,8 @@ interface TagsProviderProps {
 export function TagsProvider({ children }: TagsProviderProps) {
     const { user } = useUser();
     const [tags, setTags] = useState<{ [key: string]: Tag } | null>(null);
+
+    const [isFetching, setIsFetching] = useState(true);
 
     function getTagById(id: string) {
         if (!tags) return null;
@@ -59,6 +62,8 @@ export function TagsProvider({ children }: TagsProviderProps) {
             } catch (error: unknown) {
                 console.error(error);
                 setTags(null);
+            } finally {
+                setIsFetching(false);
             }
         }
 
@@ -71,6 +76,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
     const value = {
         tags,
+        isFetching,
         setTags,
         getTagById
     };

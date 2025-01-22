@@ -11,6 +11,8 @@ import useTags from "./useTags";
 
 const NotesContext = createContext<{
 	notes: { [key: string]: Note } | null;
+	isFetching: boolean;
+	getTagNotesNum: (tagId: string) => number; // | undefined
 	getNoteById: (id: string) => Note | null;
 	addNote: (note: NoteObjectForUpdate) => Promise<string | null>;
 	updateNote: (note: NoteObjectForUpdate, noteId: string) => Promise<Note | null>;
@@ -34,13 +36,27 @@ interface NotesProviderProps {
 export function NotesProvider({ children }: NotesProviderProps) {
 	const { user } = useUser();
 	const [notes, setNotes] = useState<{ [key: string]: Note } | null>(null);
-	// filter tags from notes
-	const {setTags} = useTags();
+	const { setTags } = useTags();
+
+	const [isFetching, setIsFetching] = useState(true);
 
 	function getNoteById(id: string) {
 		if (!notes) return null;
 
 		return notes[id];
+	}
+
+	function getTagNotesNum(tagId: string) {
+		// if (!tagId) {
+		// 	console.error("No tagId was passed to getTagNotesNum()...");
+		// 	return undefined;
+		// }
+	
+		if (!notes) return 0;
+	
+		const NOTES_ARRAY = Object.keys(notes).map(id => ({ ...notes[id], id }));
+	
+		return NOTES_ARRAY.filter(note => note.tags ? note.tags[tagId] : false).length
 	}
 
 	async function addNote(note: NoteObjectForUpdate) {
@@ -257,6 +273,8 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			} catch (error: unknown) {
 				console.error(error);
 				setNotes(null);
+			} finally {
+				setIsFetching(false);
 			}
 		}
 
@@ -269,6 +287,8 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 	const value = {
 		notes,
+		isFetching,
+		getTagNotesNum,
 		getNoteById,
 		addNote,
 		updateNote,

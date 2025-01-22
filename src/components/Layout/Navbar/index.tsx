@@ -15,6 +15,7 @@ import {
 	AiOutlineFileMarkdown,
 	AiOutlineLogout,
 	AiOutlineLogin,
+	AiOutlineLock,
 } from "react-icons/ai";
 import { BiRocket, BiUserCheck } from "react-icons/bi";
 import { BsBoxSeam } from "react-icons/bs";
@@ -24,41 +25,16 @@ import { useState } from "react";
 import useTheme from "@/context/useTheme";
 import logOut from "@/auth/logOut";
 import useUser from "@/context/useUser";
-
-const LINKS = {
-	public: [
-		{
-			name: "about",
-			link: "/",
-			icon: <AiOutlineInfoCircle className="me-3" />,
-		},
-		{
-			name: "how to format your notes",
-			link: "/guides/markdown-guide",
-			icon: <AiOutlineFileMarkdown className="me-3" />,
-		},
-		{
-			name: "how to use the app efficiently",
-			link: "/guides/app-guide",
-			icon: <BiRocket className="me-3" />,
-		},
-		{
-			name: "how to create an inner app inside the app",
-			link: "/guides/inner-app-guide",
-			icon: <BsBoxSeam className="me-3" />,
-		},
-	],
-	private: [
-		{ name: "notes", link: "/notes", icon: <CgNotes className="me-3" /> },
-		{ name: "tags", link: "/tags", icon: <AiOutlineTags className="me-3" /> },
-	],
-};
+import useNotes from "@/context/useNotes";
+import useTags from "@/context/useTags";
 
 const pencilSquareButtonClassName = "collapsed ms-auto me-2 text-";
 
 export default function NavBar({ maxWidth }: { maxWidth: number }) {
 	const { theme, switchTheme } = useTheme();
 	const { user } = useUser();
+	const { notes } = useNotes();
+	const { tags } = useTags();
 	// const NOTES = useSelector((state) => state.notes.value);
 	// const TAGS = useSelector((state) => state.tags.value);
 	const [isHovering, setIsHovering] = useState(false);
@@ -66,6 +42,43 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 	const handleMouseEnter = () => setIsHovering(true);
 
 	const handleMouseLeave = () => setIsHovering(false);
+
+	const LINKS = {
+		public: [
+			{
+				name: "about",
+				link: "/",
+				icon: <AiOutlineInfoCircle className="me-3" />,
+			},
+			{
+				name: "how to format your notes",
+				link: "/guides/markdown-guide",
+				icon: <AiOutlineFileMarkdown className="me-3" />,
+			},
+			{
+				name: "how to use the app efficiently",
+				link: "/guides/app-guide",
+				icon: <BiRocket className="me-3" />,
+			},
+			{
+				name: "how to create an inner app inside the app",
+				link: "/guides/inner-app-guide",
+				icon: <BsBoxSeam className="me-3" />,
+			},
+		],
+		private: [
+			{
+				name: notes ? `notes (${Object.keys(notes).length})` : "notes (0)",
+				link: "/notes",
+				icon: <CgNotes className="me-3" />
+			},
+			{
+				name: tags ? `tags (${Object.keys(tags).length})` : "tags (0)",
+				link: "/tags",
+				icon: <AiOutlineTags className="me-3" />
+			},
+		],
+	};
 
 	return (
 		<Navbar
@@ -184,6 +197,13 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 								</Link>
 							</>
 						)}
+
+						<Link href="/password-reset" passHref legacyBehavior>
+							<Nav.Link>
+								<AiOutlineLock className="me-3" />
+								<span>reset password</span>
+							</Nav.Link>
+						</Link>
 					</Nav>
 				</Navbar.Collapse>
 			</Container>
