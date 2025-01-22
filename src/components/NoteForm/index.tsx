@@ -29,7 +29,7 @@ export default function NoteForm({
 	onCancel,
 }: NoteFormProps) {
 	// from state:
-	const { getNoteById } = useNotes();
+	const { getNoteById, getTagNotesNum } = useNotes();
 	const { tags: TAGS } = useTags();
 	// note object:
 	const [note, setNote] = useState<NoteObjectForUpdate | null>(null);
@@ -177,7 +177,7 @@ export default function NoteForm({
 						{Object.keys(foundTags).map((id) => (
 							<Tag
 								key={id}
-								value={TAGS![id].tag}
+								value={TAGS![id].tag + ` (${getTagNotesNum(id)})`}
 								onClick={() => {
 									// add tag to note.existingTags:
 									setNote({
