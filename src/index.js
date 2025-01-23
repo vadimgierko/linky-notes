@@ -20,7 +20,7 @@ const root = createRoot(container);
 root.render(
 	<ThemeProvider>
 		<BrowserRouter
-		    // COMMENT THIS CODE WHEN IN DEV MODE;
+			// COMMENT THIS CODE WHEN IN DEV MODE;
 			// UNCOMMENT THIS CODE WHEN DEPLOYING ON GITHUB PAGES:
 			basename={process.env.PUBLIC_URL}
 		>
