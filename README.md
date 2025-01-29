@@ -7,7 +7,7 @@
     Store, organize & filter your notes by tags & style/format them using Markdown & HTML with inline CSS styles.
     <br />
     <strong>
-      <a href="https://vadimgierko.github.io/linky-notes/">See more. It's free!</a>
+      <a href="https://linkynotes.com">Visit the app & see more. It's free!</a>
     </strong>
   </p>
 </header>
@@ -63,7 +63,7 @@ As mentioned before, you can **format your notes with Markdown**. Using basic Ma
 
 to your notes.
 
-Check out [my app's guide](https://vadimgierko.github.io/linky-notes/markdown-guide) to learn how to use basic Markdown in a few minutes!
+Check out [my app's guide](https://linkynotes.com/guides/markdown-guide) to learn how to use basic Markdown in a few minutes!
 
 These features can **make your notes more readable, unique and containing a lot of useful references and additional materials**. But... you'll discover, that you can do much more with your notes' content!
 
@@ -85,7 +85,7 @@ Of course, that requires some basic knowledge of HTML & CSS, but if you are real
 
 ## Add videos, images &... even the whole websites to your notes!
 
-As been mentioned, thanks to ability of using HTML in your notes, you can also add different embed elements to your note. For example, you can add... the whole website (for instance, Linky Notes) to your notes by adding this: `<iframe src="https://vadimgierko.github.io/linky-notes/about" width="100%" height="500px" title="Linky Notes About Page"></iframe>`!
+As been mentioned, thanks to ability of using HTML in your notes, you can also add different embed elements to your note. For example, you can add... the whole website (for instance, Linky Notes) to your notes by adding this: `<iframe src="https://linkynotes.com" width="100%" height="500px" title="Linky Notes About Page"></iframe>`!
 
 I will add some basic tutorial on the topic soon...
 
@@ -99,7 +99,7 @@ Although the linky_notes app has only a few simple functionalities, it offers en
 
 No more overthinking about how to organize or find your notes. You'll save a tone of time & mental resources you can use for creative activities, learning or developing projects.
 
-To read more, how to efficiently organize your notes, [read this app's tutorial](https://vadimgierko.github.io/linky-notes/app-guide).
+To read more, how to efficiently organize your notes, [read this app's tutorial](https://linkynotes.com/guides/app-guide).
 
 ## Dark Mode 🌙
 

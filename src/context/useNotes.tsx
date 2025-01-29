@@ -1,6 +1,6 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, get, update, remove } from "firebase/database";
+import { ref, update, remove, onValue } from "firebase/database";
 import { createContext, useContext, useEffect, useState } from "react";
 import useUser from "./useUser";
 import { Note, Tag } from "@/types";
@@ -15,8 +15,11 @@ const NotesContext = createContext<{
 	getTagNotesNum: (tagId: string) => number; // | undefined
 	getNoteById: (id: string) => Note | null;
 	addNote: (note: NoteObjectForUpdate) => Promise<string | null>;
-	updateNote: (note: NoteObjectForUpdate, noteId: string) => Promise<Note | null>;
-	deleteNote: (noteId: string) => Promise<void>
+	updateNote: (
+		note: NoteObjectForUpdate,
+		noteId: string
+	) => Promise<Note | null>;
+	deleteNote: (noteId: string) => Promise<void>;
 } | null>(null);
 
 export default function useNotes() {
@@ -51,12 +54,13 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		// 	console.error("No tagId was passed to getTagNotesNum()...");
 		// 	return undefined;
 		// }
-	
+
 		if (!notes) return 0;
-	
-		const NOTES_ARRAY = Object.keys(notes).map(id => ({ ...notes[id], id }));
-	
-		return NOTES_ARRAY.filter(note => note.tags ? note.tags[tagId] : false).length
+
+		const NOTES_ARRAY = Object.keys(notes).map((id) => ({ ...notes[id], id }));
+
+		return NOTES_ARRAY.filter((note) => (note.tags ? note.tags[tagId] : false))
+			.length;
 	}
 
 	async function addNote(note: NoteObjectForUpdate) {
@@ -68,14 +72,14 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		if (!note.content.trim().length) {
 			console.error("Your note has no content! Cannot add the note...");
-			return null
+			return null;
 		}
 
 		const noteId = generateFirebaseKeyFor("items", user.uid);
 
 		if (!noteId) {
 			console.error("No noteId! Cannot add the note...");
-			return null
+			return null;
 		}
 
 		const date = createDate();
@@ -87,8 +91,8 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			sourceKey: note.sourceKey,
 			updatedAt: date,
 			userId: user.uid,
-			tags: note.existingTags
-		}
+			tags: note.existingTags,
+		};
 		// check for new tags to add:
 		const tagsToAdd: { [key: string]: Tag } = {};
 
@@ -100,15 +104,17 @@ export function NotesProvider({ children }: NotesProviderProps) {
 				const tagId = generateFirebaseKeyFor("tags", user.uid);
 
 				if (!tagId) {
-					console.error("No tagId provided for the new tag... Cannot add tag & note...");
-					return null
+					console.error(
+						"No tagId provided for the new tag... Cannot add tag & note..."
+					);
+					return null;
 				}
 
 				const newTagObject: Tag = {
 					tag: newTag,
 					createdAt: date,
 					userId: user.uid,
-				}
+				};
 
 				// update new tags
 				tagsToAdd[tagId] = newTagObject;
@@ -116,7 +122,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 				newNote.tags = {
 					...newNote.tags,
 					[tagId]: newTagObject,
-				}
+				};
 			});
 		} else {
 			console.log("There are no new tags to add to database!");
@@ -126,22 +132,22 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		const tagsRef = "tags/" + user.uid + "/";
 		//===========================================================
 		// add note to rtdb & new tags using update
-		const updates: { [key: string]: Note | Tag } = {}
+		const updates: { [key: string]: Note | Tag } = {};
 		// update note in rtdb:
 		updates[notesRef + noteId] = newNote;
 		// update new tags in rtdb:
-		Object.keys(tagsToAdd).forEach(newTagId => {
+		Object.keys(tagsToAdd).forEach((newTagId) => {
 			updates[tagsRef + newTagId] = tagsToAdd[newTagId];
 		});
 
 		await update(ref(rtdb), updates);
 
 		// update notes
-		setNotes(prevNotes => ({ ...prevNotes, [noteId]: newNote }));
+		setNotes((prevNotes) => ({ ...prevNotes, [noteId]: newNote }));
 		// update tags
-		setTags(prevTags => ({...prevTags, ...tagsToAdd}))
+		setTags((prevTags) => ({ ...prevTags, ...tagsToAdd }));
 
-		return noteId
+		return noteId;
 	}
 
 	async function updateNote(note: NoteObjectForUpdate, noteId: string) {
@@ -153,12 +159,12 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		if (!note.content.trim().length) {
 			console.error("Your note has no content! Cannot add the note...");
-			return null
+			return null;
 		}
 
 		if (!noteId) {
 			console.error("No noteId! Cannot add the note...");
-			return null
+			return null;
 		}
 
 		const date = createDate();
@@ -177,8 +183,8 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			sourceKey: note.sourceKey,
 			updatedAt: date,
 			userId: user.uid,
-			tags: note.existingTags
-		}
+			tags: note.existingTags,
+		};
 		// check for new tags to add:
 		const tagsToAdd: { [key: string]: Tag } = {};
 
@@ -190,15 +196,17 @@ export function NotesProvider({ children }: NotesProviderProps) {
 				const tagId = generateFirebaseKeyFor("tags", user.uid);
 
 				if (!tagId) {
-					console.error("No tagId provided for the new tag... Cannot add tag & note...");
-					return null
+					console.error(
+						"No tagId provided for the new tag... Cannot add tag & note..."
+					);
+					return null;
 				}
 
 				const newTagObject: Tag = {
 					tag: newTag,
 					createdAt: date,
 					userId: user.uid,
-				}
+				};
 
 				// update new tags
 				tagsToAdd[tagId] = newTagObject;
@@ -206,7 +214,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 				updatedNote.tags = {
 					...updatedNote.tags,
 					[tagId]: newTagObject,
-				}
+				};
 			});
 		} else {
 			console.log("There are no new tags to add to database!");
@@ -216,21 +224,21 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		const tagsRef = "tags/" + user.uid + "/";
 		//===========================================================
 		// update note in rtdb & new tags using update
-		const updates: { [key: string]: Note | Tag } = {}
+		const updates: { [key: string]: Note | Tag } = {};
 		// update note in rtdb:
 		updates[notesRef + noteId] = updatedNote;
 		// update new tags in rtdb:
-		Object.keys(tagsToAdd).forEach(newTagId => {
+		Object.keys(tagsToAdd).forEach((newTagId) => {
 			updates[tagsRef + newTagId] = tagsToAdd[newTagId];
 		});
 
 		await update(ref(rtdb), updates);
 
 		// update notes
-		setNotes(prevNotes => ({ ...prevNotes, [noteId]: updatedNote }));
+		setNotes((prevNotes) => ({ ...prevNotes, [noteId]: updatedNote }));
 		// update tags
 		// update tags
-		setTags(prevTags => ({...prevTags, ...tagsToAdd}))
+		setTags((prevTags) => ({ ...prevTags, ...tagsToAdd }));
 
 		return updatedNote;
 	}
@@ -243,39 +251,53 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		await remove(ref(rtdb, "items/" + user.uid + "/" + noteId));
 
-		setNotes(prevNotes => {
+		setNotes((prevNotes) => {
 			if (prevNotes) {
-				const updatedNotes = { ...prevNotes }
+				const updatedNotes = { ...prevNotes };
 				delete updatedNotes[noteId];
-				return updatedNotes
+				return updatedNotes;
 			}
-			return prevNotes
-		})
+			return prevNotes;
+		});
 	}
 
 	useEffect(() => {
 		async function fetchNotes(reference: string) {
-			try {
-				const snapshot = await get(ref(rtdb, reference)); // => fetches all notes
-
-				// const firstTenNotesRef = query(ref(rtdb, reference), limitToLast(10));
-				// const snapshot = await get(firstTenNotesRef);
-
-				if (snapshot.exists()) {
+			return onValue(
+				ref(rtdb, reference),
+				(snapshot) => {
 					const data = snapshot.val() as { [key: string]: Note };
 					console.log("DATA WAS FETCHED: ALL USER'S ITEMS FROM", reference);
 					console.log("fetchedItems:", data);
 					setNotes(data);
-				} else {
-					console.log("There are no items at", reference);
-					setNotes(null);
+					setIsFetching(false);
+				},
+				{
+					onlyOnce: true,
 				}
-			} catch (error: unknown) {
-				console.error(error);
-				setNotes(null);
-			} finally {
-				setIsFetching(false);
-			}
+			);
+
+			// try {
+			// 	const snapshot = await get(ref(rtdb, reference)); // => fetches all notes
+
+			// 	// const firstTenNotesRef = query(ref(rtdb, reference), limitToLast(10));
+			// 	// const snapshot = await get(firstTenNotesRef);
+
+			// 	if (snapshot.exists()) {
+			// 		const data = snapshot.val() as { [key: string]: Note };
+			// 		console.log("DATA WAS FETCHED: ALL USER'S ITEMS FROM", reference);
+			// 		console.log("fetchedItems:", data);
+			// 		setNotes(data);
+			// 	} else {
+			// 		console.log("There are no items at", reference);
+			// 		setNotes(null);
+			// 	}
+			// } catch (error: unknown) {
+			// 	console.error(error);
+			// 	setNotes(null);
+			// } finally {
+			// 	setIsFetching(false);
+			// }
 		}
 
 		if (!user) {
@@ -292,7 +314,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		getNoteById,
 		addNote,
 		updateNote,
-		deleteNote
+		deleteNote,
 	};
 
 	return (
