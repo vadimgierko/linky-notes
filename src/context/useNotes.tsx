@@ -1,9 +1,9 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, update, remove, onValue, get, set } from "firebase/database";
+import { ref, update, remove, onValue, set } from "firebase/database";
 import { createContext, useContext, useEffect, useState } from "react";
 import useUser from "./useUser";
-import { Note, Tag } from "@/types";
+import { Note, Tag, UpgradedNote, UpgradedTag } from "@/types";
 import { NoteObjectForUpdate } from "@/components/NoteForm";
 import createDate from "@/lib/createDate";
 import generateFirebaseKeyFor from "@/lib/generateFirebaseKeyFor";
@@ -41,7 +41,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 	const { tags, setTags } = useTags();
 	const [notes, setNotes] = useState<{ [key: string]: Note } | null>(null);
 
-	const [areNotesMappedToTags, setAreNotesMappedToTags] = useState(false);
+	const [areNotesAndTagsUpgraded, setAreNotesAndTagsUpgraded] = useState(false);
 
 	// helper var:
 	const NOTES_ARRAY = notes
@@ -301,14 +301,13 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		if (!user) {
 			setNotes(null);
 		} else {
-			fetchNotes("items/" + user.uid)
+			fetchNotes("items/" + user.uid);
 		}
 	}, [user]);
 
-	// check if user's notes are mapped to tag-notes
-	// if no => map!
+	// Check if user's notes & tags are upgraded & upgrade if not:
 	useEffect(() => {
-		if (areNotesMappedToTags) return;
+		if (areNotesAndTagsUpgraded) return;
 
 		if (!user) return;
 		// ❗ there must be at least 1 tag & 1 note ❗
@@ -316,49 +315,77 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		if (!notes) return;
 
 		const LOCAL_NOTES_ARRAY = notes
-				? Object.keys(notes).map((id) => ({ ...notes[id], id }))
-				: [];
+			? Object.keys(notes).map((id) => ({ ...notes[id], id }))
+			: [];
 
 		function getTagNotesIdsArray(tagId: string) {
-			return LOCAL_NOTES_ARRAY
-				.filter((note) => (note.tags ? note.tags[tagId] : false))
-				.map(note => note.id);
+			return LOCAL_NOTES_ARRAY.filter((note) =>
+				note.tags ? note.tags[tagId] : false
+			).map((note) => note.id);
 		}
 
-		async function mapNotesToTagNotesInRTDB() {
-			if (!user) return;
-			if (!tags) return
-			// check if there is /tag-notes/userId/firstTagId in db
-			// just to check
-			const firstTagId = LOCAL_NOTES_ARRAY[0].tags && Object.keys(LOCAL_NOTES_ARRAY[0].tags)[0];
-			const firstTagNotesSnap = await get(ref(rtdb, `tag-notes/${user.uid}/${firstTagId}`));
+		async function upgradeNotesAndTags() {
+			if (!user || !tags || !notes) return;
 
-			if (firstTagNotesSnap.exists()) {
-				console.log("Notes are already mapped to tag-notes.");
-				setAreNotesMappedToTags(true);
-			} else {
-				console.log("No tag-notes. Mapping notes to tag-notes...");
+			console.log("Upgrading user's tags & notes...");
 
-				if (!tags) return;
+			const upgradedTags: { [key: string]: UpgradedTag } = {};
+			const upgradedNotes: { [key: string]: UpgradedNote } = {};
 
-				const userTagNotesObject: { [key: string]: { [key: string]: true } } = {}
+			// upgrade tags
+			Object.keys(tags).forEach((tagId) => {
+				const prevTag = tags[tagId];
 
-				Object.keys(tags).forEach(tagId => {
-					const tagNotes: { [key: string]: true } = getTagNotesIdsArray(tagId)
-						.reduce((prev, curr) => ({ ...prev, [curr]: true }), {});
+				const prevTagNotes: { [key: string]: true } = getTagNotesIdsArray(
+					tagId
+				).reduce((prev, curr) => ({ ...prev, [curr]: true }), {});
 
-					userTagNotesObject[tagId] = tagNotes
-				})
+				const upgradedTag: UpgradedTag = {
+					createdAt: prevTag.createdAt || "2025.01.30",
+					id: tagId,
+					tag: prevTag.tag,
+					updatedAt: prevTag.createdAt || "2025.01.30",
+					userId: user.uid,
+					notes: prevTagNotes,
+				};
 
-				await set(ref(rtdb, "tag-notes/" + user.uid), userTagNotesObject);
+				upgradedTags[tagId] = upgradedTag;
+			});
 
-				console.log("User tag-notes was set!");
-				setAreNotesMappedToTags(true);
-			}
+			// upgrade notes
+			Object.keys(notes).forEach((noteId) => {
+				const prevNote = notes[noteId];
+				const prevNoteUpgradedTags: UpgradedNote["tags"] = {};
+
+				if (prevNote.tags) {
+					Object.keys(prevNote.tags).forEach(
+						(tagId) => (prevNoteUpgradedTags[tagId] = true)
+					);
+				}
+
+				const upgradedNote: UpgradedNote = {
+					content: prevNote.content,
+					createdAt: prevNote.createdAt,
+					id: noteId,
+					tags: prevNoteUpgradedTags,
+					updatedAt: prevNote.updatedAt || prevNote.createdAt,
+					userId: prevNote.userId,
+				};
+
+				upgradedNotes[noteId] = upgradedNote;
+			});
+
+			await set(ref(rtdb, "users/" + user.uid), {
+				notes: upgradedNotes,
+				tags: upgradedTags,
+			});
+
+			console.log("User tags & notes are upgraded!");
+			setAreNotesAndTagsUpgraded(true);
 		}
 
-		mapNotesToTagNotesInRTDB();
-	}, [notes, tags, user, areNotesMappedToTags]);
+		upgradeNotesAndTags();
+	}, [notes, tags, user, areNotesAndTagsUpgraded]);
 
 	const value = {
 		notes,
