@@ -1,6 +1,6 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, update, remove, onValue } from "firebase/database";
+import { ref, update, remove, onValue, get, set } from "firebase/database";
 import { createContext, useContext, useEffect, useState } from "react";
 import useUser from "./useUser";
 import { Note, Tag } from "@/types";
@@ -38,8 +38,15 @@ interface NotesProviderProps {
 
 export function NotesProvider({ children }: NotesProviderProps) {
 	const { user } = useUser();
+	const { tags, setTags } = useTags();
 	const [notes, setNotes] = useState<{ [key: string]: Note } | null>(null);
-	const { setTags } = useTags();
+
+	const [areNotesMappedToTags, setAreNotesMappedToTags] = useState(false);
+
+	// helper var:
+	const NOTES_ARRAY = notes
+		? Object.keys(notes).map((id) => ({ ...notes[id], id }))
+		: [];
 
 	const [isFetching, setIsFetching] = useState(true);
 
@@ -50,15 +57,6 @@ export function NotesProvider({ children }: NotesProviderProps) {
 	}
 
 	function getTagNotesNum(tagId: string) {
-		// if (!tagId) {
-		// 	console.error("No tagId was passed to getTagNotesNum()...");
-		// 	return undefined;
-		// }
-
-		if (!notes) return 0;
-
-		const NOTES_ARRAY = Object.keys(notes).map((id) => ({ ...notes[id], id }));
-
 		return NOTES_ARRAY.filter((note) => (note.tags ? note.tags[tagId] : false))
 			.length;
 	}
@@ -303,9 +301,64 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		if (!user) {
 			setNotes(null);
 		} else {
-			fetchNotes("items/" + user.uid);
+			fetchNotes("items/" + user.uid)
 		}
 	}, [user]);
+
+	// check if user's notes are mapped to tag-notes
+	// if no => map!
+	useEffect(() => {
+		if (areNotesMappedToTags) return;
+
+		if (!user) return;
+		// ❗ there must be at least 1 tag & 1 note ❗
+		if (!tags) return;
+		if (!notes) return;
+
+		const LOCAL_NOTES_ARRAY = notes
+				? Object.keys(notes).map((id) => ({ ...notes[id], id }))
+				: [];
+
+		function getTagNotesIdsArray(tagId: string) {
+			return LOCAL_NOTES_ARRAY
+				.filter((note) => (note.tags ? note.tags[tagId] : false))
+				.map(note => note.id);
+		}
+
+		async function mapNotesToTagNotesInRTDB() {
+			if (!user) return;
+			if (!tags) return
+			// check if there is /tag-notes/userId/firstTagId in db
+			// just to check
+			const firstTagId = LOCAL_NOTES_ARRAY[0].tags && Object.keys(LOCAL_NOTES_ARRAY[0].tags)[0];
+			const firstTagNotesSnap = await get(ref(rtdb, `tag-notes/${user.uid}/${firstTagId}`));
+
+			if (firstTagNotesSnap.exists()) {
+				console.log("Notes are already mapped to tag-notes.");
+				setAreNotesMappedToTags(true);
+			} else {
+				console.log("No tag-notes. Mapping notes to tag-notes...");
+
+				if (!tags) return;
+
+				const userTagNotesObject: { [key: string]: { [key: string]: true } } = {}
+
+				Object.keys(tags).forEach(tagId => {
+					const tagNotes: { [key: string]: true } = getTagNotesIdsArray(tagId)
+						.reduce((prev, curr) => ({ ...prev, [curr]: true }), {});
+
+					userTagNotesObject[tagId] = tagNotes
+				})
+
+				await set(ref(rtdb, "tag-notes/" + user.uid), userTagNotesObject);
+
+				console.log("User tag-notes was set!");
+				setAreNotesMappedToTags(true);
+			}
+		}
+
+		mapNotesToTagNotesInRTDB();
+	}, [notes, tags, user, areNotesMappedToTags]);
 
 	const value = {
 		notes,
