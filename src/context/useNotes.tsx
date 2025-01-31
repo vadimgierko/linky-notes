@@ -1,18 +1,18 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, update, remove, onValue, set } from "firebase/database";
+import { ref, update, onValue } from "firebase/database";
 import { createContext, useContext, useEffect, useState } from "react";
 import useUser from "./useUser";
-import { Note, Tag, UpgradedNote, UpgradedTag } from "@/types";
+import { Note, Notes, Tag, Tags } from "@/types";
 import { NoteObjectForUpdate } from "@/components/NoteForm";
 import createDate from "@/lib/createDate";
 import generateFirebaseKeyFor from "@/lib/generateFirebaseKeyFor";
 import useTags from "./useTags";
+import generateItemsRef from "@/lib/generateItemsRef";
 
 const NotesContext = createContext<{
-	notes: { [key: string]: Note } | null;
+	notes: Notes | null;
 	isFetching: boolean;
-	getTagNotesNum: (tagId: string) => number; // | undefined
 	getNoteById: (id: string) => Note | null;
 	addNote: (note: NoteObjectForUpdate) => Promise<string | null>;
 	updateNote: (
@@ -38,15 +38,9 @@ interface NotesProviderProps {
 
 export function NotesProvider({ children }: NotesProviderProps) {
 	const { user } = useUser();
-	const { tags, setTags } = useTags();
-	const [notes, setNotes] = useState<{ [key: string]: Note } | null>(null);
+	const { setTags, getTagById } = useTags();
 
-	const [areNotesAndTagsUpgraded, setAreNotesAndTagsUpgraded] = useState(false);
-
-	// helper var:
-	const NOTES_ARRAY = notes
-		? Object.keys(notes).map((id) => ({ ...notes[id], id }))
-		: [];
+	const [notes, setNotes] = useState<Notes | null>(null);
 
 	const [isFetching, setIsFetching] = useState(true);
 
@@ -54,11 +48,6 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		if (!notes) return null;
 
 		return notes[id];
-	}
-
-	function getTagNotesNum(tagId: string) {
-		return NOTES_ARRAY.filter((note) => (note.tags ? note.tags[tagId] : false))
-			.length;
 	}
 
 	async function addNote(note: NoteObjectForUpdate) {
@@ -73,7 +62,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			return null;
 		}
 
-		const noteId = generateFirebaseKeyFor("items", user.uid);
+		const noteId = generateFirebaseKeyFor("notes", user.uid);
 
 		if (!noteId) {
 			console.error("No noteId! Cannot add the note...");
@@ -82,17 +71,22 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		const date = createDate();
 
+		const newNoteTags: Note["tags"] = {};
+		Object.keys(note.existingTags).forEach(
+			(tagId) => (newNoteTags[tagId] = true)
+		);
+
 		const newNote: Note = {
 			content: note.content,
 			createdAt: date,
-			pages: note.pages,
-			sourceKey: note.sourceKey,
 			updatedAt: date,
 			userId: user.uid,
-			tags: note.existingTags,
+			tags: newNoteTags,
+			id: noteId,
 		};
+
 		// check for new tags to add:
-		const tagsToAdd: { [key: string]: Tag } = {};
+		const tagsToAdd: Tags = {};
 
 		if (note.newTags && note.newTags.length) {
 			console.log("There are new tags to add to database!");
@@ -112,6 +106,11 @@ export function NotesProvider({ children }: NotesProviderProps) {
 					tag: newTag,
 					createdAt: date,
 					userId: user.uid,
+					id: tagId,
+					updatedAt: date,
+					notes: {
+						[noteId]: true,
+					},
 				};
 
 				// update new tags
@@ -119,23 +118,23 @@ export function NotesProvider({ children }: NotesProviderProps) {
 				// update note tags
 				newNote.tags = {
 					...newNote.tags,
-					[tagId]: newTagObject,
+					[tagId]: true,
 				};
 			});
 		} else {
 			console.log("There are no new tags to add to database!");
 		}
 
-		const notesRef = "items/" + user.uid + "/";
-		const tagsRef = "tags/" + user.uid + "/";
+		const notesRef = generateItemsRef("notes", user.uid);
+		const tagsRef = generateItemsRef("tags", user.uid);
 		//===========================================================
 		// add note to rtdb & new tags using update
 		const updates: { [key: string]: Note | Tag } = {};
 		// update note in rtdb:
-		updates[notesRef + noteId] = newNote;
+		updates[notesRef + "/" + noteId] = newNote;
 		// update new tags in rtdb:
 		Object.keys(tagsToAdd).forEach((newTagId) => {
-			updates[tagsRef + newTagId] = tagsToAdd[newTagId];
+			updates[tagsRef + "/" + newTagId] = tagsToAdd[newTagId];
 		});
 
 		await update(ref(rtdb), updates);
@@ -174,17 +173,19 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			return null;
 		}
 
+		const newNoteTags: Note["tags"] = {};
+		Object.keys(note.existingTags).forEach(
+			(tagId) => (newNoteTags[tagId] = true)
+		);
+
 		const updatedNote: Note = {
+			...prevNote,
 			content: note.content,
-			createdAt: prevNote.createdAt,
-			pages: note.pages,
-			sourceKey: note.sourceKey,
 			updatedAt: date,
-			userId: user.uid,
-			tags: note.existingTags,
+			tags: newNoteTags,
 		};
 		// check for new tags to add:
-		const tagsToAdd: { [key: string]: Tag } = {};
+		const tagsToAdd: Tags = {};
 
 		if (note.newTags && note.newTags.length) {
 			console.log("There are new tags to add to database!");
@@ -204,6 +205,11 @@ export function NotesProvider({ children }: NotesProviderProps) {
 					tag: newTag,
 					createdAt: date,
 					userId: user.uid,
+					id: tagId,
+					updatedAt: date,
+					notes: {
+						[noteId]: true,
+					},
 				};
 
 				// update new tags
@@ -211,30 +217,29 @@ export function NotesProvider({ children }: NotesProviderProps) {
 				// update note tags
 				updatedNote.tags = {
 					...updatedNote.tags,
-					[tagId]: newTagObject,
+					[tagId]: true,
 				};
 			});
 		} else {
 			console.log("There are no new tags to add to database!");
 		}
 
-		const notesRef = "items/" + user.uid + "/";
-		const tagsRef = "tags/" + user.uid + "/";
+		const notesRef = generateItemsRef("notes", user.uid);
+		const tagsRef = generateItemsRef("tags", user.uid);
 		//===========================================================
 		// update note in rtdb & new tags using update
 		const updates: { [key: string]: Note | Tag } = {};
 		// update note in rtdb:
-		updates[notesRef + noteId] = updatedNote;
+		updates[notesRef + "/" + noteId] = updatedNote;
 		// update new tags in rtdb:
 		Object.keys(tagsToAdd).forEach((newTagId) => {
-			updates[tagsRef + newTagId] = tagsToAdd[newTagId];
+			updates[tagsRef + "/" + newTagId] = tagsToAdd[newTagId];
 		});
 
 		await update(ref(rtdb), updates);
 
 		// update notes
 		setNotes((prevNotes) => ({ ...prevNotes, [noteId]: updatedNote }));
-		// update tags
 		// update tags
 		setTags((prevTags) => ({ ...prevTags, ...tagsToAdd }));
 
@@ -247,7 +252,35 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			return;
 		}
 
-		await remove(ref(rtdb, "items/" + user.uid + "/" + noteId));
+		const noteToDelete = getNoteById(noteId);
+
+		if (!noteToDelete) return;
+
+		const notesRef = generateItemsRef("notes", user.uid);
+		const tagsRef = generateItemsRef("tags", user.uid);
+		// collect updated tags & removed note:
+		const updates: { [key: string]: Note | Tag | null } = {};
+
+		// ❗❗❗ REMOVE NOTE ID FROM IT'S TAGS ❗❗❗
+		const tagsToUpdate: Tags = {};
+		Object.keys(noteToDelete.tags).forEach((tagId) => {
+			const updatedTag = getTagById(tagId);
+
+			if (!updatedTag) return;
+
+			delete updatedTag.notes![noteId];
+
+			tagsToUpdate[tagId] = updatedTag;
+		});
+
+		// remove note:
+		updates[notesRef + "/" + noteId] = null;
+		// update tags:
+		Object.keys(tagsToUpdate).forEach((updatedTagId) => {
+			updates[tagsRef + "/" + updatedTagId] = tagsToUpdate[updatedTagId];
+		});
+
+		await update(ref(rtdb), updates);
 
 		setNotes((prevNotes) => {
 			if (prevNotes) {
@@ -257,6 +290,8 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			}
 			return prevNotes;
 		});
+
+		setTags((prevTags) => ({ ...prevTags, ...tagsToUpdate }));
 	}
 
 	useEffect(() => {
@@ -264,7 +299,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			return onValue(
 				ref(rtdb, reference),
 				(snapshot) => {
-					const data = snapshot.val() as { [key: string]: Note };
+					const data = snapshot.val() as Notes;
 					console.log("DATA WAS FETCHED: ALL USER'S ITEMS FROM", reference);
 					console.log("fetchedItems:", data);
 					setNotes(data);
@@ -274,123 +309,18 @@ export function NotesProvider({ children }: NotesProviderProps) {
 					onlyOnce: true,
 				}
 			);
-
-			// try {
-			// 	const snapshot = await get(ref(rtdb, reference)); // => fetches all notes
-
-			// 	// const firstTenNotesRef = query(ref(rtdb, reference), limitToLast(10));
-			// 	// const snapshot = await get(firstTenNotesRef);
-
-			// 	if (snapshot.exists()) {
-			// 		const data = snapshot.val() as { [key: string]: Note };
-			// 		console.log("DATA WAS FETCHED: ALL USER'S ITEMS FROM", reference);
-			// 		console.log("fetchedItems:", data);
-			// 		setNotes(data);
-			// 	} else {
-			// 		console.log("There are no items at", reference);
-			// 		setNotes(null);
-			// 	}
-			// } catch (error: unknown) {
-			// 	console.error(error);
-			// 	setNotes(null);
-			// } finally {
-			// 	setIsFetching(false);
-			// }
 		}
 
 		if (!user) {
 			setNotes(null);
 		} else {
-			fetchNotes("items/" + user.uid);
+			fetchNotes(generateItemsRef("notes", user.uid));
 		}
 	}, [user]);
-
-	// Check if user's notes & tags are upgraded & upgrade if not:
-	useEffect(() => {
-		if (areNotesAndTagsUpgraded) return;
-
-		if (!user) return;
-		// ❗ there must be at least 1 tag & 1 note ❗
-		if (!tags) return;
-		if (!notes) return;
-
-		const LOCAL_NOTES_ARRAY = notes
-			? Object.keys(notes).map((id) => ({ ...notes[id], id }))
-			: [];
-
-		function getTagNotesIdsArray(tagId: string) {
-			return LOCAL_NOTES_ARRAY.filter((note) =>
-				note.tags ? note.tags[tagId] : false
-			).map((note) => note.id);
-		}
-
-		async function upgradeNotesAndTags() {
-			if (!user || !tags || !notes) return;
-
-			console.log("Upgrading user's tags & notes...");
-
-			const upgradedTags: { [key: string]: UpgradedTag } = {};
-			const upgradedNotes: { [key: string]: UpgradedNote } = {};
-
-			// upgrade tags
-			Object.keys(tags).forEach((tagId) => {
-				const prevTag = tags[tagId];
-
-				const prevTagNotes: { [key: string]: true } = getTagNotesIdsArray(
-					tagId
-				).reduce((prev, curr) => ({ ...prev, [curr]: true }), {});
-
-				const upgradedTag: UpgradedTag = {
-					createdAt: prevTag.createdAt || "2025.01.30",
-					id: tagId,
-					tag: prevTag.tag,
-					updatedAt: prevTag.createdAt || "2025.01.30",
-					userId: user.uid,
-					notes: prevTagNotes,
-				};
-
-				upgradedTags[tagId] = upgradedTag;
-			});
-
-			// upgrade notes
-			Object.keys(notes).forEach((noteId) => {
-				const prevNote = notes[noteId];
-				const prevNoteUpgradedTags: UpgradedNote["tags"] = {};
-
-				if (prevNote.tags) {
-					Object.keys(prevNote.tags).forEach(
-						(tagId) => (prevNoteUpgradedTags[tagId] = true)
-					);
-				}
-
-				const upgradedNote: UpgradedNote = {
-					content: prevNote.content,
-					createdAt: prevNote.createdAt,
-					id: noteId,
-					tags: prevNoteUpgradedTags,
-					updatedAt: prevNote.updatedAt || prevNote.createdAt,
-					userId: prevNote.userId,
-				};
-
-				upgradedNotes[noteId] = upgradedNote;
-			});
-
-			await set(ref(rtdb, "users/" + user.uid), {
-				notes: upgradedNotes,
-				tags: upgradedTags,
-			});
-
-			console.log("User tags & notes are upgraded!");
-			setAreNotesAndTagsUpgraded(true);
-		}
-
-		upgradeNotesAndTags();
-	}, [notes, tags, user, areNotesAndTagsUpgraded]);
 
 	const value = {
 		notes,
 		isFetching,
-		getTagNotesNum,
 		getNoteById,
 		addNote,
 		updateNote,

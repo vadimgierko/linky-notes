@@ -20,14 +20,13 @@ import {
 import { BiRocket, BiUserCheck } from "react-icons/bi";
 import { BsBoxSeam } from "react-icons/bs";
 import Link from "next/link";
-import { Button, Nav, Navbar } from "react-bootstrap";
+import { Nav, Navbar } from "react-bootstrap";
 import { useState } from "react";
 import useTheme from "@/context/useTheme";
 import logOut from "@/auth/logOut";
 import useUser from "@/context/useUser";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
-import { upgradeNotesAndTags } from "@/lib/upgradeTagsAndNotes";
 
 const pencilSquareButtonClassName = "collapsed ms-auto me-2 text-";
 
@@ -71,12 +70,12 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 			{
 				name: notes ? `notes (${Object.keys(notes).length})` : "notes (0)",
 				link: "/notes",
-				icon: <CgNotes className="me-3" />
+				icon: <CgNotes className="me-3" />,
 			},
 			{
 				name: tags ? `tags (${Object.keys(tags).length})` : "tags (0)",
 				link: "/tags",
-				icon: <AiOutlineTags className="me-3" />
+				icon: <AiOutlineTags className="me-3" />,
 			},
 		],
 	};
@@ -205,16 +204,6 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 								<span>reset password</span>
 							</Nav.Link>
 						</Link>
-
-						{
-							(user && tags && notes)
-								? <Button
-									onClick={() => upgradeNotesAndTags(user, tags, notes)}
-								>
-									upgrade tags & notes
-								</Button>
-								: null
-						}
 					</Nav>
 				</Navbar.Collapse>
 			</Container>

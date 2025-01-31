@@ -7,6 +7,7 @@ import MarkdownRenderer from "../MarkdownRenderer";
 import Link from "next/link";
 import Tag from "../Tag";
 import useNotes from "@/context/useNotes";
+import useTags from "@/context/useTags";
 
 type NoteCardProps = {
 	note: Note;
@@ -20,7 +21,8 @@ export default function NoteCard({
 	show140chars,
 }: NoteCardProps) {
 	const { theme } = useTheme();
-	const { deleteNote, getTagNotesNum } = useNotes();
+	const { deleteNote } = useNotes();
+	const { getTagNotesNum, getTagById } = useTags();
 
 	const ICON_BUTTONS = [
 		{
@@ -95,13 +97,15 @@ export default function NoteCard({
 						show140chars ? note.content.slice(0, 137) + "..." : note.content
 					}
 				/>
-				{note.tags &&
-					Object.keys(note.tags).length > 0 &&
-					Object.keys(note.tags).map((tagId) => (
-						<Link href={`/notes?tags=${tagId}`} key={tagId}>
-							<Tag value={`${note.tags![tagId].tag} (${getTagNotesNum(tagId)})`} />
-						</Link>
-					))}
+				{Object.keys(note.tags).map((tagId) => (
+					<Link href={`/notes?tags=${tagId}`} key={tagId}>
+						{getTagById(tagId) && (
+							<Tag
+								value={`${getTagById(tagId)!.tag} (${getTagNotesNum(tagId)})`}
+							/>
+						)}
+					</Link>
+				))}
 			</Card.Body>
 			<Card.Footer>
 				<Card.Text className="text-muted">

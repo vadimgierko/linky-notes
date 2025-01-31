@@ -1,7 +1,6 @@
 "use client";
 import PrivateRoute from "@/components/PrivateRoute";
 import Tag from "@/components/Tag";
-import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -49,8 +48,7 @@ export default function TagsPage() {
 }
 
 function Tags() {
-	const { tags, isFetching } = useTags();
-	const { getTagNotesNum } = useNotes();
+	const { tags, isFetching, getTagNotesNum } = useTags();
 
 	useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
 
@@ -74,13 +72,16 @@ function Tags() {
 					<h5>{letter}</h5>
 					<hr />
 					<div>
-						{tags && Object.keys(tags).map((tagId) =>
-							tags[tagId].tag[0].toLowerCase() === letter ? (
-								<Link href={`/notes?tags=${tagId}`} key={tagId}>
-									<Tag value={`${tags[tagId].tag} (${getTagNotesNum(tagId)})`} />
-								</Link>
-							) : null
-						)}
+						{tags &&
+							Object.keys(tags).map((tagId) =>
+								tags[tagId].tag[0].toLowerCase() === letter ? (
+									<Link href={`/notes?tags=${tagId}`} key={tagId}>
+										<Tag
+											value={`${tags[tagId].tag} (${getTagNotesNum(tagId)})`}
+										/>
+									</Link>
+								) : null
+							)}
 					</div>
 				</div>
 			))}

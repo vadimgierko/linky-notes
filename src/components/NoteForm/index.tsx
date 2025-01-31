@@ -6,7 +6,7 @@ import Tag from "../Tag";
 import TagWithTrashIcon from "../TagWithTrashIcon";
 import MarkdownRenderer from "../MarkdownRenderer";
 import useNotes from "@/context/useNotes";
-import { Tag as ITag } from "@/types";
+import { Tag as ITag, Tags } from "@/types";
 import useTags from "@/context/useTags";
 
 interface NoteFormProps {
@@ -29,13 +29,13 @@ export default function NoteForm({
 	onCancel,
 }: NoteFormProps) {
 	// from state:
-	const { getNoteById, getTagNotesNum } = useNotes();
-	const { tags: TAGS } = useTags();
+	const { getNoteById } = useNotes();
+	const { tags: TAGS, getTagNotesNum } = useTags();
 	// note object:
 	const [note, setNote] = useState<NoteObjectForUpdate | null>(null);
 	// tag search bar:
 	const [input, setInput] = useState("");
-	const [foundTags, setFoundTags] = useState<{ [key: string]: ITag }>({}); // tags which exist in database
+	const [foundTags, setFoundTags] = useState<Tags>({}); // tags which exist in database
 	const [newTag, setNewTag] = useState(""); // new tag added by user
 	// editor mode: (edit, preview)
 	const [editorMode, setEditorMode] = useState<"edit" | "preview">("edit");
@@ -51,7 +51,12 @@ export default function NoteForm({
 
 			const noteObjectForUpdate: NoteObjectForUpdate = {
 				content: noteToUpdate.content,
-				existingTags: { ...noteToUpdate.tags },
+				existingTags: {
+					...Object.keys(noteToUpdate.tags).reduce(
+						(prev, curr) => ({ ...prev, [curr]: true }),
+						{}
+					),
+				},
 				newTags: [],
 				sourceKey: "",
 				pages: "",
@@ -125,10 +130,10 @@ export default function NoteForm({
 									let updatedFoundTags: { [key: string]: ITag } = {};
 									foundTagsId.forEach(
 										(id) =>
-										(updatedFoundTags = {
-											...updatedFoundTags,
-											[id]: TAGS[id],
-										})
+											(updatedFoundTags = {
+												...updatedFoundTags,
+												[id]: TAGS[id],
+											})
 									);
 									setFoundTags(updatedFoundTags);
 									// set new tag if there is no exact match with any of found tags or existing & new:
@@ -136,15 +141,15 @@ export default function NoteForm({
 										Object.keys(updatedFoundTags).find(
 											(tagId) => updatedFoundTags[tagId].tag === changedInput
 										) ||
-											(Object.keys(note.existingTags).length
-												? Object.keys(note.existingTags).find(
+										(Object.keys(note.existingTags).length
+											? Object.keys(note.existingTags).find(
 													(tagId) =>
 														note.existingTags[tagId].tag === changedInput
-												)
-												: false) ||
-											(note.newTags.length
-												? note.newTags.find((tag) => tag === changedInput)
-												: false)
+											  )
+											: false) ||
+										(note.newTags.length
+											? note.newTags.find((tag) => tag === changedInput)
+											: false)
 											? true
 											: false;
 									if (isExactMatch) {
@@ -235,7 +240,14 @@ export default function NoteForm({
 						{note.newTags.map((tag) => (
 							<TagWithTrashIcon
 								key={tag}
-								tag={{ tag: tag }}
+								//❗❗❗ below I'm passing "pseudo" tag, only containing value❗❗❗
+								tag={{
+									tag: tag,
+									id: "",
+									createdAt: "",
+									updatedAt: "",
+									userId: "",
+								}}
 								onClick={() => {
 									// delete tag from note.newTags
 									const updatedTags = note.newTags.filter((t) => t !== tag);

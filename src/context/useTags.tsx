@@ -10,19 +10,15 @@ import {
 	useState,
 } from "react";
 import useUser from "./useUser";
-import { Tag } from "@/types";
+import { Tag, Tags } from "@/types";
+import generateItemsRef from "@/lib/generateItemsRef";
 
 const TagsContext = createContext<{
-	tags: {
-		[key: string]: Tag;
-	} | null;
+	tags: Tags | null;
 	isFetching: boolean;
-	setTags: Dispatch<
-		SetStateAction<{
-			[key: string]: Tag;
-		} | null>
-	>;
+	setTags: Dispatch<SetStateAction<Tags | null>>;
 	getTagById: (id: string) => Tag | null;
+	getTagNotesNum: (tagId: string) => number;
 } | null>(null);
 
 export default function useTags() {
@@ -41,7 +37,7 @@ interface TagsProviderProps {
 
 export function TagsProvider({ children }: TagsProviderProps) {
 	const { user } = useUser();
-	const [tags, setTags] = useState<{ [key: string]: Tag } | null>(null);
+	const [tags, setTags] = useState<Tags | null>(null);
 
 	const [isFetching, setIsFetching] = useState(true);
 
@@ -51,12 +47,18 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		return tags[id];
 	}
 
+	function getTagNotesNum(tagId: string) {
+		if (!tags || !tags[tagId] || !tags[tagId].notes) return 0;
+
+		return Object.keys(tags[tagId].notes).length;
+	}
+
 	useEffect(() => {
 		async function fetchTags(reference: string) {
 			return onValue(
 				ref(rtdb, reference),
 				(snapshot) => {
-					const data = snapshot.val() as { [key: string]: Tag };
+					const data = snapshot.val() as Tags;
 					console.log("DATA WAS FETCHED: ALL USER'S ITEMS FROM", reference);
 					console.log("fetchedItems:", data);
 					setTags(data);
@@ -66,33 +68,13 @@ export function TagsProvider({ children }: TagsProviderProps) {
 					onlyOnce: true,
 				}
 			);
-			// try {
-			//     const snapshot = await get(ref(rtdb, reference)); // => fetches all notes
-
-			//     // const firstTenTagsRef = query(ref(rtdb, reference), limitToLast(100));
-			//     // const snapshot = await get(firstTenTagsRef);
-
-			//     if (snapshot.exists()) {
-			//         const data = snapshot.val() as { [key: string]: Tag };
-			//         console.log("DATA WAS FETCHED: ALL USER'S ITEMS FROM", reference);
-			//         console.log("fetchedItems:", data);
-			//         setTags(data);
-			//     } else {
-			//         console.log("There are no items at", reference);
-			//         setTags(null);
-			//     }
-			// } catch (error: unknown) {
-			//     console.error(error);
-			//     setTags(null);
-			// } finally {
-			//     setIsFetching(false);
-			// }
 		}
 
 		if (!user) {
 			setTags(null);
 		} else {
-			fetchTags("tags/" + user.uid);
+			const tagsRef = generateItemsRef("tags", user.uid);
+			fetchTags(tagsRef);
 		}
 	}, [user]);
 
@@ -101,6 +83,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		isFetching,
 		setTags,
 		getTagById,
+		getTagNotesNum,
 	};
 
 	return <TagsContext.Provider value={value}>{children}</TagsContext.Provider>;

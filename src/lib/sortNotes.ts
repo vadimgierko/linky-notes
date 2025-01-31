@@ -1,7 +1,7 @@
-import { NoteWithId } from "@/types";
+import { Note } from "@/types";
 
 export default function sortNotes(
-	notes: NoteWithId[] = [],
+	notes: Note[] = [],
 	sortBy:
 		| "lastUpdated"
 		| "firstUpdated"
@@ -9,7 +9,7 @@ export default function sortNotes(
 		| "firstCreated" = "lastUpdated"
 ) {
 	// Create a new array with updated updatedAt properties if necessary
-	const processedNotes: NoteWithId[] = notes.map((note) => {
+	const processedNotes: Note[] = notes.map((note) => {
 		return {
 			...note,
 			updatedAt: note.updatedAt || note.createdAt, // Use createdAt if updatedAt is not defined,
