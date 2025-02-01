@@ -7,7 +7,11 @@
     Store, organize & filter your notes by tags & style/format them using Markdown & HTML with inline CSS styles.
     <br />
     <strong>
-      <a href="https://linkynotes.com">Visit the app & see more. It's free!</a>
+      Visit the app at 
+      <a href="https://linkynotes.com" target="_blank">
+        https://linkynotes.com
+      </a>
+      & see more. It's free!
     </strong>
   </p>
 </header>

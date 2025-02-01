@@ -70,12 +70,12 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 			{
 				name: notes ? `notes (${Object.keys(notes).length})` : "notes (0)",
 				link: "/notes",
-				icon: <CgNotes className="me-3" />
+				icon: <CgNotes className="me-3" />,
 			},
 			{
 				name: tags ? `tags (${Object.keys(tags).length})` : "tags (0)",
 				link: "/tags",
-				icon: <AiOutlineTags className="me-3" />
+				icon: <AiOutlineTags className="me-3" />,
 			},
 		],
 	};

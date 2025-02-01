@@ -1,17 +1,14 @@
 "use client";
 
-import NoteForm, { NoteObjectForUpdate } from "@/components/NoteForm";
+import NoteForm from "@/components/NoteForm";
 import PrivateRoute from "@/components/PrivateRoute";
 import useNotes from "@/context/useNotes";
+import { NoteObjectForUpdate } from "@/types";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 
-function UpdateNote({
-	params,
-}: {
-	params: Promise<{ slug: string }>;
-}) {
+function UpdateNote({ params }: { params: Promise<{ slug: string }> }) {
 	const router = useRouter();
 	const { updateNote } = useNotes();
 	const [noteId, setNoteId] = useState<string | undefined>(undefined);
@@ -42,7 +39,7 @@ function UpdateNote({
 			return console.error("No note id provided... Cannot update note...");
 		}
 
-		const updatedNote = await updateNote(note, noteId)
+		const updatedNote = await updateNote(note, noteId);
 
 		if (!updatedNote) return alert("Cannot update the note...");
 
@@ -67,16 +64,25 @@ function UpdateNote({
 		getItemKey();
 	}, [params]);
 
-	if (!noteId) return <p className="text-center text-danger">There is no note id... Cannot update note...</p>
+	if (!noteId)
+		return (
+			<p className="text-center text-danger">
+				There is no note id... Cannot update note...
+			</p>
+		);
 
 	return (
 		<>
 			<h1 className="text-center">Update Note</h1>
-			{
-				isUpdating
-					? <Spinner />
-					: <NoteForm noteKey={noteId} onSubmit={handleSubmit} onCancel={handleCancel} />
-			}
+			{isUpdating ? (
+				<Spinner />
+			) : (
+				<NoteForm
+					noteKey={noteId}
+					onSubmit={handleSubmit}
+					onCancel={handleCancel}
+				/>
+			)}
 		</>
 	);
 }

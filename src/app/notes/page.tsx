@@ -6,7 +6,7 @@ import TagWithTrashIcon from "@/components/TagWithTrashIcon";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
 import sortNotes from "@/lib/sortNotes";
-import { NoteWithId, Tag as ITag } from "@/types";
+import { Tag as ITag, Note } from "@/types";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -34,8 +34,8 @@ function NotesPage() {
 
 	const searchParams = useSearchParams();
 
-	const { notes, isFetching: areNotesFetching, getTagNotesNum } = useNotes();
-	const { tags, isFetching: areTagsFetching } = useTags()
+	const { notes, isFetching: areNotesFetching } = useNotes();
+	const { tags, isFetching: areTagsFetching, getTagNotesNum } = useTags();
 
 	// for tags search form:
 	const [input, setInput] = useState<string>("");
@@ -47,11 +47,11 @@ function NotesPage() {
 	const sortBy = searchParams.get("sortBy") || "lastUpdated";
 	const searchTags = searchParams.get("tags");
 
-	const NOTES_ARRAY: NoteWithId[] = notes
+	const NOTES_ARRAY: Note[] = notes
 		? Object.keys(notes).map((id) => ({
-			...notes[id],
-			id,
-		}))
+				...notes[id],
+				id,
+		  }))
 		: [];
 
 	const sortedNotes = sortNotes(
@@ -61,10 +61,10 @@ function NotesPage() {
 
 	const filteredNotes = searchTags
 		? sortedNotes.filter((note) =>
-			searchTags
-				.split(" ") // "+"
-				.every((element) => Object.keys(note.tags!).includes(element))
-		)
+				searchTags
+					.split(" ") // "+"
+					.every((element) => Object.keys(note.tags!).includes(element))
+		  )
 		: sortedNotes;
 
 	return (
@@ -94,10 +94,10 @@ function NotesPage() {
 									let updatedFoundTags = {};
 									foundTagsId.forEach(
 										(id) =>
-										(updatedFoundTags = {
-											...updatedFoundTags,
-											[id]: tags[id],
-										})
+											(updatedFoundTags = {
+												...updatedFoundTags,
+												[id]: tags[id],
+											})
 									);
 									setFoundTags(updatedFoundTags);
 								}
@@ -113,8 +113,9 @@ function NotesPage() {
 				<div className="found-tags">
 					{Object.keys(foundTags).map((id) => (
 						<Link
-							href={`?tags=${searchTags ? searchTags + "+" + id : id
-								}&sortBy=${sortBy}`}
+							href={`?tags=${
+								searchTags ? searchTags + "+" + id : id
+							}&sortBy=${sortBy}`}
 							key={id}
 						>
 							<Tag
