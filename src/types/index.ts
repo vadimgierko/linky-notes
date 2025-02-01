@@ -19,6 +19,46 @@ export interface Notes {
 	[key: string]: Note;
 }
 
+/**
+ * NoteObjectForUpdate is almost like Note interface,
+ * but instead of tags prop it has:
+ * existingTags (same as tags) & newTags (string[])
+ */
+export interface NoteObjectForUpdate {
+	content: string;
+	createdAt: string;
+	id: string;
+	updatedAt: string;
+	userId: string;
+	/**
+	 * Note's tags that exist already in RTDB.
+	 *
+	 * It can be same tags and previously in the note,
+	 * but also newly added existing tags.
+	 *
+	 * To deal with newly added & removed extisting tags,
+	 * `removedExistingTags` & `addedExistingTags` props are used,
+	 * which are updated automatically before `NoteForm` submit.
+	 */
+	existingTags: {
+		[key: string]: true;
+	};
+	/**
+	 * New tags to create & add to RTDB.
+	 */
+	newTags: string[];
+	/**
+	 * Are used to deal with removed extisting tags,
+	 * & are updated automatically before `NoteForm` submit.
+	 */
+	removedExistingTags: string[];
+	/**
+	 * Are used to deal with newly added extisting tags,
+	 * & are updated automatically before `NoteForm` submit.
+	 */
+	addedExistingTags: string[];
+}
+
 export interface Tag {
 	createdAt: string;
 	id: string;

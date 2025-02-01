@@ -1,8 +1,9 @@
 "use client";
 
-import NoteForm, { NoteObjectForUpdate } from "@/components/NoteForm";
+import NoteForm from "@/components/NoteForm";
 import PrivateRoute from "@/components/PrivateRoute";
 import useNotes from "@/context/useNotes";
+import { NoteObjectForUpdate } from "@/types";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { Spinner } from "react-bootstrap";
@@ -60,11 +61,11 @@ function AddNote() {
 	return (
 		<>
 			<h1 className="text-center">Add New Note</h1>
-			{
-				isAdding
-					? <Spinner />
-					: <NoteForm onSubmit={handleSubmit} onCancel={handleCancel} />
-			}
+			{isAdding ? (
+				<Spinner />
+			) : (
+				<NoteForm onSubmit={handleSubmit} onCancel={handleCancel} />
+			)}
 		</>
 	);
 }
