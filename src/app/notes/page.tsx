@@ -67,7 +67,7 @@ function NotesPage() {
 		)
 		: sortedNotes;
 
-	let debouncedSetFoundTags = useRef<NodeJS.Timeout | null>(null);
+	const debouncedSetFoundTags = useRef<NodeJS.Timeout | null>(null);
 
 	return (
 		<PrivateRoute>
