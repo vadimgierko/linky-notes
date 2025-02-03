@@ -6,10 +6,10 @@ import TagWithTrashIcon from "@/components/TagWithTrashIcon";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
 import sortNotes from "@/lib/sortNotes";
-import { Tag as ITag, Note } from "@/types";
+import { Tag as ITag, Note, Tags } from "@/types";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { Form, Spinner } from "react-bootstrap";
 
 export default function NotesPageWrappedInSuspense() {
@@ -39,7 +39,7 @@ function NotesPage() {
 
 	// for tags search form:
 	const [input, setInput] = useState<string>("");
-	const [foundTags, setFoundTags] = useState<{ [key: string]: ITag }>({});
+	const [foundTags, setFoundTags] = useState<Tags>({});
 
 	/**
 	 * options: lastUpdated (default), firstUpdated, lastCreated, firstCreated
@@ -49,9 +49,9 @@ function NotesPage() {
 
 	const NOTES_ARRAY: Note[] = notes
 		? Object.keys(notes).map((id) => ({
-				...notes[id],
-				id,
-		  }))
+			...notes[id],
+			id,
+		}))
 		: [];
 
 	const sortedNotes = sortNotes(
@@ -61,11 +61,13 @@ function NotesPage() {
 
 	const filteredNotes = searchTags
 		? sortedNotes.filter((note) =>
-				searchTags
-					.split(" ") // "+"
-					.every((element) => Object.keys(note.tags!).includes(element))
-		  )
+			searchTags
+				.split(" ") // "+"
+				.every((element) => Object.keys(note.tags!).includes(element))
+		)
 		: sortedNotes;
+
+	let debouncedSetFoundTags = useRef<NodeJS.Timeout | null>(null);
 
 	return (
 		<PrivateRoute>
@@ -83,29 +85,28 @@ function NotesPage() {
 					onChange={(e) => {
 						const changedInput = e.target.value;
 						setInput(changedInput);
-						//=============================================
-						// when user types, set found tags to show them:
-						if (changedInput && changedInput.length) {
-							if (tags && Object.keys(tags).length) {
-								const foundTagsId = Object.keys(tags).filter((id) =>
-									tags[id].tag.startsWith(changedInput)
-								);
-								if (foundTagsId.length) {
-									let updatedFoundTags = {};
-									foundTagsId.forEach(
-										(id) =>
-											(updatedFoundTags = {
-												...updatedFoundTags,
-												[id]: tags[id],
-											})
+
+						// clear prev debounce timer:
+						debouncedSetFoundTags.current && clearTimeout(debouncedSetFoundTags.current)
+
+						// reassign debounce timer:
+						debouncedSetFoundTags.current = setTimeout(() => {
+							console.log("debouncing")
+							//=============================================
+							// when user types, set found tags to show them:
+							if (changedInput && changedInput.length) {
+								if (tags && Object.keys(tags).length) {
+									const foundTags: ITag[] = Object.values(tags).filter((tag) =>
+										tag.tag.startsWith(changedInput)
 									);
-									setFoundTags(updatedFoundTags);
+
+									setFoundTags(foundTags.reduce((prev, curr) => ({ ...prev, [curr.id]: curr }), {} as Tags))
 								}
+							} else {
+								// if input is cleared:
+								setFoundTags({});
 							}
-						} else {
-							// if input is cleared:
-							setFoundTags({});
-						}
+						}, 500)
 					}}
 				/>
 
@@ -113,9 +114,8 @@ function NotesPage() {
 				<div className="found-tags">
 					{Object.keys(foundTags).map((id) => (
 						<Link
-							href={`?tags=${
-								searchTags ? searchTags + "+" + id : id
-							}&sortBy=${sortBy}`}
+							href={`?tags=${searchTags ? searchTags + "+" + id : id
+								}&sortBy=${sortBy}`}
 							key={id}
 						>
 							<Tag
