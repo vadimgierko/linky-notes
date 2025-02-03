@@ -87,7 +87,9 @@ function NotesPage() {
 						setInput(changedInput);
 
 						// clear prev debounce timer:
-						debouncedSetFoundTags.current && clearTimeout(debouncedSetFoundTags.current)
+						if (debouncedSetFoundTags.current) {
+							clearTimeout(debouncedSetFoundTags.current)
+						}
 
 						// reassign debounce timer:
 						debouncedSetFoundTags.current = setTimeout(() => {
