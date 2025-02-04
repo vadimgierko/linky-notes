@@ -41,38 +41,63 @@ function NotesPage() {
 	const [input, setInput] = useState<string>("");
 	const [foundTags, setFoundTags] = useState<Tags>({});
 
+	//======================== searchTags => filteredNotes ========================//
 	/**
 	 * options: lastUpdated (default), firstUpdated, lastCreated, firstCreated
 	 */
 	const sortBy = searchParams.get("sortBy") || "lastUpdated";
-	const searchTags = searchParams.get("tags");
 
-	const NOTES_ARRAY: Note[] = notes
-		? Object.keys(notes).map((id) => ({
-			...notes[id],
-			id,
-		}))
-		: [];
+	const searchTagsIdsString = searchParams.get("tags");
+	// split tags search string into an array of tagsIds:
+	const searchTagsIds = searchTagsIdsString
+		? searchTagsIdsString.split(" ") // "+"
+		: []
+	console.log(searchTagsIds)
+	const searchTags = searchTagsIds.reduce((filterTags, tagId) => tags ? ([...filterTags, tags[tagId]]) : [], [] as ITag[])
+	console.log("searchTags:", searchTags)
 
-	const sortedNotes = sortNotes(
-		NOTES_ARRAY,
+	function filterNotesIds() {
+		let filteredNotesIds: string[] = []
+		
+
+		searchTags.forEach(tag => {
+			// if any of tags has got no notes, reset filteredNotesIds & break the loop:
+			if (!tag || !tag.notes) {
+				filteredNotesIds = [];
+				return;
+			}
+
+			// if tag has got notes ids & filteredNotesIds are empty, push ids:
+			if (!filteredNotesIds.length) {
+				filteredNotesIds.push(...Object.keys(tag.notes))
+			}
+
+			if (searchTags.length > 1) {
+				// now with the every next tag keep only notes id that are common:
+				const mutualNoteIds = Object.keys(tag.notes).filter(id => filteredNotesIds.includes(id))
+				filteredNotesIds = mutualNoteIds
+			}
+		})
+
+		return filteredNotesIds
+	}
+
+	const filteredNotesIds = filterNotesIds()
+	console.log("filteredNotesIds:", filteredNotesIds)
+	const filteredNotes: Note[] = notes ? filteredNotesIds.map(noteId => notes[noteId]) : []
+	console.log("filteredNotes:", filteredNotes)
+
+	const filteredAndSortedNotes = sortNotes(
+		filteredNotes,
 		sortBy as "lastUpdated" | "firstUpdated" | "lastCreated" | "firstCreated"
 	); // ⚠️ note object consists noteId
-
-	const filteredNotes = searchTags
-		? sortedNotes.filter((note) =>
-			searchTags
-				.split(" ") // "+"
-				.every((element) => Object.keys(note.tags!).includes(element))
-		)
-		: sortedNotes;
 
 	const debouncedSetFoundTags = useRef<NodeJS.Timeout | null>(null);
 
 	return (
 		<PrivateRoute>
 			<h1 className="text-center">
-				Your Filtered Notes ({filteredNotes.length})
+				Your Filtered Notes ({filteredAndSortedNotes.length})
 			</h1>
 
 			{/*================== search bar ==================*/}
@@ -116,7 +141,7 @@ function NotesPage() {
 				<div className="found-tags">
 					{Object.keys(foundTags).map((id) => (
 						<Link
-							href={`?tags=${searchTags ? searchTags + "+" + id : id
+							href={`?tags=${searchTagsIdsString ? searchTagsIdsString + "+" + id : id
 								}&sortBy=${sortBy}`}
 							key={id}
 						>
@@ -134,12 +159,12 @@ function NotesPage() {
 				</div>
 
 				{/*======================================== filter tags */}
-				{searchTags && tags ? (
+				{searchTagsIdsString && tags ? (
 					<div className="filter-tags">
-						{searchTags
+						{searchTagsIdsString
 							.split(" ") // "+"
 							.map((filterTagId) => {
-								const updatedParamsString = searchTags
+								const updatedParamsString = searchTagsIdsString
 									.split(" ") // "+"
 									.filter((id) => filterTagId !== id)
 									.join("+");
@@ -165,8 +190,8 @@ function NotesPage() {
 				<select
 					className="form-control mb-2"
 					onChange={(e) =>
-						searchTags
-							? router.push(`?tags=${searchTags}&sortBy=${e.target.value}`)
+						searchTagsIdsString
+							? router.push(`?tags=${searchTagsIdsString}&sortBy=${e.target.value}`)
 							: router.push(`?sortBy=${e.target.value}`)
 					}
 					value={sortBy}
@@ -196,7 +221,7 @@ function NotesPage() {
 				</div>
 			)}
 
-			{filteredNotes.map((note) => (
+			{filteredAndSortedNotes.map((note) => (
 				<NoteCard
 					key={note.id}
 					note={note}
