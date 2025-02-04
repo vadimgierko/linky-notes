@@ -11,6 +11,7 @@ import generateItemsRef from "@/lib/generateItemsRef";
 
 const NotesContext = createContext<{
 	notes: Notes | null;
+	notesNum: number;
 	isFetching: boolean;
 	getNoteById: (id: string) => Note | null;
 	addNote: (note: NoteObjectForUpdate) => Promise<string | null>;
@@ -277,6 +278,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 	const value = {
 		notes,
+		notesNum: notes ? Object.keys(notes).length : 0,
 		isFetching,
 		getNoteById,
 		addNote,

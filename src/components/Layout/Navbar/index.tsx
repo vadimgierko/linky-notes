@@ -33,10 +33,8 @@ const pencilSquareButtonClassName = "collapsed ms-auto me-2 text-";
 export default function NavBar({ maxWidth }: { maxWidth: number }) {
 	const { theme, switchTheme } = useTheme();
 	const { user } = useUser();
-	const { notes } = useNotes();
-	const { tags } = useTags();
-	// const NOTES = useSelector((state) => state.notes.value);
-	// const TAGS = useSelector((state) => state.tags.value);
+	const { notesNum } = useNotes();
+	const { tagsNum } = useTags();
 	const [isHovering, setIsHovering] = useState(false);
 
 	const handleMouseEnter = () => setIsHovering(true);
@@ -68,12 +66,12 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 		],
 		private: [
 			{
-				name: notes ? `notes (${Object.keys(notes).length})` : "notes (0)",
+				name: `notes (${notesNum})`,
 				link: "/notes",
 				icon: <CgNotes className="me-3" />,
 			},
 			{
-				name: tags ? `tags (${Object.keys(tags).length})` : "tags (0)",
+				name: `tags (${tagsNum})`,
 				link: "/tags",
 				icon: <AiOutlineTags className="me-3" />,
 			},
@@ -129,17 +127,11 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 											<Nav.Link>
 												{link.icon ? link.icon : null}
 												<strong>{link.name}</strong>
-												{/* <Badge bg="secondary" className="ms-3">
-												{Object.keys(NOTES).length}
-											</Badge> */}
 											</Nav.Link>
 										) : link.name === "tags" ? (
 											<Nav.Link>
 												{link.icon ? link.icon : null}
 												{link.name}
-												{/* <Badge bg="secondary" className="ms-3">
-												{Object.keys(TAGS).length}
-											</Badge> */}
 											</Nav.Link>
 										) : (
 											<Nav.Link>

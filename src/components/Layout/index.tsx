@@ -28,8 +28,6 @@ export default function Layout({ children }: {children: ReactNode}) {
 					paddingTop: 70,
 					flexGrow: 1,
 					maxWidth: maxWidth,
-					// backgroundColor: theme === "light" ? "white" : "rgb(13, 17, 23)",
-					// color: theme === "light" ? "black" : "white",
 				}}
 			>
 				{children}

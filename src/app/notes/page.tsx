@@ -34,7 +34,7 @@ function NotesPage() {
 
 	const searchParams = useSearchParams();
 
-	const { notes, isFetching: areNotesFetching } = useNotes();
+	const { notes, notesNum, isFetching: areNotesFetching } = useNotes();
 	const { tags, isFetching: areTagsFetching, getTagNotesNum } = useTags();
 
 	// for tags search form:
@@ -52,13 +52,12 @@ function NotesPage() {
 	const searchTagsIds = searchTagsIdsString
 		? searchTagsIdsString.split(" ") // "+"
 		: []
-	console.log(searchTagsIds)
+	// console.log(searchTagsIds)
 	const searchTags = searchTagsIds.reduce((filterTags, tagId) => tags ? ([...filterTags, tags[tagId]]) : [], [] as ITag[])
-	console.log("searchTags:", searchTags)
+	// console.log("searchTags:", searchTags)
 
 	function filterNotesIds() {
-		let filteredNotesIds: string[] = []
-		
+		let filteredNotesIds: string[] = [];
 
 		searchTags.forEach(tag => {
 			// if any of tags has got no notes, reset filteredNotesIds & break the loop:
@@ -83,9 +82,9 @@ function NotesPage() {
 	}
 
 	const filteredNotesIds = filterNotesIds()
-	console.log("filteredNotesIds:", filteredNotesIds)
+	// console.log("filteredNotesIds:", filteredNotesIds)
 	const filteredNotes: Note[] = notes ? filteredNotesIds.map(noteId => notes[noteId]) : []
-	console.log("filteredNotes:", filteredNotes)
+	// console.log("filteredNotes:", filteredNotes)
 
 	const filteredAndSortedNotes = sortNotes(
 		filteredNotes,
@@ -96,9 +95,11 @@ function NotesPage() {
 
 	return (
 		<PrivateRoute>
-			<h1 className="text-center">
-				Your Filtered Notes ({filteredAndSortedNotes.length})
-			</h1>
+			<header>
+				<h1 className="text-center">
+					Filtered Notes ({filteredAndSortedNotes.length}/{notesNum})
+				</h1>
+			</header>
 
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
@@ -118,7 +119,7 @@ function NotesPage() {
 
 						// reassign debounce timer:
 						debouncedSetFoundTags.current = setTimeout(() => {
-							console.log("debouncing")
+							// console.log("debouncing")
 							//=============================================
 							// when user types, set found tags to show them:
 							if (changedInput && changedInput.length) {
@@ -212,23 +213,27 @@ function NotesPage() {
 				</div>
 			)}
 
-			{areTagsFetching && (
-				<div className="text-center">
-					Loading your tags...{" "}
-					<Spinner animation="border" role="status">
-						<span className="visually-hidden">Loading...</span>
-					</Spinner>
-				</div>
-			)}
-
-			{filteredAndSortedNotes.map((note) => (
-				<NoteCard
-					key={note.id}
-					note={note}
-					noteKey={note.id}
-					show140chars={true}
-				/>
-			))}
+			<div
+				id="filtered-notes"
+			>
+				{
+					areTagsFetching
+						? <div className="text-center">
+							Loading your tags...{" "}
+							<Spinner animation="border" role="status">
+								<span className="visually-hidden">Loading...</span>
+							</Spinner>
+						</div>
+						: filteredAndSortedNotes.map((note) => (
+							<NoteCard
+								key={note.id}
+								note={note}
+								noteKey={note.id}
+								show140chars={true}
+							/>
+						))
+				}
+			</div>
 		</PrivateRoute>
 	);
 }

@@ -15,6 +15,7 @@ import generateItemsRef from "@/lib/generateItemsRef";
 
 const TagsContext = createContext<{
 	tags: Tags | null;
+	tagsNum: number;
 	isFetching: boolean;
 	setTags: Dispatch<SetStateAction<Tags | null>>;
 	getTagById: (id: string) => Tag | null;
@@ -80,6 +81,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
 	const value = {
 		tags,
+		tagsNum: tags ? Object.keys(tags).length : 0,
 		isFetching,
 		setTags,
 		getTagById,

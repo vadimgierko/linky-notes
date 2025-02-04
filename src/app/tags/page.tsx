@@ -4,8 +4,8 @@ import Tag from "@/components/Tag";
 import useTags from "@/context/useTags";
 import { Tag as ITag } from "@/types";
 import Link from "next/link";
-import { useCallback, useEffect } from "react";
-import { Spinner } from "react-bootstrap";
+import { useCallback, useEffect, useState } from "react";
+import { Form, Spinner } from "react-bootstrap";
 
 export default function TagsPage() {
 	return (
@@ -15,31 +15,44 @@ export default function TagsPage() {
 	);
 }
 
+type SortBy = "alphabetically" | "byTagNotesNum";
+
 function Tags() {
-	const { tags, isFetching, getTagNotesNum, getTagById } = useTags();
+	const { tags, tagsNum, isFetching, getTagNotesNum, getTagById } = useTags();
+	const [sortBy, setSortBy] = useState<SortBy>("alphabetically");
 
 	const sortTags = useCallback(() => {
-		console.log("sorting tags...")
-		// map tags to {[tagValue]: tagId}:
-		const tagsValueIdObject = tags
-			? Object
-				.values(tags)
-				.reduce((prev, curr) => ({ ...prev, [curr.tag]: curr.id }), {} as { [key: string]: string })
-			: {}
+		console.log("sorting tags", sortBy, "...");
 
-		const sortedTagsValues = Object.keys(tagsValueIdObject).toSorted();
+		if (sortBy === "alphabetically") {
+			// map tags to {[tagValue]: tagId}:
+			const tagsValueIdObject = tags
+				? Object
+					.values(tags)
+					.reduce((prev, curr) => ({ ...prev, [curr.tag]: curr.id }), {} as { [key: string]: string })
+				: {}
 
-		const sortedTags = sortedTagsValues
-			.map(value => {
-				const tagId = tagsValueIdObject[value];
-				const tag = getTagById(tagId)
+			const tagsValuesSortedAlphabetically = Object.keys(tagsValueIdObject).toSorted();
 
-				return tag
-			})
-			.filter(t => t !== null) as ITag[]
+			const tagsSortedAlphabetically = tagsValuesSortedAlphabetically
+				.map(value => {
+					const tagId = tagsValueIdObject[value];
+					const tag = getTagById(tagId)
 
-		return sortedTags
-	}, [tags, getTagById]);
+					return tag
+				})
+				.filter(t => t !== null) as ITag[]
+
+			return tagsSortedAlphabetically
+		} else {
+			const tagsSortedByNotesNum: ITag[] = tags
+				? Object.values(tags).toSorted((a, b) => getTagNotesNum(a.id) - getTagNotesNum(b.id))
+				: []
+
+			return tagsSortedByNotesNum.reverse();
+		}
+
+	}, [tags, getTagById, sortBy, getTagNotesNum]);
 
 	const sortedTags = sortTags()
 
@@ -47,32 +60,42 @@ function Tags() {
 
 	return (
 		<>
-			<h1 className="text-center mb-3">
-				Your tags ({tags ? Object.keys(tags).length : 0})
-			</h1>
+			<header>
+				<h1 className="text-center mb-3">
+					Tags ({tagsNum})
+				</h1>
 
-			{isFetching && (
-				<div className="text-center">
-					Loading your tags...{" "}
-					<Spinner animation="border" role="status">
-						<span className="visually-hidden">Loading...</span>
-					</Spinner>
-				</div>
-			)}
+				<Form.Select
+					className="mb-3"
+					value={sortBy}
+					onChange={e => setSortBy(e.currentTarget.value as SortBy)}
+				>
+					<option value="alphabetically">sort alphabetically</option>
+					<option value="byTagNotesNum">sort by tag notes number</option>
+				</Form.Select>
+			</header>
 
 			<div
 				id="sorted-tags"
 				className="text-center"
 			>
 				{
-					sortedTags
-						.map(tag => (
-							<Link href={`/notes?tags=${tag.id}`} key={tag.id}>
-								<Tag
-									value={`${tag.tag} (${getTagNotesNum(tag.id)})`}
-								/>
-							</Link>
-						))
+					isFetching
+						? <>
+							Loading your tags...{" "}
+							<Spinner animation="border" role="status">
+								<span className="visually-hidden">Loading...</span>
+							</Spinner>
+						</>
+						: sortedTags
+							.map(tag => (
+								<Link href={`/notes?tags=${tag.id}`} key={tag.id}>
+									<Tag
+										value={`${tag.tag} (${getTagNotesNum(tag.id)})`}
+									/>
+								</Link>
+							))
+
 				}
 			</div>
 		</>
