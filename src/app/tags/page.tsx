@@ -2,42 +2,10 @@
 import PrivateRoute from "@/components/PrivateRoute";
 import Tag from "@/components/Tag";
 import useTags from "@/context/useTags";
+import { Tag as ITag } from "@/types";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Spinner } from "react-bootstrap";
-
-const ALPHABET = [
-	"a",
-	"b",
-	"c",
-	"ć",
-	"d",
-	"e",
-	"f",
-	"g",
-	"h",
-	"i",
-	"j",
-	"k",
-	"l",
-	"ł",
-	"m",
-	"n",
-	"o",
-	"p",
-	"r",
-	"s",
-	"ś",
-	"t",
-	"u",
-	"w",
-	"v",
-	"x",
-	"y",
-	"z",
-	"ź",
-	"ż",
-];
 
 export default function TagsPage() {
 	return (
@@ -48,7 +16,32 @@ export default function TagsPage() {
 }
 
 function Tags() {
-	const { tags, isFetching, getTagNotesNum } = useTags();
+	const { tags, isFetching, getTagNotesNum, getTagById } = useTags();
+
+	const sortTags = useCallback(() => {
+		console.log("sorting tags...")
+		// map tags to {[tagValue]: tagId}:
+		const tagsValueIdObject = tags
+			? Object
+				.values(tags)
+				.reduce((prev, curr) => ({ ...prev, [curr.tag]: curr.id }), {} as { [key: string]: string })
+			: {}
+
+		const sortedTagsValues = Object.keys(tagsValueIdObject).toSorted();
+
+		const sortedTags = sortedTagsValues
+			.map(value => {
+				const tagId = tagsValueIdObject[value];
+				const tag = getTagById(tagId)
+
+				return tag
+			})
+			.filter(t => t !== null) as ITag[]
+
+		return sortedTags
+	}, [tags, getTagById]);
+
+	const sortedTags = sortTags()
 
 	useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
 
@@ -67,24 +60,21 @@ function Tags() {
 				</div>
 			)}
 
-			{ALPHABET.map((letter) => (
-				<div key={letter + "-section"}>
-					<h5>{letter}</h5>
-					<hr />
-					<div>
-						{tags &&
-							Object.keys(tags).map((tagId) =>
-								tags[tagId].tag[0].toLowerCase() === letter ? (
-									<Link href={`/notes?tags=${tagId}`} key={tagId}>
-										<Tag
-											value={`${tags[tagId].tag} (${getTagNotesNum(tagId)})`}
-										/>
-									</Link>
-								) : null
-							)}
-					</div>
-				</div>
-			))}
+			<div
+				id="sorted-tags"
+				className="text-center"
+			>
+				{
+					sortedTags
+						.map(tag => (
+							<Link href={`/notes?tags=${tag.id}`} key={tag.id}>
+								<Tag
+									value={`${tag.tag} (${getTagNotesNum(tag.id)})`}
+								/>
+							</Link>
+						))
+				}
+			</div>
 		</>
 	);
 }
