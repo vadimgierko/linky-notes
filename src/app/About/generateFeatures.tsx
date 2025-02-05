@@ -34,7 +34,7 @@ export default function generateFeatures(props: IconProps) {
 			icon: <TbArrowsSort {...props} />,
 			header: "Sort",
 			paragraph:
-				"You can sort your notes by creation or update date along filtering by tags.",
+				"You can sort your notes & tags by creation or update date. Tags can also be sorted by assigned notes number & alphabetically.",
 		},
 		{
 			icon: <AiOutlinePaperClip {...props} />,

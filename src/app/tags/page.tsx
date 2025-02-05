@@ -15,41 +15,62 @@ export default function TagsPage() {
 	);
 }
 
-type SortBy = "alphabetically" | "byTagNotesNum";
+type SortBy =
+	| "alphabetically"
+	| "tag notes number"
+	| "first created"
+	| "last created";
+
+const allowedSortByValues: SortBy[] = [
+	"alphabetically",
+	"tag notes number",
+	"last created",
+	"first created"
+];
 
 function Tags() {
 	const { tags, tagsNum, isFetching, getTagNotesNum, getTagById } = useTags();
 	const [sortBy, setSortBy] = useState<SortBy>("alphabetically");
 
 	const sortTags = useCallback(() => {
-		console.log("sorting tags", sortBy, "...");
+		console.log("sorting tags by", sortBy, "...");
 
-		if (sortBy === "alphabetically") {
-			// map tags to {[tagValue]: tagId}:
-			const tagsValueIdObject = tags
-				? Object
-					.values(tags)
-					.reduce((prev, curr) => ({ ...prev, [curr.tag]: curr.id }), {} as { [key: string]: string })
-				: {}
+		const defaultSortedTags = tags
+			? Object.values(tags).reduce((prev, curr) => [...prev, curr], [] as ITag[])
+			: []
 
-			const tagsValuesSortedAlphabetically = Object.keys(tagsValueIdObject).toSorted();
+		switch (sortBy) {
+			case "alphabetically":
+				// map tags to {[tagValue]: tagId}:
+				const tagsValueIdObject = tags
+					? Object
+						.values(tags)
+						.reduce((prev, curr) => ({ ...prev, [curr.tag]: curr.id }), {} as { [key: string]: string })
+					: {}
 
-			const tagsSortedAlphabetically = tagsValuesSortedAlphabetically
-				.map(value => {
-					const tagId = tagsValueIdObject[value];
-					const tag = getTagById(tagId)
+				const tagsValuesSortedAlphabetically = Object.keys(tagsValueIdObject).toSorted();
 
-					return tag
-				})
-				.filter(t => t !== null) as ITag[]
+				const tagsSortedAlphabetically = tagsValuesSortedAlphabetically
+					.map(value => {
+						const tagId = tagsValueIdObject[value];
+						const tag = getTagById(tagId)
 
-			return tagsSortedAlphabetically
-		} else {
-			const tagsSortedByNotesNum: ITag[] = tags
-				? Object.values(tags).toSorted((a, b) => getTagNotesNum(a.id) - getTagNotesNum(b.id))
-				: []
+						return tag
+					})
+					.filter(t => t !== null) as ITag[]
 
-			return tagsSortedByNotesNum.reverse();
+				return tagsSortedAlphabetically;
+			case "tag notes number":
+				const tagsSortedByNotesNum: ITag[] = tags
+					? Object.values(tags).toSorted((a, b) => getTagNotesNum(a.id) - getTagNotesNum(b.id))
+					: []
+				return tagsSortedByNotesNum.reverse();
+			case "first created":
+				return defaultSortedTags
+			case "last created":
+				return defaultSortedTags.toReversed();
+			default:
+				return defaultSortedTags
 		}
 
 	}, [tags, getTagById, sortBy, getTagNotesNum]);
@@ -70,8 +91,17 @@ function Tags() {
 					value={sortBy}
 					onChange={e => setSortBy(e.currentTarget.value as SortBy)}
 				>
-					<option value="alphabetically">sort alphabetically</option>
-					<option value="byTagNotesNum">sort by tag notes number</option>
+					{
+						allowedSortByValues
+							.map(value => (
+								<option
+									value={value}
+									key={value}
+								>
+									sort by: {value}
+								</option>
+							))
+					}
 				</Form.Select>
 			</header>
 
