@@ -34,11 +34,36 @@
 
 ## 🚀 Nowe funkcjonalności
 
-- Określ zależności pomiędzy tagami (dodaj możliwość organizacji tagów w apce)
+- Określ zależności pomiędzy tagami (dodaj możliwość organizacji tagów w apce):
+  ```ts
+  type KeyValueObject = {
+    [key: string]: true;
+  }
 
-```js
-note {
-  backlinks: [], // noteIds
-  linkedNotes: [], // noteIds
-}
-```
+  interface Tag {
+    ...Tag,
+    parents: KeyValueObject;
+    children: KeyValueObject;
+    linkedTags: KeyValueObject;
+  }
+  ```
+- Określ zależności pomiędzy notatkami:
+  ```ts
+  type KeyValueObject = {
+    [key: string]: true;
+  }
+
+  interface Note {
+    ...Note,
+    parents: KeyValueObject;
+    /**
+     * Child = note, text block, etc.
+     */
+    children: {
+      [key: number]: Child; // or {child: Child, index: number}
+    }
+    backlinks: KeyValueObject;
+    forwardLinks: KeyValueObject;
+    linkedNotes: KeyValueObject;
+  }
+  ```

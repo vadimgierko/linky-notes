@@ -4,8 +4,8 @@
   - ✅ ~~this enables having static `about` pages & `guides`~~
 - ✅ ~~gradually migrate to `TypeScript`~~
 - ✅ ~~get rid of/ do not use ~~`Redux`~~ & use `Context API` if neccessary~~
-- change name *items* => *notes* (in database, CRUD, thunks etc. + migrate from items to notes when log in if there is no notes in db, then delete items folder)
-- add users folder to store users data, preferences (mode), settings
+- ✅ ~~change name *items* => *notes* (in database, CRUD, thunks etc. + migrate from items to notes when log in if there is no notes in db, then delete items folder)~~
+- ✅ ~~add users folder~~ 
 - use `Firestore` instead of ~~`RTDB`~~
 - optimize data loading, filtering & querying
   - do not load all notes & tags on app mount

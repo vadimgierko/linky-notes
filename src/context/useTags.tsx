@@ -1,6 +1,6 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, update } from "firebase/database";
 import {
 	createContext,
 	Dispatch,
@@ -12,6 +12,7 @@ import {
 import useUser from "./useUser";
 import { Tag, Tags } from "@/types";
 import generateItemsRef from "@/lib/generateItemsRef";
+import createDate from "@/lib/createDate";
 
 const TagsContext = createContext<{
 	tags: Tags | null;
@@ -20,6 +21,7 @@ const TagsContext = createContext<{
 	setTags: Dispatch<SetStateAction<Tags | null>>;
 	getTagById: (id: string) => Tag | null;
 	getTagNotesNum: (tagId: string) => number;
+	updateTag: (value: string, id: string) => Promise<null | undefined>
 } | null>(null);
 
 export default function useTags() {
@@ -54,6 +56,46 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		return Object.keys(tags[tagId].notes).length;
 	}
 
+	async function updateTag(value: string, id: string) {
+		// CHECKS:
+		if (!user) {
+			console.error("Cannot set tag when user is not logged...");
+			return null;
+		}
+
+		if (!value.trim().length) {
+			console.error("Your tag has no value! Cannot set the tag...");
+			return null;
+		}
+
+		const date = createDate();
+
+		const tagRef = generateItemsRef("tags", user.uid) + "/" + id;
+
+		const updatedTagProps: {
+			updatedAt: Tag["updatedAt"],
+			tag: Tag["tag"]
+		} = {
+			updatedAt: date,
+			tag: value
+		}
+
+		const updates: {
+			[key: string]: Tag
+		} = {}
+
+		const prevTag = getTagById(id);
+
+		updates[tagRef] = {
+			...prevTag!,
+			...updatedTagProps
+		}
+
+		await update(ref(rtdb), updates);
+
+		setTags(prevTags => ({ ...prevTags, [id]: { ...prevTags![id], ...updatedTagProps } }))
+	}
+
 	useEffect(() => {
 		async function fetchTags(reference: string) {
 			return onValue(
@@ -86,6 +128,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		setTags,
 		getTagById,
 		getTagNotesNum,
+		updateTag
 	};
 
 	return <TagsContext.Provider value={value}>{children}</TagsContext.Provider>;
