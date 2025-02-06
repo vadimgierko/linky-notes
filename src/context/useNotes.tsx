@@ -1,7 +1,14 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, update, onValue } from "firebase/database";
-import { createContext, useContext, useEffect, useState } from "react";
+import { ref, update, onValue, Unsubscribe } from "firebase/database";
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import useUser from "./useUser";
 import { Note, NoteObjectForUpdate, Notes, Tag, Tags } from "@/types";
 import createDate from "@/lib/createDate";
@@ -12,7 +19,8 @@ import generateItemsRef from "@/lib/generateItemsRef";
 const NotesContext = createContext<{
 	notes: Notes | null;
 	notesNum: number;
-	isFetching: boolean;
+	fetchAndListenToNote: (id: string) => void;
+	fetchAndListenToNotes: (ids: string[]) => void;
 	getNoteById: (id: string) => Note | null;
 	addNote: (note: NoteObjectForUpdate) => Promise<string | null>;
 	updateNote: (
@@ -36,18 +44,69 @@ interface NotesProviderProps {
 	children: React.ReactNode;
 }
 
+type UnsubscribesObject = { [key: string]: Unsubscribe };
+const initUnsubscribesObject: UnsubscribesObject = {};
+
 export function NotesProvider({ children }: NotesProviderProps) {
+	const unsubscribes = useRef(initUnsubscribesObject);
+
 	const { user } = useUser();
 	const { setTags, getTagById } = useTags();
 
 	const [notes, setNotes] = useState<Notes | null>(null);
 
-	const [isFetching, setIsFetching] = useState(true);
+	const getNoteById = useCallback(
+		(id: string) => {
+			if (!notes) return null;
 
-	function getNoteById(id: string) {
-		if (!notes) return null;
+			return notes[id];
+		},
+		[notes]
+	);
 
-		return notes[id];
+	function fetchAndListenToNote(id: string) {
+		if (!user) return;
+		console.log("fetchAndListenToNote", id, "...");
+
+		const noteRef = generateItemsRef("notes", user.uid) + "/" + id;
+
+		//==================== listen to updates: ====================//
+		const unsubscribe = onValue(ref(rtdb, noteRef), (snapshot) => {
+			if (snapshot.exists()) {
+				const note = snapshot.val() as Note;
+				console.log("DATA WAS FETCHED onValue: note of id", id, note);
+				setNotes((prevNotes) =>
+					prevNotes ? { ...prevNotes, [id]: note } : { [id]: note }
+				);
+			} else {
+				setNotes((prevNotes) => {
+					if (prevNotes) {
+						const updatedNotes = { ...prevNotes };
+						delete updatedNotes[id];
+						return updatedNotes;
+					}
+					return prevNotes;
+				});
+
+				//unsubsribe
+				const unsub = unsubscribes.current[id];
+				unsub();
+				delete unsubscribes.current[id];
+				console.log("unsubscribes after delete:", unsubscribes.current);
+			}
+		});
+
+		unsubscribes.current[id] = unsubscribe;
+		console.log("unsubscribes updated:", unsubscribes.current);
+		//============================================================//
+	}
+
+	function fetchAndListenToNotes(ids: string[]) {
+		if (!ids.length) return;
+
+		console.log("fetchAndListenToNotes:", ids, "...");
+
+		ids.forEach((id) => fetchAndListenToNote(id));
 	}
 
 	/**
@@ -130,7 +189,11 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 			if (!updatedTag) return;
 
-			delete updatedTag.notes![noteId];
+			if (!updatedTag.notes) {
+				return;
+			}
+
+			delete updatedTag.notes[noteId];
 
 			tagsWithRemovedNoteIdToUpdate[tagId] = updatedTag;
 		});
@@ -142,8 +205,9 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			const updatedTag = getTagById(tagId);
 
 			if (!updatedTag) return;
+			if (!updatedTag.notes) return;
 
-			updatedTag.notes![noteId] = true;
+			updatedTag.notes[noteId] = true;
 
 			tagsWithAddedNoteIdToUpdate[tagId] = updatedTag;
 		});
@@ -170,8 +234,6 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		await update(ref(rtdb), updates);
 
-		// update notes
-		setNotes((prevNotes) => ({ ...prevNotes, [noteId]: updatedNote }));
 		// update tags
 		setTags((prevTags) => ({ ...prevTags, ...tagsToAdd }));
 
@@ -195,6 +257,8 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		if (!newNote) return null;
 
+		fetchAndListenToNote(newNote.id);
+
 		return newNote.id;
 	}
 
@@ -212,7 +276,11 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		const noteToDelete = getNoteById(noteId);
 
-		if (!noteToDelete) return;
+		// just in case...
+		// note should be there,
+		// becuase you can delete note only from the note card,
+		// and that means, that the note was fetched:
+		if (!noteToDelete) return alert("There is no note in state to delete...");
 
 		const notesRef = generateItemsRef("notes", user.uid);
 		const tagsRef = generateItemsRef("tags", user.uid);
@@ -225,8 +293,9 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			const updatedTag = getTagById(tagId);
 
 			if (!updatedTag) return;
+			if (!updatedTag.notes) return;
 
-			delete updatedTag.notes![noteId];
+			delete updatedTag.notes[noteId];
 
 			tagsToUpdate[tagId] = updatedTag;
 		});
@@ -240,46 +309,31 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		await update(ref(rtdb), updates);
 
-		setNotes((prevNotes) => {
-			if (prevNotes) {
-				const updatedNotes = { ...prevNotes };
-				delete updatedNotes[noteId];
-				return updatedNotes;
-			}
-			return prevNotes;
-		});
-
 		setTags((prevTags) => ({ ...prevTags, ...tagsToUpdate }));
 	}
 
 	useEffect(() => {
-		async function fetchNotes(reference: string) {
-			return onValue(
-				ref(rtdb, reference),
-				(snapshot) => {
-					const data = snapshot.val() as Notes;
-					console.log("DATA WAS FETCHED: ALL USER'S ITEMS FROM", reference);
-					console.log("fetchedItems:", data);
-					setNotes(data);
-					setIsFetching(false);
-				},
-				{
-					onlyOnce: true,
-				}
-			);
-		}
-
 		if (!user) {
 			setNotes(null);
-		} else {
-			fetchNotes(generateItemsRef("notes", user.uid));
+			// clear unsubscribes:
+			if (Object.keys(unsubscribes.current).length) {
+				Object.values(unsubscribes.current).forEach((unsub) => {
+					unsub();
+				});
+				unsubscribes.current = initUnsubscribesObject;
+				console.log(
+					"User logged out. Unsub all notes & clear unsubscribes object:",
+					unsubscribes.current
+				);
+			}
 		}
 	}, [user]);
 
 	const value = {
 		notes,
 		notesNum: notes ? Object.keys(notes).length : 0,
-		isFetching,
+		fetchAndListenToNote,
+		fetchAndListenToNotes,
 		getNoteById,
 		addNote,
 		updateNote,

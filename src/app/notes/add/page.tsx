@@ -18,7 +18,7 @@ export default function AddNotePage() {
 
 function AddNote() {
 	const router = useRouter();
-	const { addNote, getNoteById } = useNotes();
+	const { addNote } = useNotes();
 	const [isAdding, setIsAdding] = useState(false);
 
 	async function handleSubmit(
@@ -47,8 +47,8 @@ function AddNote() {
 			return console.error("No newNoteId provided... Cannot add note...");
 		}
 
-		const newNote = getNoteById(newNoteId);
-		console.log("New note was added:", newNote);
+		// const newNote = getNoteById(newNoteId);
+		alert(`New note was added with the id: ${newNoteId}`);
 
 		// navigate to new note:
 		router.push("/notes/" + newNoteId);

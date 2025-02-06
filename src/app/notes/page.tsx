@@ -9,7 +9,7 @@ import sortNotes from "@/lib/sortNotes";
 import { Tag as ITag, Note, Tags } from "@/types";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Form, Spinner } from "react-bootstrap";
 
 export default function NotesPageWrappedInSuspense() {
@@ -30,12 +30,24 @@ export default function NotesPageWrappedInSuspense() {
 }
 
 function NotesPage() {
+	const debouncedSetFoundTags = useRef<NodeJS.Timeout | null>(null);
+
 	const router = useRouter();
 
 	const searchParams = useSearchParams();
 
-	const { notes, notesNum, isFetching: areNotesFetching } = useNotes();
+	const {
+		notes,
+		notesNum,
+		getNoteById,
+		fetchAndListenToNotes: fetchNotes,
+	} = useNotes();
 	const { tags, isFetching: areTagsFetching, getTagNotesNum } = useTags();
+
+	const fetchAndListenToNotes = useCallback(
+		(ids: string[]) => fetchNotes(ids),
+		[fetchNotes]
+	);
 
 	// for tags search form:
 	const [input, setInput] = useState<string>("");
@@ -51,15 +63,18 @@ function NotesPage() {
 	// split tags search string into an array of tagsIds:
 	const searchTagsIds = searchTagsIdsString
 		? searchTagsIdsString.split(" ") // "+"
-		: []
+		: [];
 	// console.log(searchTagsIds)
-	const searchTags = searchTagsIds.reduce((filterTags, tagId) => tags ? ([...filterTags, tags[tagId]]) : [], [] as ITag[])
+	const searchTags = searchTagsIds.reduce(
+		(filterTags, tagId) => (tags ? [...filterTags, tags[tagId]] : []),
+		[] as ITag[]
+	);
 	// console.log("searchTags:", searchTags)
 
 	function filterNotesIds() {
 		let filteredNotesIds: string[] = [];
 
-		searchTags.forEach(tag => {
+		searchTags.forEach((tag) => {
 			// if any of tags has got no notes, reset filteredNotesIds & break the loop:
 			if (!tag || !tag.notes) {
 				filteredNotesIds = [];
@@ -68,22 +83,33 @@ function NotesPage() {
 
 			// if tag has got notes ids & filteredNotesIds are empty, push ids:
 			if (!filteredNotesIds.length) {
-				filteredNotesIds.push(...Object.keys(tag.notes))
+				filteredNotesIds.push(...Object.keys(tag.notes));
 			}
 
 			if (searchTags.length > 1) {
 				// now with the every next tag keep only notes id that are common:
-				const mutualNoteIds = Object.keys(tag.notes).filter(id => filteredNotesIds.includes(id))
-				filteredNotesIds = mutualNoteIds
+				const mutualNoteIds = Object.keys(tag.notes).filter((id) =>
+					filteredNotesIds.includes(id)
+				);
+				filteredNotesIds = mutualNoteIds;
 			}
-		})
+		});
 
-		return filteredNotesIds
+		return filteredNotesIds;
 	}
 
-	const filteredNotesIds = filterNotesIds()
+	const filteredNotesIds = filterNotesIds();
+
+	const filteredNotesIdsToFetch = filteredNotesIds.filter(
+		(id) => !getNoteById(id)
+	);
+	//==========================================================================================//
 	// console.log("filteredNotesIds:", filteredNotesIds)
-	const filteredNotes: Note[] = notes ? filteredNotesIds.map(noteId => notes[noteId]) : []
+	const filteredNotes: Note[] = notes
+		? (filteredNotesIds
+				.map((noteId) => getNoteById(noteId))
+				.filter((note) => note) as Note[])
+		: [];
 	// console.log("filteredNotes:", filteredNotes)
 
 	const filteredAndSortedNotes = sortNotes(
@@ -91,7 +117,11 @@ function NotesPage() {
 		sortBy as "lastUpdated" | "firstUpdated" | "lastCreated" | "firstCreated"
 	); // ⚠️ note object consists noteId
 
-	const debouncedSetFoundTags = useRef<NodeJS.Timeout | null>(null);
+	useEffect(() => {
+		if (filteredNotesIdsToFetch.length) {
+			fetchAndListenToNotes(filteredNotesIdsToFetch);
+		}
+	}, [fetchAndListenToNotes, filteredNotesIdsToFetch]);
 
 	return (
 		<PrivateRoute>
@@ -114,7 +144,7 @@ function NotesPage() {
 
 						// clear prev debounce timer:
 						if (debouncedSetFoundTags.current) {
-							clearTimeout(debouncedSetFoundTags.current)
+							clearTimeout(debouncedSetFoundTags.current);
 						}
 
 						// reassign debounce timer:
@@ -128,13 +158,18 @@ function NotesPage() {
 										tag.tag.startsWith(changedInput)
 									);
 
-									setFoundTags(foundTags.reduce((prev, curr) => ({ ...prev, [curr.id]: curr }), {} as Tags))
+									setFoundTags(
+										foundTags.reduce(
+											(prev, curr) => ({ ...prev, [curr.id]: curr }),
+											{} as Tags
+										)
+									);
 								}
 							} else {
 								// if input is cleared:
 								setFoundTags({});
 							}
-						}, 500)
+						}, 500);
 					}}
 				/>
 
@@ -142,8 +177,9 @@ function NotesPage() {
 				<div className="found-tags">
 					{Object.keys(foundTags).map((id) => (
 						<Link
-							href={`?tags=${searchTagsIdsString ? searchTagsIdsString + "+" + id : id
-								}&sortBy=${sortBy}`}
+							href={`?tags=${
+								searchTagsIdsString ? searchTagsIdsString + "+" + id : id
+							}&sortBy=${sortBy}`}
 							key={id}
 						>
 							<Tag
@@ -192,7 +228,9 @@ function NotesPage() {
 					className="form-control mb-2"
 					onChange={(e) =>
 						searchTagsIdsString
-							? router.push(`?tags=${searchTagsIdsString}&sortBy=${e.target.value}`)
+							? router.push(
+									`?tags=${searchTagsIdsString}&sortBy=${e.target.value}`
+							  )
 							: router.push(`?sortBy=${e.target.value}`)
 					}
 					value={sortBy}
@@ -204,35 +242,24 @@ function NotesPage() {
 				</select>
 			</div>
 
-			{areNotesFetching && (
-				<div className="text-center">
-					Loading your notes...{" "}
-					<Spinner animation="border" role="status">
-						<span className="visually-hidden">Loading...</span>
-					</Spinner>
-				</div>
-			)}
-
-			<div
-				id="filtered-notes"
-			>
-				{
-					areTagsFetching
-						? <div className="text-center">
-							Loading your tags...{" "}
-							<Spinner animation="border" role="status">
-								<span className="visually-hidden">Loading...</span>
-							</Spinner>
-						</div>
-						: filteredAndSortedNotes.map((note) => (
-							<NoteCard
-								key={note.id}
-								note={note}
-								noteKey={note.id}
-								show140chars={true}
-							/>
-						))
-				}
+			<div id="filtered-notes">
+				{areTagsFetching ? (
+					<div className="text-center">
+						Loading your tags...{" "}
+						<Spinner animation="border" role="status">
+							<span className="visually-hidden">Loading...</span>
+						</Spinner>
+					</div>
+				) : (
+					filteredAndSortedNotes.map((note) => (
+						<NoteCard
+							key={note.id}
+							note={note}
+							noteKey={note.id}
+							show140chars={true}
+						/>
+					))
+				)}
 			</div>
 		</PrivateRoute>
 	);
