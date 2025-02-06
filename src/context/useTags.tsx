@@ -1,6 +1,6 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, onValue, update } from "firebase/database";
+import { ref, onValue, update, remove } from "firebase/database";
 import {
 	createContext,
 	Dispatch,
@@ -21,7 +21,8 @@ const TagsContext = createContext<{
 	setTags: Dispatch<SetStateAction<Tags | null>>;
 	getTagById: (id: string) => Tag | null;
 	getTagNotesNum: (tagId: string) => number;
-	updateTag: (value: string, id: string) => Promise<null | undefined>
+	updateTag: (value: string, id: string) => Promise<null | undefined>;
+	deleteTag: (tag: Tag) => Promise<void>
 } | null>(null);
 
 export default function useTags() {
@@ -96,6 +97,34 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		setTags(prevTags => ({ ...prevTags, [id]: { ...prevTags![id], ...updatedTagProps } }))
 	}
 
+	async function deleteTag(tag: Tag) {
+		// CHECKS:
+		if (!user) {
+			const msg = "Cannot set tag when user is not logged...";
+			console.error(msg);
+			alert(msg);
+			return;
+		}
+
+		if (tag.notes) {
+			const msg = "Cannot delete tag with notes assigned... Remove the tag from it's notes, than try to delete the tag.";
+			console.error(msg);
+			alert(msg);
+			return;
+		}
+
+		const tagRef = generateItemsRef("tags", user.uid) + "/" + tag.id;
+
+		await remove(ref(rtdb, tagRef));
+
+		setTags(prevTags => {
+			const updatedTags = {...prevTags}
+			delete updatedTags[tag.id];
+
+			return updatedTags
+		})
+	}
+
 	useEffect(() => {
 		async function fetchTags(reference: string) {
 			return onValue(
@@ -128,7 +157,8 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		setTags,
 		getTagById,
 		getTagNotesNum,
-		updateTag
+		updateTag,
+		deleteTag
 	};
 
 	return <TagsContext.Provider value={value}>{children}</TagsContext.Provider>;

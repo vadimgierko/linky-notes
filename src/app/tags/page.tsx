@@ -2,9 +2,9 @@
 import PrivateRoute from "@/components/PrivateRoute";
 import useTags from "@/context/useTags";
 import { Tag as ITag } from "@/types";
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { Dropdown, Form, Spinner } from "react-bootstrap";
+import { Form, Spinner } from "react-bootstrap";
+import TagComponent from "./TagComponent";
 
 export default function TagsPage() {
 	return (
@@ -34,7 +34,6 @@ function Tags() {
 		isFetching,
 		getTagNotesNum,
 		getTagById,
-		updateTag
 	} = useTags();
 
 	const [sortBy, setSortBy] = useState<SortBy>("alphabetically");
@@ -126,46 +125,11 @@ function Tags() {
 						</>
 						: sortedTags
 							.map(tag => (
-								<Dropdown
-								key={tag.id}
-								style={{
-									display: "inline-block",
-								}}
-								className="m-1"
-								>
-									<Dropdown.Toggle>
-										{`${tag.tag} (${getTagNotesNum(tag.id)})`}
-									</Dropdown.Toggle>
-
-									<Dropdown.Menu>
-										<Link href={`/notes?tags=${tag.id}`} passHref legacyBehavior>
-											<Dropdown.Item >🔎</Dropdown.Item>
-										</Link>
-
-										<Dropdown.Item
-											onClick={async () => {
-												const newTagValue = prompt(`Provide the new tag value for ${tag.tag}:`, tag.tag);
-
-												if (newTagValue && newTagValue.trim().length) {
-													await updateTag(newTagValue, tag.id);
-													alert(`${tag.tag} tag was updated to ${newTagValue}!`)
-												} else {
-													alert("New tag value should have at least 1 character!");
-												}
-											}}
-										>
-											✏️
-										</Dropdown.Item>
-										<Dropdown.Item>🗑️</Dropdown.Item>
-									</Dropdown.Menu>
-								</Dropdown>
-								// <Link href={`/notes?tags=${tag.id}`} key={tag.id}>
-								// 	<Tag
-								// 		value={`${tag.tag} (${getTagNotesNum(tag.id)})`}
-								// 	/>
-								// </Link>
+								<TagComponent
+									key={tag.id}
+									tag={tag}
+								/>
 							))
-
 				}
 			</div>
 		</>
