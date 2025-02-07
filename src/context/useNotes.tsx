@@ -1,6 +1,6 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, update, onValue, Unsubscribe } from "firebase/database";
+import { ref, update, onValue, Unsubscribe, increment } from "firebase/database";
 import {
 	createContext,
 	useCallback,
@@ -18,7 +18,7 @@ import generateItemsRef from "@/lib/generateItemsRef";
 
 const NotesContext = createContext<{
 	notes: Notes | null;
-	notesNum: number;
+	notesNum: number | null;
 	fetchAndListenToNote: (id: string) => void;
 	fetchAndListenToNotes: (ids: string[]) => void;
 	getNoteById: (id: string) => Note | null;
@@ -44,15 +44,18 @@ interface NotesProviderProps {
 	children: React.ReactNode;
 }
 
-type UnsubscribesObject = { [key: string]: Unsubscribe };
-const initUnsubscribesObject: UnsubscribesObject = {};
+type UnsubscribesObject = { [key: string]: Unsubscribe } | null;
+const initUnsubscribesObject: UnsubscribesObject = null;
 
 export function NotesProvider({ children }: NotesProviderProps) {
+	const notesNumUnsubscribe = useRef<Unsubscribe | null>(null);
+	// notes unsubscribes:
 	const unsubscribes = useRef(initUnsubscribesObject);
 
 	const { user } = useUser();
 	const { setTags, getTagById } = useTags();
 
+	const [notesNum, setNotesNum] = useState<number | null>(0);
 	const [notes, setNotes] = useState<Notes | null>(null);
 
 	const getNoteById = useCallback(
@@ -89,15 +92,20 @@ export function NotesProvider({ children }: NotesProviderProps) {
 				});
 
 				//unsubsribe
-				const unsub = unsubscribes.current[id];
-				unsub();
-				delete unsubscribes.current[id];
-				console.log("unsubscribes after delete:", unsubscribes.current);
+				if (unsubscribes.current) {
+					const unsub = unsubscribes.current[id];
+					unsub();
+					delete unsubscribes.current[id];
+					console.log("unsubscribes after delete:", unsubscribes.current);
+				}
+
 			}
 		});
 
-		unsubscribes.current[id] = unsubscribe;
-		console.log("unsubscribes updated:", unsubscribes.current);
+		if (unsubscribes.current) {
+			unsubscribes.current[id] = unsubscribe;
+			console.log("unsubscribes updated:", unsubscribes.current);
+		}
 		//============================================================//
 	}
 
@@ -118,7 +126,11 @@ export function NotesProvider({ children }: NotesProviderProps) {
 	 * transforms newly created tags into `Tag`s,
 	 * updates RTDB & returns updated `Note`.
 	 */
-	async function setNote(note: NoteObjectForUpdate, noteId: string) {
+	async function setNote(
+		note: NoteObjectForUpdate,
+		noteId: string,
+		incrementNotesNum: boolean = false
+	) {
 		// CHECKS:
 		if (!user) {
 			console.error("Cannot set note when user is not logged...");
@@ -216,7 +228,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		const tagsRef = generateItemsRef("tags", user.uid);
 		//===========================================================
 		// add note to rtdb & new tags using update
-		const updates: { [key: string]: Note | Tag } = {};
+		const updates: { [key: string]: Note | Tag | object } = {};
 		// update note in rtdb:
 		updates[notesRef + "/" + noteId] = updatedNote;
 		// update new tags in rtdb:
@@ -231,6 +243,11 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		Object.keys(tagsWithAddedNoteIdToUpdate).forEach((tagId) => {
 			updates[tagsRef + "/" + tagId] = tagsWithAddedNoteIdToUpdate[tagId];
 		});
+
+		if (incrementNotesNum) {
+			// increment notesNum:
+			updates[`users/${user.uid}/notesNum`] = increment(1);
+		}
 
 		await update(ref(rtdb), updates);
 
@@ -253,7 +270,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			return null;
 		}
 
-		const newNote = await setNote(note, noteId);
+		const newNote = await setNote(note, noteId, true);
 
 		if (!newNote) return null;
 
@@ -285,7 +302,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		const notesRef = generateItemsRef("notes", user.uid);
 		const tagsRef = generateItemsRef("tags", user.uid);
 		// collect updated tags & removed note:
-		const updates: { [key: string]: Note | Tag | null } = {};
+		const updates: { [key: string]: Note | Tag | null | object } = {};
 
 		// ❗❗❗ REMOVE NOTE ID FROM IT'S TAGS ❗❗❗
 		const tagsToUpdate: Tags = {};
@@ -307,31 +324,65 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			updates[tagsRef + "/" + updatedTagId] = tagsToUpdate[updatedTagId];
 		});
 
+		// decrease notesNum:
+		updates[`users/${user.uid}/notesNum`] = increment(-1);
+
 		await update(ref(rtdb), updates);
 
 		setTags((prevTags) => ({ ...prevTags, ...tagsToUpdate }));
 	}
 
 	useEffect(() => {
-		if (!user) {
+		if (user) {
+			// LISTEN TO NOTES NUM:
+			const unsubscribeNotesNum = onValue(
+				ref(rtdb, `users/${user.uid}/notesNum`),
+				snapshot => {
+					if (snapshot.exists()) {
+						const num = snapshot.val() as number
+						setNotesNum(num);
+					} else {
+						console.log("There is no notesNum value...");
+						setNotesNum(null);
+						// unsubscribe from notesNum:
+						if (notesNumUnsubscribe.current) {
+							notesNumUnsubscribe.current = null;
+						}
+					}
+				}
+			);
+
+			notesNumUnsubscribe.current = unsubscribeNotesNum;
+		} else {
+			// NO USER => CLEAR STATE & UNSUBSCRIBE FROM ALL:
 			setNotes(null);
-			// clear unsubscribes:
-			if (Object.keys(unsubscribes.current).length) {
+			setNotesNum(null);
+			// unsubscribe from notesNum:
+			if (notesNumUnsubscribe.current) {
+				notesNumUnsubscribe.current = null;
+			}
+			console.log(
+				"User logged out. Unsub notesNum & clear notesNumUnsubscribe:",
+				notesNumUnsubscribe.current
+			);
+			// clear notes unsubscribes:
+			if (unsubscribes.current) {
 				Object.values(unsubscribes.current).forEach((unsub) => {
 					unsub();
 				});
 				unsubscribes.current = initUnsubscribesObject;
-				console.log(
-					"User logged out. Unsub all notes & clear unsubscribes object:",
-					unsubscribes.current
-				);
 			}
+
+			console.log(
+				"User logged out. Unsub all notes & clear unsubscribes object:",
+				unsubscribes.current
+			);
 		}
 	}, [user]);
 
 	const value = {
 		notes,
-		notesNum: notes ? Object.keys(notes).length : 0,
+		notesNum,
 		fetchAndListenToNote,
 		fetchAndListenToNotes,
 		getNoteById,

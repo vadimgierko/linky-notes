@@ -127,7 +127,7 @@ function NotesPage() {
 		<PrivateRoute>
 			<header>
 				<h1 className="text-center">
-					Filtered Notes ({filteredAndSortedNotes.length}/{notesNum})
+					Filtered Notes ({filteredAndSortedNotes.length}/{notesNum ? notesNum : 0})
 				</h1>
 			</header>
 
