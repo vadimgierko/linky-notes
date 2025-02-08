@@ -1,6 +1,12 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, update, onValue, Unsubscribe, increment } from "firebase/database";
+import {
+	ref,
+	update,
+	onValue,
+	Unsubscribe,
+	increment,
+} from "firebase/database";
 import {
 	createContext,
 	useCallback,
@@ -53,7 +59,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 	const unsubscribes = useRef(initUnsubscribesObject);
 
 	const { user } = useUser();
-	const { setTags, getTagById } = useTags();
+	const { getTagById } = useTags();
 
 	const [notesNum, setNotesNum] = useState<number | null>(0);
 	const [notes, setNotes] = useState<Notes | null>(null);
@@ -98,7 +104,6 @@ export function NotesProvider({ children }: NotesProviderProps) {
 					delete unsubscribes.current[id];
 					console.log("unsubscribes after delete:", unsubscribes.current);
 				}
-
 			}
 		});
 
@@ -251,9 +256,6 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		await update(ref(rtdb), updates);
 
-		// update tags
-		setTags((prevTags) => ({ ...prevTags, ...tagsToAdd }));
-
 		return updatedNote;
 	}
 
@@ -328,8 +330,6 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		updates[`users/${user.uid}/notesNum`] = increment(-1);
 
 		await update(ref(rtdb), updates);
-
-		setTags((prevTags) => ({ ...prevTags, ...tagsToUpdate }));
 	}
 
 	useEffect(() => {
@@ -337,9 +337,9 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			// LISTEN TO NOTES NUM:
 			const unsubscribeNotesNum = onValue(
 				ref(rtdb, `users/${user.uid}/notesNum`),
-				snapshot => {
+				(snapshot) => {
 					if (snapshot.exists()) {
-						const num = snapshot.val() as number
+						const num = snapshot.val() as number;
 						setNotesNum(num);
 					} else {
 						console.log("There is no notesNum value...");
