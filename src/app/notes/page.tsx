@@ -42,7 +42,7 @@ function NotesPage() {
 		getNoteById,
 		fetchAndListenToNotes: fetchNotes,
 	} = useNotes();
-	const { tags, isFetching: areTagsFetching, getTagNotesNum } = useTags();
+	const { tags, getTagNotesNum } = useTags();
 
 	const fetchAndListenToNotes = useCallback(
 		(ids: string[]) => fetchNotes(ids),
@@ -127,7 +127,8 @@ function NotesPage() {
 		<PrivateRoute>
 			<header>
 				<h1 className="text-center">
-					Filtered Notes ({filteredAndSortedNotes.length}/{notesNum ? notesNum : 0})
+					Filtered Notes ({filteredAndSortedNotes.length}/
+					{notesNum ? notesNum : 0})
 				</h1>
 			</header>
 
@@ -243,23 +244,14 @@ function NotesPage() {
 			</div>
 
 			<div id="filtered-notes">
-				{areTagsFetching ? (
-					<div className="text-center">
-						Loading your tags...{" "}
-						<Spinner animation="border" role="status">
-							<span className="visually-hidden">Loading...</span>
-						</Spinner>
-					</div>
-				) : (
-					filteredAndSortedNotes.map((note) => (
-						<NoteCard
-							key={note.id}
-							note={note}
-							noteKey={note.id}
-							show140chars={true}
-						/>
-					))
-				)}
+				{filteredAndSortedNotes.map((note) => (
+					<NoteCard
+						key={note.id}
+						note={note}
+						noteKey={note.id}
+						show140chars={true}
+					/>
+				))}
 			</div>
 		</PrivateRoute>
 	);

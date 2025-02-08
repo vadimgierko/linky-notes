@@ -1,6 +1,13 @@
 "use client";
 import { rtdb } from "@/firebaseConfig";
-import { ref, onValue, update, remove } from "firebase/database";
+import {
+	ref,
+	update,
+	remove,
+	onChildAdded,
+	onChildChanged,
+	onChildRemoved,
+} from "firebase/database";
 import {
 	createContext,
 	Dispatch,
@@ -17,12 +24,11 @@ import createDate from "@/lib/createDate";
 const TagsContext = createContext<{
 	tags: Tags | null;
 	tagsNum: number;
-	isFetching: boolean;
 	setTags: Dispatch<SetStateAction<Tags | null>>;
 	getTagById: (id: string) => Tag | null;
 	getTagNotesNum: (tagId: string) => number;
 	updateTag: (value: string, id: string) => Promise<null | undefined>;
-	deleteTag: (tag: Tag) => Promise<void>
+	deleteTag: (tag: Tag) => Promise<void>;
 } | null>(null);
 
 export default function useTags() {
@@ -43,17 +49,13 @@ export function TagsProvider({ children }: TagsProviderProps) {
 	const { user } = useUser();
 	const [tags, setTags] = useState<Tags | null>(null);
 
-	const [isFetching, setIsFetching] = useState(true);
-
 	function getTagById(id: string) {
 		if (!tags) return null;
-
 		return tags[id];
 	}
 
 	function getTagNotesNum(tagId: string) {
 		if (!tags || !tags[tagId] || !tags[tagId].notes) return 0;
-
 		return Object.keys(tags[tagId].notes).length;
 	}
 
@@ -70,31 +72,28 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		}
 
 		const date = createDate();
-
 		const tagRef = generateItemsRef("tags", user.uid) + "/" + id;
 
 		const updatedTagProps: {
-			updatedAt: Tag["updatedAt"],
-			tag: Tag["tag"]
+			updatedAt: Tag["updatedAt"];
+			tag: Tag["tag"];
 		} = {
 			updatedAt: date,
-			tag: value
-		}
+			tag: value,
+		};
 
 		const updates: {
-			[key: string]: Tag
-		} = {}
+			[key: string]: Tag;
+		} = {};
 
 		const prevTag = getTagById(id);
 
 		updates[tagRef] = {
 			...prevTag!,
-			...updatedTagProps
-		}
+			...updatedTagProps,
+		};
 
 		await update(ref(rtdb), updates);
-
-		setTags(prevTags => ({ ...prevTags, [id]: { ...prevTags![id], ...updatedTagProps } }))
 	}
 
 	async function deleteTag(tag: Tag) {
@@ -107,58 +106,65 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		}
 
 		if (tag.notes) {
-			const msg = "Cannot delete tag with notes assigned... Remove the tag from it's notes, than try to delete the tag.";
+			const msg =
+				"Cannot delete tag with notes assigned... Remove the tag from it's notes, than try to delete the tag.";
 			console.error(msg);
 			alert(msg);
 			return;
 		}
 
 		const tagRef = generateItemsRef("tags", user.uid) + "/" + tag.id;
-
 		await remove(ref(rtdb, tagRef));
-
-		setTags(prevTags => {
-			const updatedTags = {...prevTags}
-			delete updatedTags[tag.id];
-
-			return updatedTags
-		})
 	}
 
 	useEffect(() => {
-		async function fetchTags(reference: string) {
-			return onValue(
-				ref(rtdb, reference),
-				(snapshot) => {
-					const data = snapshot.val() as Tags;
-					console.log("DATA WAS FETCHED: ALL USER'S ITEMS FROM", reference);
-					console.log("fetchedItems:", data);
-					setTags(data);
-					setIsFetching(false);
-				},
-				{
-					onlyOnce: true,
-				}
-			);
+		function fetchTagsAndListenToChanges(reference: string) {
+			const tagsRef = ref(rtdb, reference);
+
+			onChildAdded(tagsRef, (snapshot) => {
+				const newTag = snapshot.val() as Tag;
+				// console.log("DATA WAS FETCHED (onChildAdded): tag added:", newTag);
+				setTags((prevTags) => ({ ...prevTags, [snapshot.key!]: newTag }));
+			});
+
+			onChildChanged(tagsRef, (snapshot) => {
+				const updatedTag = snapshot.val() as Tag;
+				console.log(
+					"DATA WAS FETCHED (onChildChanged): tag updated:",
+					updatedTag
+				);
+				setTags((prevTags) => ({ ...prevTags, [snapshot.key!]: updatedTag }));
+			});
+
+			onChildRemoved(tagsRef, (snapshot) => {
+				console.log(
+					"DATA WAS FETCHED (onChildRemoved): tag removed:",
+					snapshot.val()
+				);
+				setTags((prevTags) => {
+					const updatedTags = { ...prevTags };
+					delete updatedTags[snapshot.key!];
+					return updatedTags;
+				});
+			});
 		}
 
 		if (!user) {
 			setTags(null);
 		} else {
 			const tagsRef = generateItemsRef("tags", user.uid);
-			fetchTags(tagsRef);
+			fetchTagsAndListenToChanges(tagsRef);
 		}
 	}, [user]);
 
 	const value = {
 		tags,
 		tagsNum: tags ? Object.keys(tags).length : 0,
-		isFetching,
 		setTags,
 		getTagById,
 		getTagNotesNum,
 		updateTag,
-		deleteTag
+		deleteTag,
 	};
 
 	return <TagsContext.Provider value={value}>{children}</TagsContext.Provider>;
