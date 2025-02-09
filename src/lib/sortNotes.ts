@@ -1,13 +1,6 @@
-import { Note } from "@/types";
+import { Note, SortBy } from "@/types";
 
-export default function sortNotes(
-	notes: Note[] = [],
-	sortBy:
-		| "lastUpdated"
-		| "firstUpdated"
-		| "lastCreated"
-		| "firstCreated" = "lastUpdated"
-) {
+export default function sortNotes(notes: Note[], sortBy: SortBy): Note[] {
 	// Create a new array with updated updatedAt properties if necessary
 	const processedNotes: Note[] = notes.map((note) => {
 		return {

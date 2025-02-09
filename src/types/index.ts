@@ -107,3 +107,9 @@ export interface Tags {
 // 		[key: string]: true;
 // 	};
 // };
+
+export type SortBy =
+	| "lastUpdated"
+	| "firstUpdated"
+	| "lastCreated"
+	| "firstCreated";

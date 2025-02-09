@@ -32,6 +32,10 @@
 1. Wyszukuj notatki tymi tagami i dołączaj/ linkuj do spisu treści + dodaj oznaczenie/ tag `processed note`
 1. rozbijaj notatki na mniejsze chunks
 
+## Changelog
+
+Linky Notes has been in development for several years. Starting with version 1.0, we are officially tracking changes in a public changelog.
+
 ## 🚀 Nowe funkcjonalności
 
 - Określ zależności pomiędzy tagami (dodaj możliwość organizacji tagów w apce):

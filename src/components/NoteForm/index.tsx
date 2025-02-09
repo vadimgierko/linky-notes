@@ -174,7 +174,9 @@ export default function NoteForm({
 							// find tags or create a new one
 							if (TAGS && Object.keys(TAGS).length) {
 								const foundTagsId = Object.keys(TAGS).filter((id) =>
-									TAGS[id].tag.startsWith(changedInput)
+									TAGS[id].tag
+										.toLowerCase()
+										.startsWith(changedInput.toLowerCase())
 								);
 								// if there is at least one existing tag found:
 								if (foundTagsId.length) {

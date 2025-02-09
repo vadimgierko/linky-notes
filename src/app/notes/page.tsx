@@ -1,16 +1,16 @@
 "use client";
 import NoteCard from "@/components/NoteCard";
 import PrivateRoute from "@/components/PrivateRoute";
-import Tag from "@/components/Tag";
+import TagsSearchBar from "@/components/TagsSearchBar";
 import TagWithTrashIcon from "@/components/TagWithTrashIcon";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
 import sortNotes from "@/lib/sortNotes";
-import { Tag as ITag, Note, Tags } from "@/types";
+import { Tag as ITag, Note, SortBy } from "@/types";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { Form, Spinner } from "react-bootstrap";
+import { Suspense, useCallback, useEffect } from "react";
+import { Spinner } from "react-bootstrap";
 
 export default function NotesPageWrappedInSuspense() {
 	return (
@@ -30,8 +30,6 @@ export default function NotesPageWrappedInSuspense() {
 }
 
 function NotesPage() {
-	const debouncedSetFoundTags = useRef<NodeJS.Timeout | null>(null);
-
 	const router = useRouter();
 
 	const searchParams = useSearchParams();
@@ -42,22 +40,20 @@ function NotesPage() {
 		getNoteById,
 		fetchAndListenToNotes: fetchNotes,
 	} = useNotes();
-	const { tags, getTagNotesNum } = useTags();
+	const { tags } = useTags();
 
 	const fetchAndListenToNotes = useCallback(
 		(ids: string[]) => fetchNotes(ids),
 		[fetchNotes]
 	);
 
-	// for tags search form:
-	const [input, setInput] = useState<string>("");
-	const [foundTags, setFoundTags] = useState<Tags>({});
-
 	//======================== searchTags => filteredNotes ========================//
 	/**
 	 * options: lastUpdated (default), firstUpdated, lastCreated, firstCreated
 	 */
-	const sortBy = searchParams.get("sortBy") || "lastUpdated";
+	const sortBy = searchParams.get("sortBy")
+		? (searchParams.get("sortBy") as SortBy)
+		: "lastUpdated";
 
 	const searchTagsIdsString = searchParams.get("tags");
 	// split tags search string into an array of tagsIds:
@@ -134,67 +130,12 @@ function NotesPage() {
 
 			{/*================== search bar ==================*/}
 			<div className="search-bar">
-				<Form.Label>Filter your notes by tags:</Form.Label>
-				<Form.Control
-					className="form-control mb-2"
-					value={input}
-					placeholder="type some tag to filter your notes & click found tag"
-					onChange={(e) => {
-						const changedInput = e.target.value;
-						setInput(changedInput);
-
-						// clear prev debounce timer:
-						if (debouncedSetFoundTags.current) {
-							clearTimeout(debouncedSetFoundTags.current);
-						}
-
-						// reassign debounce timer:
-						debouncedSetFoundTags.current = setTimeout(() => {
-							// console.log("debouncing")
-							//=============================================
-							// when user types, set found tags to show them:
-							if (changedInput && changedInput.length) {
-								if (tags && Object.keys(tags).length) {
-									const foundTags: ITag[] = Object.values(tags).filter((tag) =>
-										tag.tag.startsWith(changedInput)
-									);
-
-									setFoundTags(
-										foundTags.reduce(
-											(prev, curr) => ({ ...prev, [curr.id]: curr }),
-											{} as Tags
-										)
-									);
-								}
-							} else {
-								// if input is cleared:
-								setFoundTags({});
-							}
-						}, 500);
-					}}
+				<TagsSearchBar
+					searchTagsIdsString={
+						searchTagsIdsString ? searchTagsIdsString : undefined
+					}
+					sortBy={sortBy ? sortBy : undefined}
 				/>
-
-				{/*======================================== found tags */}
-				<div className="found-tags">
-					{Object.keys(foundTags).map((id) => (
-						<Link
-							href={`?tags=${
-								searchTagsIdsString ? searchTagsIdsString + "+" + id : id
-							}&sortBy=${sortBy}`}
-							key={id}
-						>
-							<Tag
-								value={`${tags![id].tag} (${getTagNotesNum(id)})`} // 🚀❗ fix using !
-								onClick={() => {
-									// clear found tags:
-									setFoundTags({});
-									// clear input:
-									setInput("");
-								}}
-							/>
-						</Link>
-					))}
-				</div>
 
 				{/*======================================== filter tags */}
 				{searchTagsIdsString && tags ? (
