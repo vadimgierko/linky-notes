@@ -123,7 +123,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
 			onChildAdded(tagsRef, (snapshot) => {
 				const newTag = snapshot.val() as Tag;
-				// console.log("DATA WAS FETCHED (onChildAdded): tag added:", newTag);
+				console.log("New tag was added to RTDB:", newTag);
 				setTags((prevTags) => ({ ...prevTags, [snapshot.key!]: newTag }));
 			});
 

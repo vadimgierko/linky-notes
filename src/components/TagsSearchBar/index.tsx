@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import Tag from "../Tag";
 import Link from "next/link";
+import sortTagsAlphabetically from "@/lib/sortTagsAlphabetically";
 
 interface TagsSearchBarProps {
 	onFoundTagsClick?: (tag: ITag) => void;
@@ -24,6 +25,7 @@ export default function TagsSearchBar({
 
 	const [input, setInput] = useState<string>("");
 	const [foundTags, setFoundTags] = useState<Tags>({});
+	const foundTagsSortedAlphabetically = sortTagsAlphabetically(foundTags);
 
 	return (
 		<div className="tags-search-bar">
@@ -73,18 +75,14 @@ export default function TagsSearchBar({
 				 * if /tags found tags should be links to /tags/[tagId];
 				 * if /notes/add or /update tags should be just buttons with onClick to add tag to the note's tags
 				 */}
-				{Object.keys(foundTags).map((id) => {
-					const tag = getTagById(id);
-
-					if (!tag) return null;
-
+				{foundTagsSortedAlphabetically.map((tag) => {
 					if (onFoundTagsClick) {
 						return (
 							<Tag
-								key={id}
-								value={`${tag.tag} (${getTagNotesNum(id)})`} // 🚀❗ fix using !
+								key={tag.id}
+								value={`${tag.tag} (${getTagNotesNum(tag.id)})`}
 								onClick={() => {
-									onFoundTagsClick(getTagById(id)!);
+									onFoundTagsClick(getTagById(tag.id)!);
 									// clear found tags:
 									setFoundTags({});
 									// clear input:
@@ -95,14 +93,13 @@ export default function TagsSearchBar({
 					} else {
 						return (
 							<Link
-								href={`?tags=${
-									searchTagsIdsString ? searchTagsIdsString + "+" + id : id
-								}&sortBy=${sortBy}`}
-								key={id}
+								href={`?tags=${searchTagsIdsString ? searchTagsIdsString + "+" + tag.id : tag.id
+									}&sortBy=${sortBy}`}
+								key={tag.id}
 							>
 								<Tag
-									key={id}
-									value={`${tag.tag} (${getTagNotesNum(id)})`} // 🚀❗ fix using !
+									key={tag.id}
+									value={`${tag.tag} (${getTagNotesNum(tag.id)})`}
 									onClick={() => {
 										// clear found tags:
 										setFoundTags({});

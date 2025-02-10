@@ -138,6 +138,7 @@ function NotesPage() {
 				/>
 
 				{/*======================================== filter tags */}
+				{/** I COULD SORT IT ALPHABETICALLY, BUT I THINK IT'S BETTER TO HAVE IT IN ORDER OF SEARCH */}
 				{searchTagsIdsString && tags ? (
 					<div className="filter-tags">
 						{searchTagsIdsString

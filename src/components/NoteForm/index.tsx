@@ -8,6 +8,7 @@ import MarkdownRenderer from "../MarkdownRenderer";
 import useNotes from "@/context/useNotes";
 import { Tag as ITag, NoteObjectForUpdate, Tags } from "@/types";
 import useTags from "@/context/useTags";
+import sortTagsAlphabetically from "@/lib/sortTagsAlphabetically";
 
 interface NoteFormProps {
 	noteKey?: string;
@@ -28,6 +29,18 @@ export default function NoteForm({
 	// tag search bar:
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState<Tags>({}); // tags which exist in database
+	const foundTagsSortedAlphabetically = sortTagsAlphabetically(foundTags);
+
+	// sort note existing tags alphabetically:
+	const noteExistingTags: ITag[] = Object.keys({
+		...note?.existingTags
+	})
+		.map(tagId => getTagById(tagId))
+		.filter(t => t !== null) as ITag[]
+	const noteExistingTagsObject = noteExistingTags
+		.reduce((tagsObject, tag) => ({ ...tagsObject, [tag.id]: tag }), {} as Tags)
+	const noteExistingTagsSortedAlphabetically = sortTagsAlphabetically(noteExistingTagsObject)
+
 	const [newTag, setNewTag] = useState(""); // new tag added by user
 	// editor mode: (edit, preview)
 	const [editorMode, setEditorMode] = useState<"edit" | "preview">("edit");
@@ -183,10 +196,10 @@ export default function NoteForm({
 									let updatedFoundTags: { [key: string]: ITag } = {};
 									foundTagsId.forEach(
 										(id) =>
-											(updatedFoundTags = {
-												...updatedFoundTags,
-												[id]: TAGS[id],
-											})
+										(updatedFoundTags = {
+											...updatedFoundTags,
+											[id]: TAGS[id],
+										})
 									);
 									setFoundTags(updatedFoundTags);
 									// set new tag if there is no exact match with any of found tags or existing & new:
@@ -194,18 +207,18 @@ export default function NoteForm({
 										Object.keys(updatedFoundTags).find(
 											(tagId) => updatedFoundTags[tagId].tag === changedInput
 										) ||
-										(Object.keys(note.existingTags).length
-											? Object.keys(note.existingTags).find((tagId) => {
+											(Object.keys(note.existingTags).length
+												? Object.keys(note.existingTags).find((tagId) => {
 													const tag = getTagById(tagId);
 
 													if (!tag) return undefined;
 
 													return tag.tag === changedInput;
-											  })
-											: false) ||
-										(note.newTags.length
-											? note.newTags.find((tag) => tag === changedInput)
-											: false)
+												})
+												: false) ||
+											(note.newTags.length
+												? note.newTags.find((tag) => tag === changedInput)
+												: false)
 											? true
 											: false;
 									if (isExactMatch) {
@@ -233,7 +246,7 @@ export default function NoteForm({
 				/>
 
 				{/*======================================== found tags */}
-				{Object.keys(foundTags).length ? (
+				{foundTagsSortedAlphabetically.length ? (
 					<div className="found-tags">
 						{Object.keys(foundTags).map((id) => (
 							<Tag
@@ -279,38 +292,43 @@ export default function NoteForm({
 				)}
 
 				{/*================================== filter tags (existing & new) */}
-				{Object.keys(note.existingTags).length || note.newTags.length ? (
+				{noteExistingTagsSortedAlphabetically.length || note.newTags.length ? (
 					<div className="filter-tags">
-						{Object.keys(note.existingTags).map((id) => (
+						{noteExistingTagsSortedAlphabetically.map((tag) => (
 							<TagWithTrashIcon
-								key={id}
-								tag={TAGS![id]}
+								key={tag.id}
+								tag={tag}
 								onClick={() => {
 									// delete tag from note.existingTags:
 									const updatedTags = { ...note.existingTags };
-									delete updatedTags[id];
+									delete updatedTags[tag.id];
 									setNote({ ...note, existingTags: updatedTags });
 								}}
 							/>
 						))}
-						{note.newTags.map((tag) => (
-							<TagWithTrashIcon
-								key={tag}
-								//❗❗❗ below I'm passing "pseudo" tag, only containing value❗❗❗
-								tag={{
-									tag: tag,
-									id: "",
-									createdAt: "",
-									updatedAt: "",
-									userId: "",
-								}}
-								onClick={() => {
-									// delete tag from note.newTags
-									const updatedTags = note.newTags.filter((t) => t !== tag);
-									setNote({ ...note, newTags: updatedTags });
-								}}
-							/>
-						))}
+						<br />
+						{note.newTags.length > 0 && <span className="mx-2">new tags to add to database:</span>}
+						{
+							note.newTags
+								.toSorted()
+								.map((tag) => (
+									<TagWithTrashIcon
+										key={tag}
+										//❗❗❗ below I'm passing "pseudo" tag, only containing value❗❗❗
+										tag={{
+											tag: tag,
+											id: "",
+											createdAt: "",
+											updatedAt: "",
+											userId: "",
+										}}
+										onClick={() => {
+											// delete tag from note.newTags
+											const updatedTags = note.newTags.filter((t) => t !== tag);
+											setNote({ ...note, newTags: updatedTags });
+										}}
+									/>
+								))}
 					</div>
 				) : (
 					<div className="filter-tags">This note has no tags yet...</div>
