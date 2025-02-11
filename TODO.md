@@ -1,44 +1,51 @@
-# 🚀 TODO (future/maybe todo list for myself)
+# Linky Notes MILESTONES / TODO 🚀 (2025-02-09)
 
-## Why there ~~is no~~ IS SENSE to add new features, rewrite the app & why I should ~~freeze & quit~~ KEEP MAINTAINING the app ASAP
+## Features to implement for full v1.0
 
-- ~~❌ this app's tech stack is outdated~~ ✅ UPDATED STACK,
-- ~~❌ the way code is organized is not what I'm used to currently~~ ✅ CODE IS ORGANIZED THE WAY I'M DOING IT NOW,
-- ~~❌ domain name is taken~~ ✅ JUST BOUGHT LINKYNOTES.COM,
-- ~~❌ even the name of the app is not reflecting what I want it to be anymore~~ ✅ THIS APP IS EXACTLY WHAT IT SHOULD BE & I'M USING IT EVERYDAY FOR 4 YEARS.
+By móc uporządkować swoje
+- `notatki` oraz
+- `zadania`/`tasks`/`todos` z nich wynikające oraz
+- sposoby postępowania (`checklisty`)
 
-## Future/maybe changes/ updates for an EXISTING APP in current stack without major changes
-
-⚠️ *do these improvements & freeze maintaining/ adding new features, but rather start from a scratch with the new app*
-
-- ADD GOOGLE ANALYTICS
-- ADD HTML with INLINE CSS GUIDE
-- NOTE PAGE UI & FEATURES
-  - tags, preview checkbox on top of the note or aside ???
-  - do not use note cards, but note must be presented as article or post/ page without the border
-  - show related notes (based on tags & links) => now I can search every note for inner links 👉 sprawdzaj notatkę na obecność wewnętrznych linków, by zbudować wizualną sieć, pokazywać backlinki oraz powiązane notatki,
-  - show backlinks (*need to expand note db scheme*) => now I can search every note for inner links
-- `enable searching/ filtering notes via dialog or side menu while creating/ updating the current note to easily grab links/ notes ids we want to refer`.
-<br>⚠️ *Now this can be partially done by opening an app in 2 separate browser windows and use one to browse the notes, and another to create/ update a note, but ⚠️⚠️ the app uses local state after init fetch, so 2 opened windows will be not synced...*.
-- split md editor like my own I've built ???
-- (*if this won't force to rewrite the app - check it*) `add onSnapshot listener to sync state in all opened app instances`
-
-## 💡 Wewnętrzna Organizacja Notatek w Aplikacji *linky_notes*
-
-🎯 **Ogólny cel** 👉 stworzenie pseudo-podręcznika, łączącego wiedzę zawartą w notatkach
-
-1. Sprawdź tagi, które mają największą liczbę wystąpień (otagowanych notatek) 👉 najprawdopodobniej będą głównymi słowami kluczowymi (*a-la* rozdziały, podrozdziały), z których można utworzyć zbiorczą notatkę organizującą/ spis treści.
-1. Określ zależności pomiędzy tagami (🚀 dodaj możliwość organizacji tagów w apce)
-1. Wyszukuj notatki tymi tagami i dołączaj/ linkuj do spisu treści + dodaj oznaczenie/ tag `processed note`
-1. rozbijaj notatki na mniejsze chunks
-
-## Changelog
-
-Linky Notes has been in development for several years. Starting with version 1.0, we are officially tracking changes in a public changelog.
-
-## 🚀 Nowe funkcjonalności
-
-- Określ zależności pomiędzy tagami (dodaj możliwość organizacji tagów w apce):
+brakuje mi takich funkcjonalności/`features` from my unfinished project `setitems`, jak:
+- <mark>searching for tags while editing note's content for suggestions</mark>
+- <mark>related tag's tags prop for suggestions</mark>
+- <mark>`copy/clone` note</mark>
+  - with content
+  - without content (only tags)
+- <mark>`templates`</mark>
+- <mark>`draft`s for abandoned notes</mark>
+- <mark>`saved`</mark>
+  - notes
+  - searches ???
+- <mark>`nesting` notes</mark>
+  ```ts
+  interface Note extends PrevNote {
+    parents?: {
+      [key: string (noteId)]: true
+    };
+    children?: {
+      [key: number]: ContentBlock | Note
+    };
+    backlinks?: {
+      [key: string (noteId)]: true
+    };
+    forwardLinks?: {
+      [key: string (noteId)]: true
+    };
+    relatedNotes?: {
+      [key: string (noteId)]: true
+    };
+  }
+  ```
+  - `parents`
+  - `children`
+    - `content blocks`
+    - `nested notes` (children)
+- <mark>`related`</mark>
+  - notes 
+  - tags
+- ?? <mark>Określ zależności pomiędzy tagami</mark> (dodaj możliwość organizacji tagów w apce):
   ```ts
   type KeyValueObject = {
     [key: string]: true;
@@ -50,24 +57,64 @@ Linky Notes has been in development for several years. Starting with version 1.0
     children: KeyValueObject;
     linkedTags: KeyValueObject;
   }
+- <mark>enable łączenie przefiltrowanych notatek w jedną</mark>
+- <mark>enable przekształcanie bloków tekstowych notatki w samodzielną (od razu) zagnieżdżoną notatkę</mark>
+- <mark>bind same tags in diff languages</mark>
+- <mark>`<dialog />` or `<aside />` for (while adding/editing/working with current notes)</mark>:
+  - CRUD
+  - filtering/searching
+    - notes
+    - tags
+- <mark>enable modifying creation date</mark>
+- <mark>users CRUD</mark> (store it in Firestore to enable more than 100 users logged simultaniously in free RTDB)
+- <mark>new RTDB structure</mark> (*de facto* inverting recent changes)
   ```
-- Określ zależności pomiędzy notatkami:
-  ```ts
-  type KeyValueObject = {
-    [key: string]: true;
-  }
+  /users // FOR STATISTICS & EVETUALLY USER PREFERENCES
+    /$uid
+      /userData
+      /notesNum
+      /tagsNum
+  /notes
+    /$uid
+      /[noteId]
+  /tags
+    /$uid
+      /[tagId]
+  ```
+- <mark>recent notes</mark> (fetch when user is logged) 10 (limit to last, but it will be last created, not updated...)
+- <mark>"normal" timestamps</mark>
 
-  interface Note {
-    ...Note,
-    parents: KeyValueObject;
-    /**
-     * Child = note, text block, etc.
-     */
-    children: {
-      [key: number]: Child; // or {child: Child, index: number}
-    }
-    backlinks: KeyValueObject;
-    forwardLinks: KeyValueObject;
-    linkedNotes: KeyValueObject;
-  }
-  ```
+i chyba dopiero wtedy będzie to dla mnie (uwzględniając moje potrzeby) `v1.0`
+
+## Other features
+
+- unregister `serviceWorker` in `gh-pages`
+- `Google Analytics`
+- `index/follow`
+  - static routes
+  - ~~private routes~~
+- video instruction
+- static guides made from public notes to showcase the app
+- HTML with INLINE CSS GUIDE
+- NOTE PAGE UI & FEATURES
+  - tags preview checkbox on top of the note or aside ???
+  - do not use note cards, but note must be presented as article or post/ page without the border
+- split md editor like my own I've built ???
+- `changelog` => Linky Notes has been in development for several years (2021+). Starting with version 1.0 (2025), we are officially tracking changes in a public changelog.
+- logo
+- gh-like stats
+- store fetched tags in `IndexDB`/`local/session storage`? (*for example for opening a few windows simultaniously*)
+- not wrapping the whole app in `Context`?
+  | route | context | Component |
+  | --- | --- | --- |
+  | `/guide/[guide]`; `/about` | ❌ | `<StaticPage />` |
+  | `/signin`; `/signup`; `/password-reset` | User | `<AuthPage />` |
+  | `/notes/[noteId]`; `/tags/[tagId]` | User, Notes, Tags | `<ItemsPage />` |
+  - ❗❗❗ if we go to StaticPage, other contexts will unmount... does that mean, that all listeners will be unsubscribed? Does it mean that I loose all fetched items? Will this solution improve anything?
+- enable user connecting their own
+  - Firebase project
+  - AI key (if implemented)
+- implement AI ?
+  - for "smart" tags suggestions based on note content
+- working with files (`Storage`)
+- migrate to `Firestore`

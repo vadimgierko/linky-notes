@@ -158,3 +158,11 @@ All your notes & data are **private**, what means that only the logged owner/ au
     /update
 /tags
 ```
+
+## Future of the Linky Notes
+
+I'm constantly developing & expanding the app after recent rewrite & upgrade (January 2025).
+
+At the moment I'm reimplementing features from other 2 private apps, which were the extenstion of Linky Notes, but I've decided to include them in the app.
+
+Soon it should reach 1.0 version. If you want to see planned future features, check out [TODO file](/TODO.md) & stay tuned to the future best note-taking app!

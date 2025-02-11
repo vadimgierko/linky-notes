@@ -8,7 +8,7 @@
 - ✅ ~~add users folder~~ 
 - use `Firestore` instead of ~~`RTDB`~~
 - optimize data loading, filtering & querying
-  - do not load all notes & tags on app mount
+  - ✅ do not load all notes on app mount, but only needed
   - pagination
   - filter notes & tags using Firestore queries
   - implement Firebase Caching
