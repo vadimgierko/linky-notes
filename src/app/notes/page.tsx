@@ -2,12 +2,10 @@
 import NoteCard from "@/components/NoteCard";
 import PrivateRoute from "@/components/PrivateRoute";
 import TagsSearchBar from "@/components/TagsSearchBar";
-import TagWithTrashIcon from "@/components/TagWithTrashIcon";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
 import sortNotes from "@/lib/sortNotes";
 import { Tag as ITag, Note, SortBy } from "@/types";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect } from "react";
 import { Spinner } from "react-bootstrap";
@@ -40,6 +38,7 @@ function NotesPage() {
 		getNoteById,
 		fetchAndListenToNotes: fetchNotes,
 	} = useNotes();
+
 	const { tags } = useTags();
 
 	const fetchAndListenToNotes = useCallback(
@@ -129,41 +128,33 @@ function NotesPage() {
 			</header>
 
 			{/*================== search bar ==================*/}
-			<div className="search-bar">
-				<TagsSearchBar
-					searchTagsIdsString={
-						searchTagsIdsString ? searchTagsIdsString : undefined
-					}
-					sortBy={sortBy ? sortBy : undefined}
+			<TagsSearchBar.InputAndFoundTags
+				useLinks={true}
+				searchTagsIdsString={searchTagsIdsString || ""}
+				sortBy={sortBy}
+			/>
+
+			{searchTagsIdsString && tags ? (
+				<TagsSearchBar.SelectedTagsLinks
+					selectedTags={searchTagsIdsString
+						.split(" ") // "+"
+						.map((filterTagId) => {
+							const updatedParamsString = searchTagsIdsString
+								.split(" ") // "+"
+								.filter((id) => filterTagId !== id)
+								.join("+");
+
+							const filterTagLink = updatedParamsString
+								? `?tags=${updatedParamsString}&sortBy=${sortBy}`
+								: `?sortBy=${sortBy}`;
+
+							const t = { tag: tags[filterTagId], tagLink: filterTagLink };
+							return t;
+						})}
 				/>
-
-				{/*======================================== filter tags */}
-				{/** I COULD SORT IT ALPHABETICALLY, BUT I THINK IT'S BETTER TO HAVE IT IN ORDER OF SEARCH */}
-				{searchTagsIdsString && tags ? (
-					<div className="filter-tags">
-						{searchTagsIdsString
-							.split(" ") // "+"
-							.map((filterTagId) => {
-								const updatedParamsString = searchTagsIdsString
-									.split(" ") // "+"
-									.filter((id) => filterTagId !== id)
-									.join("+");
-
-								const filterTagLink = updatedParamsString
-									? `?tags=${updatedParamsString}&sortBy=${sortBy}`
-									: `?sortBy=${sortBy}`;
-
-								return (
-									<Link href={filterTagLink} key={filterTagId}>
-										<TagWithTrashIcon tag={tags[filterTagId]} />
-									</Link>
-								);
-							})}
-					</div>
-				) : (
-					<div className="filter-tags mb-2">There are no filter tags...</div>
-				)}
-			</div>
+			) : (
+				<div className="filter-tags mb-2">There are no filter tags...</div>
+			)}
 
 			{/** SORT */}
 			<div className="sort">
