@@ -196,6 +196,15 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 								<span>reset password</span>
 							</Nav.Link>
 						</Link>
+
+						{/* {
+							user && tags &&
+							<Button
+								onClick={() => upgradeRTDBtoV1({ uid: user.uid, prevTags: tags })}
+							>
+								upgrade tags & notes
+							</Button>
+						} */}
 					</Nav>
 				</Navbar.Collapse>
 			</Container>
