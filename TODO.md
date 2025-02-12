@@ -24,13 +24,20 @@ brakuje mi takich funkcjonalności/`features` from my unfinished project `setite
     parents?: {
       [key: string (noteId)]: true
     };
-    children?: {
-      [key: number]: ContentBlock | Note
-    };
+    /**
+      * Cannot be optional,
+      * becuase note has to have at least 1 child (content).
+      */
+	  children: {
+	  	[key: number]: {
+	  		type: "content" | "note",
+	  		value: string
+	  	}
+  	};
     backlinks?: {
       [key: string (noteId)]: true
     };
-    forwardLinks?: {
+    forwardlinks?: {
       [key: string (noteId)]: true
     };
     relatedNotes?: {
@@ -53,9 +60,9 @@ brakuje mi takich funkcjonalności/`features` from my unfinished project `setite
 
   interface Tag {
     ...Tag,
-    parents: KeyValueObject;
-    children: KeyValueObject;
-    linkedTags: KeyValueObject;
+    parents?: KeyValueObject;
+    children?: KeyValueObject;
+    linkedTags?: KeyValueObject;
   }
 - <mark>enable łączenie przefiltrowanych notatek w jedną</mark>
 - <mark>enable przekształcanie bloków tekstowych notatki w samodzielną (od razu) zagnieżdżoną notatkę</mark>
@@ -74,6 +81,8 @@ brakuje mi takich funkcjonalności/`features` from my unfinished project `setite
       /userData
       /notesNum
       /tagsNum
+      /lastUpdatedNotes?
+      /savedNotes?
   /notes
     /$uid
       /[noteId]
