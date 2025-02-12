@@ -47,7 +47,7 @@ function Tags() {
 				// map tags to {[tagValue]: tagId}:
 				const tagsValueIdObject = tags
 					? Object.values(tags).reduce(
-							(prev, curr) => ({ ...prev, [curr.tag]: curr.id }),
+							(prev, curr) => ({ ...prev, [curr.value]: curr.id }),
 							{} as { [key: string]: string }
 					  )
 					: {};

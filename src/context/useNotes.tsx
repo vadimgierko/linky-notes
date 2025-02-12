@@ -17,10 +17,10 @@ import {
 } from "react";
 import useUser from "./useUser";
 import { Note, NoteObjectForUpdate, Notes, Tag, Tags } from "@/types";
-import createDate from "@/lib/createDate";
 import generateFirebaseKeyFor from "@/lib/generateFirebaseKeyFor";
 import useTags from "./useTags";
-import generateItemsRef from "@/lib/generateItemsRef";
+import { generateItemRef, generateItemsRef } from "@/lib/generateItemsRef";
+import date from "@/lib/date";
 
 const NotesContext = createContext<{
 	notes: Notes | null;
@@ -77,7 +77,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		if (!user) return;
 		console.log("fetchAndListenToNote", id, "...");
 
-		const noteRef = generateItemsRef("notes", user.uid) + "/" + id;
+		const noteRef = generateItemRef("notes", user.uid, id);
 
 		//==================== listen to updates: ====================//
 		const unsubscribe = onValue(ref(rtdb, noteRef), (snapshot) => {
@@ -142,17 +142,17 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			return null;
 		}
 
-		if (!note.content.trim().length) {
+		if (!note.children[0].value.trim().length) {
 			console.error("Your note has no content! Cannot set the note...");
 			return null;
 		}
 
-		const date = createDate();
+		const timestamp = date.getTimestamp();
 
 		const updatedNote: Note = {
-			content: note.content,
-			createdAt: note.createdAt || date,
-			updatedAt: date,
+			children: note.children,
+			createdAt: note.createdAt.auto ? note.createdAt : { auto: timestamp },
+			updatedAt: timestamp,
 			userId: note.userId || user.uid,
 			tags: note.existingTags,
 			id: noteId,
@@ -176,11 +176,11 @@ export function NotesProvider({ children }: NotesProviderProps) {
 				}
 
 				const newTagObject: Tag = {
-					tag: newTag,
-					createdAt: date,
+					value: newTag,
+					createdAt: { auto: timestamp },
 					userId: user.uid,
 					id: tagId,
-					updatedAt: date,
+					updatedAt: timestamp,
 					notes: {
 						[noteId]: true,
 					},
@@ -215,27 +215,29 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			tagsWithRemovedNoteIdToUpdate[tagId] = updatedTag;
 		});
 
-		// ❗❗❗ REMOVE NOTE ID FROM REMOVED TAGS ❗❗❗
+		// ❗❗❗ ADD NOTE ID TO ADDED TAGS ❗❗❗
 		const tagsWithAddedNoteIdToUpdate: Tags = {};
 
 		note.addedExistingTags.forEach((tagId) => {
 			const updatedTag = getTagById(tagId);
 
-			if (!updatedTag) return;
-			if (!updatedTag.notes) return;
-
-			updatedTag.notes[noteId] = true;
+			if (!updatedTag) return console.error("No updatedTag with id:", tagId);
+			if (!updatedTag.notes) {
+				updatedTag.notes = { [noteId]: true };
+			} else {
+				updatedTag.notes[noteId] = true;
+			}
 
 			tagsWithAddedNoteIdToUpdate[tagId] = updatedTag;
 		});
 
-		const notesRef = generateItemsRef("notes", user.uid);
+		const noteRef = generateItemRef("notes", user.uid, noteId);
 		const tagsRef = generateItemsRef("tags", user.uid);
 		//===========================================================
 		// add note to rtdb & new tags using update
 		const updates: { [key: string]: Note | Tag | object } = {};
 		// update note in rtdb:
-		updates[notesRef + "/" + noteId] = updatedNote;
+		updates[noteRef] = updatedNote;
 		// update new tags in rtdb:
 		Object.keys(tagsToAdd).forEach((newTagId) => {
 			updates[tagsRef + "/" + newTagId] = tagsToAdd[newTagId];
@@ -252,6 +254,13 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		if (incrementNotesNum) {
 			// increment notesNum:
 			updates[`users/${user.uid}/notesNum`] = increment(1);
+		}
+
+		if (Object.keys(tagsToAdd).length) {
+			// increment tagsNum:
+			updates[`users/${user.uid}/tagsNum`] = increment(
+				Object.keys(tagsToAdd).length
+			);
 		}
 
 		await update(ref(rtdb), updates);
@@ -301,7 +310,6 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		// and that means, that the note was fetched:
 		if (!noteToDelete) return alert("There is no note in state to delete...");
 
-		const notesRef = generateItemsRef("notes", user.uid);
 		const tagsRef = generateItemsRef("tags", user.uid);
 		// collect updated tags & removed note:
 		const updates: { [key: string]: Note | Tag | null | object } = {};
@@ -320,7 +328,8 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		});
 
 		// remove note:
-		updates[notesRef + "/" + noteId] = null;
+		const removedNoteRef = generateItemRef("notes", user.uid, noteId);
+		updates[removedNoteRef] = null;
 		// update tags:
 		Object.keys(tagsToUpdate).forEach((updatedTagId) => {
 			updates[tagsRef + "/" + updatedTagId] = tagsToUpdate[updatedTagId];

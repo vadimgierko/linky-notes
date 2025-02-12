@@ -1,18 +1,45 @@
-// These are new upgraded types since 31.01.2025
-// which replaced commented prev types below:
-export interface Note {
-	content: string;
-	createdAt: string;
+export type KeyBoolean = {
+	[key: string]: true;
+};
+
+/**
+ * Common props for Note & Tag.
+ */
+interface Item {
+	backlinks?: KeyBoolean;
+	createdAt: {
+		/**
+		 * Automatically generated timestamp,
+		 * containing the date,
+		 * when the tag is added to the app.
+		 */
+		auto: number;
+		custom?: number;
+	};
+	forwardlinks?: KeyBoolean;
 	id: string;
+	parents?: KeyBoolean;
+	related?: KeyBoolean;
+	updatedAt: number;
+	userId: string;
+}
+
+export interface Note extends Item {
 	/**
-	 * Tags are not optional, like tag's notes,
+	 * Cannot be optional,
+	 * becuase note has to have at least 1 child (content).
+	 */
+	children: {
+		[key: number]: {
+			type: "content" | "note";
+			value: string;
+		};
+	};
+	/**
+	 * Cannot be optional, like tag's notes,
 	 * because note has to have at least 1 tag.
 	 */
-	tags: {
-		[key: string]: true;
-	};
-	updatedAt: string;
-	userId: string;
+	tags: KeyBoolean;
 }
 
 export interface Notes {
@@ -25,10 +52,10 @@ export interface Notes {
  * existingTags (same as tags) & newTags (string[])
  */
 export interface NoteObjectForUpdate {
-	content: string;
-	createdAt: string;
+	children: Note["children"];
+	createdAt: Note["createdAt"];
 	id: string;
-	updatedAt: string;
+	updatedAt: number;
 	userId: string;
 	/**
 	 * Note's tags that exist already in RTDB.
@@ -59,12 +86,8 @@ export interface NoteObjectForUpdate {
 	addedExistingTags: string[];
 }
 
-export interface Tag {
-	createdAt: string;
-	id: string;
-	tag: string;
-	updatedAt: string;
-	userId: string;
+export interface Tag extends Item {
+	children?: KeyBoolean;
 	/**
 	 * Notes may be undefined,
 	 * because Firebase RTDB doesn't store empty objects,
@@ -74,39 +97,14 @@ export interface Tag {
 	 * this will be unnecessary, because it will be an array,
 	 * and Firestore stores empty arrays.
 	 */
-	notes?: {
-		[key: string]: true;
-	};
+	notes?: KeyBoolean;
+	sameTagsInDiffLangs?: KeyBoolean;
+	value: string;
 }
 
 export interface Tags {
 	[key: string]: Tag;
 }
-
-// export interface PrevNote {
-// 	content: string;
-// 	createdAt: string;
-// 	pages: string;
-// 	sourceKey: string;
-// 	tags?: {
-// 		[key: string]: Tag;
-// 	};
-// 	updatedAt: string;
-// 	userId: string;
-// }
-
-// export interface PrevNoteWithId extends Note {
-// 	id: string;
-// }
-
-// export type PrevTag = {
-// 	createdAt?: string;
-// 	tag: string;
-// 	userId?: string;
-// 	notes?: {
-// 		[key: string]: true;
-// 	};
-// };
 
 export type SortBy =
 	| "lastUpdated"

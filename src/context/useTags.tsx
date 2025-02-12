@@ -3,10 +3,11 @@ import { rtdb } from "@/firebaseConfig";
 import {
 	ref,
 	update,
-	remove,
 	onChildAdded,
 	onChildChanged,
 	onChildRemoved,
+	increment,
+	onValue,
 } from "firebase/database";
 import {
 	createContext,
@@ -18,8 +19,8 @@ import {
 } from "react";
 import useUser from "./useUser";
 import { Tag, Tags } from "@/types";
-import generateItemsRef from "@/lib/generateItemsRef";
-import createDate from "@/lib/createDate";
+import { generateItemRef, generateItemsRef } from "@/lib/generateItemsRef";
+import date from "@/lib/date";
 
 const TagsContext = createContext<{
 	tags: Tags | null;
@@ -48,6 +49,7 @@ interface TagsProviderProps {
 export function TagsProvider({ children }: TagsProviderProps) {
 	const { user } = useUser();
 	const [tags, setTags] = useState<Tags | null>(null);
+	const [tagsNum, setTagsNum] = useState<number>(0);
 
 	function getTagById(id: string) {
 		if (!tags) return null;
@@ -71,14 +73,14 @@ export function TagsProvider({ children }: TagsProviderProps) {
 			return null;
 		}
 
-		const date = createDate();
-		const tagRef = generateItemsRef("tags", user.uid) + "/" + id;
+		const timestamp = date.getTimestamp();
+		const tagRef = generateItemRef("tags", user.uid, id);
 
 		const updatedTagProps: {
 			updatedAt: Tag["updatedAt"];
-			tag: Tag["tag"];
+			tag: Tag["value"];
 		} = {
-			updatedAt: date,
+			updatedAt: timestamp,
 			tag: value,
 		};
 
@@ -88,8 +90,13 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
 		const prevTag = getTagById(id);
 
+		if (!prevTag) {
+			console.error("Tag with this id does not exist...");
+			return null;
+		}
+
 		updates[tagRef] = {
-			...prevTag!,
+			...prevTag,
 			...updatedTagProps,
 		};
 
@@ -113,12 +120,21 @@ export function TagsProvider({ children }: TagsProviderProps) {
 			return;
 		}
 
-		const tagRef = generateItemsRef("tags", user.uid) + "/" + tag.id;
-		await remove(ref(rtdb, tagRef));
+		const updates: { [key: string]: Tag | null | object } = {};
+
+		// remove tag:
+		updates[generateItemRef("tags", user.uid, tag.id)] = null;
+		// update tagsNum:
+		const tagsNumRef = `users/${user.uid}/tagsNum`;
+		updates[tagsNumRef] = increment(-1);
+
+		await update(ref(rtdb), updates);
 	}
 
 	useEffect(() => {
 		function fetchTagsAndListenToChanges(reference: string) {
+			if (!user) return;
+
 			const tagsRef = ref(rtdb, reference);
 
 			onChildAdded(tagsRef, (snapshot) => {
@@ -147,6 +163,15 @@ export function TagsProvider({ children }: TagsProviderProps) {
 					return updatedTags;
 				});
 			});
+
+			const tagsNumRef = ref(rtdb, `users/${user.uid}/tagsNum`);
+			onValue(tagsNumRef, (snapshot) => {
+				if (!snapshot.exists()) return;
+
+				const tagsNum = snapshot.val() as number;
+				console.log("DATA WAS FETCHED (onValue): tagsNum updated:", tagsNum);
+				setTagsNum(tagsNum);
+			});
 		}
 
 		if (!user) {
@@ -159,7 +184,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
 	const value = {
 		tags,
-		tagsNum: tags ? Object.keys(tags).length : 0,
+		tagsNum,
 		setTags,
 		getTagById,
 		getTagNotesNum,

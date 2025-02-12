@@ -16,6 +16,18 @@ interface NoteFormProps {
 	onCancel: () => void;
 }
 
+const emptyNote: NoteObjectForUpdate = {
+	existingTags: {},
+	newTags: [],
+	removedExistingTags: [],
+	addedExistingTags: [],
+	createdAt: { auto: 0 },
+	id: "",
+	updatedAt: 0,
+	userId: "",
+	children: { [0]: { type: "content", value: "" } },
+};
+
 export default function NoteForm({
 	noteKey,
 	onSubmit,
@@ -33,13 +45,17 @@ export default function NoteForm({
 
 	// sort note existing tags alphabetically:
 	const noteExistingTags: ITag[] = Object.keys({
-		...note?.existingTags
+		...note?.existingTags,
 	})
-		.map(tagId => getTagById(tagId))
-		.filter(t => t !== null) as ITag[]
-	const noteExistingTagsObject = noteExistingTags
-		.reduce((tagsObject, tag) => ({ ...tagsObject, [tag.id]: tag }), {} as Tags)
-	const noteExistingTagsSortedAlphabetically = sortTagsAlphabetically(noteExistingTagsObject)
+		.map((tagId) => getTagById(tagId))
+		.filter((t) => t !== null) as ITag[];
+	const noteExistingTagsObject = noteExistingTags.reduce(
+		(tagsObject, tag) => ({ ...tagsObject, [tag.id]: tag }),
+		{} as Tags
+	);
+	const noteExistingTagsSortedAlphabetically = sortTagsAlphabetically(
+		noteExistingTagsObject
+	);
 
 	const [newTag, setNewTag] = useState(""); // new tag added by user
 	// editor mode: (edit, preview)
@@ -69,18 +85,6 @@ export default function NoteForm({
 
 			setNote(noteObjectForUpdate);
 		} else {
-			const emptyNote: NoteObjectForUpdate = {
-				existingTags: {},
-				newTags: [],
-				content: "",
-				createdAt: "",
-				id: "",
-				updatedAt: "",
-				userId: "",
-				removedExistingTags: [],
-				addedExistingTags: [],
-			};
-
 			setNote(emptyNote);
 		}
 	}, [getNoteById, noteKey]);
@@ -148,16 +152,24 @@ export default function NoteForm({
 						as="textarea"
 						//rows={11}
 						placeholder="type your note here"
-						value={note.content || ""}
+						value={note.children[0].value || ""}
 						style={{
 							height: "40vh",
 						}}
-						onChange={(e) => setNote({ ...note, content: e.target.value })}
+						onChange={(e) =>
+							setNote({
+								...note,
+								children: {
+									...note.children,
+									0: { type: "content", value: e.target.value },
+								},
+							})
+						}
 					/>
 				)}
 				{editorMode === "preview" && (
 					<div className="border py-2 px-3">
-						<MarkdownRenderer markdown={note.content} />
+						<MarkdownRenderer markdown={note.children[0].value} />
 					</div>
 				)}
 			</Form.Group>
@@ -187,7 +199,7 @@ export default function NoteForm({
 							// find tags or create a new one
 							if (TAGS && Object.keys(TAGS).length) {
 								const foundTagsId = Object.keys(TAGS).filter((id) =>
-									TAGS[id].tag
+									TAGS[id].value
 										.toLowerCase()
 										.startsWith(changedInput.toLowerCase())
 								);
@@ -196,29 +208,29 @@ export default function NoteForm({
 									let updatedFoundTags: { [key: string]: ITag } = {};
 									foundTagsId.forEach(
 										(id) =>
-										(updatedFoundTags = {
-											...updatedFoundTags,
-											[id]: TAGS[id],
-										})
+											(updatedFoundTags = {
+												...updatedFoundTags,
+												[id]: TAGS[id],
+											})
 									);
 									setFoundTags(updatedFoundTags);
 									// set new tag if there is no exact match with any of found tags or existing & new:
 									const isExactMatch =
 										Object.keys(updatedFoundTags).find(
-											(tagId) => updatedFoundTags[tagId].tag === changedInput
+											(tagId) => updatedFoundTags[tagId].value === changedInput
 										) ||
-											(Object.keys(note.existingTags).length
-												? Object.keys(note.existingTags).find((tagId) => {
+										(Object.keys(note.existingTags).length
+											? Object.keys(note.existingTags).find((tagId) => {
 													const tag = getTagById(tagId);
 
 													if (!tag) return undefined;
 
-													return tag.tag === changedInput;
-												})
-												: false) ||
-											(note.newTags.length
-												? note.newTags.find((tag) => tag === changedInput)
-												: false)
+													return tag.value === changedInput;
+											  })
+											: false) ||
+										(note.newTags.length
+											? note.newTags.find((tag) => tag === changedInput)
+											: false)
 											? true
 											: false;
 									if (isExactMatch) {
@@ -251,7 +263,7 @@ export default function NoteForm({
 						{Object.keys(foundTags).map((id) => (
 							<Tag
 								key={id}
-								value={TAGS![id].tag + ` (${getTagNotesNum(id)})`}
+								value={TAGS![id].value + ` (${getTagNotesNum(id)})`}
 								onClick={() => {
 									// add tag to note.existingTags:
 									setNote({
@@ -307,28 +319,27 @@ export default function NoteForm({
 							/>
 						))}
 						<br />
-						{note.newTags.length > 0 && <span className="mx-2">new tags to add to database:</span>}
-						{
-							note.newTags
-								.toSorted()
-								.map((tag) => (
-									<TagWithTrashIcon
-										key={tag}
-										//❗❗❗ below I'm passing "pseudo" tag, only containing value❗❗❗
-										tag={{
-											tag: tag,
-											id: "",
-											createdAt: "",
-											updatedAt: "",
-											userId: "",
-										}}
-										onClick={() => {
-											// delete tag from note.newTags
-											const updatedTags = note.newTags.filter((t) => t !== tag);
-											setNote({ ...note, newTags: updatedTags });
-										}}
-									/>
-								))}
+						{note.newTags.length > 0 && (
+							<span className="mx-2">new tags to add to database:</span>
+						)}
+						{note.newTags.toSorted().map((tag) => (
+							<TagWithTrashIcon
+								key={tag}
+								//❗❗❗ below I'm passing "pseudo" tag, only containing value❗❗❗
+								tag={{
+									value: tag,
+									id: "",
+									createdAt: { auto: 0 },
+									updatedAt: 0,
+									userId: "",
+								}}
+								onClick={() => {
+									// delete tag from note.newTags
+									const updatedTags = note.newTags.filter((t) => t !== tag);
+									setNote({ ...note, newTags: updatedTags });
+								}}
+							/>
+						))}
 					</div>
 				) : (
 					<div className="filter-tags">This note has no tags yet...</div>
@@ -340,18 +351,6 @@ export default function NoteForm({
 					className="me-2"
 					variant="secondary"
 					onClick={() => {
-						const emptyNote: NoteObjectForUpdate = {
-							existingTags: {},
-							newTags: [],
-							removedExistingTags: [],
-							addedExistingTags: [],
-							content: "",
-							createdAt: "",
-							id: "",
-							updatedAt: "",
-							userId: "",
-						};
-
 						setNote(emptyNote);
 						onCancel();
 					}}

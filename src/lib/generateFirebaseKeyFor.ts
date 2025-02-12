@@ -1,6 +1,6 @@
 import { rtdb } from "@/firebaseConfig";
 import { child, push, ref } from "firebase/database";
-import generateItemsRef from "./generateItemsRef";
+import { generateItemsRef } from "./generateItemsRef";
 
 export default function generateFirebaseKeyFor(
 	itemTypeInPlural: "notes" | "tags",

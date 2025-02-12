@@ -1,6 +1,11 @@
-export default function generateItemsRef(
+export function generateItemsRef(itemType: "notes" | "tags", userId: string) {
+	return `${itemType}/${userId}`;
+}
+
+export function generateItemRef(
 	itemType: "notes" | "tags",
-	userId: string
+	userId: string,
+	itemId: string
 ) {
-	return `users/${userId}/${itemType}`;
+	return `${itemType}/${userId}/${itemId}`;
 }

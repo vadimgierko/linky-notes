@@ -13,7 +13,7 @@ function FoundTagsButtons({ foundTags }: { foundTags: Tags }) {
 	return (
 		<div className="tags-search-bar__found-tags">
 			{Object.values(foundTags).map((tag) => {
-				return <Tag key={tag.id} value={tag.tag} />;
+				return <Tag key={tag.id} value={tag.value} />;
 			})}
 		</div>
 	);
@@ -36,7 +36,7 @@ function FoundTagsLinks({
 					<Link href={tagLink} key={tag.id}>
 						<Tag
 							key={tag.id}
-							value={`${tag.tag} (${getTagNotesNum(tag.id)})`}
+							value={`${tag.value} (${getTagNotesNum(tag.id)})`}
 							onClick={onFoundTagClick}
 						/>
 					</Link>
@@ -169,7 +169,7 @@ function InputAndFoundTags({
 						if (changedInput && changedInput.length) {
 							if (tags && Object.keys(tags).length) {
 								const foundTags: ITag[] = Object.values(tags).filter((tag) =>
-									tag.tag.toLowerCase().startsWith(changedInput.toLowerCase())
+									tag.value.toLowerCase().startsWith(changedInput.toLowerCase())
 								);
 
 								setFoundTags(

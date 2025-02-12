@@ -22,7 +22,7 @@ function UpdateNote({ params }: { params: Promise<{ slug: string }> }) {
 		e.preventDefault();
 		console.log("Note to update:", note);
 
-		if (!note.content.length)
+		if (!note.children[0].value.length)
 			return alert(
 				"Your note is empty! Add some content to your note to add it to database."
 			);

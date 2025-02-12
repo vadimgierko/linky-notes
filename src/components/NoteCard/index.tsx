@@ -9,6 +9,7 @@ import Tag from "../Tag";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
 import sortTagsAlphabetically from "@/lib/sortTagsAlphabetically";
+import date from "@/lib/date";
 
 type NoteCardProps = {
 	note: Note;
@@ -56,9 +57,12 @@ export default function NoteCard({
 
 	// sort tags alphabetically:
 	const noteTags: ITag[] = Object.keys(note.tags)
-		.map(tagId => getTagById(tagId))
-		.filter(t => t !== null) as ITag[]
-	const noteTagsObject = noteTags.reduce((tagsObject, tag) => ({ ...tagsObject, [tag.id]: tag }), {} as Tags)
+		.map((tagId) => getTagById(tagId))
+		.filter((t) => t !== null) as ITag[];
+	const noteTagsObject = noteTags.reduce(
+		(tagsObject, tag) => ({ ...tagsObject, [tag.id]: tag }),
+		{} as Tags
+	);
 	const noteTagsSortedAlphabetically = sortTagsAlphabetically(noteTagsObject);
 
 	return (
@@ -72,7 +76,8 @@ export default function NoteCard({
 			<Card.Header>
 				<Row>
 					<Col className="text-muted">
-						{note.createdAt} {note.updatedAt ? "/ " + note.updatedAt : null}
+						{date.getDateFromTimestamp(note.createdAt.auto)} /{" "}
+						{date.getDateFromTimestamp(note.updatedAt)}
 					</Col>
 					<Col xs={4} className="text-end">
 						{ICON_BUTTONS.map((btn) =>
@@ -100,20 +105,17 @@ export default function NoteCard({
 				<Card.Text className="text-muted">{noteKey}</Card.Text>
 				<MarkdownRenderer
 					markdown={
-						show140chars ? note.content.slice(0, 137) + "..." : note.content
+						show140chars
+							? note.children[0].value.slice(0, 137) + "..."
+							: note.children[0].value
 					}
 				/>
 				<div id="note-tags">
-					{
-						noteTagsSortedAlphabetically
-							.map(tag =>
-								<Link href={`/notes?tags=${tag.id}`} key={tag.id}>
-									<Tag
-										value={`${tag.tag} (${getTagNotesNum(tag.id)})`}
-									/>
-								</Link>
-							)
-					}
+					{noteTagsSortedAlphabetically.map((tag) => (
+						<Link href={`/notes?tags=${tag.id}`} key={tag.id}>
+							<Tag value={`${tag.value} (${getTagNotesNum(tag.id)})`} />
+						</Link>
+					))}
 				</div>
 			</Card.Body>
 			<Card.Footer>
