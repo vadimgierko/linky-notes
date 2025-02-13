@@ -29,8 +29,15 @@ export function UserProvider({ children }: UserProviderProps) {
 		const unsubscribe = onAuthStateChanged(auth, (u) => {
 			if (u) {
 				setUser(u);
+				// save user id to sessionStorage:
+				sessionStorage.setItem("linky_notes_user_id", u.uid);
 			} else {
 				setUser(null);
+				// ❗THIS IS NOT NEEDED❗
+				// EVEN IF NEW USER LOGS IN,
+				// TAGS WILL CHECK IF USER ID STORED IN SESSION STORAGE IS THE SAME AS LOGGED USER ID
+				// remove user id from sessionStorage:
+				// sessionStorage.removeItem("linky_notes_user_id");
 			}
 		});
 
