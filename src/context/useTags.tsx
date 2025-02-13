@@ -8,6 +8,7 @@ import {
 	onChildRemoved,
 	increment,
 	onValue,
+	get,
 } from "firebase/database";
 import {
 	createContext,
@@ -78,10 +79,10 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
 		const updatedTagProps: {
 			updatedAt: Tag["updatedAt"];
-			tag: Tag["value"];
+			value: Tag["value"];
 		} = {
 			updatedAt: timestamp,
-			tag: value,
+			value,
 		};
 
 		const updates: {
@@ -132,15 +133,53 @@ export function TagsProvider({ children }: TagsProviderProps) {
 	}
 
 	useEffect(() => {
-		function fetchTagsAndListenToChanges(reference: string) {
+		async function fetchTagsAndListenToChanges(reference: string) {
 			if (!user) return;
-
 			const tagsRef = ref(rtdb, reference);
 
+			if (
+				// check if user is the same as the one stored in sessionStorage:
+				sessionStorage.getItem("linky_notes_user_id") === user.uid &&
+				// check if tags were already fetched:
+				sessionStorage.getItem("linky_notes_user_tags")
+			) {
+				console.log(
+					"User tags are already in sessionStorage. No need to fetch them again."
+				);
+				const tagsStoredInSessionStorage = JSON.parse(
+					sessionStorage.getItem("linky_notes_user_tags")!
+				);
+				setTags(tagsStoredInSessionStorage);
+			} else {
+				console.log(
+					"There are no user tags stored in sessionStorage. Fetching tags from RTDB..."
+				);
+				const fetchedTagsSnapshot = await get(tagsRef);
+
+				if (fetchedTagsSnapshot.exists()) {
+					const fetchedTags = fetchedTagsSnapshot.val() as Tags;
+					setTags(fetchedTags);
+					// save tags to sessionStorage:
+					sessionStorage.setItem(
+						"linky_notes_user_tags",
+						JSON.stringify(fetchedTags)
+					);
+				}
+			}
+
+			// attach listeners anyway:
 			onChildAdded(tagsRef, (snapshot) => {
 				const newTag = snapshot.val() as Tag;
 				console.log("New tag was added to RTDB:", newTag);
-				setTags((prevTags) => ({ ...prevTags, [snapshot.key!]: newTag }));
+				setTags((prevTags) => {
+					const updatedTags = { ...prevTags, [snapshot.key!]: newTag };
+					// save tags to sessionStorage:
+					sessionStorage.setItem(
+						"linky_notes_user_tags",
+						JSON.stringify(updatedTags)
+					);
+					return updatedTags;
+				});
 			});
 
 			onChildChanged(tagsRef, (snapshot) => {
@@ -149,6 +188,15 @@ export function TagsProvider({ children }: TagsProviderProps) {
 					"DATA WAS FETCHED (onChildChanged): tag updated:",
 					updatedTag
 				);
+				setTags((prevTags) => {
+					const updatedTags = { ...prevTags, [snapshot.key!]: updatedTag };
+					// save tags to sessionStorage:
+					sessionStorage.setItem(
+						"linky_notes_user_tags",
+						JSON.stringify(updatedTags)
+					);
+					return updatedTags;
+				});
 				setTags((prevTags) => ({ ...prevTags, [snapshot.key!]: updatedTag }));
 			});
 
@@ -160,6 +208,11 @@ export function TagsProvider({ children }: TagsProviderProps) {
 				setTags((prevTags) => {
 					const updatedTags = { ...prevTags };
 					delete updatedTags[snapshot.key!];
+					// save tags to sessionStorage:
+					sessionStorage.setItem(
+						"linky_notes_user_tags",
+						JSON.stringify(updatedTags)
+					);
 					return updatedTags;
 				});
 			});
@@ -176,6 +229,8 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
 		if (!user) {
 			setTags(null);
+			// remove tags from sessionStorage:
+			// sessionStorage.removeItem("linky_notes_user_tags");
 		} else {
 			const tagsRef = generateItemsRef("tags", user.uid);
 			fetchTagsAndListenToChanges(tagsRef);
