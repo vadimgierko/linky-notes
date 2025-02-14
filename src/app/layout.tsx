@@ -4,22 +4,30 @@ import "./globals.css";
 import Layout from "../components/Layout";
 import { ThemeProvider } from "../context/useTheme";
 import { UserProvider } from "@/context/useUser";
-import { NotesProvider } from "@/context/useNotes";
 import { TagsProvider } from "@/context/useTags";
+import { NotesProvider } from "@/context/useNotes";
 
 /**
  * This below is added automatically:
  * `<meta charset="utf-8" />`
  * `<meta name="viewport" content="width=device-width, initial-scale=1" />`
- * 
+ *
  * ❗❗❗ metadata cannot be exported from client components with "use client"❗❗❗
  */
 export const metadata: Metadata = {
-	title: "linky_notes | organize & filter your notes by tags",
+	title: "Linky Notes | About",
 	description:
-		"linky_notes app allows you to create, organize & filter your notes by tags & create your own knowledge base",
+		"Linky Notes App allows you to create, organize & filter your notes by tags & create your own knowledge base",
 	authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
-	keywords: ["linky notes", "notes app", "notetaking app", "tags", "tags", "knowledge base", "second brain"]
+	keywords: [
+		"linky notes",
+		"notes app",
+		"notetaking app",
+		"tags",
+		"tags",
+		"knowledge base",
+		"second brain",
+	],
 };
 
 export default function RootLayout({

@@ -1,12 +1,12 @@
-"use client"
+"use client";
 import useTheme from "@/context/useTheme";
 import { ReactNode } from "react";
 import { Container } from "react-bootstrap";
-import Navbar from "./Navbar";
 import Footer from "./Footer";
 import ScrollToTop from "../ScrollToTop";
+import NavBar from "./Navbar";
 
-export default function Layout({ children }: {children: ReactNode}) {
+export default function Layout({ children }: { children: ReactNode }) {
 	const { theme } = useTheme();
 	const maxWidth = 900;
 
@@ -19,9 +19,7 @@ export default function Layout({ children }: {children: ReactNode}) {
 				minHeight: "100vh",
 			}}
 		>
-			<Navbar
-            	maxWidth={maxWidth}
-            />
+			<NavBar maxWidth={maxWidth} />
 			<Container
 				as="main"
 				style={{

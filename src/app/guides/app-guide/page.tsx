@@ -2,13 +2,27 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "linky_notes | app guide",
-	description:
-		"How to use Linky Notes App app efficiently",
-	// authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
-	keywords: ["linky notes", "notes app", "notetaking app", "tags", "tags", "knowledge base", "second brain", "guide"]
+	title: "Linky Notes | App Guide",
+	description: "How to use Linky Notes App app efficiently",
+	keywords: [
+		"linky notes",
+		"notes app",
+		"notetaking app",
+		"tags",
+		"tags",
+		"knowledge base",
+		"second brain",
+		"guide",
+	],
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: {
+			index: true,
+			follow: true,
+		},
+	},
 };
-
 
 const CONTENT = `
 <h1 align="center">How to use <em>linky_notes</em> app efficiently</h1>
