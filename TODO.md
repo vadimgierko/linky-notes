@@ -18,6 +18,7 @@ brakuje mi takich funkcjonalności/`features` from my unfinished project `setite
 - <mark>`saved`</mark>
   - notes
   - searches ???
+- <mark>recent notes</mark> (fetch when user is logged) 10 (limit to last, but it will be last created, not updated...)
 - <mark>`nesting` notes</mark>
   ```ts
   interface Note extends PrevNote {
@@ -34,12 +35,15 @@ brakuje mi takich funkcjonalności/`features` from my unfinished project `setite
 	  		value: string
 	  	}
   	};
+    // symbol: ->|
     backlinks?: {
       [key: string (noteId)]: true
     };
+    // symbol: |->
     forwardlinks?: {
       [key: string (noteId)]: true
     };
+    // symbol: <->
     relatedNotes?: {
       [key: string (noteId)]: true
     };
@@ -74,24 +78,6 @@ brakuje mi takich funkcjonalności/`features` from my unfinished project `setite
     - tags
 - <mark>enable modifying creation date</mark>
 - <mark>users CRUD</mark> (store it in Firestore to enable more than 100 users logged simultaniously in free RTDB)
-- <mark>new RTDB structure</mark> (*de facto* inverting recent changes)
-  ```
-  /users // FOR STATISTICS & EVETUALLY USER PREFERENCES
-    /$uid
-      /userData
-      /notesNum
-      /tagsNum
-      /lastUpdatedNotes?
-      /savedNotes?
-  /notes
-    /$uid
-      /[noteId]
-  /tags
-    /$uid
-      /[tagId]
-  ```
-- <mark>recent notes</mark> (fetch when user is logged) 10 (limit to last, but it will be last created, not updated...)
-- <mark>"normal" timestamps</mark>
 
 i chyba dopiero wtedy będzie to dla mnie (uwzględniając moje potrzeby) `v1.0`
 
@@ -99,27 +85,23 @@ i chyba dopiero wtedy będzie to dla mnie (uwzględniając moje potrzeby) `v1.0`
 
 - unregister `serviceWorker` in `gh-pages`
 - `Google Analytics`
-- `index/follow`
-  - static routes
-  - ~~private routes~~
 - video instruction
 - static guides made from public notes to showcase the app
 - HTML with INLINE CSS GUIDE
 - NOTE PAGE UI & FEATURES
   - tags preview checkbox on top of the note or aside ???
   - do not use note cards, but note must be presented as article or post/ page without the border
-- split md editor like my own I've built ???
+- split md editor like my own I've built ??? OR content editable (write md & render on the fly)
 - `changelog` => Linky Notes has been in development for several years (2021+). Starting with version 1.0 (2025), we are officially tracking changes in a public changelog.
 - logo
 - gh-like stats
-- store fetched tags in `IndexDB`/`local/session storage`? (*for example for opening a few windows simultaniously*)
-- not wrapping the whole app in `Context`?
-  | route | context | Component |
-  | --- | --- | --- |
-  | `/guide/[guide]`; `/about` | ❌ | `<StaticPage />` |
-  | `/signin`; `/signup`; `/password-reset` | User | `<AuthPage />` |
-  | `/notes/[noteId]`; `/tags/[tagId]` | User, Notes, Tags | `<ItemsPage />` |
-  - ❗❗❗ if we go to StaticPage, other contexts will unmount... does that mean, that all listeners will be unsubscribed? Does it mean that I loose all fetched items? Will this solution improve anything?
+- store fetched tags in
+  - `IndexDB` ???
+  - `localStorage` ???
+  - ✅ ~~`sessionStorage`~~
+
+## Next Versions Major Changes
+
 - enable user connecting their own
   - Firebase project
   - AI key (if implemented)

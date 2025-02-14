@@ -59,8 +59,8 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 				icon: <BiRocket className="me-3" />,
 			},
 			{
-				name: "how to create an inner app inside the app",
-				link: "/guides/inner-app-guide",
+				name: "how to create an internal app",
+				link: "/guides/internal-app-guide",
 				icon: <BsBoxSeam className="me-3" />,
 			},
 		],

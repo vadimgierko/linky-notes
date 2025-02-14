@@ -2,15 +2,31 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "linky_notes | inner app guide",
-	description:
-		"How to create an inner app in Linky Notes App",
-	// authors: { name: "Vadim Gierko", url: "https://vadimgierko.com" },
-	keywords: ["linky notes", "notes app", "notetaking app", "tags", "tags", "knowledge base", "second brain", "inner app", "guide"]
+	title: "Linky Notes | Internal App Guide",
+	description: "How to create an internal app inside Linky Notes App",
+	keywords: [
+		"linky notes",
+		"notes app",
+		"notetaking app",
+		"tags",
+		"tags",
+		"knowledge base",
+		"second brain",
+		"inner app",
+		"guide",
+	],
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: {
+			index: true,
+			follow: true,
+		},
+	},
 };
 
 const CONTENT = `
-<h1 align="center">How to create an inner app in <em>linky_notes</em></h1>
+<h1 align="center">How to create an internal app inside <em>Linky Notes</em></h1>
 
 ---
 
@@ -61,8 +77,8 @@ This example & idea proves how powerful is *linky_notes* app and how powerful is
 Every note can be whatever you want & need.
 
 Users can organize anything using tags (and their variations) & inner links to other notes.
-`
+`;
 
-export default function InnerAppGuide() {
+export default function InternalAppGuide() {
 	return <MarkdownRenderer markdown={CONTENT} />;
 }
