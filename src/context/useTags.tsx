@@ -12,6 +12,7 @@ import {
 	query,
 	startAfter,
 	orderByKey,
+	orderByChild,
 } from "firebase/database";
 import {
 	createContext,
@@ -179,7 +180,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
 	const fetchTagsAndListenToChanges = useCallback(
 		async (reference: string, userId: string) => {
-			// fetch tags num first:
+			// Fetch tagsNum first:
 			const tagsNumRef = ref(rtdb, `users/${userId}/tagsNum`);
 			onValue(tagsNumRef, (snapshot) => {
 				if (!snapshot.exists()) return;
@@ -189,22 +190,27 @@ export function TagsProvider({ children }: TagsProviderProps) {
 				setTagsNum(tagsNum);
 			});
 
-			// now the rest...
+			// Reference to tags:
 			const tagsRef = ref(rtdb, reference);
 
+			let lastUpdatedAt = 0;
 			let lastKey: string | undefined = undefined;
+			let tagsStoredInSessionStorage: Tags | null = null;
 
 			if (
-				// check if user is the same as the one stored in sessionStorage:
 				sessionStorage.getItem("linky_notes_user_id") === userId &&
-				// check if tags were already fetched:
 				sessionStorage.getItem("linky_notes_user_tags")
 			) {
 				console.log(
 					"User tags are already in sessionStorage. No need to fetch them again."
 				);
-				const tagsStoredInSessionStorage = JSON.parse(
+				tagsStoredInSessionStorage = JSON.parse(
 					sessionStorage.getItem("linky_notes_user_tags")!
+				) as Tags;
+				lastUpdatedAt = Math.max(
+					...Object.values(tagsStoredInSessionStorage).map(
+						(tag) => tag.updatedAt || 0
+					)
 				);
 				lastKey = Object.keys(tagsStoredInSessionStorage).pop();
 				setTags(tagsStoredInSessionStorage);
@@ -215,30 +221,34 @@ export function TagsProvider({ children }: TagsProviderProps) {
 				const fetchedTagsSnapshot = await get(tagsRef);
 
 				if (fetchedTagsSnapshot.exists()) {
-					const fetchedTags = fetchedTagsSnapshot.val() as Tags;
-					setTags(fetchedTags);
-					lastKey = Object.keys(fetchedTags).pop();
-					// save tags to sessionStorage:
+					tagsStoredInSessionStorage = fetchedTagsSnapshot.val() as Tags;
+					setTags(tagsStoredInSessionStorage);
+					lastUpdatedAt = Math.max(
+						...Object.values(tagsStoredInSessionStorage).map(
+							(tag) => tag.updatedAt || 0
+						)
+					);
+					lastKey = Object.keys(tagsStoredInSessionStorage).pop();
 					sessionStorage.setItem(
 						"linky_notes_user_tags",
-						JSON.stringify(fetchedTags)
+						JSON.stringify(tagsStoredInSessionStorage)
 					);
 				}
 			}
 
-			// attach listeners to listen to changes in tags:
+			// Attach listener for new added tags (uses orderByKey()!)
 			const queryForNewAddedTags = lastKey
 				? query(tagsRef, orderByKey(), startAfter(lastKey))
 				: tagsRef;
 
-			console.log(lastKey, queryForNewAddedTags);
+			console.log("Listening for new tags after key:", lastKey);
 
 			onChildAdded(queryForNewAddedTags, (snapshot) => {
 				const newTag = snapshot.val() as Tag;
 				console.log("New tag was added to RTDB:", newTag);
+
 				setTags((prevTags) => {
 					const updatedTags = { ...prevTags, [snapshot.key!]: newTag };
-					// save tags to sessionStorage:
 					sessionStorage.setItem(
 						"linky_notes_user_tags",
 						JSON.stringify(updatedTags)
@@ -247,33 +257,51 @@ export function TagsProvider({ children }: TagsProviderProps) {
 				});
 			});
 
-			onChildChanged(tagsRef, (snapshot) => {
-				const updatedTag = snapshot.val() as Tag;
+			// Attach listener for updated tags (uses updatedAt)
+			const queryForUpdatedTags = query(
+				tagsRef,
+				orderByChild("updatedAt"),
+				startAfter(lastUpdatedAt)
+			);
+
+			console.log("Listening for updated tags after:", lastUpdatedAt);
+
+			onChildChanged(queryForUpdatedTags, (snapshot) => {
+				const updatedTag = snapshot.val();
 				console.log(
 					"DATA WAS FETCHED (onChildChanged): tag updated:",
 					updatedTag
 				);
+
 				setTags((prevTags) => {
 					const updatedTags = { ...prevTags, [snapshot.key!]: updatedTag };
-					// save tags to sessionStorage:
 					sessionStorage.setItem(
 						"linky_notes_user_tags",
 						JSON.stringify(updatedTags)
 					);
 					return updatedTags;
 				});
-				setTags((prevTags) => ({ ...prevTags, [snapshot.key!]: updatedTag }));
 			});
 
-			onChildRemoved(tagsRef, (snapshot) => {
+			// Attach listener for removed tags (uses updatedAt)
+			const queryForRemovedTags = query(
+				tagsRef,
+				orderByChild("updatedAt"),
+				startAfter(lastUpdatedAt)
+			);
+
+			console.log("Listening for removed tags after:", lastUpdatedAt);
+
+			onChildRemoved(queryForRemovedTags, (snapshot) => {
+				const removedTag = snapshot.val();
 				console.log(
 					"DATA WAS FETCHED (onChildRemoved): tag removed:",
-					snapshot.val()
+					removedTag
 				);
+
 				setTags((prevTags) => {
 					const updatedTags = { ...prevTags };
 					delete updatedTags[snapshot.key!];
-					// save tags to sessionStorage:
 					sessionStorage.setItem(
 						"linky_notes_user_tags",
 						JSON.stringify(updatedTags)
