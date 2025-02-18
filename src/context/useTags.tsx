@@ -12,7 +12,6 @@ import {
 	query,
 	startAfter,
 	orderByKey,
-	orderByChild,
 } from "firebase/database";
 import {
 	createContext,
@@ -182,6 +181,15 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
 	const fetchTagsAndListenToChanges = useCallback(
 		async (reference: string, userId: string) => {
+			// ❗ SET TO TRUE ONLY WHILE IN DEV MODE ❗
+			const isDevMode = false; // TRUE IN DEV
+			if (!isDevMode) {
+				sessionStorage.clear();
+			}
+			
+			console.log("isDevMode", isDevMode);
+			// ❗ ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗ ❗
+
 			// Fetch tagsNum first:
 			const tagsNumRef = ref(rtdb, `users/${userId}/tagsNum`);
 
@@ -196,19 +204,23 @@ export function TagsProvider({ children }: TagsProviderProps) {
 			// Reference to tags:
 			const tagsRef = ref(rtdb, reference);
 
+			// USE SESSION STORAGE BUT ONLY FOR THE SAME OF DEV:
 			const userStorageObj = userStorageObject.get(userId);
 
 			let lastKey: string | undefined = undefined;
-			let storageUpdatedAt: number = 0;
 
 			if (userStorageObj) {
-				console.log(
-					"User tags are already in sessionStorage. No need to fetch them again."
-				);
-				const tagsStoredInSessionStorage = userStorageObj.tags;
-				storageUpdatedAt = userStorageObj.updatedAt;
-				lastKey = Object.keys(tagsStoredInSessionStorage).pop();
-				setTags(tagsStoredInSessionStorage);
+				if (isDevMode) {
+					console.log(
+						"User tags are already in sessionStorage. No need to fetch them again."
+					);
+					const tagsStoredInSessionStorage = userStorageObj.tags;
+					lastKey = Object.keys(tagsStoredInSessionStorage).pop();
+					setTags(tagsStoredInSessionStorage);
+				} else {
+					// DO NOT USE USER OBJECT IF NOT DEV MODE
+				}
+
 			} else {
 				console.log(
 					"There are no user tags stored in sessionStorage. Fetching tags from RTDB..."
@@ -218,19 +230,22 @@ export function TagsProvider({ children }: TagsProviderProps) {
 				if (fetchedTagsSnapshot.exists()) {
 					const tagsStoredInSessionStorage = fetchedTagsSnapshot.val() as Tags;
 					setTags(tagsStoredInSessionStorage);
-
-					// assign current timestamp:
-					storageUpdatedAt = date.getTimestamp();
 					lastKey = Object.keys(tagsStoredInSessionStorage).pop();
 
-					userStorageObject.set(
-						{
-							tags: tagsStoredInSessionStorage,
-							updatedAt: storageUpdatedAt,
-							userId,
-						},
-						userId
-					);
+					if (isDevMode) {
+						
+
+						userStorageObject.set(
+							{
+								tags: tagsStoredInSessionStorage,
+								userId,
+							},
+							userId
+						);
+					} else {
+						// DO NOT USE USER OBJECT IF NOT DEV MODE
+					}
+
 				}
 			}
 
@@ -251,29 +266,23 @@ export function TagsProvider({ children }: TagsProviderProps) {
 						[snapshot.key!]: newTag,
 					};
 
-					userStorageObject.set(
-						{
-							tags: updatedTags,
-							updatedAt: newTag.updatedAt,
-							userId,
-						},
-						userId
-					);
+					if (isDevMode) {
+						userStorageObject.set(
+							{
+								tags: updatedTags,
+								userId,
+							},
+							userId
+						);
+					} else {
+						// DO NOT USE USER OBJECT IF NOT DEV MODE
+					}
 
 					return updatedTags;
 				});
 			});
 
-			// Attach listener for updated tags (uses updatedAt)
-			const queryForUpdatedTags = query(
-				tagsRef,
-				orderByChild("updatedAt"),
-				startAfter(storageUpdatedAt)
-			);
-
-			console.log("Listening for updated tags after:", storageUpdatedAt);
-
-			onChildChanged(queryForUpdatedTags, (snapshot) => {
+			onChildChanged(tagsRef, (snapshot) => {
 				const updatedTag = snapshot.val();
 				console.log(
 					"DATA WAS FETCHED (onChildChanged): tag updated:",
@@ -286,29 +295,23 @@ export function TagsProvider({ children }: TagsProviderProps) {
 						[snapshot.key!]: updatedTag,
 					};
 
-					userStorageObject.set(
-						{
-							tags: updatedTags,
-							updatedAt: updatedTag.updatedAt,
-							userId,
-						},
-						userId
-					);
+					if (isDevMode) {
+						userStorageObject.set(
+							{
+								tags: updatedTags,
+								userId,
+							},
+							userId
+						);
+					} else {
+						// DO NOT USE USER OBJECT IF NOT DEV MODE
+					}
 
 					return updatedTags;
 				});
 			});
 
-			// Attach listener for removed tags (uses updatedAt)
-			const queryForRemovedTags = query(
-				tagsRef,
-				orderByChild("updatedAt"),
-				startAfter(storageUpdatedAt)
-			);
-
-			console.log("Listening for removed tags after:", storageUpdatedAt);
-
-			onChildRemoved(queryForRemovedTags, (snapshot) => {
+			onChildRemoved(tagsRef, (snapshot) => {
 				const removedTag = snapshot.val() as Tag;
 				console.log(
 					"DATA WAS FETCHED (onChildRemoved): tag removed:",
@@ -319,14 +322,18 @@ export function TagsProvider({ children }: TagsProviderProps) {
 					const updatedTags = { ...prevTags };
 					delete updatedTags[snapshot.key!];
 
-					userStorageObject.set(
-						{
-							tags: updatedTags,
-							updatedAt: date.getTimestamp(),
-							userId,
-						},
-						userId
-					);
+					if (isDevMode) {
+						userStorageObject.set(
+							{
+								tags: updatedTags,
+								userId,
+							},
+							userId
+						);
+					} else {
+						// DO NOT USE USER OBJECT IF NOT DEV MODE
+					}
+
 					return updatedTags;
 				});
 			});
