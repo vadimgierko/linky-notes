@@ -74,7 +74,7 @@ brakuje mi takich funkcjonalności/`features` from my unfinished project `setite
 - <mark>`<dialog />` or `<aside />` for (while adding/editing/working with current notes)</mark>:
   - CRUD
   - filtering/searching
-    - notes
+    - ~~notes~~
     - tags
 - <mark>enable modifying creation date</mark>
 - <mark>users CRUD</mark> (store it in Firestore to enable more than 100 users logged simultaniously in free RTDB)
