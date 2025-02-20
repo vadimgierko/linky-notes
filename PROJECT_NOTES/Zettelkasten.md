@@ -45,7 +45,7 @@ That means, that current version can be officially named as v1 stable version, i
 -OJTZPr9ox9-nvVaOs-w
 
 v1 (Zettelkasten) Version Features & overall ease of use can be improved by adding these optional (and possible even now, but manually) features:
-- sep modal for notes CRUD & notes search by tags
+- ~~sep modal for notes CRUD & notes search by tags~~
 - easy copy note id/ ready to use link for linking
 - auto back/forward links
 - search extended to filtering excluding some tags

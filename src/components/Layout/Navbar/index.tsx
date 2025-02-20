@@ -6,7 +6,7 @@ import Container from "react-bootstrap/Container";
 // auth:
 // import logOut from "../../auth/logOut";
 // react-icons:
-import { BsSunFill, BsMoonFill } from "react-icons/bs";
+import { BsSunFill, BsMoonFill, BsSearch } from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
 import { CgNotes } from "react-icons/cg";
 import {
@@ -20,26 +20,32 @@ import {
 import { BiRocket, BiUserCheck } from "react-icons/bi";
 import { BsBoxSeam } from "react-icons/bs";
 import Link from "next/link";
-import { Nav, Navbar } from "react-bootstrap";
+import { Button, Modal, Nav, Navbar } from "react-bootstrap";
 import { useState } from "react";
 import useTheme from "@/context/useTheme";
 import logOut from "@/auth/logOut";
 import useUser from "@/context/useUser";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
+import NotesSearch from "@/components/NotesSearch";
 
-const pencilSquareButtonClassName = "collapsed ms-auto me-2 text-";
+const pencilSquareButtonClassName = "me-2 text-"; // collapsed ms-auto me-2
 
 export default function NavBar({ maxWidth }: { maxWidth: number }) {
 	const { theme, switchTheme } = useTheme();
 	const { user } = useUser();
 	const { notesNum } = useNotes();
 	const { tagsNum } = useTags();
-	const [isHovering, setIsHovering] = useState(false);
-
-	const handleMouseEnter = () => setIsHovering(true);
-
-	const handleMouseLeave = () => setIsHovering(false);
+	// for add note & search icons:
+	const [isAddIconHovering, setIsAddIconHovering] = useState(false);
+	const handleMouseEnterAddIcon = () => setIsAddIconHovering(true);
+	const handleMouseLeaveAddIcon = () => setIsAddIconHovering(false);
+	const [isSearchIconHovering, setIsSearchIconHovering] = useState(false);
+	const handleMouseEnterSearchIcon = () => setIsSearchIconHovering(true);
+	const handleMouseLeaveSearchIcon = () => setIsSearchIconHovering(false);
+	// for search modal:
+	const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+	const handleCloseSearchModal = () => setIsSearchModalOpen(false);
 
 	const LINKS = {
 		public: [
@@ -91,21 +97,64 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 				<Link href="/" passHref legacyBehavior>
 					<Navbar.Brand>linky_notes</Navbar.Brand>
 				</Link>
-				<Link href="/notes/add" passHref legacyBehavior>
+
+				{user && <span className="collapsed ms-auto me-2 d-flex">
+					{/**================== ADD NOTE ICON ==================*/}
+					<Link href="/notes/add" passHref legacyBehavior>
+						<Nav.Link
+							className={
+								isAddIconHovering
+									? theme === "dark"
+										? pencilSquareButtonClassName + "light"
+										: pencilSquareButtonClassName + "dark"
+									: pencilSquareButtonClassName + "secondary"
+							}
+							onMouseEnter={handleMouseEnterAddIcon}
+							onMouseLeave={handleMouseLeaveAddIcon}
+						>
+							<BsPencilSquare size={30} />
+						</Nav.Link>
+					</Link>
+					{/**================== SEARCH ICON & MODAL ==================*/}
 					<Nav.Link
 						className={
-							isHovering
+							isSearchIconHovering
 								? theme === "dark"
 									? pencilSquareButtonClassName + "light"
 									: pencilSquareButtonClassName + "dark"
 								: pencilSquareButtonClassName + "secondary"
 						}
-						onMouseEnter={handleMouseEnter}
-						onMouseLeave={handleMouseLeave}
+						onMouseEnter={handleMouseEnterSearchIcon}
+						onMouseLeave={handleMouseLeaveSearchIcon}
+						onClick={() => setIsSearchModalOpen(true)}
 					>
-						<BsPencilSquare size={30} />
+						<BsSearch size={30} />
 					</Nav.Link>
-				</Link>
+				</span>}
+
+				<Modal
+					show={isSearchModalOpen}
+					onHide={handleCloseSearchModal}
+					//fullscreen={true}
+					size="lg"
+				>
+					<NotesSearch
+						closeModal={() => {
+							// if (
+							// 	confirm("Are you sure you want to leave current page? All progress will be lost...")
+							// ) {
+								setIsSearchModalOpen(true);
+							//}
+						}}
+					/>
+
+					<Modal.Footer>
+						<Button variant="secondary" onClick={handleCloseSearchModal}>
+							Close
+						</Button>
+					</Modal.Footer>
+				</Modal>
+
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav className="me-auto">

@@ -15,45 +15,52 @@ type NoteCardProps = {
 	note: Note;
 	noteKey: string;
 	show140chars: boolean;
+	closeModal?: () => void
 };
 
 export default function NoteCard({
 	note,
 	noteKey,
 	show140chars,
+	closeModal
 }: NoteCardProps) {
 	const { theme } = useTheme();
 	const { deleteNote } = useNotes();
 	const { getTagNotesNum, getTagById } = useTags();
 
-	const ICON_BUTTONS = [
-		{
-			iconName: "eye",
-			color: "secondary",
-			href: "/notes/" + noteKey,
-		},
-		{
-			iconName: "pencil",
-			color: "info",
-			href: "/notes/" + noteKey + "/update",
-		},
-
-		{
-			iconName: "trash",
-			color: "danger",
-			onClick: async () => {
-				if (
-					confirm(
-						"Are you sure you want to delete this note? This action cannot be undone!"
-					)
-				) {
-					await deleteNote(noteKey);
-				} else {
-					return;
-				}
+	const ICON_BUTTONS: {
+		iconName: string;
+		color: string;
+		href?: string;
+		onClick?: () => void | Promise<void>;
+	}[] = [
+			{
+				iconName: "eye",
+				color: "secondary",
+				href: "/notes/" + noteKey,
 			},
-		},
-	];
+			{
+				iconName: "pencil",
+				color: "info",
+				href: "/notes/" + noteKey + "/update",
+			},
+
+			{
+				iconName: "trash",
+				color: "danger",
+				onClick: async () => {
+					if (
+						confirm(
+							"Are you sure you want to delete this note? This action cannot be undone!"
+						)
+					) {
+						await deleteNote(noteKey);
+					} else {
+						return;
+					}
+				},
+			},
+		];
 
 	// sort tags alphabetically:
 	const noteTags: ITag[] = Object.keys(note.tags)
@@ -86,7 +93,15 @@ export default function NoteCard({
 									<IconButton
 										iconName={btn.iconName}
 										color={btn.color}
-										onClick={btn.onClick || console.log}
+										onClick={() => {
+											if (closeModal) {
+												closeModal();
+											}
+											if (btn.onClick) {
+												btn.onClick();
+											}
+										}
+										}
 									/>
 								</Link>
 							) : btn.onClick ? (
@@ -94,7 +109,15 @@ export default function NoteCard({
 									key={btn.iconName}
 									iconName={btn.iconName}
 									color={btn.color}
-									onClick={btn.onClick || console.log}
+									onClick={() => {
+										if (closeModal) {
+											closeModal();
+										}
+										if (btn.onClick) {
+											btn.onClick();
+										}
+									}
+									}
 								/>
 							) : null
 						)}
