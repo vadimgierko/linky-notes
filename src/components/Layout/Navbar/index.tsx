@@ -6,7 +6,7 @@ import Container from "react-bootstrap/Container";
 // auth:
 // import logOut from "../../auth/logOut";
 // react-icons:
-import { BsSunFill, BsMoonFill, BsSearch } from "react-icons/bs";
+import { BsSunFill, BsMoonFill, BsSearch, BsPersonCircle } from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
 import { CgNotes } from "react-icons/cg";
 import {
@@ -15,7 +15,6 @@ import {
 	AiOutlineFileMarkdown,
 	AiOutlineLogout,
 	AiOutlineLogin,
-	AiOutlineLock,
 } from "react-icons/ai";
 import { BiRocket, BiUserCheck } from "react-icons/bi";
 import { BsBoxSeam } from "react-icons/bs";
@@ -28,6 +27,7 @@ import useUser from "@/context/useUser";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
 import NotesSearch from "@/components/NotesSearch";
+import Image from "next/image";
 
 const pencilSquareButtonClassName = "me-2 text-"; // collapsed ms-auto me-2
 
@@ -130,6 +130,25 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 					>
 						<BsSearch size={30} />
 					</Nav.Link>
+					{/**============== USER DISPLAY NAME & AVATAR ===============*/}
+					<span>
+						{/* {user.displayName
+							? user.displayName
+							: user.email
+								? user.email
+								: "Anonymus"}{" "} */}
+						{user.photoURL ? (
+							<Image
+								width={30}
+								height={30}
+								src={user.photoURL}
+								style={{ borderRadius: "50%" }}
+								alt={`${user.displayName} avatar`}
+							/>
+						) : (
+							<BsPersonCircle />
+						)}
+					</span>
 				</span>}
 
 				<Modal
@@ -143,7 +162,7 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 							// if (
 							// 	confirm("Are you sure you want to leave current page? All progress will be lost...")
 							// ) {
-								setIsSearchModalOpen(true);
+							setIsSearchModalOpen(true);
 							//}
 						}}
 					/>
@@ -162,7 +181,22 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 							<>
 								<Nav.Link href="#" disabled>
 									<BiUserCheck className="me-3" />
-									{user.email}
+									{user.photoURL ? (
+										<Image
+											width={30}
+											height={30}
+											src={user.photoURL}
+											style={{ borderRadius: "50%" }}
+											alt={`${user.displayName} avatar`}
+										/>
+									) : (
+										<BsPersonCircle />
+									)}{" "}
+									{user.displayName
+										? user.displayName
+										: user.email
+											? user.email
+											: "Anonymus"}
 								</Nav.Link>
 
 								{LINKS.private.map((link) => (
@@ -223,28 +257,13 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 								</Nav.Link>
 							</Link>
 						) : (
-							<>
-								<Link href="/signin" passHref legacyBehavior>
-									<Nav.Link>
-										<AiOutlineLogin className="me-3" />
-										<span>sign in</span>
-									</Nav.Link>
-								</Link>
-								<Link href="/signup" passHref legacyBehavior>
-									<Nav.Link>
-										<AiOutlineLogin className="me-3" />
-										<span>sign up</span>
-									</Nav.Link>
-								</Link>
-							</>
+							<Link href="/signin" passHref legacyBehavior>
+								<Nav.Link>
+									<AiOutlineLogin className="me-3" />
+									<span>sign in/up</span>
+								</Nav.Link>
+							</Link>
 						)}
-
-						<Link href="/password-reset" passHref legacyBehavior>
-							<Nav.Link>
-								<AiOutlineLock className="me-3" />
-								<span>reset password</span>
-							</Nav.Link>
-						</Link>
 
 						{/* {
 							user && tags &&
