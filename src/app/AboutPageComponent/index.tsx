@@ -55,17 +55,9 @@ export default function About() {
                 <Link href="/signin">
                     <Button
                         className="mb-5 me-3"
-                        variant="success"
-                    >
-                        Sign In
-                    </Button>
-                </Link>
-                <Link href="/signup">
-                    <Button
-                        className="mb-5"
                         variant="primary"
                     >
-                        Sign Up
+                        Sign In/Up
                     </Button>
                 </Link>
             </header>

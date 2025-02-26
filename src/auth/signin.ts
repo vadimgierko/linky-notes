@@ -1,18 +1,18 @@
-import { UserData } from "@/components/AuthForm";
 import { auth } from "@/firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-export default async function signIn(userData: UserData) {
+export default async function signIn() {
 	try {
-		const userCredential = await signInWithEmailAndPassword(
-			auth,
-			userData.email,
-			userData.password
-		);
+		const provider = new GoogleAuthProvider();
+		// This gives you a Google Access Token. You can use it to access the Google API.
+		// const credential = GoogleAuthProvider.credentialFromResult(result);
+		// const token = credential?.accessToken;
+		const userCredential = await signInWithPopup(auth, provider);
 		// Signed in
 		const user = userCredential.user;
-		console.log(user);
+		console.log("User signed in:", user);
 	} catch (error: unknown) {
+		console.error(error);
 		alert(error);
 	}
 }
