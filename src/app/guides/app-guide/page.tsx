@@ -46,7 +46,7 @@ You can use my tips mentioned below or **create your own system**!
 
 ---
 
-## Tags
+<h2 id="tags">Tags</h2>
 
 ---
 
@@ -74,7 +74,7 @@ and add a tag with the **name of the note source, e.g. book or article title** e
 
 ---
 
-## Links
+<h2 id="links">Links</h2>
 
 ---
 
@@ -92,7 +92,7 @@ The possibilities are endless.
 
 ---
 
-## Markdown & HTML with inline styles
+<h2 id="markdown-html">Markdown & HTML with inline styles</h2>
 
 ---
 
@@ -108,7 +108,7 @@ than you can learn it online for free pretty fast ([HTML Tutorial](https://www.w
 
 ---
 
-## Todo/ Check Lists
+<h2 id="todo-checklists">Todo/ Check Lists</h2>
 
 ---
 
@@ -116,7 +116,7 @@ You may also create todo/check lists using [built-in markdown editor](/guides/ma
 
 ---
 
-## Split & consolidate notes
+<h2 id="split-consolidate-notes">Split & consolidate notes</h2>
 
 ---
 
@@ -129,7 +129,7 @@ make a link to the term instead of describing term B inside same note (if it's p
 
 ---
 
-## Edit & update
+<h2 id="edit-update-notes">Edit & update notes</h2>
 
 ---
 Remember, that you can always go back to any note & update it with new tags or styles!

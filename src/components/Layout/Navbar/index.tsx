@@ -1,12 +1,11 @@
 "use client";
-// import { useTheme } from "../../contexts/useTheme";
-// react-bootstrap:
 import Container from "react-bootstrap/Container";
-// import Badge from "react-bootstrap/Badge";
-// auth:
-// import logOut from "../../auth/logOut";
-// react-icons:
-import { BsSunFill, BsMoonFill, BsSearch, BsPersonCircle } from "react-icons/bs";
+import {
+	BsSunFill,
+	BsMoonFill,
+	BsSearch,
+	BsPersonCircle,
+} from "react-icons/bs";
 import { BsPencilSquare } from "react-icons/bs";
 import { CgNotes } from "react-icons/cg";
 import {
@@ -16,7 +15,7 @@ import {
 	AiOutlineLogout,
 	AiOutlineLogin,
 } from "react-icons/ai";
-import { BiRocket, BiUserCheck } from "react-icons/bi";
+import { BiRocket } from "react-icons/bi";
 import { BsBoxSeam } from "react-icons/bs";
 import Link from "next/link";
 import { Button, Modal, Nav, Navbar } from "react-bootstrap";
@@ -27,7 +26,7 @@ import useUser from "@/context/useUser";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
 import NotesSearch from "@/components/NotesSearch";
-import Image from "next/image";
+import signInUpWithGoogle from "@/auth/signInUpWithGoogle";
 
 const pencilSquareButtonClassName = "me-2 text-"; // collapsed ms-auto me-2
 
@@ -98,58 +97,55 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 					<Navbar.Brand>linky_notes</Navbar.Brand>
 				</Link>
 
-				{user && <span className="collapsed ms-auto me-2 d-flex">
-					{/**================== ADD NOTE ICON ==================*/}
-					<Link href="/notes/add" passHref legacyBehavior>
+				{user && (
+					<span className="collapsed ms-auto me-2 d-flex">
+						{/**================== ADD NOTE ICON ==================*/}
+						<Link href="/notes/add" passHref legacyBehavior>
+							<Nav.Link
+								className={
+									isAddIconHovering
+										? theme === "dark"
+											? pencilSquareButtonClassName + "light"
+											: pencilSquareButtonClassName + "dark"
+										: pencilSquareButtonClassName + "secondary"
+								}
+								onMouseEnter={handleMouseEnterAddIcon}
+								onMouseLeave={handleMouseLeaveAddIcon}
+							>
+								<BsPencilSquare size={30} />
+							</Nav.Link>
+						</Link>
+						{/**================== SEARCH ICON & MODAL ==================*/}
 						<Nav.Link
 							className={
-								isAddIconHovering
+								isSearchIconHovering
 									? theme === "dark"
 										? pencilSquareButtonClassName + "light"
 										: pencilSquareButtonClassName + "dark"
 									: pencilSquareButtonClassName + "secondary"
 							}
-							onMouseEnter={handleMouseEnterAddIcon}
-							onMouseLeave={handleMouseLeaveAddIcon}
+							onMouseEnter={handleMouseEnterSearchIcon}
+							onMouseLeave={handleMouseLeaveSearchIcon}
+							onClick={() => setIsSearchModalOpen(true)}
 						>
-							<BsPencilSquare size={30} />
+							<BsSearch size={30} />
 						</Nav.Link>
-					</Link>
-					{/**================== SEARCH ICON & MODAL ==================*/}
-					<Nav.Link
-						className={
-							isSearchIconHovering
-								? theme === "dark"
-									? pencilSquareButtonClassName + "light"
-									: pencilSquareButtonClassName + "dark"
-								: pencilSquareButtonClassName + "secondary"
-						}
-						onMouseEnter={handleMouseEnterSearchIcon}
-						onMouseLeave={handleMouseLeaveSearchIcon}
-						onClick={() => setIsSearchModalOpen(true)}
-					>
-						<BsSearch size={30} />
-					</Nav.Link>
-					{/**============== USER DISPLAY NAME & AVATAR ===============*/}
-					<span>
-						{/* {user.displayName
-							? user.displayName
-							: user.email
-								? user.email
-								: "Anonymus"}{" "} */}
-						{user.photoURL ? (
-							<Image
-								width={30}
-								height={30}
-								src={user.photoURL}
-								style={{ borderRadius: "50%" }}
-								alt={`${user.displayName} avatar`}
-							/>
-						) : (
-							<BsPersonCircle />
-						)}
+						{/**============== USER DISPLAY NAME & AVATAR ===============*/}
+						<span>
+							{user.photoURL ? (
+								<img
+									width={30}
+									height={30}
+									src={user.photoURL}
+									style={{ borderRadius: "50%" }}
+									alt={`${user.displayName} avatar`}
+								/>
+							) : (
+								<BsPersonCircle />
+							)}
+						</span>
 					</span>
-				</span>}
+				)}
 
 				<Modal
 					show={isSearchModalOpen}
@@ -179,10 +175,11 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 					<Nav className="me-auto">
 						{user && (
 							<>
-								<Nav.Link href="#" disabled>
+								<hr />
+								{/* <Nav.Link href="#" disabled>
 									<BiUserCheck className="me-3" />
 									{user.photoURL ? (
-										<Image
+										<img
 											width={30}
 											height={30}
 											src={user.photoURL}
@@ -195,9 +192,9 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 									{user.displayName
 										? user.displayName
 										: user.email
-											? user.email
-											: "Anonymus"}
-								</Nav.Link>
+										? user.email
+										: "Anonymus"}
+								</Nav.Link> */}
 
 								{LINKS.private.map((link) => (
 									<Link
@@ -257,10 +254,10 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 								</Nav.Link>
 							</Link>
 						) : (
-							<Link href="/signin" passHref legacyBehavior>
-								<Nav.Link>
+							<Link href="/notes" passHref legacyBehavior>
+								<Nav.Link onClick={signInUpWithGoogle}>
 									<AiOutlineLogin className="me-3" />
-									<span>sign in/up</span>
+									<span>sign in/up with Google</span>
 								</Nav.Link>
 							</Link>
 						)}

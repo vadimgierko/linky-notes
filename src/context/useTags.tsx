@@ -186,7 +186,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 			if (!isDevMode) {
 				sessionStorage.clear();
 			}
-			
+
 			console.log("isDevMode", isDevMode);
 			// ❗ ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗ ❗
 
@@ -220,7 +220,6 @@ export function TagsProvider({ children }: TagsProviderProps) {
 				} else {
 					// DO NOT USE USER OBJECT IF NOT DEV MODE
 				}
-
 			} else {
 				console.log(
 					"There are no user tags stored in sessionStorage. Fetching tags from RTDB..."
@@ -233,8 +232,6 @@ export function TagsProvider({ children }: TagsProviderProps) {
 					lastKey = Object.keys(tagsStoredInSessionStorage).pop();
 
 					if (isDevMode) {
-						
-
 						userStorageObject.set(
 							{
 								tags: tagsStoredInSessionStorage,
@@ -245,7 +242,6 @@ export function TagsProvider({ children }: TagsProviderProps) {
 					} else {
 						// DO NOT USE USER OBJECT IF NOT DEV MODE
 					}
-
 				}
 			}
 
