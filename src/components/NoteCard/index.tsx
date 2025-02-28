@@ -3,13 +3,13 @@ import useTheme from "@/context/useTheme";
 import { Note, Tag as ITag, Tags } from "@/types";
 import { Card, Row, Col } from "react-bootstrap";
 import IconButton from "../IconButton";
-import MarkdownRenderer from "../MarkdownRenderer";
 import Link from "next/link";
 import Tag from "../Tag";
 import useNotes from "@/context/useNotes";
 import useTags from "@/context/useTags";
 import sortTagsAlphabetically from "@/lib/sortTagsAlphabetically";
 import date from "@/lib/date";
+import MarkdownRendererNoteMode from "../MarkdownRenderer/NoteMode";
 
 type NoteCardProps = {
 	note: Note;
@@ -126,7 +126,8 @@ export default function NoteCard({
 			</Card.Header>
 			<Card.Body>
 				<Card.Text className="text-muted">{noteKey}</Card.Text>
-				<MarkdownRenderer
+				<MarkdownRendererNoteMode
+					noteId={noteKey}
 					markdown={
 						show140chars
 							? note.children[0].value.slice(0, 137) + "..."

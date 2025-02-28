@@ -49,9 +49,6 @@ export default function NotePageComponent(
         }
     }, [fetchNote, isLoading, itemKey, notes]);
 
-    // always scroll to top:
-    useEffect(() => window.scrollTo({ top: 0, behavior: "instant" }), []);
-
     if (!itemKey) return <p>There is no such note id...</p>;
     if (isLoading) return <Spinner />;
     if (!note) return <p>There is no such note...</p>;

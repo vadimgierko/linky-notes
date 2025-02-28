@@ -169,7 +169,9 @@ export default function NoteForm({
 				)}
 				{editorMode === "preview" && (
 					<div className="border py-2 px-3">
-						<MarkdownRenderer markdown={note.children[0].value} />
+						<MarkdownRenderer
+							markdown={note.children[0].value}
+						/>
 					</div>
 				)}
 			</Form.Group>
@@ -208,10 +210,10 @@ export default function NoteForm({
 									let updatedFoundTags: { [key: string]: ITag } = {};
 									foundTagsId.forEach(
 										(id) =>
-											(updatedFoundTags = {
-												...updatedFoundTags,
-												[id]: TAGS[id],
-											})
+										(updatedFoundTags = {
+											...updatedFoundTags,
+											[id]: TAGS[id],
+										})
 									);
 									setFoundTags(updatedFoundTags);
 									// set new tag if there is no exact match with any of found tags or existing & new:
@@ -219,18 +221,18 @@ export default function NoteForm({
 										Object.keys(updatedFoundTags).find(
 											(tagId) => updatedFoundTags[tagId].value === changedInput
 										) ||
-										(Object.keys(note.existingTags).length
-											? Object.keys(note.existingTags).find((tagId) => {
+											(Object.keys(note.existingTags).length
+												? Object.keys(note.existingTags).find((tagId) => {
 													const tag = getTagById(tagId);
 
 													if (!tag) return undefined;
 
 													return tag.value === changedInput;
-											  })
-											: false) ||
-										(note.newTags.length
-											? note.newTags.find((tag) => tag === changedInput)
-											: false)
+												})
+												: false) ||
+											(note.newTags.length
+												? note.newTags.find((tag) => tag === changedInput)
+												: false)
 											? true
 											: false;
 									if (isExactMatch) {
