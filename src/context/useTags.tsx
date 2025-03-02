@@ -182,7 +182,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 	const fetchTagsAndListenToChanges = useCallback(
 		async (reference: string, userId: string) => {
 			// ❗ SET TO TRUE ONLY WHILE IN DEV MODE ❗
-			const isDevMode = true; // TRUE IN DEV
+			const isDevMode = false; // TRUE IN DEV
 			if (!isDevMode) {
 				sessionStorage.clear();
 			}

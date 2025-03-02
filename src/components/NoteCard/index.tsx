@@ -15,14 +15,14 @@ type NoteCardProps = {
 	note: Note;
 	noteKey: string;
 	show140chars: boolean;
-	closeModal?: () => void
+	closeModal?: () => void;
 };
 
 export default function NoteCard({
 	note,
 	noteKey,
 	show140chars,
-	closeModal
+	closeModal,
 }: NoteCardProps) {
 	const { theme } = useTheme();
 	const { deleteNote } = useNotes();
@@ -34,33 +34,33 @@ export default function NoteCard({
 		href?: string;
 		onClick?: () => void | Promise<void>;
 	}[] = [
-			{
-				iconName: "eye",
-				color: "secondary",
-				href: "/notes/" + noteKey,
-			},
-			{
-				iconName: "pencil",
-				color: "info",
-				href: "/notes/" + noteKey + "/update",
-			},
+		{
+			iconName: "eye",
+			color: "secondary",
+			href: "/notes/" + noteKey,
+		},
+		{
+			iconName: "pencil",
+			color: "info",
+			href: "/notes/" + noteKey + "/update",
+		},
 
-			{
-				iconName: "trash",
-				color: "danger",
-				onClick: async () => {
-					if (
-						confirm(
-							"Are you sure you want to delete this note? This action cannot be undone!"
-						)
-					) {
-						await deleteNote(noteKey);
-					} else {
-						return;
-					}
-				},
+		{
+			iconName: "trash",
+			color: "danger",
+			onClick: async () => {
+				if (
+					confirm(
+						"Are you sure you want to delete this note? This action cannot be undone!"
+					)
+				) {
+					await deleteNote(noteKey);
+				} else {
+					return;
+				}
 			},
-		];
+		},
+	];
 
 	// sort tags alphabetically:
 	const noteTags: ITag[] = Object.keys(note.tags)
@@ -100,8 +100,7 @@ export default function NoteCard({
 											if (btn.onClick) {
 												btn.onClick();
 											}
-										}
-										}
+										}}
 									/>
 								</Link>
 							) : btn.onClick ? (
@@ -116,8 +115,7 @@ export default function NoteCard({
 										if (btn.onClick) {
 											btn.onClick();
 										}
-									}
-									}
+									}}
 								/>
 							) : null
 						)}
@@ -142,13 +140,13 @@ export default function NoteCard({
 					))}
 				</div>
 			</Card.Body>
-			<Card.Footer>
+			{/* <Card.Footer>
 				<Card.Text className="text-muted">
 					to link to this note in other one, copy this:
 					<br />
 					[some text goes here](/notes/{noteKey})
 				</Card.Text>
-			</Card.Footer>
+			</Card.Footer> */}
 		</Card>
 	);
 }
