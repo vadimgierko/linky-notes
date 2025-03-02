@@ -3,7 +3,15 @@
 import ReactMarkdown, { ExtraProps } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import { AnchorHTMLAttributes, ClassAttributes, createElement, HTMLAttributes, useEffect, useRef, useState } from "react";
+import {
+	AnchorHTMLAttributes,
+	ClassAttributes,
+	createElement,
+	HTMLAttributes,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import Link from "next/link";
 import useTheme from "@/context/useTheme";
 import rehypeHighlight from "rehype-highlight";
@@ -12,21 +20,26 @@ import slugify from "slugify";
 import { BsLink45Deg } from "react-icons/bs";
 
 function HeadingWithHashhashLinkToCopy({
-	level, children, noteId, noteTitle
+	level,
+	children,
+	noteId,
+	noteTitle,
 }: {
-	level: number; children: React.ReactNode, noteId: string, noteTitle: string
+	level: number;
+	children: React.ReactNode;
+	noteId: string;
+	noteTitle: string;
 }) {
 	const { theme } = useTheme();
 	const [isHovering, setIsHovering] = useState(false);
 	const hashTitle = String(children);
+	// id to assign to the heading:
 	const id = slugify(hashTitle, { lower: true, trim: true });
 
 	return createElement(
 		`h${level}`,
 		{ id },
-		<span className="me-2">
-			{children}
-		</span>,
+		<span className="me-2">{children}</span>,
 		<BsLink45Deg
 			className={
 				isHovering
@@ -38,15 +51,19 @@ function HeadingWithHashhashLinkToCopy({
 			onMouseEnter={() => setIsHovering(true)}
 			onMouseLeave={() => setIsHovering(false)}
 			onClick={() => {
-				const hashLinkToCopy = `[${noteTitle}/${hashTitle}](/notes/${noteId}#${id})`
+				const hashLinkToCopy =
+					level === 1
+						? `[${hashTitle}](/notes/${noteId})`
+						: `[${noteTitle}/${hashTitle}](/notes/${noteId}#${id})`;
+
 				navigator.clipboard.writeText(hashLinkToCopy);
 
 				// Alert the copied text
 				alert("Copied the text: " + hashLinkToCopy);
 			}}
 		/>
-	)
-};
+	);
+}
 
 function NextLink(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
 	const { href, ...rest } = props;
@@ -71,16 +88,73 @@ function NextLink(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
 
 interface MarkdownRendererProps {
 	markdown: string;
-	noteId: string
+	noteId: string;
 }
 
-export default function MarkdownRendererNoteMode(
-	{ markdown, noteId }: MarkdownRendererProps
-) {
+export default function MarkdownRendererNoteMode({
+	markdown,
+	noteId,
+}: MarkdownRendererProps) {
 	const { theme } = useTheme();
 	const pathname = usePathname();
 	const markdownRef = useRef<HTMLDivElement | null>(null);
 	const [hash, setHash] = useState<string | null>(null);
+
+	// Extract headings from markdown
+	const headings = markdown.match(/^(#{2,6})\s+(.*)$/gm) || [];
+	const toc = headings.map((heading) => {
+		const level = heading.match(/^#{2,6}/)?.[0].length || 0;
+		const title = heading.replace(/^#{2,6}\s+/, "");
+		const id = slugify(title, { lower: true, trim: true });
+		return { level, title, id };
+	});
+
+	// FIX THIS, MAYBE ADD AS A CUSTOM COMPONENT TO MARKDOWN RENDERER:
+	// const tocLinkIcon = (noteTitle: string, hashTitle: string, id: string) =>
+	// 	createElement(
+	// 		`span`,
+	// 		{},
+	// 		<BsLink45Deg
+	// 			// className={
+	// 			// 	isHovering
+	// 			// 		? theme === "dark"
+	// 			// 			? "text-light"
+	// 			// 			: "text-dark"
+	// 			// 		: "text-secondary"
+	// 			// }
+	// 			// onMouseEnter={() => setIsHovering(true)}
+	// 			// onMouseLeave={() => setIsHovering(false)}
+	// 			onClick={() => {
+	// 				const hashLinkToCopy = `[${noteTitle}/${hashTitle}](/notes/${noteId}#${id})`;
+
+	// 				navigator.clipboard.writeText(hashLinkToCopy);
+
+	// 				// Alert the copied text
+	// 				alert("Copied the text: " + hashLinkToCopy);
+	// 			}}
+	// 		/>
+	// 	);
+
+	// Generate TOC markdown
+	const tocMarkdown = toc
+		.map(
+			({ level, title, id }) =>
+				`${"  ".repeat(level - 2)}1. [${title}](/notes/${noteId}#${id})`
+		)
+		.join("\n");
+
+	// ${tocLinkIcon(
+	// 	noteId,
+	// 	title,
+	// 	id
+	// )}
+
+	// Insert TOC after h1 or at the beginning
+	const updatedMarkdown =
+		markdown.replace(
+			/(^# .*$\n)/m,
+			(match) => `${match}\n## Table of Contents\n${tocMarkdown}\n`
+		) || `## Table of Contents\n${tocMarkdown}\n${markdown}`;
 
 	// Apply syntax highlighting styles dynamically
 	useEffect(() => {
@@ -150,33 +224,36 @@ export default function MarkdownRendererNoteMode(
 		<article ref={markdownRef}>
 			<ReactMarkdown
 				remarkPlugins={[remarkGfm]}
-				rehypePlugins={[
-					rehypeRaw, // enables rendering HTML tags
-					rehypeHighlight
-				]}
+				rehypePlugins={[rehypeRaw, rehypeHighlight]}
 				components={{
 					a: NextLink,
 					...Object.fromEntries(
-						[2, 3, 4, 5, 6].map(level => [
+						[1, 2, 3, 4, 5, 6].map((level) => [
 							`h${level}`,
-							(props: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => (
+							(
+								props: ClassAttributes<HTMLHeadingElement> &
+									HTMLAttributes<HTMLHeadingElement> &
+									ExtraProps
+							) => (
 								<HeadingWithHashhashLinkToCopy
 									level={level}
 									noteId={noteId}
-									noteTitle={markdown
-										.slice(0, 30)
-										.replace("#", "")
-										.trim() + "..."}
+									noteTitle={
+										// get note title from extracting the first h1 tag, but without # symbol:
+										markdown.match(/# (.*)/)?.[1] ||
+										// if the first h1 tag is not found, use the first 30 characters of the markdown
+										markdown.slice(0, 30).replace("#", "").trim() + "..."
+									}
 									{...props}
 								>
 									{props.children}
 								</HeadingWithHashhashLinkToCopy>
-							)
+							),
 						])
-					)
+					),
 				}}
 			>
-				{markdown}
+				{updatedMarkdown}
 			</ReactMarkdown>
 		</article>
 	);
