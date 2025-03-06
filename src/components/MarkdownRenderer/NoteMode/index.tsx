@@ -137,10 +137,10 @@ export default function MarkdownRendererNoteMode({
 
 	// Generate TOC markdown
 	const tocMarkdown = toc
-		.map(
-			({ level, title, id }) =>
-				`${"  ".repeat(level - 2)}1. [${title}](/notes/${noteId}#${id})`
-		)
+		.map(({ level, title, id }) => {
+			const indent = "   ".repeat(level - 2);
+			return `${indent}1. [${title}](/notes/${noteId}#${id})`;
+		})
 		.join("\n");
 
 	// ${tocLinkIcon(
@@ -150,11 +150,12 @@ export default function MarkdownRendererNoteMode({
 	// )}
 
 	// Insert TOC after h1 or at the beginning
-	const updatedMarkdown =
-		markdown.replace(
-			/(^# .*$\n)/m,
-			(match) => `${match}\n## Table of Contents\n${tocMarkdown}\n`
-		) || `## Table of Contents\n${tocMarkdown}\n${markdown}`;
+	const updatedMarkdown = tocMarkdown.length
+		? markdown.replace(
+				/(^# .*$\n)/m,
+				(match) => `${match}\n---\n## Table of Contents\n${tocMarkdown}\n`
+		  ) || `## Table of Contents\n${tocMarkdown}\n${markdown}`
+		: markdown;
 
 	// Apply syntax highlighting styles dynamically
 	useEffect(() => {
