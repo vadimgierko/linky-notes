@@ -73,54 +73,60 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		[notes]
 	);
 
-	function fetchAndListenToNote(id: string) {
-		if (!user) return;
-		console.log("fetchAndListenToNote", id, "...");
+	const fetchAndListenToNote = useCallback(
+		(id: string) => {
+			if (!user) return;
+			console.log("fetchAndListenToNote", id, "...");
 
-		const noteRef = generateItemRef("notes", user.uid, id);
+			const noteRef = generateItemRef("notes", user.uid, id);
 
-		//==================== listen to updates: ====================//
-		const unsubscribe = onValue(ref(rtdb, noteRef), (snapshot) => {
-			if (snapshot.exists()) {
-				const note = snapshot.val() as Note;
-				console.log("DATA WAS FETCHED onValue: note of id", id, note);
-				setNotes((prevNotes) =>
-					prevNotes ? { ...prevNotes, [id]: note } : { [id]: note }
-				);
-			} else {
-				setNotes((prevNotes) => {
-					if (prevNotes) {
-						const updatedNotes = { ...prevNotes };
-						delete updatedNotes[id];
-						return updatedNotes;
+			//==================== listen to updates: ====================//
+			const unsubscribe = onValue(ref(rtdb, noteRef), (snapshot) => {
+				if (snapshot.exists()) {
+					const note = snapshot.val() as Note;
+					console.log("DATA WAS FETCHED onValue: note of id", id, note);
+					setNotes((prevNotes) =>
+						prevNotes ? { ...prevNotes, [id]: note } : { [id]: note }
+					);
+				} else {
+					setNotes((prevNotes) => {
+						if (prevNotes) {
+							const updatedNotes = { ...prevNotes };
+							delete updatedNotes[id];
+							return updatedNotes;
+						}
+						return prevNotes;
+					});
+
+					//unsubsribe
+					if (unsubscribes.current) {
+						const unsub = unsubscribes.current[id];
+						unsub();
+						delete unsubscribes.current[id];
+						console.log("unsubscribes after delete:", unsubscribes.current);
 					}
-					return prevNotes;
-				});
-
-				//unsubsribe
-				if (unsubscribes.current) {
-					const unsub = unsubscribes.current[id];
-					unsub();
-					delete unsubscribes.current[id];
-					console.log("unsubscribes after delete:", unsubscribes.current);
 				}
+			});
+
+			if (unsubscribes.current) {
+				unsubscribes.current[id] = unsubscribe;
+				console.log("unsubscribes updated:", unsubscribes.current);
 			}
-		});
+			//============================================================//
+		},
+		[user]
+	);
 
-		if (unsubscribes.current) {
-			unsubscribes.current[id] = unsubscribe;
-			console.log("unsubscribes updated:", unsubscribes.current);
-		}
-		//============================================================//
-	}
+	const fetchAndListenToNotes = useCallback(
+		(ids: string[]) => {
+			if (!ids.length) return;
 
-	function fetchAndListenToNotes(ids: string[]) {
-		if (!ids.length) return;
+			console.log("fetchAndListenToNotes:", ids, "...");
 
-		console.log("fetchAndListenToNotes:", ids, "...");
-
-		ids.forEach((id) => fetchAndListenToNote(id));
-	}
+			ids.forEach((id) => fetchAndListenToNote(id));
+		},
+		[fetchAndListenToNote]
+	);
 
 	/**
 	 * Internal helper function

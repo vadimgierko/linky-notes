@@ -116,7 +116,7 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 							</Nav.Link>
 						</Link>
 						{/**================== SEARCH ICON & MODAL ==================*/}
-						<Nav.Link
+						{/* <Nav.Link
 							className={
 								isSearchIconHovering
 									? theme === "dark"
@@ -129,7 +129,22 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 							onClick={() => setIsSearchModalOpen(true)}
 						>
 							<BsSearch size={30} />
-						</Nav.Link>
+						</Nav.Link> */}
+						<Link href="/notes" passHref legacyBehavior>
+							<Nav.Link
+								className={
+									isSearchIconHovering
+										? theme === "dark"
+											? pencilSquareButtonClassName + "light"
+											: pencilSquareButtonClassName + "dark"
+										: pencilSquareButtonClassName + "secondary"
+								}
+								onMouseEnter={handleMouseEnterSearchIcon}
+								onMouseLeave={handleMouseLeaveSearchIcon}
+							>
+								<BsSearch size={30} />
+							</Nav.Link>
+						</Link>
 						{/**============== USER DISPLAY NAME & AVATAR ===============*/}
 						<span>
 							{user.photoURL ? (
