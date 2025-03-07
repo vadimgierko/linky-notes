@@ -2,16 +2,16 @@
 import { rtdb } from "@/firebaseConfig";
 import {
 	ref,
-	update,
 	onChildAdded,
 	onChildChanged,
 	onChildRemoved,
-	increment,
 	onValue,
 	get,
 	query,
 	startAfter,
 	orderByKey,
+	orderByValue,
+	DatabaseReference,
 } from "firebase/database";
 import {
 	createContext,
@@ -25,9 +25,9 @@ import {
 import useUser from "./useUser";
 import { Tag, Tags } from "@/types";
 import { generateItemRef, generateItemsRef } from "@/lib/generateItemsRef";
+import userStorageObject, { UserStorageObject } from "@/lib/userStorageObject";
+import { addTag, deleteTag, updateTag } from "@/lib/crud/tags";
 import date from "@/lib/date";
-import generateFirebaseKeyFor from "@/lib/generateFirebaseKeyFor";
-import userStorageObject from "@/lib/userStorageObject";
 
 const TagsContext = createContext<{
 	tags: Tags | null;
@@ -70,186 +70,182 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		return Object.keys(tags[tagId].notes).length;
 	}
 
-	async function addTag(value: string) {
-		// CHECKS:
-		if (!user) {
-			console.error("Cannot set tag when user is not logged...");
-			return null;
+	const fetchTagsNum = (userId: string) => {
+		const tagsNumRef = ref(rtdb, `users/${userId}/tagsNum`);
+		onValue(tagsNumRef, (snapshot) => {
+			if (!snapshot.exists()) return;
+			const tagsNum = snapshot.val() as number;
+			console.log("DATA WAS FETCHED (onValue): tagsNum updated:", tagsNum);
+			setTagsNum(tagsNum);
+		});
+	};
+
+	const fetchUpdatedTags = async (userId: string, updatedAt: number) => {
+		const updatedRef = ref(rtdb, `events/${userId}/tags/updated`);
+		const updatedQuery = query(
+			updatedRef,
+			orderByValue(),
+			startAfter(updatedAt)
+		);
+		const updatedSnapshot = await get(updatedQuery);
+
+		const updatedTags: { [tagId: string]: number } = {};
+		if (updatedSnapshot.exists()) {
+			const updatedEvents = updatedSnapshot.val() as {
+				[tagId: string]: number;
+			};
+			console.log("Updated events fetched:", updatedEvents);
+			Object.keys(updatedEvents).forEach((tagId) => {
+				updatedTags[tagId] = updatedEvents[tagId];
+			});
 		}
+		return updatedTags;
+	};
 
-		if (!value.trim().length) {
-			console.error("Your tag has no value! Cannot set the tag...");
-			return null;
+	const fetchRemovedTags = async (userId: string, updatedAt: number) => {
+		const removedRef = ref(rtdb, `events/${userId}/tags/removed`);
+		const removedQuery = query(
+			removedRef,
+			orderByValue(),
+			startAfter(updatedAt)
+		);
+		const removedSnapshot = await get(removedQuery);
+
+		const removedTags: { [tagId: string]: number } = {};
+		if (removedSnapshot.exists()) {
+			const removedEvents = removedSnapshot.val() as {
+				[tagId: string]: number;
+			};
+			console.log("Removed events fetched:", removedEvents);
+			Object.keys(removedEvents).forEach((tagId) => {
+				removedTags[tagId] = removedEvents[tagId];
+			});
 		}
+		return removedTags;
+	};
 
-		const timestamp = date.getTimestamp();
-		const tagId = generateFirebaseKeyFor("tags", user.uid);
+	const fetchTagsByKeys = async (keys: string[], userId: string) => {
+		const fetchedTags: { [key: string]: Tag } = {};
+		for (const key of keys) {
+			const tagRef = generateItemRef("tags", userId, key);
+			const snapshot = await get(ref(rtdb, tagRef));
+			if (snapshot.exists()) {
+				fetchedTags[key] = snapshot.val();
+			}
+		}
+		return fetchedTags;
+	};
 
-		if (!tagId) return console.error("Cannot generate tag id...");
+	const fetchNewTags = async (
+		tagsRef: DatabaseReference,
+		lastKey: string | undefined
+	) => {
+		const newTagsQuery = lastKey
+			? query(tagsRef, orderByKey(), startAfter(lastKey))
+			: tagsRef;
+		const newTagsSnapshot = await get(newTagsQuery);
+		const newTags = newTagsSnapshot.exists()
+			? (newTagsSnapshot.val() as Tags)
+			: {};
+		console.log("New tags fetched:", newTags);
+		return newTags;
+	};
 
-		const tagRef = generateItemRef("tags", user.uid, tagId);
-
-		const newTag: Tag = {
-			id: tagId,
-			createdAt: { auto: timestamp },
-			updatedAt: timestamp,
-			value,
-			userId: user.uid,
+	const updateUserStorage = (
+		userId: string,
+		updatedTags: Tags,
+		updatedAt: number
+	) => {
+		console.log("User storage was updated at:", updatedAt);
+		const prevUserStorageObj = userStorageObject.get(userId)!;
+		const updatedUserStorageObj = {
+			...prevUserStorageObj,
+			updatedAt,
+			tags: updatedTags,
 		};
-
-		const updates: {
-			[key: string]: Tag | object;
-		} = {};
-
-		updates[tagRef] = newTag;
-
-		const tagsNumRef = `users/${user.uid}/tagsNum`;
-		updates[tagsNumRef] = increment(1);
-
-		await update(ref(rtdb), updates);
-	}
-
-	async function updateTag(value: string, id: string) {
-		// CHECKS:
-		if (!user) {
-			console.error("Cannot set tag when user is not logged...");
-			return null;
-		}
-
-		if (!value.trim().length) {
-			console.error("Your tag has no value! Cannot set the tag...");
-			return null;
-		}
-
-		const timestamp = date.getTimestamp();
-		const tagRef = generateItemRef("tags", user.uid, id);
-
-		const updatedTagProps: {
-			updatedAt: Tag["updatedAt"];
-			value: Tag["value"];
-		} = {
-			updatedAt: timestamp,
-			value,
-		};
-
-		const updates: {
-			[key: string]: Tag;
-		} = {};
-
-		const prevTag = getTagById(id);
-
-		if (!prevTag) {
-			console.error("Tag with this id does not exist...");
-			return null;
-		}
-
-		updates[tagRef] = {
-			...prevTag,
-			...updatedTagProps,
-		};
-
-		await update(ref(rtdb), updates);
-	}
-
-	async function deleteTag(tag: Tag) {
-		// CHECKS:
-		if (!user) {
-			const msg = "Cannot set tag when user is not logged...";
-			console.error(msg);
-			alert(msg);
-			return;
-		}
-
-		if (tag.notes) {
-			const msg =
-				"Cannot delete tag with notes assigned... Remove the tag from it's notes, than try to delete the tag.";
-			console.error(msg);
-			alert(msg);
-			return;
-		}
-
-		const updates: { [key: string]: Tag | null | object } = {};
-
-		// remove tag:
-		updates[generateItemRef("tags", user.uid, tag.id)] = null;
-		// update tagsNum:
-		const tagsNumRef = `users/${user.uid}/tagsNum`;
-		updates[tagsNumRef] = increment(-1);
-
-		await update(ref(rtdb), updates);
-	}
+		userStorageObject.set(updatedUserStorageObj, userId);
+	};
 
 	const fetchTagsAndListenToChanges = useCallback(
 		async (reference: string, userId: string) => {
-			// ❗ SET TO TRUE ONLY WHILE IN DEV MODE ❗
-			const isDevMode = false; // TRUE IN DEV
-			if (!isDevMode) {
-				sessionStorage.clear();
-			}
+			fetchTagsNum(userId);
 
-			console.log("isDevMode", isDevMode);
-			// ❗ ❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗❗ ❗
-
-			// Fetch tagsNum first:
-			const tagsNumRef = ref(rtdb, `users/${userId}/tagsNum`);
-
-			onValue(tagsNumRef, (snapshot) => {
-				if (!snapshot.exists()) return;
-
-				const tagsNum = snapshot.val() as number;
-				console.log("DATA WAS FETCHED (onValue): tagsNum updated:", tagsNum);
-				setTagsNum(tagsNum);
-			});
-
-			// Reference to tags:
 			const tagsRef = ref(rtdb, reference);
-
-			// USE SESSION STORAGE BUT ONLY FOR THE SAME OF DEV:
-			const userStorageObj = userStorageObject.get(userId);
-
 			let lastKey: string | undefined = undefined;
 
-			if (userStorageObj) {
-				if (isDevMode) {
-					console.log(
-						"User tags are already in sessionStorage. No need to fetch them again."
-					);
-					const tagsStoredInSessionStorage = userStorageObj.tags;
-					lastKey = Object.keys(tagsStoredInSessionStorage).pop();
-					setTags(tagsStoredInSessionStorage);
-				} else {
-					// DO NOT USE USER OBJECT IF NOT DEV MODE
-				}
+			if (userStorageObject.get(userId)) {
+				const userStorageObj = userStorageObject.get(userId)!;
+				console.log(
+					`There is userStorageObj created at ${new Date(
+						userStorageObj.createdAt
+					)} and lastly updated at ${new Date(
+						userStorageObj.updatedAt
+					)}. Checking for updates...`
+				);
+
+				const updatedTags = await fetchUpdatedTags(
+					userId,
+					userStorageObj.updatedAt
+				);
+				const removedTags = await fetchRemovedTags(
+					userId,
+					userStorageObj.updatedAt
+				);
+				const newTags = await fetchNewTags(
+					tagsRef,
+					Object.keys(userStorageObj.tags).pop()
+				);
+
+				const updatedStorageObj = {
+					...userStorageObj,
+					tags: { ...userStorageObj.tags, ...newTags },
+				};
+
+				Object.keys(removedTags).forEach((tagId) => {
+					delete updatedStorageObj.tags[tagId];
+				});
+
+				const updatedTagsData = await fetchTagsByKeys(
+					Object.keys(updatedTags),
+					userId
+				);
+				Object.keys(updatedTagsData).forEach((tagId) => {
+					updatedStorageObj.tags[tagId] = updatedTagsData[tagId];
+				});
+
+				userStorageObject.set(
+					{
+						...updatedStorageObj,
+						updatedAt: date.getTimestamp(),
+					},
+					userId
+				);
+				lastKey = Object.keys(updatedStorageObj.tags).pop();
+				setTags(updatedStorageObj.tags);
 			} else {
 				console.log(
-					"There are no user tags stored in sessionStorage. Fetching tags from RTDB..."
+					"There is no userStorageObject stored. Fetching tags from RTDB & populating userStorageObject..."
 				);
 				const fetchedTagsSnapshot = await get(tagsRef);
-
 				if (fetchedTagsSnapshot.exists()) {
-					const tagsStoredInSessionStorage = fetchedTagsSnapshot.val() as Tags;
-					setTags(tagsStoredInSessionStorage);
-					lastKey = Object.keys(tagsStoredInSessionStorage).pop();
+					const fetchedTags = fetchedTagsSnapshot.val() as Tags;
+					const timestamp = date.getTimestamp();
 
-					if (isDevMode) {
-						userStorageObject.set(
-							{
-								tags: tagsStoredInSessionStorage,
-								userId,
-							},
-							userId
-						);
-					} else {
-						// DO NOT USE USER OBJECT IF NOT DEV MODE
-					}
+					const newUserStorageObject: UserStorageObject = {
+						createdAt: timestamp,
+						tags: fetchedTags,
+						updatedAt: timestamp,
+						userId,
+					};
+					userStorageObject.set(newUserStorageObject, userId);
+					lastKey = Object.keys(newUserStorageObject.tags).pop();
+					setTags(fetchedTags);
 				}
 			}
 
-			// Attach listener for new added tags (uses orderByKey()!)
 			const queryForNewAddedTags = lastKey
 				? query(tagsRef, orderByKey(), startAfter(lastKey))
 				: tagsRef;
-
 			console.log("Listening for new tags after key:", lastKey);
 
 			onChildAdded(queryForNewAddedTags, (snapshot) => {
@@ -257,23 +253,8 @@ export function TagsProvider({ children }: TagsProviderProps) {
 				console.log("New tag was added to RTDB:", newTag);
 
 				setTags((prevTags) => {
-					const updatedTags = {
-						...prevTags,
-						[snapshot.key!]: newTag,
-					};
-
-					if (isDevMode) {
-						userStorageObject.set(
-							{
-								tags: updatedTags,
-								userId,
-							},
-							userId
-						);
-					} else {
-						// DO NOT USE USER OBJECT IF NOT DEV MODE
-					}
-
+					const updatedTags = { ...prevTags, [snapshot.key!]: newTag };
+					updateUserStorage(userId, updatedTags, newTag.createdAt.auto);
 					return updatedTags;
 				});
 			});
@@ -286,50 +267,23 @@ export function TagsProvider({ children }: TagsProviderProps) {
 				);
 
 				setTags((prevTags) => {
-					const updatedTags = {
-						...prevTags,
-						[snapshot.key!]: updatedTag,
-					};
-
-					if (isDevMode) {
-						userStorageObject.set(
-							{
-								tags: updatedTags,
-								userId,
-							},
-							userId
-						);
-					} else {
-						// DO NOT USE USER OBJECT IF NOT DEV MODE
-					}
-
+					const updatedTags = { ...prevTags, [snapshot.key!]: updatedTag };
+					updateUserStorage(userId, updatedTags, updatedTag.updatedAt);
 					return updatedTags;
 				});
 			});
 
 			onChildRemoved(tagsRef, (snapshot) => {
+				const timestamp = date.getTimestamp();
 				const removedTag = snapshot.val() as Tag;
 				console.log(
 					"DATA WAS FETCHED (onChildRemoved): tag removed:",
 					removedTag
 				);
-
 				setTags((prevTags) => {
 					const updatedTags = { ...prevTags };
 					delete updatedTags[snapshot.key!];
-
-					if (isDevMode) {
-						userStorageObject.set(
-							{
-								tags: updatedTags,
-								userId,
-							},
-							userId
-						);
-					} else {
-						// DO NOT USE USER OBJECT IF NOT DEV MODE
-					}
-
+					updateUserStorage(userId, updatedTags, timestamp);
 					return updatedTags;
 				});
 			});
@@ -352,9 +306,10 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		setTags,
 		getTagById,
 		getTagNotesNum,
-		addTag,
-		updateTag,
-		deleteTag,
+		addTag: async (value: string) => addTag({ user, value }),
+		updateTag: async (value: string, id: string) =>
+			updateTag({ user, value, id, prevTag: getTagById(id) }),
+		deleteTag: async (tag: Tag) => deleteTag(tag, user),
 	};
 
 	return <TagsContext.Provider value={value}>{children}</TagsContext.Provider>;

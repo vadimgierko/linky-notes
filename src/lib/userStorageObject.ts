@@ -1,7 +1,9 @@
 import { Tags } from "@/types";
 
 export interface UserStorageObject {
+	createdAt: number;
 	tags: Tags;
+	updatedAt: number;
 	userId: string;
 }
 
@@ -10,12 +12,12 @@ function generateUserLocalStorageRef(userId: string) {
 }
 
 /**
- * This can be used with `localStorage` or `sessionStorage` - 
+ * This can be used with `localStorage` or `sessionStorage` -
  * just change `localStorage` <-> `sessionStorage`
  */
 const userStorageObject = {
 	get: (userId: string) => {
-		const s = sessionStorage.getItem(generateUserLocalStorageRef(userId));
+		const s = localStorage.getItem(generateUserLocalStorageRef(userId));
 
 		if (s) {
 			return JSON.parse(s) as UserStorageObject;
@@ -24,7 +26,7 @@ const userStorageObject = {
 		}
 	},
 	set: (updatedObj: UserStorageObject, userId: string) => {
-		return sessionStorage.setItem(
+		return localStorage.setItem(
 			generateUserLocalStorageRef(userId),
 			JSON.stringify(updatedObj)
 		);
