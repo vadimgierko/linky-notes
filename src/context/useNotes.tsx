@@ -241,7 +241,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		const tagsRef = generateItemsRef("tags", user.uid);
 		//===========================================================
 		// add note to rtdb & new tags using update
-		const updates: { [key: string]: Note | Tag | object } = {};
+		const updates: { [key: string]: Note | Tag | object | number } = {};
 		// update note in rtdb:
 		updates[noteRef] = updatedNote;
 		// update new tags in rtdb:
@@ -255,6 +255,14 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		// update tags with added noteId in rtdb:
 		Object.keys(tagsWithAddedNoteIdToUpdate).forEach((tagId) => {
 			updates[tagsRef + "/" + tagId] = tagsWithAddedNoteIdToUpdate[tagId];
+		});
+		// UPDATE EVENTS:
+		Object.keys({
+			...tagsWithRemovedNoteIdToUpdate,
+			...tagsWithAddedNoteIdToUpdate,
+		}).forEach((tagId) => {
+			const eventsRef = `events/${user.uid}/tags/updated/${tagId}`;
+			updates[eventsRef] = timestamp;
 		});
 
 		if (incrementNotesNum) {
@@ -318,8 +326,9 @@ export function NotesProvider({ children }: NotesProviderProps) {
 
 		const tagsRef = generateItemsRef("tags", user.uid);
 		// collect updated tags & removed note:
-		const updates: { [key: string]: Note | Tag | null | object } = {};
+		const updates: { [key: string]: Note | Tag | null | object | number } = {};
 
+		const timestamp = date.getTimestamp();
 		// ❗❗❗ REMOVE NOTE ID FROM IT'S TAGS ❗❗❗
 		const tagsToUpdate: Tags = {};
 		Object.keys(noteToDelete.tags).forEach((tagId) => {
@@ -329,6 +338,7 @@ export function NotesProvider({ children }: NotesProviderProps) {
 			if (!updatedTag.notes) return;
 
 			delete updatedTag.notes[noteId];
+			updatedTag.updatedAt = timestamp;
 
 			tagsToUpdate[tagId] = updatedTag;
 		});
@@ -339,6 +349,11 @@ export function NotesProvider({ children }: NotesProviderProps) {
 		// update tags:
 		Object.keys(tagsToUpdate).forEach((updatedTagId) => {
 			updates[tagsRef + "/" + updatedTagId] = tagsToUpdate[updatedTagId];
+		});
+		// UPDATE EVENTS:
+		Object.keys(tagsToUpdate).forEach((tagId) => {
+			const eventsRef = `events/${user.uid}/tags/updated/${tagId}`;
+			updates[eventsRef] = tagsToUpdate[tagId].updatedAt;
 		});
 
 		// decrease notesNum:

@@ -75,8 +75,6 @@ export async function updateTag({
 
 	const timestamp = date.getTimestamp();
 	const tagRef = generateItemRef("tags", user.uid, id);
-	// const eventsRef = ref(rtdb, `events/${user.uid}/tags/updated`);
-	const eventsRef = `events/${user.uid}/tags/updated/${id}`;
 
 	const updatedTagProps: {
 		updatedAt: Tag["updatedAt"];
@@ -100,6 +98,8 @@ export async function updateTag({
 		...updatedTagProps,
 	};
 
+	// update events:
+	const eventsRef = `events/${user.uid}/tags/updated/${id}`;
 	updates[eventsRef] = updatedTagProps.updatedAt;
 
 	await update(ref(rtdb), updates);
