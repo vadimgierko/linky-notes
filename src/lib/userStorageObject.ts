@@ -25,6 +25,23 @@ const userStorageObject = {
 			return null;
 		}
 	},
+	getTagById: ({ tagId, userId }: { tagId: string; userId: string }) => {
+		const s = localStorage.getItem(generateUserLocalStorageRef(userId));
+
+		if (s) {
+			const parsedStorage = JSON.parse(s) as UserStorageObject;
+			const { tags } = parsedStorage;
+			const tag = tags[tagId];
+
+			if (tag) {
+				return tag;
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	},
 	set: (updatedObj: UserStorageObject, userId: string) => {
 		return localStorage.setItem(
 			generateUserLocalStorageRef(userId),
