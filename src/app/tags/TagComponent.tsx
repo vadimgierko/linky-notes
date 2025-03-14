@@ -1,5 +1,6 @@
 "use client";
 import useTags from "@/context/useTags";
+import date from "@/lib/date";
 import { Tag } from "@/types";
 import Link from "next/link";
 import { Dropdown, DropdownButton } from "react-bootstrap";
@@ -22,6 +23,12 @@ export default function TagComponent({ tag }: TagComponentProps) {
 				borderRadius: 20,
 			}}
 		>
+			<Dropdown.Item>
+				<p>created: {date.getDateFromTimestamp(tag.createdAt.auto)}</p>
+				<p>updated: {date.getDateFromTimestamp(tag.updatedAt)}</p>
+				<hr />
+			</Dropdown.Item>
+
 			<Link href={`/notes?tags=${tag.id}`} passHref legacyBehavior>
 				<Dropdown.Item>🔎 see tag&apos;s notes</Dropdown.Item>
 			</Link>

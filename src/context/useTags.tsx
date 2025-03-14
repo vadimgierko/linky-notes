@@ -168,6 +168,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 
 	const fetchTagsAndListenToChanges = useCallback(
 		async (reference: string, userId: string) => {
+			if (!user) return;
 			fetchTagsNum(userId);
 
 			const tagsRef = ref(rtdb, reference);
@@ -213,13 +214,8 @@ export function TagsProvider({ children }: TagsProviderProps) {
 					updatedStorageObj.tags[tagId] = updatedTagsData[tagId];
 				});
 
-				userStorageObject.set(
-					{
-						...updatedStorageObj,
-						updatedAt: date.getTimestamp(),
-					},
-					userId
-				);
+				updateUserStorage(user.uid, updatedStorageObj.tags, date.getTimestamp());
+
 				lastKey = Object.keys(updatedStorageObj.tags).pop();
 				setTags(updatedStorageObj.tags);
 			} else {

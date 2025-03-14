@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 // react-bootstrap components:
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Spinner } from "react-bootstrap";
 // custom components:
 import Tag from "../Tag";
 import TagWithTrashIcon from "../TagWithTrashIcon";
@@ -9,6 +9,8 @@ import useNotes from "@/context/useNotes";
 import { Tag as ITag, NoteObjectForUpdate, Tags } from "@/types";
 import useTags from "@/context/useTags";
 import sortTagsAlphabetically from "@/lib/sortTagsAlphabetically";
+import { fetchNote } from "@/lib/crud/notes";
+import useUser from "@/context/useUser";
 
 interface NoteFormProps {
 	noteKey?: string;
@@ -34,14 +36,17 @@ export default function NoteForm({
 	onCancel,
 }: NoteFormProps) {
 	// from state:
-	const { getNoteById } = useNotes();
+	const { user } = useUser();
+	const { getNoteById, fetchAndListenToNote } = useNotes();
 	const { tags: TAGS, getTagNotesNum, getTagById } = useTags();
+	const [isLoading, setIsLoading] = useState(true);
 	// note object:
 	const [note, setNote] = useState<NoteObjectForUpdate | null>(null);
 	// tag search bar:
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState<Tags>({}); // tags which exist in database
 	const foundTagsSortedAlphabetically = sortTagsAlphabetically(foundTags);
+	const [error, setError] = useState<unknown | undefined>(undefined);
 
 	// sort note existing tags alphabetically:
 	const noteExistingTags: ITag[] = Object.keys({
@@ -62,14 +67,19 @@ export default function NoteForm({
 	const [editorMode, setEditorMode] = useState<"edit" | "preview">("edit");
 
 	useEffect(() => {
-		if (noteKey) {
-			// if noteKey was passed,
-			// it means that we are updating the existing note,
-			// so we need to fetch it from the store:
-			const noteToUpdate = getNoteById(noteKey);
+		if (!user) return;
+		if (!isLoading) return;
+		if (!noteKey) {
+			setNote(emptyNote);
+			setIsLoading(false);
+		}
 
-			if (!noteToUpdate) return;
+		// if noteKey was passed,
+		// it means that we are updating the existing note,
+		// so we need to fetch it from the store:
+		const noteToUpdate = getNoteById(noteKey!);
 
+		if (noteToUpdate) {
 			const noteObjectForUpdate: NoteObjectForUpdate = {
 				...noteToUpdate,
 				existingTags: {
@@ -82,14 +92,46 @@ export default function NoteForm({
 				removedExistingTags: [],
 				addedExistingTags: [],
 			};
-
 			setNote(noteObjectForUpdate);
+			setIsLoading(false);
 		} else {
-			setNote(emptyNote);
-		}
-	}, [getNoteById, noteKey]);
+			fetchNote({ noteId: noteKey, user: user })
+				.then(returnObj => {
+					const { note: n, error } = returnObj;
 
-	if (!note) return null;
+					setError(error);
+
+					if (n) {
+						const noteObjectForUpdate: NoteObjectForUpdate = {
+							...n,
+							existingTags: {
+								...Object.keys(n.tags).reduce(
+									(prev, curr) => ({ ...prev, [curr]: true }),
+									{}
+								),
+							},
+							newTags: [],
+							removedExistingTags: [],
+							addedExistingTags: [],
+						};
+						setNote(noteObjectForUpdate);
+						// this code below sets listener & updates notes store:
+						fetchAndListenToNote(n.id);
+					}
+
+					setIsLoading(false);
+				})
+		}
+	}, [getNoteById, noteKey, fetchAndListenToNote, isLoading, user]);
+
+	// if update mode:
+	if (noteKey) {
+		if (isLoading) return <Spinner />;
+		if (error) return <p>Error while fetching a note... See console logs for futher information...</p>
+		if (!note) return <p>There is no such note...</p>;
+	}
+
+	if (!note) return <p>There is no such note...</p>;
 
 	return (
 		<Form
