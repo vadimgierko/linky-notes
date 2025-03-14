@@ -5,7 +5,37 @@ import { generateItemRef, generateItemsRef } from "@/lib/generateItemsRef";
 import userStorageObject from "@/lib/userStorageObject";
 import { Note, NoteObjectForUpdate, Tag, Tags } from "@/types";
 import { User } from "firebase/auth";
-import { increment, ref, update } from "firebase/database";
+import { get, increment, ref, update } from "firebase/database";
+
+export async function fetchNote(
+	{ noteId, user }: { noteId?: string, user: User | null }
+) {
+
+	type ReturnObj = {note: Note | null; error: unknown | undefined};
+	const returnObj: ReturnObj = {note: null, error: undefined};
+
+	try {
+		if (!noteId) return returnObj;
+	    if (!user) return returnObj;
+
+		const noteRef = generateItemRef("notes", user.uid, noteId);
+		const noteSnapshot = await get(ref(rtdb, noteRef));
+
+		if (noteSnapshot.exists()) {
+			const note = noteSnapshot.val() as Note;
+			console.log("fetchNote(): note of id", noteId, "was fetched:", note);
+			returnObj["note"] = note;
+		} else {
+			console.log("There is no note of id", noteId, "in rtdb...");
+			returnObj["note"] = null;
+		}
+	} catch (error: unknown) {
+		console.error(error);
+		returnObj["error"] = error;
+	} finally {
+		return returnObj
+	}
+}
 
 /**
  * Internal helper function
@@ -105,6 +135,7 @@ async function setNote({
 		}
 
 		delete updatedTag.notes[noteId];
+		updatedTag.updatedAt = timestamp;
 
 		tagsWithRemovedNoteIdToUpdate[tagId] = updatedTag;
 	});
@@ -124,6 +155,7 @@ async function setNote({
 		} else {
 			updatedTag.notes[noteId] = true;
 		}
+		updatedTag.updatedAt = timestamp;
 
 		tagsWithAddedNoteIdToUpdate[tagId] = updatedTag;
 	});

@@ -10,13 +10,17 @@ type SortBy =
 	| "alphabetically"
 	| "tag notes number"
 	| "first created"
-	| "last created";
+	| "last created"
+	| "first updated"
+	| "last updated"
 
 const allowedSortByValues: SortBy[] = [
 	"alphabetically",
 	"tag notes number",
 	"last created",
 	"first created",
+	"first updated",
+	"last updated"
 ];
 
 export default function Tags() {
@@ -29,9 +33,9 @@ export default function Tags() {
 
 		const defaultSortedTags = tags
 			? Object.values(tags).reduce(
-					(prev, curr) => [...prev, curr],
-					[] as ITag[]
-			  )
+				(prev, curr) => [...prev, curr],
+				[] as ITag[]
+			)
 			: [];
 
 		switch (sortBy) {
@@ -39,9 +43,9 @@ export default function Tags() {
 				// map tags to {[tagValue]: tagId}:
 				const tagsValueIdObject = tags
 					? Object.values(tags).reduce(
-							(prev, curr) => ({ ...prev, [curr.value]: curr.id }),
-							{} as { [key: string]: string }
-					  )
+						(prev, curr) => ({ ...prev, [curr.value]: curr.id }),
+						{} as { [key: string]: string }
+					)
 					: {};
 
 				const tagsValuesSortedAlphabetically =
@@ -60,14 +64,28 @@ export default function Tags() {
 			case "tag notes number":
 				const tagsSortedByNotesNum: ITag[] = tags
 					? Object.values(tags).toSorted(
-							(a, b) => getTagNotesNum(a.id) - getTagNotesNum(b.id)
-					  )
+						(a, b) => getTagNotesNum(a.id) - getTagNotesNum(b.id)
+					)
 					: [];
 				return tagsSortedByNotesNum.reverse();
 			case "first created":
 				return defaultSortedTags;
 			case "last created":
 				return defaultSortedTags.toReversed();
+			case "first updated":
+				const tagsSortedByFirstUpdated: ITag[] = tags
+					? Object.values(tags).toSorted(
+						(a, b) => a.updatedAt - b.updatedAt
+					)
+					: [];
+				return tagsSortedByFirstUpdated;
+			case "last updated":
+				const tagsSortedByLastUpdated: ITag[] = tags
+					? Object.values(tags).toSorted(
+						(a, b) => b.updatedAt - a.updatedAt
+					)
+					: [];
+				return tagsSortedByLastUpdated;
 			default:
 				return defaultSortedTags;
 		}
