@@ -71,7 +71,7 @@ export default function NavBar({ maxWidth }: { maxWidth: number }) {
 		],
 		private: [
 			{
-				name: notesNum ? `notes (${notesNum})` : "notes",
+				name: notesNum ? `notes (${notesNum})` : "notes (0)",
 				link: "/notes",
 				icon: <CgNotes className="me-3" />,
 			},

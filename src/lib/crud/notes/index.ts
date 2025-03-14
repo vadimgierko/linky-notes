@@ -7,16 +7,19 @@ import { Note, NoteObjectForUpdate, Tag, Tags } from "@/types";
 import { User } from "firebase/auth";
 import { get, increment, ref, update } from "firebase/database";
 
-export async function fetchNote(
-	{ noteId, user }: { noteId?: string, user: User | null }
-) {
-
-	type ReturnObj = {note: Note | null; error: unknown | undefined};
-	const returnObj: ReturnObj = {note: null, error: undefined};
+export async function fetchNote({
+	noteId,
+	user,
+}: {
+	noteId?: string;
+	user: User | null;
+}) {
+	type ReturnObj = { note: Note | null; error: unknown | undefined };
+	const returnObj: ReturnObj = { note: null, error: undefined };
 
 	try {
 		if (!noteId) return returnObj;
-	    if (!user) return returnObj;
+		if (!user) return returnObj;
 
 		const noteRef = generateItemRef("notes", user.uid, noteId);
 		const noteSnapshot = await get(ref(rtdb, noteRef));
@@ -33,7 +36,7 @@ export async function fetchNote(
 		console.error(error);
 		returnObj["error"] = error;
 	} finally {
-		return returnObj
+		return returnObj;
 	}
 }
 
@@ -49,12 +52,12 @@ export async function fetchNote(
 async function setNote({
 	note,
 	noteId,
-	incrementNotesNum = false,
+	incrementNotesNum,
 	user,
 }: {
 	note: NoteObjectForUpdate;
 	noteId: string;
-	incrementNotesNum?: boolean;
+	incrementNotesNum: boolean;
 	user: User | null;
 }) {
 	// CHECKS:
@@ -224,7 +227,12 @@ export async function addNote({
 		return null;
 	}
 
-	const newNote = await setNote({ note, noteId, user });
+	const newNote = await setNote({
+		note,
+		noteId,
+		user,
+		incrementNotesNum: true,
+	});
 
 	if (!newNote) return null;
 
@@ -240,7 +248,12 @@ export async function updateNote({
 	noteId: string;
 	user: User | null;
 }) {
-	const updatedNote = await setNote({ note, noteId, user });
+	const updatedNote = await setNote({
+		note,
+		noteId,
+		user,
+		incrementNotesNum: false,
+	});
 
 	return updatedNote;
 }

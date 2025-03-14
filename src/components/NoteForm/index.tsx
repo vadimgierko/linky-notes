@@ -95,39 +95,44 @@ export default function NoteForm({
 			setNote(noteObjectForUpdate);
 			setIsLoading(false);
 		} else {
-			fetchNote({ noteId: noteKey, user: user })
-				.then(returnObj => {
-					const { note: n, error } = returnObj;
+			fetchNote({ noteId: noteKey, user: user }).then((returnObj) => {
+				const { note: n, error } = returnObj;
 
-					setError(error);
+				setError(error);
 
-					if (n) {
-						const noteObjectForUpdate: NoteObjectForUpdate = {
-							...n,
-							existingTags: {
-								...Object.keys(n.tags).reduce(
-									(prev, curr) => ({ ...prev, [curr]: true }),
-									{}
-								),
-							},
-							newTags: [],
-							removedExistingTags: [],
-							addedExistingTags: [],
-						};
-						setNote(noteObjectForUpdate);
-						// this code below sets listener & updates notes store:
-						fetchAndListenToNote(n.id);
-					}
+				if (n) {
+					const noteObjectForUpdate: NoteObjectForUpdate = {
+						...n,
+						existingTags: {
+							...Object.keys(n.tags).reduce(
+								(prev, curr) => ({ ...prev, [curr]: true }),
+								{}
+							),
+						},
+						newTags: [],
+						removedExistingTags: [],
+						addedExistingTags: [],
+					};
+					setNote(noteObjectForUpdate);
+					// this code below sets listener & updates notes store:
+					fetchAndListenToNote(n.id);
+				}
 
-					setIsLoading(false);
-				})
+				setIsLoading(false);
+			});
 		}
 	}, [getNoteById, noteKey, fetchAndListenToNote, isLoading, user]);
 
 	// if update mode:
 	if (noteKey) {
 		if (isLoading) return <Spinner />;
-		if (error) return <p>Error while fetching a note... See console logs for futher information...</p>
+		if (error)
+			return (
+				<p>
+					Error while fetching a note... See console logs for futher
+					information...
+				</p>
+			);
 		if (!note) return <p>There is no such note...</p>;
 	}
 
@@ -211,9 +216,7 @@ export default function NoteForm({
 				)}
 				{editorMode === "preview" && (
 					<div className="border py-2 px-3">
-						<MarkdownRenderer
-							markdown={note.children[0].value}
-						/>
+						<MarkdownRenderer markdown={note.children[0].value} />
 					</div>
 				)}
 			</Form.Group>
@@ -252,10 +255,10 @@ export default function NoteForm({
 									let updatedFoundTags: { [key: string]: ITag } = {};
 									foundTagsId.forEach(
 										(id) =>
-										(updatedFoundTags = {
-											...updatedFoundTags,
-											[id]: TAGS[id],
-										})
+											(updatedFoundTags = {
+												...updatedFoundTags,
+												[id]: TAGS[id],
+											})
 									);
 									setFoundTags(updatedFoundTags);
 									// set new tag if there is no exact match with any of found tags or existing & new:
@@ -263,18 +266,18 @@ export default function NoteForm({
 										Object.keys(updatedFoundTags).find(
 											(tagId) => updatedFoundTags[tagId].value === changedInput
 										) ||
-											(Object.keys(note.existingTags).length
-												? Object.keys(note.existingTags).find((tagId) => {
+										(Object.keys(note.existingTags).length
+											? Object.keys(note.existingTags).find((tagId) => {
 													const tag = getTagById(tagId);
 
 													if (!tag) return undefined;
 
 													return tag.value === changedInput;
-												})
-												: false) ||
-											(note.newTags.length
-												? note.newTags.find((tag) => tag === changedInput)
-												: false)
+											  })
+											: false) ||
+										(note.newTags.length
+											? note.newTags.find((tag) => tag === changedInput)
+											: false)
 											? true
 											: false;
 									if (isExactMatch) {

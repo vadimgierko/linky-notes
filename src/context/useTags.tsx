@@ -214,7 +214,11 @@ export function TagsProvider({ children }: TagsProviderProps) {
 					updatedStorageObj.tags[tagId] = updatedTagsData[tagId];
 				});
 
-				updateUserStorage(user.uid, updatedStorageObj.tags, date.getTimestamp());
+				updateUserStorage(
+					user.uid,
+					updatedStorageObj.tags,
+					date.getTimestamp()
+				);
 
 				lastKey = Object.keys(updatedStorageObj.tags).pop();
 				setTags(updatedStorageObj.tags);
@@ -284,7 +288,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 				});
 			});
 		},
-		[]
+		[user]
 	);
 
 	useEffect(() => {
