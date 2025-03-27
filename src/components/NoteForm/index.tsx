@@ -18,31 +18,31 @@ interface NoteFormProps {
 	onCancel: () => void;
 }
 
-const emptyNote: NoteObjectForUpdate = {
-	existingTags: {},
-	newTags: [],
-	removedExistingTags: [],
-	addedExistingTags: [],
-	createdAt: { auto: 0 },
-	id: "",
-	updatedAt: 0,
-	userId: "",
-	children: { [0]: { type: "content", value: "" } },
-};
-
 export default function NoteForm({
 	noteKey,
 	onSubmit,
 	onCancel,
 }: NoteFormProps) {
+	const emptyNote: NoteObjectForUpdate = {
+		existingTags: {},
+		newTags: [],
+		removedExistingTags: [],
+		addedExistingTags: [],
+		createdAt: { auto: 0 },
+		id: "",
+		updatedAt: 0,
+		userId: "",
+		children: { [0]: { type: "content", value: "" } },
+	};
 	// from state:
 	const { user } = useUser();
 	const { getNoteById, fetchAndListenToNote } = useNotes();
 	const { tags: TAGS, getTagNotesNum, getTagById } = useTags();
+
 	const [isLoading, setIsLoading] = useState(true);
 	// note object:
 	const [note, setNote] = useState<NoteObjectForUpdate | null>(null);
-	// tag search bar:
+	//======================== tag search bar: =================================//
 	const [input, setInput] = useState("");
 	const [foundTags, setFoundTags] = useState<Tags>({}); // tags which exist in database
 	const foundTagsSortedAlphabetically = sortTagsAlphabetically(foundTags);
@@ -66,27 +66,29 @@ export default function NoteForm({
 	// editor mode: (edit, preview)
 	const [editorMode, setEditorMode] = useState<"edit" | "preview">("edit");
 
+	// set note on init:
 	useEffect(() => {
 		if (!user) return;
 		if (!isLoading) return;
+
+		// if !noteKey => we're adding a new note:
 		if (!noteKey) {
 			setNote(emptyNote);
 			setIsLoading(false);
+			return;
 		}
 
 		// if noteKey was passed,
 		// it means that we are updating the existing note,
 		// so we need to fetch it from the store:
-		const noteToUpdate = getNoteById(noteKey!);
+		const noteToUpdate = getNoteById(noteKey);
 
+		// if there is note in the store:
 		if (noteToUpdate) {
 			const noteObjectForUpdate: NoteObjectForUpdate = {
 				...noteToUpdate,
 				existingTags: {
-					...Object.keys(noteToUpdate.tags).reduce(
-						(prev, curr) => ({ ...prev, [curr]: true }),
-						{}
-					),
+					...noteToUpdate.tags,
 				},
 				newTags: [],
 				removedExistingTags: [],
@@ -95,6 +97,8 @@ export default function NoteForm({
 			setNote(noteObjectForUpdate);
 			setIsLoading(false);
 		} else {
+			// if there is no such note in the store,
+			// fetch it from db
 			fetchNote({ noteId: noteKey, user: user }).then((returnObj) => {
 				const { note: n, error } = returnObj;
 
@@ -104,10 +108,7 @@ export default function NoteForm({
 					const noteObjectForUpdate: NoteObjectForUpdate = {
 						...n,
 						existingTags: {
-							...Object.keys(n.tags).reduce(
-								(prev, curr) => ({ ...prev, [curr]: true }),
-								{}
-							),
+							...n.tags,
 						},
 						newTags: [],
 						removedExistingTags: [],
@@ -122,6 +123,10 @@ export default function NoteForm({
 			});
 		}
 	}, [getNoteById, noteKey, fetchAndListenToNote, isLoading, user]);
+
+	useEffect(() => {
+		console.log("NOTE FORM => Note to add/update:", note);
+	}, [note]);
 
 	// if update mode:
 	if (noteKey) {
@@ -141,8 +146,8 @@ export default function NoteForm({
 	return (
 		<Form
 			onSubmit={(e) => {
-				// before submit,
-				// check removed & newly added existing tags only in updated notes
+				// before submit
+				// check removed & newly added existing tags only in updated note
 				// by comparing prevNote tags & updatedNote existingTags:
 				const checkedForTagsToRemoveAndNewlyAddedNote: NoteObjectForUpdate = {
 					...note,

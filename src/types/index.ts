@@ -49,7 +49,12 @@ export interface Notes {
 /**
  * NoteObjectForUpdate is almost like Note interface,
  * but instead of tags prop it has:
- * existingTags (same as tags) & newTags (string[])
+ * - existingTags (same as prev tags)
+ * - newTags (string[])
+ * - removedExistingTags (string[]) - added automatically before submit
+ * - addedExistingTags: (string[]) - added automatically before submit
+ *
+ * 🚀❗ CHECK IF REMOVING A NEW TAG WORKS... ❗🚀
  */
 export interface NoteObjectForUpdate {
 	children: Note["children"];

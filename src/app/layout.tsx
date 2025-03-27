@@ -15,6 +15,7 @@ import { NotesProvider } from "@/context/useNotes";
  * ❗❗❗ metadata cannot be exported from client components with "use client"❗❗❗
  */
 export const metadata: Metadata = {
+	metadataBase: new URL("https://linkynotes.com"),
 	title: "Linky Notes | About",
 	description:
 		"Linky Notes App allows you to create, organize & filter your notes by tags & create your own knowledge base",
@@ -28,6 +29,9 @@ export const metadata: Metadata = {
 		"knowledge base",
 		"second brain",
 	],
+	alternates: {
+		canonical: "/",
+	},
 };
 
 export default function RootLayout({

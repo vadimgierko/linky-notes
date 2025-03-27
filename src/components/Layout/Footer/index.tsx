@@ -6,7 +6,7 @@ export default function Footer({ maxWidth }: { maxWidth: number }) {
 			as="footer"
 			style={{
 				color: "grey",
-                maxWidth: maxWidth
+				maxWidth: maxWidth,
 			}}
 		>
 			<hr />
@@ -19,14 +19,6 @@ export default function Footer({ maxWidth }: { maxWidth: number }) {
 					style={{ textDecoration: "none" }}
 				>
 					Vadim Gierko
-				</a>{" "}
-				<a
-					href="https://github.com/vadimgierko/linky-notes"
-					target="_blank"
-					rel="noreferrer"
-					style={{ textDecoration: "none" }}
-				>
-					[see the code]
 				</a>
 			</p>
 		</Container>
