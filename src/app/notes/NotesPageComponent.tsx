@@ -100,6 +100,30 @@ export default function NotesPageComponent() {
 		}
 	}, [fetchAndListenToNotes, filteredNotesIdsToFetch]);
 
+	// THIS COMMENTED CODE BELOW
+	// SHOULD BE USED ONLY TO FETCH ALL USER'S NOTES.
+
+	// useEffect(() => {
+	// 	async function fetchAllNotes() {
+	// 		if (!user) return;
+
+	// 		const NOTES_REF = generateItemsRef("notes", user.uid);
+	// 		const notesSnap = await get(ref(rtdb, NOTES_REF));
+
+	// 		if (notesSnap.exists()) {
+	// 			const data = notesSnap.val();
+	// 			console.log("Notes:", data);
+	// 		}
+	// 	}
+
+	// 	fetchAllNotes();
+	// }, [user]);
+
+	// useEffect(() => {
+	// 	console.log("doesEveryTagNoteExist:", doesEveryTagNoteExist);
+	// 	console.log("tagsWithNonExistentNotes:", tagsWithNonExistentNotes);
+	// }, []);
+
 	return (
 		<PrivateRoute>
 			<header>
