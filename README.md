@@ -144,9 +144,6 @@ All your notes & data are **private**, what means that only the logged owner/ au
   /app-guide
   /markdown-guide
   /inner-app-guide
-/signin
-/signup
-/password-reset
 ```
 
 ### Private Routes

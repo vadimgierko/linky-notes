@@ -1,6 +1,6 @@
 "use client";
 import useTheme from "@/context/useTheme";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { Container } from "react-bootstrap";
 import Footer from "./Footer";
 import ScrollToTop from "../ScrollToTop";
@@ -10,19 +10,19 @@ export default function Layout({ children }: { children: ReactNode }) {
 	const { theme } = useTheme();
 	const maxWidth = 900;
 
-	useEffect(() => {
-		const WARNING_MESSAGE = `
-WARNING [June 26, 2025]!
+	// 	useEffect(() => {
+	// 		const WARNING_MESSAGE = `
+	// WARNING [June 26, 2025]!
 
-Due to a critical bug,
-that causes that tags sometimes have more notes assigned, that it should be,
-all WRITE OPERATIONS (update, delete) ARE OFF
-UNTIL THE BUG IS FIXED.
+	// Due to a critical bug,
+	// that causes that tags sometimes have more notes assigned, that it should be,
+	// all WRITE OPERATIONS (update, delete) ARE OFF
+	// UNTIL THE BUG IS FIXED.
 
-However, you can still read & browse your notes & tags!`;
+	// However, you can still read & browse your notes & tags!`;
 
-		alert(WARNING_MESSAGE.toUpperCase());
-	}, []);
+	// 		alert(WARNING_MESSAGE.toUpperCase());
+	// 	}, []);
 
 	return (
 		<div

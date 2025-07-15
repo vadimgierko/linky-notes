@@ -300,6 +300,10 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		}
 	}, [fetchTagsAndListenToChanges, user]);
 
+	useEffect(() => {
+		console.log("tags:", tags);
+	}, [tags]);
+
 	const value = {
 		tags,
 		tagsNum,
